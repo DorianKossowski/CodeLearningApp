@@ -1,0 +1,5 @@
+grammar Java;
+
+declaration
+    : '*' EOF
+    ;

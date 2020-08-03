@@ -24,7 +24,8 @@ hs_err_pid*
 
 HELP.md
 target/
-back/.mvn/wrapper/**
+.mvn/wrapper/**
+src/gen/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
