@@ -1,5 +1,19 @@
+@font-face {
+  font-family: MavenPro;
+  src: url('./fonts/MavenPro-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: MavenPro;
+  src: url('./fonts/MavenPro-Medium.ttf');
+  font-weight: bold;
+  font-style: normal;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: MavenPro !important;
 }
