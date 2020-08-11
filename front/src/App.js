@@ -10,7 +10,7 @@ class App extends Component {
       <div>
         <Router>
           <Switch>
-            <Route exact path='/' component={ AuthorizedViewContainer }/>
+            <Route path='/' component={ AuthorizedViewContainer }/>
           </Switch>
         </Router>
       </div>
