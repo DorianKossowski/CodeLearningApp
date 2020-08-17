@@ -1,7 +1,7 @@
 package com.server.app.controller;
 
 import com.server.app.model.dto.TestInputDto;
-import com.server.parser.JavaParserBuilder;
+import com.server.parser.java.JavaParserBuilder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

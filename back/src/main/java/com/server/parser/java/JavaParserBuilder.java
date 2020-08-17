@@ -1,4 +1,4 @@
-package com.server.parser;
+package com.server.parser.java;
 
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStreams;
