@@ -19,18 +19,14 @@ public abstract class ParserTestBase<P extends Parser> {
     }
 
     protected <PRC extends ParserRuleContext> PRC shouldParseToEof(String input, Function<P, PRC> parsingRule) {
-        CodePointCharStream codePointCharStream = CharStreams.fromString(input);
-        Lexer lexer = lexerConstructor.apply(codePointCharStream);
+        Lexer lexer = ParserBuilder.createLexer(input, lexerConstructor);
+        TokenStream tokenStream = ParserBuilder.createTokenStream(lexer);
 
-        CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
-
-        P parser = parserConstructor.apply(commonTokenStream);
-        parser.setErrorHandler(new BailErrorStrategy());
-
+        P parser = ParserBuilder.createParser(parserConstructor, tokenStream);
         PRC parsingResult = parsingRule.apply(parser);
 
-        assertThat(commonTokenStream.LA(1))
-                .overridingErrorMessage("Should be EOF, got: ", commonTokenStream.LT(1))
+        assertThat(tokenStream.LA(1))
+                .overridingErrorMessage("Should be EOF, got: ", tokenStream.LT(1))
                 .isEqualTo(EOF);
 
         return parsingResult;
