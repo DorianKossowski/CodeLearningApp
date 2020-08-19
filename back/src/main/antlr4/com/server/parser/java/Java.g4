@@ -5,7 +5,11 @@ exerciseEOF
     ;
 
 exercise
-    : .*?
+    : classDec
+    ;
+
+classDec
+    : 'class' IDENTIFIER '{' .*? '}'
     ;
 
 IDENTIFIER : (LOWERCASE | UPPERCASE | '_')+ ;
