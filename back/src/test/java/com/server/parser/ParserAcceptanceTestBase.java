@@ -11,12 +11,13 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class ParserAcceptanceTestBase<P extends Parser> extends ParserTestBase<P> {
+public abstract class ParserAcceptanceTestBase<P extends Parser> {
+    private final ParserTestHelper<P> helper;
     private final Map<String, String> testCases;
 
     protected ParserAcceptanceTestBase(Function<CodePointCharStream, Lexer> lexerConstructor,
                                        Function<TokenStream, P> parserConstructor) {
-        super(lexerConstructor, parserConstructor);
+        helper = new ParserTestHelper<>(lexerConstructor, parserConstructor);
         testCases = ParserAcceptanceTestCasesProvider.getTestCases(getPath());
     }
 
@@ -27,8 +28,8 @@ public abstract class ParserAcceptanceTestBase<P extends Parser> extends ParserT
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("testCasesMethodSource")
-    void shouldParseAll(String caseName, String testCase) {
-        shouldParseToEof(testCase, getParsingRule());
+    void shouldParseAll(@SuppressWarnings("unused") String caseName, String testCase) {
+        helper.shouldParseToEof(testCase, getParsingRule());
     }
 
     protected abstract String getPath();
