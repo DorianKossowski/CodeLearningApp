@@ -20,4 +20,10 @@ public class JavaParserTest {
 
         HELPER.shouldParseToEof(input, JavaParser::classDec);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"public", "protected", "private", "abstract", "static", "final", "strictfp"})
+    void shouldParseClassModifier(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::classModifier);
+    }
 }

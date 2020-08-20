@@ -9,7 +9,17 @@ exercise
     ;
 
 classDec
-    : 'class' identifier '{' .*? '}'
+    : classModifier* 'class' identifier '{' .*? '}'
+    ;
+
+classModifier
+    : 'public'
+    | 'protected'
+    | 'private'
+    | 'abstract'
+    | 'static'
+    | 'final'
+    | 'strictfp'
     ;
 
 identifier
