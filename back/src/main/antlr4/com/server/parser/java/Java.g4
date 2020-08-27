@@ -12,6 +12,24 @@ classDec
     : classModifier* 'class' identifier '{' classBody '}'
     ;
 
+
+methodDec
+    : methodHeader '{' methodBody '}'
+    ;
+
+methodHeader
+    : methodModifier* methodResult identifier '(' .*? ')'
+    ;
+
+methodBody
+    : .*?
+    ;
+
+methodResult
+    : 'void'
+    | type
+    ;
+
 type
     : primitiveType
     | objectType

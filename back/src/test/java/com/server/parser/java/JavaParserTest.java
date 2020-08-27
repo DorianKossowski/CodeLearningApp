@@ -21,7 +21,7 @@ public class JavaParserTest {
 
     @Test
     void shouldParseClassDec() {
-        String input = "class Hello { body }";
+        String input = "class Hello { }";
 
         HELPER.shouldParseToEof(input, JavaParser::classDec);
     }
@@ -53,5 +53,15 @@ public class JavaParserTest {
     @ValueSource(strings = {"Integer []", "int[]", "MyClass[]"})
     void shouldParseArrayType(String input) {
         HELPER.shouldParseToEof(input, JavaParser::arrayType);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "public static void m(String[] args)",
+            "abstract String m()",
+            "private final int m(Integer i, Double d)"
+    })
+    void shouldParseMethodHeader(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::methodHeader);
     }
 }
