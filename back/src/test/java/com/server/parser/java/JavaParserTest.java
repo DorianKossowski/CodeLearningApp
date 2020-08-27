@@ -19,11 +19,14 @@ public class JavaParserTest {
         HELPER.shouldParseToEof(input, JavaParser::identifier);
     }
 
-    @Test
-    void shouldParseClassDec() {
-        String input = "class Hello { }";
-
-        HELPER.shouldParseToEof(input, JavaParser::classDec);
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "class C",
+            "abstract public class C",
+            "static private class C"
+    })
+    void shouldParseClassHeader(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::classHeader);
     }
 
     @Test

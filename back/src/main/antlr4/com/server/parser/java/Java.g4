@@ -9,9 +9,16 @@ exercise
     ;
 
 classDec
-    : classModifier* 'class' identifier '{' classBody '}'
+    : classHeader '{' classBody '}'
     ;
 
+classHeader
+    : classModifier* 'class' identifier
+    ;
+
+classBody
+    : methodDec*
+    ;
 
 methodDec
     : methodHeader '{' methodBody '}'
