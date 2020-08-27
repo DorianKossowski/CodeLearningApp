@@ -9,7 +9,32 @@ exercise
     ;
 
 classDec
-    : classModifier* 'class' identifier '{' .*? '}'
+    : classModifier* 'class' identifier '{' classBody '}'
+    ;
+
+type
+    : primitiveType
+    | objectType
+    | arrayType
+    ;
+
+arrayType
+    : ( primitiveType | objectType )  '[' ']'
+    ;
+
+objectType
+    : identifier
+    ;
+
+primitiveType
+    : 'short'
+    | 'int'
+    | 'long'
+    | 'float'
+    | 'double'
+    | 'byte'
+    | 'char'
+    | 'boolean'
     ;
 
 methodModifier

@@ -36,4 +36,22 @@ public class JavaParserTest {
         classModifiers.forEach(modifier -> HELPER.shouldParseToEof(modifier, JavaParser::classModifier));
         methodModifiers.forEach(modifier -> HELPER.shouldParseToEof(modifier, JavaParser::methodModifier));
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"short", "int", "long", "float", "double", "byte", "char", "boolean"})
+    void shouldParsePrimitiveType(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::primitiveType);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Integer", "String", "MyClass"})
+    void shouldParseObjectType(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::objectType);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Integer []", "int[]", "MyClass[]"})
+    void shouldParseArrayType(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::arrayType);
+    }
 }
