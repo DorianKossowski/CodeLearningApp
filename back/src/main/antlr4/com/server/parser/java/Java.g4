@@ -12,6 +12,12 @@ classDec
     : classModifier* 'class' identifier '{' .*? '}'
     ;
 
+methodModifier
+    : classModifier
+    | 'synchronized'
+    | 'native'
+    ;
+
 classModifier
     : 'public'
     | 'protected'
