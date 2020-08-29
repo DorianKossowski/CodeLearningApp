@@ -1,5 +1,9 @@
 grammar Java;
 
+@header {
+import com.server.parser.java.ast.*;
+}
+
 exerciseEOF
     : exercise EOF
     ;
@@ -32,8 +36,9 @@ methodArgs
     : '(' ( singleMethodArg ( ',' singleMethodArg )* )? ')'
     ;
 
-singleMethodArg
+singleMethodArg returns [Variable var]
     : type identifier
+    { $var = new Variable($type.text, $identifier.text); }
     ;
 
 methodBody

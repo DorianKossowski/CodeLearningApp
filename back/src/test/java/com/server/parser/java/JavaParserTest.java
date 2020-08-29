@@ -1,6 +1,7 @@
 package com.server.parser.java;
 
 import com.server.parser.ParserTestHelper;
+import com.server.parser.java.ast.Variable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -9,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JavaParserTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
@@ -72,5 +75,14 @@ public class JavaParserTest {
     @ValueSource(strings = {"", "int a", "int a, String[] b"})
     void shouldParseMethodArgs(String input) {
         HELPER.shouldParseToEof("(" + input + ")", JavaParser::methodArgs);
+    }
+
+    @Test
+    void shouldCreateFromSingleMethodArg() {
+        String input = "Integer[] a";
+        Variable variable = HELPER.shouldParseToEof(input, JavaParser::singleMethodArg).var;
+
+        assertThat(variable).extracting(Variable::getType, Variable::getName)
+                .containsExactly("Integer[]", "a");
     }
 }
