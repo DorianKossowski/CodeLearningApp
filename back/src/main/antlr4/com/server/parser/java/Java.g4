@@ -4,12 +4,14 @@ grammar Java;
 import com.server.parser.java.ast.*;
 }
 
-exerciseEOF
+exerciseEOF returns [Exercise e]
     : exercise EOF
+    { $e = $exercise.e; }
     ;
 
-exercise
+exercise returns [Exercise e]
     : classDec
+    { $e = new Exercise($classDec.classAst); }
     ;
 
 classDec returns [ClassAst classAst]

@@ -148,4 +148,12 @@ public class JavaParserTest {
         assertThat(classAst.getHeader().getName()).isEqualTo("c");
         assertThat(Iterables.getOnlyElement(classAst.getBody().getMethods()).getHeader().getName()).isEqualTo("m");
     }
+
+    @Test
+    void shouldCreateFromExercise() {
+        String input = "public class c {}";
+        Exercise exercise = HELPER.shouldParseToEof(input, JavaParser::exercise).e;
+
+        assertThat(exercise.getClassAst().getHeader().getName()).isEqualTo("c");
+    }
 }
