@@ -67,4 +67,10 @@ public class JavaParserTest {
     void shouldParseMethodHeader(String input) {
         HELPER.shouldParseToEof(input, JavaParser::methodHeader);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "int a", "int a, String[] b"})
+    void shouldParseMethodArgs(String input) {
+        HELPER.shouldParseToEof("(" + input + ")", JavaParser::methodArgs);
+    }
 }

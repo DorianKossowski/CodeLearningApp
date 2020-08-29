@@ -25,7 +25,15 @@ methodDec
     ;
 
 methodHeader
-    : methodModifier* methodResult identifier '(' .*? ')'
+    : methodModifier* methodResult identifier methodArgs
+    ;
+
+methodArgs
+    : '(' ( singleMethodArg ( ',' singleMethodArg )* )? ')'
+    ;
+
+singleMethodArg
+    : type identifier
     ;
 
 methodBody
