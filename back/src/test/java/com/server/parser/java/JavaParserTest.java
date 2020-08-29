@@ -2,6 +2,7 @@ package com.server.parser.java;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
+import com.server.parser.java.ast.ClassBody;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
@@ -122,5 +123,15 @@ public class JavaParserTest {
         assertThat(header).extracting(MethodHeader::getResult, MethodHeader::getName)
                 .containsExactly("void", "m");
         assertVariable(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
+    }
+
+    @Test
+    void shouldCreateFromClassBody() {
+        String input = "void m(){} void m2(){}";
+        ClassBody body = HELPER.shouldParseToEof(input, JavaParser::classBody).body;
+
+        assertThat(body.getMethods()).hasSize(2);
+        assertThat(body.getMethods()).extracting(method -> method.getHeader().getName())
+                .containsExactly("m", "m2");
     }
 }

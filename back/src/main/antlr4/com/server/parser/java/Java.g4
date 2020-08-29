@@ -20,8 +20,10 @@ classHeader
     : classModifier* 'class' identifier
     ;
 
-classBody
-    : methodDec*
+classBody returns [ClassBody body]
+@init{ List<Method> methods = new ArrayList<>(); }
+    : ( methodDec { methods.add($methodDec.method); } )*
+    { $body = new ClassBody(methods); }
     ;
 
 methodDec returns [Method method]
