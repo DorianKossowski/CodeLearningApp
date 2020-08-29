@@ -2,6 +2,7 @@ package com.server.parser.java;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
+import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import org.junit.jupiter.api.Test;
@@ -109,6 +110,17 @@ public class JavaParserTest {
 
         assertThat(header.getResult()).isEqualTo("void");
         assertThat(header.getName()).isEqualTo("m");
+        assertVariable(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
+    }
+
+    @Test
+    void shouldCreateFromMethodDec() {
+        String input = "void m(String[] a) { }";
+        Method method = HELPER.shouldParseToEof(input, JavaParser::methodDec).method;
+
+        MethodHeader header = method.getHeader();
+        assertThat(header).extracting(MethodHeader::getResult, MethodHeader::getName)
+                .containsExactly("void", "m");
         assertVariable(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
     }
 }

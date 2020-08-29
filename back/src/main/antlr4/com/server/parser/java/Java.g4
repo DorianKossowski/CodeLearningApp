@@ -24,8 +24,9 @@ classBody
     : methodDec*
     ;
 
-methodDec
+methodDec returns [Method method]
     : methodHeader '{' methodBody '}'
+    { $method = new Method($methodHeader.header); }
     ;
 
 methodHeader returns [MethodHeader header]
