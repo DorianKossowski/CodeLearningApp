@@ -2,10 +2,7 @@ package com.server.parser.java;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
-import com.server.parser.java.ast.ClassBody;
-import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -133,5 +130,13 @@ public class JavaParserTest {
         assertThat(body.getMethods()).hasSize(2);
         assertThat(body.getMethods()).extracting(method -> method.getHeader().getName())
                 .containsExactly("m", "m2");
+    }
+
+    @Test
+    void shouldCreateFromClassHeader() {
+        String input = "public class c";
+        ClassHeader header = HELPER.shouldParseToEof(input, JavaParser::classHeader).header;
+
+        assertThat(header.getName()).isEqualTo("c");
     }
 }

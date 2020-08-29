@@ -16,8 +16,9 @@ classDec
     : classHeader '{' classBody '}'
     ;
 
-classHeader
+classHeader returns [ClassHeader header]
     : classModifier* 'class' identifier
+    { $header = new ClassHeader($identifier.text); }
     ;
 
 classBody returns [ClassBody body]
