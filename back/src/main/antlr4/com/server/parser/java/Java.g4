@@ -28,8 +28,9 @@ methodDec
     : methodHeader '{' methodBody '}'
     ;
 
-methodHeader
+methodHeader returns [MethodHeader header]
     : methodModifier* methodResult identifier methodArgs
+    { $header = new MethodHeader($methodResult.text, $identifier.text, $methodArgs.args); }
     ;
 
 methodArgs returns [List<Variable> args = new ArrayList<>()]

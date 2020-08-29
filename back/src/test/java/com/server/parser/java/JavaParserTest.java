@@ -1,6 +1,8 @@
 package com.server.parser.java;
 
+import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
+import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -98,5 +100,15 @@ public class JavaParserTest {
         assertThat(variables).hasSize(2);
         assertVariable(variables.get(0), "Integer[]", "a");
         assertVariable(variables.get(1), "double", "b");
+    }
+
+    @Test
+    void shouldCreateFromMethodHeader() {
+        String input = "void m(String[] a)";
+        MethodHeader header = HELPER.shouldParseToEof(input, JavaParser::methodHeader).header;
+
+        assertThat(header.getResult()).isEqualTo("void");
+        assertThat(header.getName()).isEqualTo("m");
+        assertVariable(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
     }
 }
