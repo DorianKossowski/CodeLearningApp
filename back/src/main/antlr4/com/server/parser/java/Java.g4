@@ -32,8 +32,8 @@ methodHeader
     : methodModifier* methodResult identifier methodArgs
     ;
 
-methodArgs
-    : '(' ( singleMethodArg ( ',' singleMethodArg )* )? ')'
+methodArgs returns [List<Variable> args = new ArrayList<>()]
+    : '(' ( s=singleMethodArg { $args.add($s.var); } ( ',' s=singleMethodArg { $args.add($s.var); } )* )? ')'
     ;
 
 singleMethodArg returns [Variable var]

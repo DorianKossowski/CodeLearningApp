@@ -82,7 +82,21 @@ public class JavaParserTest {
         String input = "Integer[] a";
         Variable variable = HELPER.shouldParseToEof(input, JavaParser::singleMethodArg).var;
 
+        assertVariable(variable, "Integer[]", "a");
+    }
+
+    private void assertVariable(Variable variable, String type, String name) {
         assertThat(variable).extracting(Variable::getType, Variable::getName)
-                .containsExactly("Integer[]", "a");
+                .containsExactly(type, name);
+    }
+
+    @Test
+    void shouldCreateFromMethodArgs() {
+        String input = "(Integer[] a, double b)";
+        List<Variable> variables = HELPER.shouldParseToEof(input, JavaParser::methodArgs).args;
+
+        assertThat(variables).hasSize(2);
+        assertVariable(variables.get(0), "Integer[]", "a");
+        assertVariable(variables.get(1), "double", "b");
     }
 }
