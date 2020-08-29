@@ -139,4 +139,13 @@ public class JavaParserTest {
 
         assertThat(header.getName()).isEqualTo("c");
     }
+
+    @Test
+    void shouldCreateFromClassDec() {
+        String input = "public class c { void m() {} }";
+        ClassAst classAst = HELPER.shouldParseToEof(input, JavaParser::classDec).classAst;
+
+        assertThat(classAst.getHeader().getName()).isEqualTo("c");
+        assertThat(Iterables.getOnlyElement(classAst.getBody().getMethods()).getHeader().getName()).isEqualTo("m");
+    }
 }

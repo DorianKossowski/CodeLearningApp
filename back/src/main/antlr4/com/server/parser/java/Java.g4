@@ -12,8 +12,9 @@ exercise
     : classDec
     ;
 
-classDec
+classDec returns [ClassAst classAst]
     : classHeader '{' classBody '}'
+    { $classAst = new ClassAst($classHeader.header, $classBody.body); }
     ;
 
 classHeader returns [ClassHeader header]
