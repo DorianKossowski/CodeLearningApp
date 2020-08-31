@@ -54,6 +54,19 @@ methodBody
     : .*?
     ;
 
+methodCall returns [MethodCall mc]
+    : methodName '(' callArguments ')'
+    { $mc = new MethodCall($methodName.name, $callArguments.args); }
+    ;
+
+callArguments returns [List<Expression> args = new ArrayList<>()]
+    : e1=expression { $args.add($e1.e); } ( ',' e2=expression { $args.add($e2.e); } )*
+    ;
+
+expression returns [Expression e]
+    : literal { $e = new Expression($literal.l); }
+    ;
+
 literal returns [String l]
     : stringLiteral { $l = $stringLiteral.l; }
     ;
