@@ -5,6 +5,8 @@ import com.server.parser.ParserTestHelper;
 import com.server.parser.java.ast.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Arrays;
@@ -163,5 +165,22 @@ public class JavaParserTest {
         String name = HELPER.shouldParseToEof(input, JavaParser::methodName).name;
 
         assertThat(name).isEqualTo(input);
+    }
+
+    static Stream<Arguments> literalsProvider() {
+        return Stream.of(
+                Arguments.of("\"abc\"", "abc"),
+                Arguments.of("\"a b\"", "a b"),
+                Arguments.of("\"a\\\"a\"", "a\\\"a"),
+                Arguments.of("'a'", "a")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("literalsProvider")
+    void shouldParseLiteral(String literal, String expected) {
+        String parsedLiteral = HELPER.shouldParseToEof(literal, JavaParser::literal).l;
+
+        assertThat(parsedLiteral).isEqualTo(expected);
     }
 }

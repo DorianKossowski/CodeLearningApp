@@ -54,6 +54,15 @@ methodBody
     : .*?
     ;
 
+literal returns [String l]
+    : stringLiteral { $l = $stringLiteral.l; }
+    ;
+
+stringLiteral returns [String l]
+    : s = STRING_LITERAL { $l = $s.text.substring(1, $s.text.length()-1); }
+    | c = CHAR_LITERAL { $l = String.valueOf($c.text.charAt(1)); }
+    ;
+
 methodName returns [String name]
 @init{ List<String> ids = new ArrayList<>(); }
     : identifier { ids.add($identifier.text); } ( '.' identifier { ids.add($identifier.text); } )*
@@ -109,6 +118,9 @@ classModifier
 identifier
     : IDENTIFIER
     ;
+
+STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
+CHAR_LITERAL : '\'' . '\'' ;
 
 IDENTIFIER : (AZ | '_' | '$')  (AZ | DIGIT | '_' | '$')* ;
 
