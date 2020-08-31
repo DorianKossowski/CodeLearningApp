@@ -2,6 +2,7 @@ grammar Java;
 
 @header {
 import com.server.parser.java.ast.*;
+import com.server.parser.java.JavaGrammarHelper;
 }
 
 exerciseEOF returns [Exercise e]
@@ -51,6 +52,12 @@ singleMethodArg returns [Variable var]
 
 methodBody
     : .*?
+    ;
+
+methodName returns [String name]
+@init{ List<String> ids = new ArrayList<>(); }
+    : identifier { ids.add($identifier.text); } ( '.' identifier { ids.add($identifier.text); } )*
+    { $name = JavaGrammarHelper.createMethodName(ids); }
     ;
 
 methodResult

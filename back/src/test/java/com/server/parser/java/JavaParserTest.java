@@ -156,4 +156,12 @@ public class JavaParserTest {
 
         assertThat(exercise.getClassAst().getHeader().getName()).isEqualTo("c");
     }
+
+    @Test
+    void shouldParseMethodName() {
+        String input = "a.b";
+        String name = HELPER.shouldParseToEof(input, JavaParser::methodName).name;
+
+        assertThat(name).isEqualTo(input);
+    }
 }
