@@ -33,7 +33,7 @@ classBody returns [ClassBody body]
 
 methodDec returns [Method method]
     : methodHeader '{' methodBody '}'
-    { $method = new Method($methodHeader.header); }
+    { $method = new Method($methodHeader.header, $methodBody.body); }
     ;
 
 methodHeader returns [MethodHeader header]
@@ -50,8 +50,14 @@ singleMethodArg returns [Variable var]
     { $var = new Variable($type.text, $identifier.text); }
     ;
 
-methodBody
-    : .*?
+methodBody returns [MethodBody body]
+@init{ List<Statement> sList = new ArrayList<>(); }
+    : ( mbs=methodBodyStatement { sList.add($mbs.s); } )*
+    { $body = new MethodBody(sList); }
+    ;
+
+methodBodyStatement returns [Statement s]
+    : methodCall { $s = $methodCall.mc; }
     ;
 
 methodCall returns [MethodCall mc]

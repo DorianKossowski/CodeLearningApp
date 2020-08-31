@@ -2,7 +2,7 @@ package com.server.parser.java.ast;
 
 import java.util.List;
 
-public class MethodCall extends AstElement {
+public class MethodCall extends Statement {
     private final String name;
     private final List<Expression> args;
 
