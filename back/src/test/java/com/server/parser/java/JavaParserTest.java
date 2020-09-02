@@ -130,12 +130,13 @@ public class JavaParserTest {
 
     @Test
     void shouldCreateFromClassBody() {
-        String input = "void m(){} void m2(){}";
+        String input = "int i; void m(){} void m2(){} private String s;";
         ClassBody body = HELPER.shouldParseToEof(input, JavaParser::classBody).body;
 
-        assertThat(body.getMethods()).hasSize(2);
         assertThat(body.getMethods()).extracting(method -> method.getHeader().getName())
                 .containsExactly("m", "m2");
+        assertThat(body.getFields()).extracting(Variable::getName)
+                .containsExactly("i", "s");
     }
 
     @Test

@@ -26,9 +26,11 @@ classHeader returns [ClassHeader header]
     ;
 
 classBody returns [ClassBody body]
-@init{ List<Method> methods = new ArrayList<>(); }
-    : ( methodDec { methods.add($methodDec.method); } )*
-    { $body = new ClassBody(methods); }
+@init{ List<Method> methods = new ArrayList<>(); List<Variable> fields = new ArrayList<>(); }
+    : ( methodDec { methods.add($methodDec.method); }
+    | fieldDec { fields.add($fieldDec.v); }
+    )*
+    { $body = new ClassBody(methods, fields); }
     ;
 
 fieldDec returns [Variable v]
