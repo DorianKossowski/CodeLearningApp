@@ -1,0 +1,4 @@
+public class MyClass {
+    private final int i;
+    public static String s = "str";
+}
