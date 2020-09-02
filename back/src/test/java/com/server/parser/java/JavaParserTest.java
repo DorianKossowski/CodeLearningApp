@@ -85,10 +85,10 @@ public class JavaParserTest {
         String input = "Integer[] a";
         Variable variable = HELPER.shouldParseToEof(input, JavaParser::singleMethodArg).var;
 
-        assertVariable(variable, "Integer[]", "a");
+        assertVariableDec(variable, "Integer[]", "a");
     }
 
-    private void assertVariable(Variable variable, String type, String name) {
+    private void assertVariableDec(Variable variable, String type, String name) {
         assertThat(variable).extracting(Variable::getType, Variable::getName)
                 .containsExactly(type, name);
     }
@@ -99,8 +99,8 @@ public class JavaParserTest {
         List<Variable> variables = HELPER.shouldParseToEof(input, JavaParser::methodArgs).args;
 
         assertThat(variables).hasSize(2);
-        assertVariable(variables.get(0), "Integer[]", "a");
-        assertVariable(variables.get(1), "double", "b");
+        assertVariableDec(variables.get(0), "Integer[]", "a");
+        assertVariableDec(variables.get(1), "double", "b");
     }
 
     @Test
@@ -110,7 +110,7 @@ public class JavaParserTest {
 
         assertThat(header.getResult()).isEqualTo("void");
         assertThat(header.getName()).isEqualTo("m");
-        assertVariable(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
+        assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
     }
 
     @Test
@@ -122,7 +122,7 @@ public class JavaParserTest {
         Statement statement = Iterables.getOnlyElement(method.getBody().getStatements());
         assertThat(header).extracting(MethodHeader::getResult, MethodHeader::getName)
                 .containsExactly("void", "m");
-        assertVariable(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
+        assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
         assertThat(((MethodCall) statement)).extracting(MethodCall::getName,
                 call -> Iterables.getOnlyElement(call.getArgs()).getText())
                 .containsExactly("println", "HELLO");
@@ -195,5 +195,15 @@ public class JavaParserTest {
 
         assertThat(call.getName()).isEqualTo("System.out.print");
         assertThat(Iterables.getOnlyElement(call.getArgs()).getText()).isEqualTo("Hello World");
+    }
+
+    @Test
+    void shouldCreateFromFieldDec() {
+        String input = "private final String a = \"str\";";
+        Variable variable = HELPER.shouldParseToEof(input, JavaParser::fieldDec).v;
+
+        assertVariableDec(variable, "String", "a");
+        assertThat(variable.getValue()).extracting(Expression::getText)
+                .isEqualTo("str");
     }
 }

@@ -31,6 +31,25 @@ classBody returns [ClassBody body]
     { $body = new ClassBody(methods); }
     ;
 
+fieldDec returns [Variable v]
+    : fieldModifier* type varDec ';'
+    { $v = new Variable($type.text, $varDec.id, $varDec.e); }
+    ;
+
+varDec returns [String id, Expression e]
+    : identifier { $id = $identifier.text;} ('=' expression { $e = $expression.e; } )?
+    ;
+
+fieldModifier
+    : 'public'
+    | 'protected'
+    | 'private'
+    | 'static'
+    | 'final'
+    | 'transient'
+    | 'volatile'
+    ;
+
 methodDec returns [Method method]
     : methodHeader '{' methodBody '}'
     { $method = new Method($methodHeader.header, $methodBody.body); }
