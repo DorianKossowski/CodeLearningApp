@@ -115,7 +115,7 @@ public class JavaParserTest {
 
     @Test
     void shouldCreateFromMethodDec() {
-        String input = "void m(String[] a) { println(\"HELLO\") }"; //TODO semicolon
+        String input = "void m(String[] a) { println(\"HELLO\"); }";
         Method method = HELPER.shouldParseToEof(input, JavaParser::methodDec).method;
 
         MethodHeader header = method.getHeader();
@@ -190,7 +190,7 @@ public class JavaParserTest {
 
     @Test
     void shouldCreateFromMethodCall() {
-        String input = "System.out.print(\"Hello World\")";
+        String input = "System.out.print(\"Hello World\");";
         MethodCall call = HELPER.shouldParseToEof(input, JavaParser::methodCall).mc;
 
         assertThat(call.getName()).isEqualTo("System.out.print");

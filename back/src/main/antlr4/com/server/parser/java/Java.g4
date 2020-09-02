@@ -52,7 +52,7 @@ singleMethodArg returns [Variable var]
 
 methodBody returns [MethodBody body]
 @init{ List<Statement> sList = new ArrayList<>(); }
-    : ( mbs=methodBodyStatement { sList.add($mbs.s); } )*
+    : ( mbs=methodBodyStatement { sList.add($mbs.s); } | ';' )*
     { $body = new MethodBody(sList); }
     ;
 
@@ -61,7 +61,7 @@ methodBodyStatement returns [Statement s]
     ;
 
 methodCall returns [MethodCall mc]
-    : methodName '(' callArguments ')'
+    : methodName '(' callArguments ')' ';'
     { $mc = new MethodCall($methodName.name, $callArguments.args); }
     ;
 
