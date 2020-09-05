@@ -109,8 +109,8 @@ literal returns [String l]
     ;
 
 stringLiteral returns [String l]
-    : s = STRING_LITERAL { $l = $s.text.substring(1, $s.text.length()-1); }
-    | c = CHAR_LITERAL { $l = String.valueOf($c.text.charAt(1)); }
+    : STRING_LITERAL
+    | CHAR_LITERAL
     ;
 
 methodName returns [String name]
