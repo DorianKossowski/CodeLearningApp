@@ -101,10 +101,10 @@ callArguments returns [List<Expression> args = new ArrayList<>()]
     ;
 
 expression returns [Expression e]
-    : literal { $e = new Expression($literal.l); }
+    : literal
     ;
 
-literal returns [String l]
+literal
     : stringLiteral
     ;
 
