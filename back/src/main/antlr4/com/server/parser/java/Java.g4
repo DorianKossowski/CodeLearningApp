@@ -68,7 +68,6 @@ methodArgs returns [List<Variable> args = new ArrayList<>()]
 
 singleMethodArg returns [Variable var]
     : type identifier
-    { $var = new Variable($type.text, $identifier.text); }
     ;
 
 methodBody returns [MethodBody body]

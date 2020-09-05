@@ -81,11 +81,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromSingleMethodArg() {
-        String input = "Integer[] a";
-        Variable variable = HELPER.shouldParseToEof(input, JavaParser::singleMethodArg).var;
-
-        assertVariableDec(variable, "Integer[]", "a");
+    void shouldParseSingleMethodArg() {
+        HELPER.shouldParseToEof("Integer[] a", JavaParser::singleMethodArg);
     }
 
     private void assertVariableDec(Variable variable, String type, String name) {
