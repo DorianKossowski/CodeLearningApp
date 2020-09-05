@@ -2,7 +2,7 @@ package com.server.parser.java.ast;
 
 import java.util.Objects;
 
-public class Variable extends AstElement {
+public class Variable extends Statement {
     private final String type;
     private final String name;
     private final Expression value;

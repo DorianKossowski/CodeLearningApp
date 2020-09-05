@@ -73,8 +73,20 @@ singleMethodArg returns [Variable var]
 
 methodBody returns [MethodBody body]
 @init{ List<Statement> sList = new ArrayList<>(); }
-    : ( mbs=methodBodyStatement { sList.add($mbs.s); } | ';' )*
+    : ( mbs=methodBodyStatement { sList.add($mbs.s); }
+    | lvd=localVarDec { sList.add($lvd.v); }
+    | ';'
+    )*
     { $body = new MethodBody(sList); }
+    ;
+
+localVarDec returns [Variable v]
+    : varModifier* type varDec ';'
+    { $v = new Variable($type.text, $varDec.id, $varDec.e); }
+    ;
+
+varModifier
+    : 'final'
     ;
 
 methodBodyStatement returns [Statement s]
