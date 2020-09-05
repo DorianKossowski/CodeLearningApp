@@ -96,13 +96,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromMethodHeader() {
-        String input = "void m(String[] a)";
-        MethodHeader header = HELPER.shouldParseToEof(input, JavaParser::methodHeader).header;
-
-        assertThat(header.getResult()).isEqualTo("void");
-        assertThat(header.getName()).isEqualTo("m");
-        assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
+    void shouldParseMethodHeader() {
+        HELPER.shouldParseToEof("void m(String[] a)", JavaParser::methodHeader);
     }
 
     @Test
