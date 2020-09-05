@@ -185,3 +185,5 @@ fragment LOWERCASE : [a-z] ;
 fragment UPPERCASE : [A-Z] ;
 
 fragment DIGIT : [0-9] ;
+
+ERROR: . ;
