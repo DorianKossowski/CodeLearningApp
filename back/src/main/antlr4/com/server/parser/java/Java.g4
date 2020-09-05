@@ -80,7 +80,6 @@ methodBody returns [MethodBody body]
 
 localVarDec returns [Variable v]
     : varModifier* type varDec ';'
-    { $v = new Variable($type.text, $varDec.id, $varDec.e); }
     ;
 
 varModifier

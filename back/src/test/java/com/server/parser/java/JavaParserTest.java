@@ -183,12 +183,7 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromLocalVarDec() {
-        String input = "final String a = \"str\";";
-        Variable variable = HELPER.shouldParseToEof(input, JavaParser::localVarDec).v;
-
-        assertVariableDec(variable, "String", "a");
-        assertThat(variable.getValue()).extracting(Expression::getText)
-                .isEqualTo("str");
+    void shouldParseLocalVarDec() {
+        HELPER.shouldParseToEof("final String a = \"str\";", JavaParser::localVarDec);
     }
 }
