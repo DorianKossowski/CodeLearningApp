@@ -39,7 +39,7 @@ fieldDec returns [Variable v]
     ;
 
 varDec returns [String id, Expression e]
-    : identifier { $id = $identifier.text;} ('=' expression { $e = $expression.e; } )?
+    : identifier ('=' expression )?
     ;
 
 fieldModifier
