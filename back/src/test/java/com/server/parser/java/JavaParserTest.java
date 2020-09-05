@@ -91,13 +91,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromMethodArgs() {
-        String input = "(Integer[] a, double b)";
-        List<Variable> variables = HELPER.shouldParseToEof(input, JavaParser::methodArgs).args;
-
-        assertThat(variables).hasSize(2);
-        assertVariableDec(variables.get(0), "Integer[]", "a");
-        assertVariableDec(variables.get(1), "double", "b");
+    void shouldParseMethodArgs() {
+        HELPER.shouldParseToEof("(Integer[] a, double b)", JavaParser::methodArgs);
     }
 
     @Test

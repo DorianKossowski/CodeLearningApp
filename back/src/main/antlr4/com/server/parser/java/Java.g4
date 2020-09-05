@@ -63,10 +63,10 @@ methodHeader returns [MethodHeader header]
     ;
 
 methodArgs returns [List<Variable> args = new ArrayList<>()]
-    : '(' ( s=singleMethodArg { $args.add($s.var); } ( ',' s=singleMethodArg { $args.add($s.var); } )* )? ')'
+    : '(' ( singleMethodArg ( ',' singleMethodArg )* )? ')'
     ;
 
-singleMethodArg returns [Variable var]
+singleMethodArg
     : type identifier
     ;
 
