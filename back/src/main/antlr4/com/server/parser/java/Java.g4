@@ -105,10 +105,10 @@ expression returns [Expression e]
     ;
 
 literal returns [String l]
-    : stringLiteral { $l = $stringLiteral.l; }
+    : stringLiteral
     ;
 
-stringLiteral returns [String l]
+stringLiteral
     : STRING_LITERAL
     | CHAR_LITERAL
     ;
