@@ -96,10 +96,10 @@ methodCall returns [MethodCall mc]
     ;
 
 callArguments returns [List<Expression> args = new ArrayList<>()]
-    : e1=expression { $args.add($e1.e); } ( ',' e2=expression { $args.add($e2.e); } )*
+    : e1=expression ( ',' e2=expression )*
     ;
 
-expression returns [Expression e]
+expression
     : literal
     ;
 
