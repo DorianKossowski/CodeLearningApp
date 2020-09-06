@@ -113,9 +113,7 @@ stringLiteral
     ;
 
 methodName returns [String name]
-@init{ List<String> ids = new ArrayList<>(); }
-    : identifier { ids.add($identifier.text); } ( '.' identifier { ids.add($identifier.text); } )*
-    { $name = JavaGrammarHelper.createMethodName(ids); }
+    : identifier ( '.' identifier )*
     ;
 
 methodResult

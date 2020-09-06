@@ -151,10 +151,7 @@ public class JavaParserTest {
 
     @Test
     void shouldParseMethodName() {
-        String input = "a.b";
-        String name = HELPER.shouldParseToEof(input, JavaParser::methodName).name;
-
-        assertThat(name).isEqualTo(input);
+        HELPER.shouldParseToEof("a.b", JavaParser::methodName);
     }
 
     @ParameterizedTest
