@@ -1,7 +1,6 @@
 package com.server.parser.java;
 
 import com.server.parser.ParserTestHelper;
-import com.server.parser.java.ast.Exercise;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -10,8 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class JavaParserTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
@@ -108,11 +105,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromExercise() {
-        String input = "public class c {}";
-        Exercise exercise = HELPER.shouldParseToEof(input, JavaParser::exercise).e;
-
-        assertThat(exercise.getClassAst().getHeader().getName()).isEqualTo("c");
+    void shouldParseExercise() {
+        HELPER.shouldParseToEof("public class c {}", JavaParser::exercise);
     }
 
     @Test

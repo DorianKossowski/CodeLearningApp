@@ -1,21 +1,14 @@
 grammar Java;
 
-@header {
-import com.server.parser.java.ast.*;
-import com.server.parser.java.JavaGrammarHelper;
-}
-
-exerciseEOF returns [Exercise e]
+exerciseEOF
     : exercise EOF
-    { $e = $exercise.e; }
     ;
 
-exercise returns [Exercise e]
+exercise
     : classDec
-    { $e = new Exercise($classDec.classAst); }
     ;
 
-classDec returns [ClassAst classAst]
+classDec
     : classHeader '{' classBody '}'
     ;
 
