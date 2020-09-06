@@ -70,15 +70,13 @@ singleMethodArg
     ;
 
 methodBody returns [MethodBody body]
-@init{ List<Statement> sList = new ArrayList<>(); }
-    : ( mbs=methodBodyStatement { sList.add($mbs.s); }
-    | lvd=localVarDec { sList.add($lvd.v); }
+    : ( mbs=methodBodyStatement
+    | lvd=localVarDec
     | ';'
     )*
-    { $body = new MethodBody(sList); }
     ;
 
-localVarDec returns [Variable v]
+localVarDec
     : varModifier* type varDec ';'
     ;
 
@@ -86,7 +84,7 @@ varModifier
     : 'final'
     ;
 
-methodBodyStatement returns [Statement s]
+methodBodyStatement
     : methodCall
     ;
 
