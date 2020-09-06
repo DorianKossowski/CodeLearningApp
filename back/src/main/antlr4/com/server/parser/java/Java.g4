@@ -17,14 +17,13 @@ exercise returns [Exercise e]
 
 classDec returns [ClassAst classAst]
     : classHeader '{' classBody '}'
-    { $classAst = new ClassAst($classHeader.header, $classBody.body); }
     ;
 
-classHeader returns [ClassHeader header]
+classHeader
     : classModifier* 'class' identifier
     ;
 
-classBody returns [ClassBody body]
+classBody
     : ( fieldDec
     | methodDec
     )*

@@ -1,10 +1,7 @@
 package com.server.parser.java;
 
-import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
-import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Exercise;
-import com.server.parser.java.ast.Variable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -85,11 +82,6 @@ public class JavaParserTest {
         HELPER.shouldParseToEof("Integer[] a", JavaParser::singleMethodArg);
     }
 
-    private void assertVariableDec(Variable variable, String type, String name) {
-        assertThat(variable).extracting(Variable::getType, Variable::getName)
-                .containsExactly(type, name);
-    }
-
     @Test
     void shouldParseMethodArgs() {
         HELPER.shouldParseToEof("(Integer[] a, double b)", JavaParser::methodArgs);
@@ -111,12 +103,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromClassDec() {
-        String input = "public class c { void m() {} }";
-        ClassAst classAst = HELPER.shouldParseToEof(input, JavaParser::classDec).classAst;
-
-        assertThat(classAst.getHeader().getName()).isEqualTo("c");
-        assertThat(Iterables.getOnlyElement(classAst.getBody().getMethods()).getHeader().getName()).isEqualTo("m");
+    void shouldParseClassDec() {
+        HELPER.shouldParseToEof("public class c { void m() {} }", JavaParser::classDec);
     }
 
     @Test
