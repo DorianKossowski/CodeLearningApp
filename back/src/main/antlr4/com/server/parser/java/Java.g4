@@ -92,10 +92,9 @@ methodBodyStatement returns [Statement s]
 
 methodCall returns [MethodCall mc]
     : methodName '(' callArguments ')' ';'
-    { $mc = new MethodCall($methodName.name, $callArguments.args); }
     ;
 
-callArguments returns [List<Expression> args = new ArrayList<>()]
+callArguments
     : e1=expression ( ',' e2=expression )*
     ;
 
@@ -112,7 +111,7 @@ stringLiteral
     | CHAR_LITERAL
     ;
 
-methodName returns [String name]
+methodName
     : identifier ( '.' identifier )*
     ;
 

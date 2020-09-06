@@ -161,12 +161,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromMethodCall() {
-        String input = "System.out.print(\"Hello World\");";
-        MethodCall call = HELPER.shouldParseToEof(input, JavaParser::methodCall).mc;
-
-        assertThat(call.getName()).isEqualTo("System.out.print");
-        assertThat(Iterables.getOnlyElement(call.getArgs()).getText()).isEqualTo("Hello World");
+    void shouldParseMethodCall() {
+        HELPER.shouldParseToEof("System.out.print(\"Hello World\");", JavaParser::methodCall);
     }
 
     @Test
