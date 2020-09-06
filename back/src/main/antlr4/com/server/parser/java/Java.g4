@@ -34,10 +34,9 @@ classBody returns [ClassBody body]
 
 fieldDec returns [Variable v]
     : fieldModifier* type varDec ';'
-    { $v = new Variable($type.text, $varDec.id, $varDec.e); }
     ;
 
-varDec returns [String id, Expression e]
+varDec
     : identifier ('=' expression )?
     ;
 

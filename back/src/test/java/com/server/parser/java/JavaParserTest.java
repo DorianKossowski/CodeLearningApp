@@ -2,7 +2,10 @@ package com.server.parser.java;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
-import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.ClassAst;
+import com.server.parser.java.ast.ClassBody;
+import com.server.parser.java.ast.Exercise;
+import com.server.parser.java.ast.Variable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -148,13 +151,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromFieldDec() {
-        String input = "private final String a = \"str\";";
-        Variable variable = HELPER.shouldParseToEof(input, JavaParser::fieldDec).v;
-
-        assertVariableDec(variable, "String", "a");
-        assertThat(variable.getValue()).extracting(Expression::getText)
-                .isEqualTo("str");
+    void shouldParseFieldDec() {
+        HELPER.shouldParseToEof("private final String a = \"str\";", JavaParser::fieldDec);
     }
 
     @Test
