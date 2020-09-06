@@ -87,10 +87,10 @@ varModifier
     ;
 
 methodBodyStatement returns [Statement s]
-    : methodCall { $s = $methodCall.mc; }
+    : methodCall
     ;
 
-methodCall returns [MethodCall mc]
+methodCall
     : methodName '(' callArguments ')' ';'
     ;
 
