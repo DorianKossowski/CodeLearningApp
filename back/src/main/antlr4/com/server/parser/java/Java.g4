@@ -25,14 +25,12 @@ classHeader returns [ClassHeader header]
     ;
 
 classBody returns [ClassBody body]
-@init{ List<Method> methods = new ArrayList<>(); List<Variable> fields = new ArrayList<>(); }
-    : ( methodDec { methods.add($methodDec.method); }
-    | fieldDec { fields.add($fieldDec.v); }
+    : ( fieldDec
+    | methodDec
     )*
-    { $body = new ClassBody(methods, fields); }
     ;
 
-fieldDec returns [Variable v]
+fieldDec
     : fieldModifier* type varDec ';'
     ;
 
@@ -50,7 +48,7 @@ fieldModifier
     | 'volatile'
     ;
 
-methodDec returns [Method method]
+methodDec
     : methodHeader '{' methodBody '}'
     ;
 

@@ -3,7 +3,6 @@ package com.server.parser.java;
 import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.ast.ClassAst;
-import com.server.parser.java.ast.ClassBody;
 import com.server.parser.java.ast.Exercise;
 import com.server.parser.java.ast.Variable;
 import org.junit.jupiter.api.Test;
@@ -107,14 +106,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromClassBody() {
-        String input = "int i; void m(){} void m2(){} private String s;";
-        ClassBody body = HELPER.shouldParseToEof(input, JavaParser::classBody).body;
-
-        assertThat(body.getMethods()).extracting(method -> method.getHeader().getName())
-                .containsExactly("m", "m2");
-        assertThat(body.getFields()).extracting(Variable::getName)
-                .containsExactly("i", "s");
+    void shouldParseClassBody() {
+        HELPER.shouldParseToEof("int i; void m(){} void m2(){} private String s;", JavaParser::classBody);
     }
 
     @Test
