@@ -115,14 +115,6 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromClassHeader() {
-        String input = "public class c";
-        ClassHeader header = HELPER.shouldParseToEof(input, JavaParser::classHeader).header;
-
-        assertThat(header.getName()).isEqualTo("c");
-    }
-
-    @Test
     void shouldCreateFromClassDec() {
         String input = "public class c { void m() {} }";
         ClassAst classAst = HELPER.shouldParseToEof(input, JavaParser::classDec).classAst;
