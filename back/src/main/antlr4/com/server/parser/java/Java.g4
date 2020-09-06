@@ -54,10 +54,9 @@ fieldModifier
 
 methodDec returns [Method method]
     : methodHeader '{' methodBody '}'
-    { $method = new Method($methodHeader.header, $methodBody.body); }
     ;
 
-methodHeader returns [MethodHeader header]
+methodHeader
     : methodModifier* methodResult identifier methodArgs
     ;
 
@@ -69,7 +68,7 @@ singleMethodArg
     : type identifier
     ;
 
-methodBody returns [MethodBody body]
+methodBody
     : ( mbs=methodBodyStatement
     | lvd=localVarDec
     | ';'

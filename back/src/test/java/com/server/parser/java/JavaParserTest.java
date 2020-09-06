@@ -99,18 +99,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldCreateFromMethodDec() {
-        String input = "void m(String[] a) { println(\"HELLO\"); }";
-        Method method = HELPER.shouldParseToEof(input, JavaParser::methodDec).method;
-
-        MethodHeader header = method.getHeader();
-        Statement statement = Iterables.getOnlyElement(method.getBody().getStatements());
-        assertThat(header).extracting(MethodHeader::getResult, MethodHeader::getName)
-                .containsExactly("void", "m");
-        assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
-        assertThat(((MethodCall) statement)).extracting(MethodCall::getName,
-                call -> Iterables.getOnlyElement(call.getArgs()).getText())
-                .containsExactly("println", "HELLO");
+    void shouldParseMethodDec() {
+        HELPER.shouldParseToEof("void m(String[] a) { println(\"HELLO\"); }", JavaParser::methodDec);
     }
 
     @Test
