@@ -13,7 +13,11 @@ singleRule
     ;
 
 methodRule
-    : ARROW 'method'
+    : 'method' methodRuleSpec+
+    ;
+
+methodRuleSpec
+    : 'with' 'name' ':' STRING_LITERAL
     ;
 
 ARROW : '-' '>' ;

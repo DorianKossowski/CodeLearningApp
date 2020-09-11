@@ -11,7 +11,9 @@ public class JavaTaskParserTest {
             JavaTaskParser::new);
 
     @ParameterizedTest
-    @ValueSource(strings = {"-> method"})
+    @ValueSource(strings = {
+            "-> method with name: \"x\""
+    })
     void shouldParseMethodRule(String input) {
         HELPER.shouldParseToEof(input, JavaTaskParser::methodRule);
     }
