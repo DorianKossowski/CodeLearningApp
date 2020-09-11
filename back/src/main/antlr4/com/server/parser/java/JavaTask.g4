@@ -9,8 +9,14 @@ rules
     ;
 
 singleRule
-    : ' '
+    : ARROW methodRule
     ;
+
+methodRule
+    : ARROW 'method'
+    ;
+
+ARROW : '-' '>' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 
