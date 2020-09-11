@@ -131,7 +131,6 @@
                 <version>4.7.1</version>
                 <configuration>
                     <outputDirectory>src/gen/java</outputDirectory>
-                    <listener>false</listener>
                     <inputEncoding>UTF-8</inputEncoding>
                     <outputEncoding>UTF-8</outputEncoding>
                 </configuration>
