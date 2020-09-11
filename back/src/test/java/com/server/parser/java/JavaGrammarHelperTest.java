@@ -15,4 +15,11 @@ class JavaGrammarHelperTest {
 
         assertThat(JavaGrammarHelper.createMethodName(input)).isEqualTo("A.B");
     }
+
+    @Test
+    void shouldGetFromStringLiteral() {
+        String literal = "\"A\\\"B\\\"\"";
+
+        assertThat(JavaGrammarHelper.getFromStringLiteral(literal)).isEqualTo("A\"B\"");
+    }
 }

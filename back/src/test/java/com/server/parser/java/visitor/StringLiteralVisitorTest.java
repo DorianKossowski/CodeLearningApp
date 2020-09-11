@@ -16,7 +16,7 @@ class StringLiteralVisitorTest extends JavaVisitorTestBase {
         return Stream.of(
                 Arguments.of("\"abc\"", "abc"),
                 Arguments.of("\"a b\"", "a b"),
-                Arguments.of("\"a\\\"a\"", "a\\\"a"),
+                Arguments.of("\"a\\\"a\"", "a\"a"),
                 Arguments.of("'a'", "a")
         );
     }
