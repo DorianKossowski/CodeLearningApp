@@ -1,4 +1,4 @@
-package com.server.app.service;
+package com.server.app.service.json;
 
 public interface JsonComparingService {
 

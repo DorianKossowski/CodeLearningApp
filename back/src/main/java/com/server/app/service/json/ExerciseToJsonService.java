@@ -1,4 +1,4 @@
-package com.server.app.service;
+package com.server.app.service.json;
 
 import com.server.parser.java.ast.Exercise;
 

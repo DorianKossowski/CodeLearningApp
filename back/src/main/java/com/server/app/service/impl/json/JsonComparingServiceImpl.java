@@ -1,6 +1,6 @@
-package com.server.app.service.impl;
+package com.server.app.service.impl.json;
 
-import com.server.app.service.JsonComparingService;
+import com.server.app.service.json.JsonComparingService;
 import org.springframework.stereotype.Service;
 
 @Service

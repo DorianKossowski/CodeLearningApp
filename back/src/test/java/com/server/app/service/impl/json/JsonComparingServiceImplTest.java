@@ -1,4 +1,4 @@
-package com.server.app.service.impl;
+package com.server.app.service.impl.json;
 
 import org.junit.jupiter.api.Test;
 

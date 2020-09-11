@@ -1,7 +1,7 @@
-package com.server.app.service.impl;
+package com.server.app.service.impl.json;
 
-import com.server.app.service.ExerciseToJsonService;
-import com.server.app.service.JsonComparingService;
+import com.server.app.service.json.ExerciseToJsonService;
+import com.server.app.service.json.JsonComparingService;
 import com.server.parser.java.ast.*;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +25,7 @@ class ExerciseToJsonServiceImplTest {
         Exercise exercise = createSampleExercise();
 
         String json = service.mapToJson(exercise);
-        
+
         assertThat(comparingService.areEqual(json, expected)).isTrue();
     }
 

@@ -1,8 +1,8 @@
-package com.server.app.service.impl;
+package com.server.app.service.impl.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.server.app.service.ExerciseToJsonService;
+import com.server.app.service.json.ExerciseToJsonService;
 import com.server.parser.java.ast.Exercise;
 import org.springframework.stereotype.Service;
 
