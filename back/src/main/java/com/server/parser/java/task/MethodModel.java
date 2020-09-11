@@ -16,6 +16,11 @@ public class MethodModel {
         return new Builder();
     }
 
+    @Override
+    public String toString() {
+        return getName().orElse("");
+    }
+
     public static class Builder {
         private String name;
 

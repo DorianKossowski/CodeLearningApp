@@ -21,7 +21,7 @@ public class MethodVerifier {
         availableMethods = new ArrayList<>(methods);
         methodModel.getName().ifPresent(this::verifyMethodName);
 
-        Verify.verify(!availableMethods.isEmpty(), "Oczekiwana metoda nie istnieje");
+        Verify.verify(!availableMethods.isEmpty(), String.format("Oczekiwana metoda: %s nie istnieje", methodModel));
     }
 
     private void verifyMethodName(String name) {
