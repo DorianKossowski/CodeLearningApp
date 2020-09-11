@@ -19,7 +19,7 @@ class ExerciseToJsonServiceImplTest {
     void shouldMapToJson() {
         String expected = "{\"classAst\" : {\"header\" : {\"name\" : \"MyClass\"},\"body\" : {" +
                 "\"fields\" : [ {\"type\" : \"String\",\"name\" : \"str\",\"value\" : null} ]," +
-                "\"methods\" : [ {\"header\" : {\"result\" : \"int\",\"name\" : \"myMethod\"," +
+                "\"methods\" : [ {\"className\" : \"MyClass\", \"header\" : {\"result\" : \"int\",\"name\" : \"myMethod\"," +
                 " \"arguments\" : [ {\"type\" : \"Integer\",\"name\" : \"arg\",\"value\" : null} ] },\"body\" : {" +
                 "  \"statements\" : [ {\"name\" : \"methodToCall\",\"args\" : [ {\"text\" : \"\\\"expr1 expr2\\\"\"} ]} ]}} ]}}}";
         Exercise exercise = createSampleExercise();
@@ -47,6 +47,6 @@ class ExerciseToJsonServiceImplTest {
         MethodCall methodCall = new MethodCall("methodToCall", callArgs);
         MethodBody methodBody = new MethodBody(Collections.singletonList(methodCall));
 
-        return new Method(methodHeader, methodBody);
+        return new Method("MyClass", methodHeader, methodBody);
     }
 }

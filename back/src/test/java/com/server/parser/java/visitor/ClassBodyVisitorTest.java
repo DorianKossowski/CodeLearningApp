@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ClassBodyVisitorTest extends JavaVisitorTestBase {
-    private final ClassBodyVisitor visitor = new ClassBodyVisitor();
+    private final ClassBodyVisitor visitor = new ClassBodyVisitor("");
 
     @Test
     void shouldVisitClassBody() {

@@ -11,7 +11,7 @@ public class ClassDecVisitor extends JavaBaseVisitor<ClassAst> {
     @Override
     public ClassAst visitClassDec(JavaParser.ClassDecContext ctx) {
         ClassHeader header = new ClassHeaderVisitor().visit(ctx.classHeader());
-        ClassBody body = new ClassBodyVisitor().visit(ctx.classBody());
+        ClassBody body = new ClassBodyVisitor(header.getName()).visit(ctx.classBody());
         return new ClassAst(header, body);
     }
 }

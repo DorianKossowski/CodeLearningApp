@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MethodDecVisitorTest extends JavaVisitorTestBase {
-    private final MethodDecVisitor visitor = new MethodDecVisitor();
+    private final MethodDecVisitor visitor = new MethodDecVisitor("");
 
     @Test
     void shouldVisitMethodDec() {
