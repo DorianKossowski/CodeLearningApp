@@ -1,6 +1,5 @@
 package com.server.parser.java.task;
 
-import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaTaskBaseListener;
 import com.server.parser.java.JavaTaskParser;
 
@@ -26,7 +25,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     }
 
     @Override
-    public void enterMethodRuleSpec(JavaTaskParser.MethodRuleSpecContext ctx) {
-        methodBuilder.withName(JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    public void enterMethodNameRuleSpec(JavaTaskParser.MethodNameRuleSpecContext ctx) {
+        JavaTaskGrammarHelper.extractValue(ctx.valueOrEmpty()).ifPresent(value -> methodBuilder.withName(value));
     }
 }

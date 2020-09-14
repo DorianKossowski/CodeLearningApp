@@ -17,10 +17,29 @@ methodRule
     ;
 
 methodRuleSpec
-    : 'with' 'name' ':' STRING_LITERAL
+    : 'with' ( methodNameRuleSpec
+    | methodArgsRuleSpec
+    )
+    ;
+
+methodArgsRuleSpec
+    : 'args' ':' argsElement ( ',' argsElement )*
+    ;
+
+methodNameRuleSpec
+    : 'name' ':' valueOrEmpty
+    ;
+
+argsElement
+    : '{' valueOrEmpty ',' valueOrEmpty '}'
+    ;
+
+valueOrEmpty
+    : STRING_LITERAL | EMPTY
     ;
 
 ARROW : '-' '>' ;
+EMPTY : '-' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 

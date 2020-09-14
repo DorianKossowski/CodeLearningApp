@@ -12,7 +12,9 @@ public class JavaTaskParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "-> method with name: \"x\""
+            "method with name: \"x\"",
+            "method with args: {\"x\", -}",
+            "method with args: {-, \"x\"}, {\"x\", \"x\"}",
     })
     void shouldParseMethodRule(String input) {
         HELPER.shouldParseToEof(input, JavaTaskParser::methodRule);
