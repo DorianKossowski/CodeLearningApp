@@ -1,9 +1,10 @@
-package com.server.parser.java.task;
+package com.server.parser.java.task.verifier;
 
 import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.Exercise;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.Variable;
+import com.server.parser.java.task.MethodModel;
 import com.server.parser.java.task.ast.MethodArgs;
 import org.junit.jupiter.api.Test;
 
