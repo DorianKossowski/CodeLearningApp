@@ -3,12 +3,15 @@ package com.server.parser.java.task;
 import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.Exercise;
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.Variable;
+import com.server.parser.java.task.ast.MethodArgs;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
@@ -44,5 +47,13 @@ class MethodVerifierTest {
         assertThatThrownBy(() -> methodVerifier.verify(MethodModel.builder().withName("NOT_NAME").build()))
                 .isExactlyInstanceOf(VerifyException.class)
                 .hasMessageContaining("Oczekiwana metoda: NOT_NAME nie istnieje");
+    }
+
+    @Test
+    void shouldHasSameMethodArgs() {
+        List<Variable> actualArgs = Arrays.asList(new Variable("int", "name1"), new Variable("String", "name2"));
+        List<MethodArgs> expectedArgs = Arrays.asList(new MethodArgs(null, "name1"), new MethodArgs("String", "name2"));
+
+        assertThat(MethodVerifier.hasSameMethodArgs(actualArgs, expectedArgs)).isTrue();
     }
 }
