@@ -1,16 +1,24 @@
 package com.server.parser.java.task;
 
+import com.server.parser.java.task.ast.MethodArgs;
+
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public class MethodModel {
     private String name;
+    private List<MethodArgs> args;
 
     private MethodModel() {
     }
 
     public Optional<String> getName() {
         return Optional.ofNullable(name);
+    }
+
+    public List<MethodArgs> getArgs() {
+        return args;
     }
 
     public static Builder builder() {
@@ -31,25 +39,33 @@ public class MethodModel {
             return false;
         }
         MethodModel that = (MethodModel) o;
-        return Objects.equals(name, that.name);
+        return Objects.equals(name, that.name) &&
+                Objects.equals(args, that.args);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, args);
     }
 
     public static class Builder {
         private String name;
+        private List<MethodArgs> args;
 
         public Builder withName(String name) {
             this.name = name;
             return this;
         }
 
+        public Builder withArgs(List<MethodArgs> args) {
+            this.args = args;
+            return this;
+        }
+
         public MethodModel build() {
             MethodModel model = new MethodModel();
             model.name = this.name;
+            model.args = this.args;
             return model;
         }
     }
