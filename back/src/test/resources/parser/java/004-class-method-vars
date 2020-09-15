@@ -1,3 +1,6 @@
+### TASK ###
+
+### INPUT ###
 public class MyClass {
     public int main(){
         String s = "Hello World";

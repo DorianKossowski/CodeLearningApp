@@ -1,5 +1,9 @@
 package com.server.parser;
 
+import com.server.app.service.TaskVerificationService;
+import com.server.app.service.impl.TaskVerificationServiceImpl;
+import com.server.parser.util.AcceptanceTestCaseFetcher;
+import com.server.parser.util.AcceptanceTestCaseModel;
 import org.antlr.v4.runtime.*;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,6 +16,7 @@ import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class ParserAcceptanceTestBase<P extends Parser> {
+    private static final TaskVerificationService VERIFICATION_SERVICE = new TaskVerificationServiceImpl();
     private final ParserTestHelper<P> helper;
     private final Map<String, String> testCases;
 
@@ -29,7 +34,8 @@ public abstract class ParserAcceptanceTestBase<P extends Parser> {
     @ParameterizedTest(name = "{0}")
     @MethodSource("testCasesMethodSource")
     void shouldParseAll(@SuppressWarnings("unused") String caseName, String testCase) {
-        helper.shouldParseToEof(testCase, getParsingRule());
+        AcceptanceTestCaseModel testCaseModel = AcceptanceTestCaseFetcher.fetchModelJson(testCase);
+        VERIFICATION_SERVICE.verify(testCaseModel.getInput(), testCaseModel.getTask());
     }
 
     protected abstract String getPath();
