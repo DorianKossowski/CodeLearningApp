@@ -2,6 +2,7 @@ package com.server.parser.java.task;
 
 import com.server.parser.java.task.ast.MethodArgs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -50,7 +51,7 @@ public class MethodModel {
 
     public static class Builder {
         private String name;
-        private List<MethodArgs> args;
+        private List<MethodArgs> args = new ArrayList<>();
 
         public Builder withName(String name) {
             this.name = name;

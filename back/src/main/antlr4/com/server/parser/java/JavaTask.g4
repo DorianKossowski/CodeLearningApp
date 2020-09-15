@@ -5,7 +5,7 @@ rulesEOF
     ;
 
 rules
-    : singleRule+
+    : singleRule*
     ;
 
 singleRule
