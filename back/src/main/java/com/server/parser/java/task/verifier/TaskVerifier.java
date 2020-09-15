@@ -1,7 +1,7 @@
 package com.server.parser.java.task.verifier;
 
 import com.server.parser.java.ast.Exercise;
-import com.server.parser.java.task.MethodModel;
+import com.server.parser.java.task.model.MethodModel;
 
 import java.util.Objects;
 

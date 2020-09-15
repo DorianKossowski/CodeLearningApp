@@ -4,8 +4,8 @@ import com.google.common.base.Verify;
 import com.server.parser.java.ast.Exercise;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.Variable;
-import com.server.parser.java.task.MethodModel;
-import com.server.parser.java.task.ast.MethodArgs;
+import com.server.parser.java.task.model.MethodArgs;
+import com.server.parser.java.task.model.MethodModel;
 
 import java.util.ArrayList;
 import java.util.Iterator;

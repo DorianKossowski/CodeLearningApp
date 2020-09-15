@@ -2,7 +2,8 @@ package com.server.parser.java.task;
 
 import com.server.parser.java.JavaTaskBaseListener;
 import com.server.parser.java.JavaTaskParser;
-import com.server.parser.java.task.ast.MethodArgs;
+import com.server.parser.java.task.model.MethodArgs;
+import com.server.parser.java.task.model.MethodModel;
 import com.server.parser.java.task.verifier.TaskVerifier;
 
 import java.util.ArrayList;

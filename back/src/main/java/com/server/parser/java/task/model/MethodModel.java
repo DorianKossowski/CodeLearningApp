@@ -1,6 +1,4 @@
-package com.server.parser.java.task;
-
-import com.server.parser.java.task.ast.MethodArgs;
+package com.server.parser.java.task.model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.server.parser.java.task.ast;
+package com.server.parser.java.task.model;
 
 import java.util.Objects;
 import java.util.Optional;
