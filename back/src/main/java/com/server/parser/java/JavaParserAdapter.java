@@ -1,14 +1,14 @@
 package com.server.parser.java;
 
 import com.server.parser.ParserBuilder;
-import com.server.parser.java.ast.Exercise;
-import com.server.parser.java.visitor.ExerciseVisitor;
+import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.visitor.TaskVisitor;
 
 public class JavaParserAdapter {
 
-    public static Exercise parseExercise(String input) {
+    public static TaskAst parseTask(String input) {
         JavaParser javaParser = ParserBuilder.build(input, JavaLexer::new, JavaParser::new);
-        JavaParser.ExerciseEOFContext context = javaParser.exerciseEOF();
-        return new ExerciseVisitor().visitExerciseEOF(context);
+        JavaParser.TaskEOFContext context = javaParser.taskEOF();
+        return new TaskVisitor().visitTaskEOF(context);
     }
 }

@@ -105,8 +105,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldParseExercise() {
-        HELPER.shouldParseToEof("public class c {}", JavaParser::exercise);
+    void shouldParseTask() {
+        HELPER.shouldParseToEof("public class c {}", JavaParser::task);
     }
 
     @Test

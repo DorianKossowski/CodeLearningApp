@@ -1,10 +1,10 @@
 grammar Java;
 
-exerciseEOF
-    : exercise EOF
+taskEOF
+    : task EOF
     ;
 
-exercise
+task
     : classDec
     ;
 

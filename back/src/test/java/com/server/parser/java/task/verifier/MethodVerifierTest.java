@@ -1,8 +1,8 @@
 package com.server.parser.java.task.verifier;
 
 import com.google.common.base.VerifyException;
-import com.server.parser.java.ast.Exercise;
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.TaskAst;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
@@ -22,16 +22,16 @@ class MethodVerifierTest {
     void shouldVerifyMethodName() {
         String name = "NAME";
         String name2 = "NAME2";
-        Exercise exercise = mockExercise(Arrays.asList(mockMethod(name), mockMethod(name2)));
-        MethodVerifier methodVerifier = new MethodVerifier(exercise);
+        TaskAst taskAst = mockTask(Arrays.asList(mockMethod(name), mockMethod(name2)));
+        MethodVerifier methodVerifier = new MethodVerifier(taskAst);
 
         methodVerifier.verify(MethodModel.builder().withName(name).build());
     }
 
-    private Exercise mockExercise(List<Method> methods) {
-        Exercise exercise = mock(Exercise.class, RETURNS_DEEP_STUBS);
-        when(exercise.getClassAst().getBody().getMethods()).thenReturn(methods);
-        return exercise;
+    private TaskAst mockTask(List<Method> methods) {
+        TaskAst taskAst = mock(TaskAst.class, RETURNS_DEEP_STUBS);
+        when(taskAst.getClassAst().getBody().getMethods()).thenReturn(methods);
+        return taskAst;
     }
 
     private Method mockMethod(String name) {
@@ -42,8 +42,8 @@ class MethodVerifierTest {
 
     @Test
     void shouldThrowDuringVerifyingMethodName() {
-        Exercise exercise = mockExercise(Collections.singletonList(mockMethod("NAME")));
-        MethodVerifier methodVerifier = new MethodVerifier(exercise);
+        TaskAst taskAst = mockTask(Collections.singletonList(mockMethod("NAME")));
+        MethodVerifier methodVerifier = new MethodVerifier(taskAst);
 
         assertThatThrownBy(() -> methodVerifier.verify(MethodModel.builder().withName("NOT_NAME").build()))
                 .isExactlyInstanceOf(VerifyException.class)

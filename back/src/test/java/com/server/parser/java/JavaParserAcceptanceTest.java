@@ -19,6 +19,6 @@ public class JavaParserAcceptanceTest extends ParserAcceptanceTestBase<JavaParse
 
     @Override
     protected Function<JavaParser, ParserRuleContext> getParsingRule() {
-        return JavaParser::exerciseEOF;
+        return JavaParser::taskEOF;
     }
 }
