@@ -9,7 +9,15 @@ rules
     ;
 
 singleRule
-    : ARROW methodRule
+    : ARROW ( methodRule | statementRule )
+    ;
+
+statementRule
+    : 'statement' statementRuleSpec+
+    ;
+
+statementRuleSpec
+    : 'in' 'method' ':' valueOrEmpty
     ;
 
 methodRule

@@ -45,4 +45,9 @@ public class JavaTaskListener extends JavaTaskBaseListener {
         }
         methodBuilder.withArgs(args);
     }
+
+    @Override
+    public void enterStatementRule(JavaTaskParser.StatementRuleContext ctx) {
+        throw new UnsupportedOperationException();
+    }
 }
