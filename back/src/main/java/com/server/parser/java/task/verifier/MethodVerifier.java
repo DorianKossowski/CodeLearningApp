@@ -23,12 +23,21 @@ public class MethodVerifier {
 
     public void verify(MethodModel methodModel) {
         availableMethods = new ArrayList<>(methods);
+        if (!methodModel.getModifiers().isEmpty()) {
+            verifyMethodModifiers(methodModel.getModifiers());
+        }
         methodModel.getName().ifPresent(this::verifyMethodName);
         if (!methodModel.getArgs().isEmpty()) {
             verifyMethodArgs(methodModel.getArgs());
         }
 
         Verify.verify(!availableMethods.isEmpty(), String.format("Oczekiwana metoda: %s nie istnieje", methodModel));
+    }
+
+    private void verifyMethodModifiers(List<String> modifiers) {
+        availableMethods = availableMethods.stream()
+                .filter(method -> method.getHeader().getModifiers().containsAll(modifiers))
+                .collect(Collectors.toList());
     }
 
     private void verifyMethodName(String name) {

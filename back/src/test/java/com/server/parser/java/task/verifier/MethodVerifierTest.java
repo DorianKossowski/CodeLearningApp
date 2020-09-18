@@ -1,6 +1,7 @@
 package com.server.parser.java.task.verifier;
 
 import com.google.common.base.VerifyException;
+import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.TaskAst;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.task.model.MethodArgs;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
 
 class MethodVerifierTest extends VerifierTestBase {
 
@@ -42,5 +44,15 @@ class MethodVerifierTest extends VerifierTestBase {
         List<MethodArgs> expectedArgs = Arrays.asList(new MethodArgs(null, "name1"), new MethodArgs("String", "name2"));
 
         assertThat(MethodVerifier.hasSameMethodArgs(actualArgs, expectedArgs)).isTrue();
+    }
+
+    @Test
+    void shouldHasSameModifiers() {
+        Method method = mockMethod("NAME");
+        when(method.getHeader().getModifiers()).thenReturn(Collections.singletonList("public"));
+        TaskAst taskAst = mockTask(Collections.singletonList(method));
+        MethodVerifier methodVerifier = new MethodVerifier(taskAst);
+
+        methodVerifier.verify(MethodModel.builder().withModifiers(Collections.singletonList("public")).build());
     }
 }

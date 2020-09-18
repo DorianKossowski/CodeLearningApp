@@ -1,5 +1,6 @@
 ### TASK ###
 -> method
+	with modifiers: { "public", "static" }
 	with name: "main"
 	with args: { "String[]", - }
 -> statement

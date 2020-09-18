@@ -1,5 +1,6 @@
 package com.server.parser.java.task;
 
+import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaTaskBaseListener;
 import com.server.parser.java.JavaTaskParser;
 import com.server.parser.java.task.model.MethodArgs;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class JavaTaskListener extends JavaTaskBaseListener {
     private final TaskVerifier taskVerifier;
@@ -46,6 +48,14 @@ public class JavaTaskListener extends JavaTaskBaseListener {
             args.add(new MethodArgs(typeOptional.orElse(null), nameOptional.orElse(null)));
         }
         methodBuilder.withArgs(args);
+    }
+
+    @Override
+    public void enterMethodModifiersRuleSpec(JavaTaskParser.MethodModifiersRuleSpecContext ctx) {
+        List<String> modifiers = ctx.STRING_LITERAL().stream()
+                .map(node -> JavaGrammarHelper.getFromStringLiteral(node.getText()))
+                .collect(Collectors.toList());
+        methodBuilder.withModifiers(modifiers);
     }
 
     @Override

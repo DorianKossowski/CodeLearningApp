@@ -6,10 +6,15 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class MethodModel {
+    private List<String> modifiers;
     private String name;
     private List<MethodArgs> args;
 
     private MethodModel() {
+    }
+
+    public List<String> getModifiers() {
+        return modifiers;
     }
 
     public Optional<String> getName() {
@@ -48,8 +53,14 @@ public class MethodModel {
     }
 
     public static class Builder {
+        private List<String> modifiers;
         private String name;
         private List<MethodArgs> args = new ArrayList<>();
+
+        public Builder withModifiers(List<String> modifiers) {
+            this.modifiers = modifiers;
+            return this;
+        }
 
         public Builder withName(String name) {
             this.name = name;
@@ -63,6 +74,7 @@ public class MethodModel {
 
         public MethodModel build() {
             MethodModel model = new MethodModel();
+            model.modifiers = this.modifiers;
             model.name = this.name;
             model.args = this.args;
             return model;
