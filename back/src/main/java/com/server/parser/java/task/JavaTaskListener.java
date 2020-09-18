@@ -4,6 +4,7 @@ import com.server.parser.java.JavaTaskBaseListener;
 import com.server.parser.java.JavaTaskParser;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
+import com.server.parser.java.task.model.StatementModel;
 import com.server.parser.java.task.verifier.TaskVerifier;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     private final TaskVerifier taskVerifier;
 
     private MethodModel.Builder methodBuilder;
+    private StatementModel.Builder statementBuilder;
 
     public JavaTaskListener(TaskVerifier taskVerifier) {
         this.taskVerifier = Objects.requireNonNull(taskVerifier, "taskVerifier cannot be null");
@@ -48,6 +50,16 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterStatementRule(JavaTaskParser.StatementRuleContext ctx) {
-        throw new UnsupportedOperationException();
+        statementBuilder = StatementModel.builder();
+    }
+
+    @Override
+    public void exitStatementRule(JavaTaskParser.StatementRuleContext ctx) {
+        taskVerifier.verifyStatement(statementBuilder.build());
+    }
+
+    @Override
+    public void enterStatementMethodRuleSpec(JavaTaskParser.StatementMethodRuleSpecContext ctx) {
+        JavaTaskGrammarHelper.extractValue(ctx.valueOrEmpty()).ifPresent(value -> statementBuilder.withMethod(value));
     }
 }

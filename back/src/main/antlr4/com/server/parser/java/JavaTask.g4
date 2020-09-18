@@ -17,6 +17,10 @@ statementRule
     ;
 
 statementRuleSpec
+    : statementMethodRuleSpec
+    ;
+
+statementMethodRuleSpec
     : 'in' 'method' ':' valueOrEmpty
     ;
 
