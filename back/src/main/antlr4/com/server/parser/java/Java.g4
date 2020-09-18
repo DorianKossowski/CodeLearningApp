@@ -131,7 +131,13 @@ primitiveType
     ;
 
 methodModifier
-    : classModifier
+    : 'public'
+    | 'protected'
+    | 'private'
+    | 'abstract'
+    | 'static'
+    | 'final'
+    | 'strictfp'
     | 'synchronized'
     | 'native'
     ;

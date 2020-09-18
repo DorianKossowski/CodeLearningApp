@@ -12,11 +12,12 @@ class MethodHeaderVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitSingleMethodArg() {
-        String input = "void m(String[] a)";
+        String input = "public synchronized void m(String[] a)";
         JavaParser.MethodHeaderContext c = HELPER.shouldParseToEof(input, JavaParser::methodHeader);
-        
+
         MethodHeader header = visitor.visit(c);
 
+        assertThat(header.getModifiers()).containsExactly("public", "synchronized");
         assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
         assertThat(header.getResult()).isEqualTo("void");
         assertThat(header.getName()).isEqualTo("m");
