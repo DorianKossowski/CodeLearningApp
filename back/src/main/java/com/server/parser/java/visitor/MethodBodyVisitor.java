@@ -6,14 +6,20 @@ import com.server.parser.java.ast.Statement;
 import com.server.parser.java.ast.Variable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MethodBodyVisitor extends JavaVisitor<MethodBody> {
+    private final String contextMethodName;
+
+    public MethodBodyVisitor(String contextMethodName) {
+        this.contextMethodName = Objects.requireNonNull(contextMethodName, "contextMethodName cannot be null");
+    }
 
     @Override
     public MethodBody visitMethodBody(JavaParser.MethodBodyContext ctx) {
-        MethodBodyStatementVisitor methodBodyStatementVisitor = new MethodBodyStatementVisitor();
+        MethodBodyStatementVisitor methodBodyStatementVisitor = new MethodBodyStatementVisitor(contextMethodName);
         Stream<Statement> methodBodyStream = ctx.methodBodyStatement().stream()
                 .map(methodBodyStatementVisitor::visit);
         LocalVarDecVisitor localVarDecVisitor = new LocalVarDecVisitor();

@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MethodCallVisitorTest extends JavaVisitorTestBase {
-    private final MethodCallVisitor visitor = new MethodCallVisitor();
+    private final String METHOD_NAME = "methodName";
+    private final MethodCallVisitor visitor = new MethodCallVisitor(METHOD_NAME);
 
     @Test
     void shouldVisitMethodCall() {
@@ -17,6 +18,7 @@ class MethodCallVisitorTest extends JavaVisitorTestBase {
 
         MethodCall methodCall = visitor.visit(c);
 
+        assertThat(methodCall.getContextMethodName()).isEqualTo(METHOD_NAME);
         assertThat(methodCall.getName()).isEqualTo("System.out.print");
         assertThat(Iterables.getOnlyElement(methodCall.getArgs()).getText()).isEqualTo("Hello World");
     }

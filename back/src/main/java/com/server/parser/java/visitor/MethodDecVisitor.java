@@ -17,7 +17,7 @@ public class MethodDecVisitor extends JavaVisitor<Method> {
     @Override
     public Method visitMethodDec(JavaParser.MethodDecContext ctx) {
         MethodHeader methodHeader = new MethodHeaderVisitor().visit(ctx.methodHeader());
-        MethodBody methodBody = new MethodBodyVisitor().visit(ctx.methodBody());
+        MethodBody methodBody = new MethodBodyVisitor(methodHeader.getName()).visit(ctx.methodBody());
         return new Method(className, methodHeader, methodBody);
     }
 }
