@@ -15,6 +15,8 @@ public class JavaTaskParserTest {
             "method with name: \"x\"",
             "method with args: {\"x\", -}",
             "method with args: {-, \"x\"}, {\"x\", \"x\"}",
+            "method with modifiers: {\"x\"}",
+            "method with modifiers: {\"x\", \"x\"}"
     })
     void shouldParseMethodRule(String input) {
         HELPER.shouldParseToEof(input, JavaTaskParser::methodRule);

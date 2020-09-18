@@ -29,9 +29,11 @@ methodRule
     ;
 
 methodRuleSpec
-    : 'with' ( methodNameRuleSpec
-    | methodArgsRuleSpec
-    )
+    : 'with' ( methodNameRuleSpec | methodArgsRuleSpec | methodModifiersRuleSpec )
+    ;
+
+methodModifiersRuleSpec
+    : 'modifiers' ':' '{' STRING_LITERAL ( ',' STRING_LITERAL )* '}'
     ;
 
 methodArgsRuleSpec
