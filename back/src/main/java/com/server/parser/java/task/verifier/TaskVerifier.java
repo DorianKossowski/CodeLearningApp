@@ -8,9 +8,11 @@ import java.util.Objects;
 
 public class TaskVerifier {
     private final MethodVerifier methodVerifier;
+    private final StatementVerifier statementVerifier;
 
     public TaskVerifier(TaskAst taskAst) {
         this.methodVerifier = new MethodVerifier(Objects.requireNonNull(taskAst, "taskAst cannot be null"));
+        this.statementVerifier = new StatementVerifier(taskAst);
     }
 
     public void verifyMethod(MethodModel methodModel) {
@@ -18,6 +20,6 @@ public class TaskVerifier {
     }
 
     public void verifyStatement(StatementModel statementModel) {
-        throw new UnsupportedOperationException();
+        statementVerifier.verify(statementModel);
     }
 }

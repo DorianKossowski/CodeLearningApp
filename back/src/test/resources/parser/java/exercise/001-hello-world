@@ -2,6 +2,8 @@
 -> method
 	with name: "main"
 	with args: { "String[]", - }
+-> statement
+	in method: "main"
 
 ### INPUT ###
 public class Hello {

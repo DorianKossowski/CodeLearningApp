@@ -1,7 +1,6 @@
 package com.server.parser.java.task.verifier;
 
 import com.google.common.base.VerifyException;
-import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.TaskAst;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.task.model.MethodArgs;
@@ -14,9 +13,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
 
-class MethodVerifierTest {
+class MethodVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldVerifyMethodName() {
@@ -26,18 +24,6 @@ class MethodVerifierTest {
         MethodVerifier methodVerifier = new MethodVerifier(taskAst);
 
         methodVerifier.verify(MethodModel.builder().withName(name).build());
-    }
-
-    private TaskAst mockTask(List<Method> methods) {
-        TaskAst taskAst = mock(TaskAst.class, RETURNS_DEEP_STUBS);
-        when(taskAst.getClassAst().getBody().getMethods()).thenReturn(methods);
-        return taskAst;
-    }
-
-    private Method mockMethod(String name) {
-        Method method = mock(Method.class, RETURNS_DEEP_STUBS);
-        when(method.getHeader().getName()).thenReturn(name);
-        return method;
     }
 
     @Test

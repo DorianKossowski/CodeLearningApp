@@ -2,6 +2,7 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodBody;
+import com.server.parser.java.ast.MethodStatement;
 import com.server.parser.java.ast.Statement;
 import com.server.parser.java.ast.Variable;
 
@@ -20,7 +21,7 @@ public class MethodBodyVisitor extends JavaVisitor<MethodBody> {
     @Override
     public MethodBody visitMethodBody(JavaParser.MethodBodyContext ctx) {
         MethodBodyStatementVisitor methodBodyStatementVisitor = new MethodBodyStatementVisitor(contextMethodName);
-        Stream<Statement> methodBodyStream = ctx.methodBodyStatement().stream()
+        Stream<MethodStatement> methodBodyStream = ctx.methodBodyStatement().stream()
                 .map(methodBodyStatementVisitor::visit);
         LocalVarDecVisitor localVarDecVisitor = new LocalVarDecVisitor();
         Stream<Variable> variableStream = ctx.localVarDec().stream()

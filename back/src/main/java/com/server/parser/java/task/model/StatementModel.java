@@ -1,11 +1,16 @@
 package com.server.parser.java.task.model;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class StatementModel {
     private String inMethod;
 
     private StatementModel() {
+    }
+
+    public Optional<String> getInMethod() {
+        return Optional.of(inMethod);
     }
 
     public static Builder builder() {
