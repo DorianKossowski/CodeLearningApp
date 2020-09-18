@@ -26,12 +26,19 @@ public class MethodVerifier {
         if (!methodModel.getModifiers().isEmpty()) {
             verifyMethodModifiers(methodModel.getModifiers());
         }
+        methodModel.getResult().ifPresent(this::verifyMethodResult);
         methodModel.getName().ifPresent(this::verifyMethodName);
         if (!methodModel.getArgs().isEmpty()) {
             verifyMethodArgs(methodModel.getArgs());
         }
 
         Verify.verify(!availableMethods.isEmpty(), String.format("Oczekiwana metoda: %s nie istnieje", methodModel));
+    }
+
+    private void verifyMethodResult(String result) {
+        availableMethods = availableMethods.stream()
+                .filter(method -> method.getHeader().getResult().equals(result))
+                .collect(Collectors.toList());
     }
 
     private void verifyMethodModifiers(List<String> modifiers) {

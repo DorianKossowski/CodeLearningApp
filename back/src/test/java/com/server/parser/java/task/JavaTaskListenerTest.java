@@ -53,6 +53,26 @@ class JavaTaskListenerTest {
     }
 
     @Test
+    void shouldVerifyModifiers() {
+        String input = "method with modifiers: {\"x\", \"y\"}";
+        JavaTaskParser.MethodRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::methodRule);
+
+        WALKER.walk(listener, c);
+
+        verify(verifier).verifyMethod(MethodModel.builder().withModifiers(Arrays.asList("x", "y")).build());
+    }
+
+    @Test
+    void shouldVerifyResult() {
+        String input = "method with result: \"x\"";
+        JavaTaskParser.MethodRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::methodRule);
+
+        WALKER.walk(listener, c);
+
+        verify(verifier).verifyMethod(MethodModel.builder().withResult("x").build());
+    }
+
+    @Test
     void shouldVerifyStatementInMethod() {
         String input = "statement in method: \"m\"";
         JavaTaskParser.StatementRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::statementRule);

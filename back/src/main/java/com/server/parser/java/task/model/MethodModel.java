@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public class MethodModel {
     private List<String> modifiers;
+    private String result;
     private String name;
     private List<MethodArgs> args;
 
@@ -19,6 +20,10 @@ public class MethodModel {
 
     public Optional<String> getName() {
         return Optional.ofNullable(name);
+    }
+
+    public Optional<String> getResult() {
+        return Optional.ofNullable(result);
     }
 
     public List<MethodArgs> getArgs() {
@@ -43,22 +48,30 @@ public class MethodModel {
             return false;
         }
         MethodModel that = (MethodModel) o;
-        return Objects.equals(name, that.name) &&
+        return Objects.equals(modifiers, that.modifiers) &&
+                Objects.equals(result, that.result) &&
+                Objects.equals(name, that.name) &&
                 Objects.equals(args, that.args);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, args);
+        return Objects.hash(modifiers, result, name, args);
     }
 
     public static class Builder {
-        private List<String> modifiers;
+        private List<String> modifiers = new ArrayList<>();
+        private String result;
         private String name;
         private List<MethodArgs> args = new ArrayList<>();
 
         public Builder withModifiers(List<String> modifiers) {
             this.modifiers = modifiers;
+            return this;
+        }
+
+        public Builder withResult(String result) {
+            this.result = result;
             return this;
         }
 
@@ -75,6 +88,7 @@ public class MethodModel {
         public MethodModel build() {
             MethodModel model = new MethodModel();
             model.modifiers = this.modifiers;
+            model.result = this.result;
             model.name = this.name;
             model.args = this.args;
             return model;

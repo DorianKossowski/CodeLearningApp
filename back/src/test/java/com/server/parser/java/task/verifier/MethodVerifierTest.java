@@ -55,4 +55,14 @@ class MethodVerifierTest extends VerifierTestBase {
 
         methodVerifier.verify(MethodModel.builder().withModifiers(Collections.singletonList("public")).build());
     }
+
+    @Test
+    void shouldHasSameResult() {
+        Method method = mockMethod("NAME");
+        when(method.getHeader().getResult()).thenReturn("int");
+        TaskAst taskAst = mockTask(Collections.singletonList(method));
+        MethodVerifier methodVerifier = new MethodVerifier(taskAst);
+
+        methodVerifier.verify(MethodModel.builder().withResult("int").build());
+    }
 }

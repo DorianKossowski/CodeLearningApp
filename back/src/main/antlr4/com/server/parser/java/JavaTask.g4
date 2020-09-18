@@ -29,7 +29,11 @@ methodRule
     ;
 
 methodRuleSpec
-    : 'with' ( methodNameRuleSpec | methodArgsRuleSpec | methodModifiersRuleSpec )
+    : 'with' ( methodNameRuleSpec | methodArgsRuleSpec | methodModifiersRuleSpec | methodResultRuleSpec )
+    ;
+
+methodResultRuleSpec
+    : 'result' ':' STRING_LITERAL
     ;
 
 methodModifiersRuleSpec
