@@ -1,5 +1,6 @@
 package com.server.parser.java.visitor;
 
+import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Expression;
 import com.server.parser.java.ast.MethodCall;
@@ -18,6 +19,6 @@ public class MethodCallVisitor extends JavaVisitor<MethodCall> {
     public MethodCall visitMethodCall(JavaParser.MethodCallContext ctx) {
         String methodName = new MethodNameVisitor().visit(ctx.methodName());
         List<Expression> arguments = new CallArgumentsVisitor().visit(ctx.callArguments());
-        return new MethodCall(contextMethodName, methodName, arguments);
+        return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), contextMethodName, methodName, arguments);
     }
 }

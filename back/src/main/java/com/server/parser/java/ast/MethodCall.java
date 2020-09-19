@@ -7,8 +7,8 @@ public class MethodCall extends MethodStatement {
     private final String name;
     private final List<Expression> args;
 
-    public MethodCall(String contextMethodName, String name, List<Expression> args) {
-        super(Objects.requireNonNull(contextMethodName, "contextMethodName cannot be null"));
+    public MethodCall(String text, String contextMethodName, String name, List<Expression> args) {
+        super(text, contextMethodName);
         this.name = Objects.requireNonNull(name, "name cannot be null");
         this.args = Objects.requireNonNull(args, "args cannot be null");
     }

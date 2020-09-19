@@ -7,11 +7,12 @@ public class Variable extends Statement {
     private final String name;
     private final Expression value;
 
-    public Variable(String type, String name) {
-        this(type, name, null);
+    public Variable(String text, String type, String name) {
+        this(text, type, name, null);
     }
 
-    public Variable(String type, String name, Expression value) {
+    public Variable(String text, String type, String name, Expression value) {
+        super(text);
         this.type = Objects.requireNonNull(type, "type cannot be null");
         this.name = Objects.requireNonNull(name, "name cannot be null");
         this.value = value;
