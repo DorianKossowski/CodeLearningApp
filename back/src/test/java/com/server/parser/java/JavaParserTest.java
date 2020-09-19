@@ -134,4 +134,10 @@ public class JavaParserTest {
     void shouldParseLocalVarDec() {
         HELPER.shouldParseToEof("final String a = \"str\";", JavaParser::localVarDec);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"\"abc\"", "a", "a.b", "'a'"})
+    void shouldParseExpression(String literal) {
+        HELPER.shouldParseToEof(literal, JavaParser::expression);
+    }
 }

@@ -84,7 +84,13 @@ callArguments
     ;
 
 expression
-    : literal
+    : ambiguousName
+    | literal
+    ;
+
+ambiguousName
+    : identifier
+    | ambiguousName '.' identifier
     ;
 
 literal
