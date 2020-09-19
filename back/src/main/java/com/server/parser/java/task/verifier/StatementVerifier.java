@@ -25,7 +25,14 @@ public class StatementVerifier {
         availableStatements = new ArrayList<>(statements);
 
         statementModel.getInMethod().ifPresent(this::verifyMethodName);
+        statementModel.getText().ifPresent(this::verifyText);
         Verify.verify(!availableStatements.isEmpty(), "Oczekiwana instrukcja nie istnieje");
+    }
+
+    private void verifyText(String text) {
+        availableStatements = availableStatements.stream()
+                .filter(statement -> statement.getText().equals(text))
+                .collect(Collectors.toList());
     }
 
     private void verifyMethodName(String methodName) {

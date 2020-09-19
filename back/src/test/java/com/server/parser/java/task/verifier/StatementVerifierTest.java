@@ -36,4 +36,14 @@ class StatementVerifierTest extends VerifierTestBase {
                 .isExactlyInstanceOf(VerifyException.class)
                 .hasMessage("Oczekiwana instrukcja nie istnieje");
     }
+
+    @Test
+    void shouldVerifyText() {
+        MethodStatement statement = mock(MethodStatement.class);
+        when(statement.getText()).thenReturn("text");
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
+        StatementVerifier verifier = new StatementVerifier(mockTask(methods));
+
+        verifier.verify(StatementModel.builder().withText("text").build());
+    }
 }

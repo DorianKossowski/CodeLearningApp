@@ -77,4 +77,9 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     public void enterStatementMethodRuleSpec(JavaTaskParser.StatementMethodRuleSpecContext ctx) {
         JavaTaskGrammarHelper.extractValue(ctx.valueOrEmpty()).ifPresent(value -> statementBuilder.withMethod(value));
     }
+
+    @Override
+    public void enterStatementTextRuleSpec(JavaTaskParser.StatementTextRuleSpecContext ctx) {
+        statementBuilder.withText(JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    }
 }

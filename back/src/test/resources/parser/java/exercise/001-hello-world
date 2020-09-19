@@ -6,6 +6,7 @@
 	with args: { "String[]", - }
 -> statement
 	in method: "main"
+	with text: "System.out.print(\"Hello World\");"
 
 ### INPUT ###
 public class Hello {
