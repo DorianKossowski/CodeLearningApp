@@ -25,7 +25,8 @@ public class JavaTaskParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "statement in method: \"m\""
+            "statement in method: \"m\"",
+            "statement with text: \"t\""
     })
     void shouldParseStatementRule(String input) {
         HELPER.shouldParseToEof(input, JavaTaskParser::statementRule);
