@@ -2,15 +2,13 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodBody;
-import com.server.parser.java.ast.MethodStatement;
 import com.server.parser.java.ast.Statement;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.context.MethodContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MethodBodyVisitor extends JavaVisitor<MethodBody> {
     private final MethodContext methodContext;
@@ -22,13 +20,17 @@ public class MethodBodyVisitor extends JavaVisitor<MethodBody> {
     @Override
     public MethodBody visitMethodBody(JavaParser.MethodBodyContext ctx) {
         MethodBodyStatementVisitor methodBodyStatementVisitor = new MethodBodyStatementVisitor(methodContext);
-        Stream<MethodStatement> methodBodyStream = ctx.methodBodyStatement().stream()
-                .map(methodBodyStatementVisitor::visit);
         LocalVarDecVisitor localVarDecVisitor = new LocalVarDecVisitor();
-        Stream<Variable> variableStream = ctx.localVarDec().stream()
-                .map(localVarDecVisitor::visit);
 
-        List<Statement> statements = Stream.concat(methodBodyStream, variableStream).collect(Collectors.toList());
+        List<Statement> statements = new ArrayList<>();
+        for (int i = 0; i < ctx.getChildCount(); ++i) {
+            ParseTree child = ctx.getChild(i);
+            if (child instanceof JavaParser.LocalVarDecContext) {
+                statements.add(localVarDecVisitor.visit(child));
+            } else if (child instanceof JavaParser.MethodBodyStatementContext) {
+                statements.add(methodBodyStatementVisitor.visit(child));
+            }
+        }
         return new MethodBody(statements);
     }
 }
