@@ -4,6 +4,7 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodBody;
 import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.context.MethodContext;
 
 import java.util.Objects;
 
@@ -17,7 +18,8 @@ public class MethodDecVisitor extends JavaVisitor<Method> {
     @Override
     public Method visitMethodDec(JavaParser.MethodDecContext ctx) {
         MethodHeader methodHeader = new MethodHeaderVisitor().visit(ctx.methodHeader());
-        MethodBody methodBody = new MethodBodyVisitor(methodHeader.getName()).visit(ctx.methodBody());
+        MethodContext methodContext = new MethodContext(methodHeader.getName());
+        MethodBody methodBody = new MethodBodyVisitor(methodContext).visit(ctx.methodBody());
         return new Method(className, methodHeader, methodBody);
     }
 }

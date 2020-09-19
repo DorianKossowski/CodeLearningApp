@@ -2,18 +2,19 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodStatement;
+import com.server.parser.java.context.MethodContext;
 
 import java.util.Objects;
 
 public class MethodBodyStatementVisitor extends JavaVisitor<MethodStatement> {
-    private final String contextMethodName;
+    private final MethodContext methodContext;
 
-    public MethodBodyStatementVisitor(String contextMethodName) {
-        this.contextMethodName = Objects.requireNonNull(contextMethodName, "contextMethodName cannot be null");
+    public MethodBodyStatementVisitor(MethodContext methodContext) {
+        this.methodContext = Objects.requireNonNull(methodContext, "methodContext cannot be null");
     }
 
     @Override
     public MethodStatement visitMethodBodyStatement(JavaParser.MethodBodyStatementContext ctx) {
-        return new MethodCallVisitor(contextMethodName).visit(ctx.methodCall());
+        return new MethodCallVisitor(methodContext).visit(ctx.methodCall());
     }
 }
