@@ -1,0 +1,16 @@
+### TASK ###
+-> method
+	with modifiers: { "public", "static" }
+	with result: "void"
+	with name: "main"
+	with args: { "String[]", - }
+-> statement
+	in method: "main"
+	with text: "System.out.print(\"My Hello World\");"
+
+### INPUT ###
+public class Hello {
+    public static void main(String[] args){
+        System.out.print("My Hello World");
+    }
+}
