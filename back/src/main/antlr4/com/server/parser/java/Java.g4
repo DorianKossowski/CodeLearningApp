@@ -84,13 +84,13 @@ callArguments
     ;
 
 expression
-    : ambiguousName
+    : objectRefName
     | literal
     ;
 
-ambiguousName
+objectRefName
     : identifier
-    | ambiguousName '.' identifier
+    | objectRefName '.' identifier
     ;
 
 literal
