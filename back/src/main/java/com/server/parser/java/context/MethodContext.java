@@ -25,4 +25,10 @@ public class MethodContext {
     public void addVar(String var, String value) {
         varToValue.put(var, value);
     }
+
+    public String getValue(String var) {
+        return varToValue.computeIfAbsent(var, key -> {
+            throw new RuntimeException("Obiekt " + key + " nie istnieje");
+        });
+    }
 }
