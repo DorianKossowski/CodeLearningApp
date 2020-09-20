@@ -2,6 +2,7 @@ package com.server.parser.java.ast;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MethodCall extends MethodStatement {
     private final String name;
@@ -19,5 +20,11 @@ public class MethodCall extends MethodStatement {
 
     public List<Expression> getArgs() {
         return args;
+    }
+
+    @Override
+    public String getResolved() {
+        String resolvedArgs = args.stream().map(Expression::getResolved).collect(Collectors.joining(", "));
+        return name + "(" + resolvedArgs + ");";
     }
 }

@@ -7,8 +7,9 @@ public class ObjectRef extends Expression {
         super(text);
     }
 
-    public String getValue() {
-        return value;
+    @Override
+    public String getResolved() {
+        return '"' + value + '"';
     }
 
     public void setValue(String value) {

@@ -43,6 +43,17 @@ class MethodCallVisitorTest extends JavaVisitorTestBase {
 
         visitor.enhanceArguments(Collections.singletonList(objectRef));
 
-        assertThat(objectRef.getValue()).isEqualTo("val");
+        assertThat(objectRef.getResolved()).isEqualTo("\"val\"");
+    }
+
+    @Test
+    void shouldGetCorrectMethodCallValue() {
+        methodContext.addVar("var", "value");
+        String input = "System.out.print(\"literal\", var);";
+        JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
+
+        MethodCall methodCall = visitor.visit(c);
+
+        assertThat(methodCall.getResolved()).isEqualTo("System.out.print(\"literal\", \"value\");");
     }
 }

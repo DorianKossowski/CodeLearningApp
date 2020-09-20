@@ -12,4 +12,8 @@ public class Expression extends AstElement {
     public String getText() {
         return text;
     }
+
+    public String getResolved() {
+        return '"' + text + '"';
+    }
 }

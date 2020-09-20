@@ -12,4 +12,8 @@ public abstract class Statement extends AstElement {
     public String getText() {
         return text;
     }
+
+    public String getResolved() {
+        throw new UnsupportedOperationException();
+    }
 }
