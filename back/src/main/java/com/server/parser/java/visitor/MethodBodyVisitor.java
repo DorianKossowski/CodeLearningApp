@@ -20,7 +20,7 @@ public class MethodBodyVisitor extends JavaVisitor<MethodBody> {
     @Override
     public MethodBody visitMethodBody(JavaParser.MethodBodyContext ctx) {
         MethodBodyStatementVisitor methodBodyStatementVisitor = new MethodBodyStatementVisitor(methodContext);
-        LocalVarDecVisitor localVarDecVisitor = new LocalVarDecVisitor();
+        LocalVarDecVisitor localVarDecVisitor = new LocalVarDecVisitor(methodContext);
 
         List<Statement> statements = new ArrayList<>();
         for (int i = 0; i < ctx.getChildCount(); ++i) {
