@@ -91,4 +91,14 @@ class JavaTaskListenerTest {
 
         verify(verifier).verifyStatement(StatementModel.builder().withText("t").build());
     }
+
+    @Test
+    void shouldVerifyStatementResolved() {
+        String input = "statement with resolved: \"t\"";
+        JavaTaskParser.StatementRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::statementRule);
+
+        WALKER.walk(listener, c);
+
+        verify(verifier).verifyStatement(StatementModel.builder().withResolved("t").build());
+    }
 }

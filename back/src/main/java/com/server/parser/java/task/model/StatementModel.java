@@ -6,6 +6,7 @@ import java.util.Optional;
 public class StatementModel {
     private String inMethod;
     private String text;
+    private String resolved;
 
     private StatementModel() {
     }
@@ -16,6 +17,10 @@ public class StatementModel {
 
     public Optional<String> getText() {
         return Optional.ofNullable(text);
+    }
+
+    public Optional<String> getResolved() {
+        return Optional.ofNullable(resolved);
     }
 
     public static Builder builder() {
@@ -32,17 +37,19 @@ public class StatementModel {
         }
         StatementModel that = (StatementModel) o;
         return Objects.equals(inMethod, that.inMethod) &&
-                Objects.equals(text, that.text);
+                Objects.equals(text, that.text) &&
+                Objects.equals(resolved, that.resolved);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inMethod, text);
+        return Objects.hash(inMethod, text, resolved);
     }
 
     public static class Builder {
         private String inMethod;
         private String text;
+        private String resolved;
 
         public Builder withMethod(String method) {
             this.inMethod = method;
@@ -54,10 +61,16 @@ public class StatementModel {
             return this;
         }
 
+        public Builder withResolved(String resolved) {
+            this.resolved = resolved;
+            return this;
+        }
+
         public StatementModel build() {
             StatementModel statementModel = new StatementModel();
             statementModel.inMethod = this.inMethod;
             statementModel.text = this.text;
+            statementModel.resolved = this.resolved;
 
             return statementModel;
         }
