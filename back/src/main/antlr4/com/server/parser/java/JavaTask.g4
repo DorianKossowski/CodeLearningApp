@@ -17,7 +17,11 @@ statementRule
     ;
 
 statementRuleSpec
-    : ( statementMethodRuleSpec | statementTextRuleSpec )
+    : ( statementMethodRuleSpec | statementTextRuleSpec | statementResolvedRuleSpec )
+    ;
+
+statementResolvedRuleSpec
+    : 'with' 'resolved' ':' STRING_LITERAL
     ;
 
 statementTextRuleSpec
