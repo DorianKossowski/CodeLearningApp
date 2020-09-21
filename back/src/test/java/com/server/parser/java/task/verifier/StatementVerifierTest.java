@@ -46,4 +46,14 @@ class StatementVerifierTest extends VerifierTestBase {
 
         verifier.verify(StatementModel.builder().withText("text").build());
     }
+
+    @Test
+    void shouldVerifyResolved() {
+        MethodStatement statement = mock(MethodStatement.class);
+        when(statement.getResolved()).thenReturn("text");
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
+        StatementVerifier verifier = new StatementVerifier(mockTask(methods));
+
+        verifier.verify(StatementModel.builder().withResolved("text").build());
+    }
 }
