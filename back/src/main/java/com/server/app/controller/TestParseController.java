@@ -1,6 +1,7 @@
 package com.server.app.controller;
 
 import com.server.app.model.dto.TestInputDto;
+import com.server.app.model.dto.VerificationResultDto;
 import com.server.app.service.TaskVerificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,8 @@ public class TestParseController {
     }
 
     @PostMapping("/parse")
-    public String parseInput(@RequestBody TestInputDto testInputDto) {
+    public VerificationResultDto parseInput(@RequestBody TestInputDto testInputDto) {
         logger.debug("Parsing: " + testInputDto.getInput());
-        verificationService.verify(testInputDto.getTask(), testInputDto.getInput());
-        return "";
+        return verificationService.verify(testInputDto.getTask(), testInputDto.getInput());
     }
 }
