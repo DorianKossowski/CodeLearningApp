@@ -27,7 +27,13 @@ public class StatementVerifier {
         statementModel.getInMethod().ifPresent(this::verifyMethodName);
         statementModel.getText().ifPresent(this::verifyText);
         statementModel.getResolved().ifPresent(this::verifyResolved);
-        Verify.verify(!availableStatements.isEmpty(), "Oczekiwana instrukcja nie istnieje");
+        Verify.verify(!availableStatements.isEmpty(), getErrorMessage(statementModel));
+    }
+
+    private String getErrorMessage(StatementModel statementModel) {
+        StringBuilder builder = new StringBuilder();
+        statementModel.getErrorMessage().ifPresent(message -> builder.append(" \"").append(message).append('"'));
+        return String.format("Oczekiwana instrukcja%s nie istnieje", builder);
     }
 
     private void verifyResolved(String resolved) {

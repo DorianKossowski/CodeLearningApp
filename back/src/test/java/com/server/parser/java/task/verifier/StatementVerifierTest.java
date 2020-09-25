@@ -56,4 +56,18 @@ class StatementVerifierTest extends VerifierTestBase {
 
         verifier.verify(StatementModel.builder().withResolved("text").build());
     }
+
+    @Test
+    void shouldThrowCorrectErrorMessage() {
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.emptyList()));
+        StatementVerifier verifier = new StatementVerifier(mockTask(methods));
+        StatementModel model = StatementModel.builder()
+                .withMethod(METHOD_NAME)
+                .withErrorMessage("Wywołanie metody wewnątrz M1")
+                .build();
+
+        assertThatThrownBy(() -> verifier.verify(model))
+                .isExactlyInstanceOf(VerifyException.class)
+                .hasMessage("Oczekiwana instrukcja \"Wywołanie metody wewnątrz M1\" nie istnieje");
+    }
 }
