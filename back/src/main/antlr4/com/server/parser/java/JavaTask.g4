@@ -19,6 +19,11 @@ statementRule
 statementRuleSpec
     : statementMethodRuleSpec
     | WITH ( statementTextRuleSpec | statementResolvedRuleSpec )
+    | errorMessage
+    ;
+
+errorMessage
+    : 'error' 'message' ':' STRING_LITERAL
     ;
 
 statementResolvedRuleSpec
