@@ -34,7 +34,7 @@ public abstract class ParserAcceptanceTestBase<P extends Parser> {
     @ParameterizedTest(name = "{0}")
     @MethodSource("testCasesMethodSource")
     void shouldParseAll(@SuppressWarnings("unused") String caseName, String testCase) {
-        AcceptanceTestCaseModel testCaseModel = AcceptanceTestCaseFetcher.fetchModelJson(testCase);
+        AcceptanceTestCaseModel testCaseModel = AcceptanceTestCaseFetcher.fetchModel(testCase);
         VERIFICATION_SERVICE.verify(testCaseModel.getTask(), testCaseModel.getInput());
     }
 

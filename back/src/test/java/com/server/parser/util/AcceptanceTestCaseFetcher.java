@@ -7,7 +7,7 @@ public class AcceptanceTestCaseFetcher {
     private static final Pattern TEST_CASE_PATTERN = Pattern.compile("### TASK ###(.*)### INPUT ###(.*)",
             Pattern.DOTALL);
 
-    public static AcceptanceTestCaseModel fetchModelJson(String testCase) {
+    public static AcceptanceTestCaseModel fetchModel(String testCase) {
         Matcher matcher = TEST_CASE_PATTERN.matcher(testCase);
         matcher.find();
         return new AcceptanceTestCaseModel(matcher.group(1), matcher.group(2));
