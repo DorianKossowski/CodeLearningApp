@@ -87,4 +87,9 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     public void enterStatementResolvedRuleSpec(JavaTaskParser.StatementResolvedRuleSpecContext ctx) {
         statementBuilder.withResolved(JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
+
+    @Override
+    public void enterErrorMessage(JavaTaskParser.ErrorMessageContext ctx) {
+        statementBuilder.withErrorMessage(JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    }
 }

@@ -7,6 +7,7 @@ public class StatementModel {
     private String inMethod;
     private String text;
     private String resolved;
+    private String errorMessage;
 
     private StatementModel() {
     }
@@ -21,6 +22,10 @@ public class StatementModel {
 
     public Optional<String> getResolved() {
         return Optional.ofNullable(resolved);
+    }
+
+    public Optional<String> getErrorMessage() {
+        return Optional.ofNullable(errorMessage);
     }
 
     public static Builder builder() {
@@ -38,18 +43,20 @@ public class StatementModel {
         StatementModel that = (StatementModel) o;
         return Objects.equals(inMethod, that.inMethod) &&
                 Objects.equals(text, that.text) &&
-                Objects.equals(resolved, that.resolved);
+                Objects.equals(resolved, that.resolved) &&
+                Objects.equals(errorMessage, that.errorMessage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inMethod, text, resolved);
+        return Objects.hash(inMethod, text, resolved, errorMessage);
     }
 
     public static class Builder {
         private String inMethod;
         private String text;
         private String resolved;
+        private String errorMessage;
 
         public Builder withMethod(String method) {
             this.inMethod = method;
@@ -66,11 +73,17 @@ public class StatementModel {
             return this;
         }
 
+        public Builder withErrorMessage(String errorMessage) {
+            this.errorMessage = errorMessage;
+            return this;
+        }
+
         public StatementModel build() {
             StatementModel statementModel = new StatementModel();
             statementModel.inMethod = this.inMethod;
             statementModel.text = this.text;
             statementModel.resolved = this.resolved;
+            statementModel.errorMessage = this.errorMessage;
 
             return statementModel;
         }
