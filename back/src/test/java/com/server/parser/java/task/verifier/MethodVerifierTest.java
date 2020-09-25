@@ -35,7 +35,7 @@ class MethodVerifierTest extends VerifierTestBase {
 
         assertThatThrownBy(() -> methodVerifier.verify(MethodModel.builder().withName("NOT_NAME").build()))
                 .isExactlyInstanceOf(VerifyException.class)
-                .hasMessageContaining("Oczekiwana metoda: NOT_NAME nie istnieje");
+                .hasMessageContaining("Oczekiwana metoda \"NOT_NAME\" nie istnieje");
     }
 
     @Test

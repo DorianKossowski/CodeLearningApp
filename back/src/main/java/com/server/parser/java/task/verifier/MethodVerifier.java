@@ -32,7 +32,13 @@ public class MethodVerifier {
             verifyMethodArgs(methodModel.getArgs());
         }
 
-        Verify.verify(!availableMethods.isEmpty(), String.format("Oczekiwana metoda: %s nie istnieje", methodModel));
+        Verify.verify(!availableMethods.isEmpty(), getErrorMessage(methodModel));
+    }
+
+    private String getErrorMessage(MethodModel methodModel) {
+        StringBuilder builder = new StringBuilder();
+        methodModel.getName().ifPresent(name -> builder.append(" \"").append(name).append('"'));
+        return String.format("Oczekiwana metoda%s nie istnieje", builder);
     }
 
     private void verifyMethodResult(String result) {

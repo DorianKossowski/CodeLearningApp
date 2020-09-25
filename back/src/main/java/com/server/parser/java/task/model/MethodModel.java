@@ -35,11 +35,6 @@ public class MethodModel {
     }
 
     @Override
-    public String toString() {
-        return getName().orElse("");
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
