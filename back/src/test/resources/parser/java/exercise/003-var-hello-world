@@ -8,7 +8,7 @@
 	in method: "main"
 	with text: "System.out.print(message);"
 	with resolved: "System.out.print(\"Hello World\");"
-	error message: "Wywołanie metody z użyciem zmiennej."
+	error message: "Wywołanie metody z użyciem zmiennej"
 
 ### INPUT ###
 public class Hello {
