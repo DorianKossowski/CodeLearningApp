@@ -20,12 +20,7 @@ class TestParseIntegrationTest extends IntegrationTestBase {
         TestInputDto inputDto = createTestInputDto("app/integration/valid-parse-input");
         VerificationResultDto resultDto = VerificationResultDto.valid();
 
-        mvc.perform(post("/parse")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(inputDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.errorMessage").value(resultDto.getErrorMessage()))
-                .andExpect(jsonPath("$.lineNumber").value(resultDto.getLineNumber()));
+        performParse(inputDto, resultDto);
     }
 
     private TestInputDto createTestInputDto(String casePath) {
@@ -34,17 +29,29 @@ class TestParseIntegrationTest extends IntegrationTestBase {
         return new TestInputDto(acceptanceTestCaseModel.getTask(), acceptanceTestCaseModel.getInput());
     }
 
-    @Test
-    void shouldReturnInvalidVerificationResultWhenNotSatisfy() throws Exception {
-        TestInputDto inputDto = createTestInputDto("app/integration/not-satisfy-parse-input");
-        VerificationResultDto resultDto = VerificationResultDto.invalid(
-                "Oczekiwana instrukcja \"Wywołanie metody z literału\" nie istnieje");
-
+    private void performParse(TestInputDto inputDto, VerificationResultDto resultDto) throws Exception {
         mvc.perform(post("/parse")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(inputDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.errorMessage").value(resultDto.getErrorMessage()))
                 .andExpect(jsonPath("$.lineNumber").value(resultDto.getLineNumber()));
+    }
+
+    @Test
+    void shouldReturnInvalidVerificationResultWhenNotSatisfy() throws Exception {
+        TestInputDto inputDto = createTestInputDto("app/integration/not-satisfy-parse-input");
+        VerificationResultDto resultDto = VerificationResultDto.invalid(
+                "Oczekiwana instrukcja \"Wywołanie metody z literału\" nie istnieje");
+
+        performParse(inputDto, resultDto);
+    }
+
+    @Test
+    void shouldReturnInvalidVerificationResultWhenWrongTask() throws Exception {
+        TestInputDto inputDto = createTestInputDto("app/integration/wrong-task-parse-input");
+        VerificationResultDto resultDto = VerificationResultDto.invalidTask();
+
+        performParse(inputDto, resultDto);
     }
 }
