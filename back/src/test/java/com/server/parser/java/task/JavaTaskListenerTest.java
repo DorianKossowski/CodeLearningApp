@@ -10,9 +10,13 @@ import com.server.parser.java.task.verifier.TaskVerifier;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -72,43 +76,26 @@ class JavaTaskListenerTest {
         verify(verifier).verifyMethod(MethodModel.builder().withResult("x").build());
     }
 
-    @Test
-    void shouldVerifyStatementInMethod() {
-        String input = "statement in method: \"m\"";
-        JavaTaskParser.StatementRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::statementRule);
-
-        WALKER.walk(listener, c);
-
-        verify(verifier).verifyStatement(StatementModel.builder().withMethod("m").build());
+    static Stream<Arguments> statementSource() {
+        return Stream.of(
+                Arguments.of("Statement in method", "statement in method: \"m\"",
+                        StatementModel.builder().withMethod("m").build()),
+                Arguments.of("Statement with text", "statement with text: \"t\"",
+                        StatementModel.builder().withText("t").build()),
+                Arguments.of("Statement with resolved", "statement with resolved: \"t\"",
+                        StatementModel.builder().withResolved("t").build()),
+                Arguments.of("Statement error message", "statement error message: \"t\"",
+                        StatementModel.builder().withErrorMessage("t").build())
+        );
     }
 
-    @Test
-    void shouldVerifyStatementText() {
-        String input = "statement with text: \"t\"";
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("statementSource")
+    void shouldVerifyStatement(@SuppressWarnings("unused") String name, String input, StatementModel model) {
         JavaTaskParser.StatementRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::statementRule);
 
         WALKER.walk(listener, c);
 
-        verify(verifier).verifyStatement(StatementModel.builder().withText("t").build());
-    }
-
-    @Test
-    void shouldVerifyStatementResolved() {
-        String input = "statement with resolved: \"t\"";
-        JavaTaskParser.StatementRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::statementRule);
-
-        WALKER.walk(listener, c);
-
-        verify(verifier).verifyStatement(StatementModel.builder().withResolved("t").build());
-    }
-
-    @Test
-    void shouldVerifyStatementErrorMessage() {
-        String input = "statement error message: \"t\"";
-        JavaTaskParser.StatementRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::statementRule);
-
-        WALKER.walk(listener, c);
-
-        verify(verifier).verifyStatement(StatementModel.builder().withErrorMessage("t").build());
+        verify(verifier).verifyStatement(model);
     }
 }
