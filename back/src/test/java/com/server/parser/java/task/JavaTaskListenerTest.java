@@ -9,13 +9,11 @@ import com.server.parser.java.task.model.StatementModel;
 import com.server.parser.java.task.verifier.TaskVerifier;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
@@ -35,45 +33,28 @@ class JavaTaskListenerTest {
         listener = new JavaTaskListener(verifier);
     }
 
-    @Test
-    void shouldVerifyMethodName() {
-        String input = "method with name: \"x\"";
-        JavaTaskParser.MethodRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::methodRule);
-
-        WALKER.walk(listener, c);
-
-        verify(verifier).verifyMethod(MethodModel.builder().withName("x").build());
+    static Stream<Arguments> methodSource() {
+        return Stream.of(
+                Arguments.of("Method with name", "method with name: \"x\"",
+                        MethodModel.builder().withName("x").build()),
+                Arguments.of("Method with args", "method with args: {\"int\", -}, {\"String[]\", \"x\"}",
+                        MethodModel.builder().withArgs(Arrays.asList(new MethodArgs("int", null),
+                                new MethodArgs("String[]", "x"))).build()),
+                Arguments.of("Method with modifiers", "method with modifiers: {\"x\", \"y\"}",
+                        MethodModel.builder().withModifiers(Arrays.asList("x", "y")).build()),
+                Arguments.of("Method with result", "method with result: \"x\"",
+                        MethodModel.builder().withResult("x").build())
+        );
     }
 
-    @Test
-    void shouldVerifyMethodArgs() {
-        String input = "method with args: {\"int\", -}, {\"String[]\", \"x\"}";
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("methodSource")
+    void shouldVerifyMethod(@SuppressWarnings("unused") String name, String input, MethodModel model) {
         JavaTaskParser.MethodRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::methodRule);
 
         WALKER.walk(listener, c);
 
-        List<MethodArgs> methodArgs = Arrays.asList(new MethodArgs("int", null), new MethodArgs("String[]", "x"));
-        verify(verifier).verifyMethod(MethodModel.builder().withArgs(methodArgs).build());
-    }
-
-    @Test
-    void shouldVerifyModifiers() {
-        String input = "method with modifiers: {\"x\", \"y\"}";
-        JavaTaskParser.MethodRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::methodRule);
-
-        WALKER.walk(listener, c);
-
-        verify(verifier).verifyMethod(MethodModel.builder().withModifiers(Arrays.asList("x", "y")).build());
-    }
-
-    @Test
-    void shouldVerifyResult() {
-        String input = "method with result: \"x\"";
-        JavaTaskParser.MethodRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::methodRule);
-
-        WALKER.walk(listener, c);
-
-        verify(verifier).verifyMethod(MethodModel.builder().withResult("x").build());
+        verify(verifier).verifyMethod(model);
     }
 
     static Stream<Arguments> statementSource() {
