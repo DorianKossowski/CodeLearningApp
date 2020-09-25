@@ -54,4 +54,12 @@ class TestParseIntegrationTest extends IntegrationTestBase {
 
         performParse(inputDto, resultDto);
     }
+
+    @Test
+    void shouldReturnInvalidVerificationResultWhenWrongInput() throws Exception {
+        TestInputDto inputDto = createTestInputDto("app/integration/wrong-input-parse-input");
+        VerificationResultDto resultDto = VerificationResultDto.invalidInput("Problem podczas parsowania: } [4:0]", 4);
+
+        performParse(inputDto, resultDto);
+    }
 }
