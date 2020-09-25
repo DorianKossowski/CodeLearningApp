@@ -3,9 +3,9 @@ package com.server.parser;
 import com.server.parser.java.JavaParserAcceptanceTest;
 import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,18 +30,26 @@ public class ParserAcceptanceTestCasesProvider {
         }
     }
 
-    private static String getTestInput(Path path) {
+    public static String getSingleTestCase(String casePath) {
+        return getTestInternal(new File(getCasesDirectoryUri(casePath)));
+    }
+
+    private static String getTestInternal(File testCase) {
         try {
-            return FileUtils.readFileToString(path.toFile(), "UTF-8");
+            return FileUtils.readFileToString(testCase, "UTF-8");
         } catch (IOException e) {
-            throw new RuntimeException("Exception during reading test input from: " + path.toString(), e);
+            throw new RuntimeException("Exception during reading test input from: " + testCase.getAbsolutePath(), e);
         }
+    }
+
+    private static String getTestInput(Path path) {
+        return getTestInternal(path.toFile());
     }
 
     private static URI getCasesDirectoryUri(String path) {
         try {
             return Objects.requireNonNull(JavaParserAcceptanceTest.class.getClassLoader().getResource(path)).toURI();
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Exception during reading test cases from: " + path, e);
         }
     }
