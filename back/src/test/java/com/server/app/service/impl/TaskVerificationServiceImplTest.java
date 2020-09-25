@@ -1,5 +1,6 @@
 package com.server.app.service.impl;
 
+import com.server.parser.java.JavaTaskParser;
 import com.server.parser.java.task.JavaTaskListener;
 import com.server.parser.util.exception.PrintableParseException;
 import org.junit.jupiter.api.Test;
@@ -29,5 +30,25 @@ class TaskVerificationServiceImplTest {
 
         assertThat(exception.getLineNumber()).isEqualTo(2);
         assertThat(exception.getMessage()).isEqualTo("Problem podczas parsowania: ; [2:3]");
+    }
+
+    @Test
+    void shouldCreateJavaTaskParser() {
+        String task = "-> method with name: \"main\"";
+
+        JavaTaskParser.RulesEOFContext context = verificationService.createJavaTaskRulesContext(task);
+
+        assertThat(context).isNotNull();
+    }
+
+    @Test
+    void shouldThrowWhenBadTaskInput() {
+        String task = "-> method\nwith: \"main\"";
+
+        PrintableParseException exception = catchThrowableOfType(() -> verificationService.createJavaTaskRulesContext(task),
+                PrintableParseException.class);
+
+        assertThat(exception.getLineNumber()).isEqualTo(2);
+        assertThat(exception.getMessage()).isEqualTo("Problem podczas parsowania: : [2:4]");
     }
 }

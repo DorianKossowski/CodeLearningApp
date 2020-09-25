@@ -16,9 +16,13 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
     @Override
     public void verify(String task, String input) {
         JavaTaskListener javaTaskListener = createJavaTaskListener(input);
+        JavaTaskParser.RulesEOFContext rulesEOFContext = createJavaTaskRulesContext(task);
+        new ParseTreeWalker().walk(javaTaskListener, rulesEOFContext);
+    }
 
-        JavaTaskParser javaTaskParser = JavaTaskParserBuilder.build(task);
-        new ParseTreeWalker().walk(javaTaskListener, javaTaskParser.rulesEOF());
+    JavaTaskParser.RulesEOFContext createJavaTaskRulesContext(String task) {
+        JavaTaskParser parser = JavaTaskParserBuilder.build(task);
+        return parser.rulesEOF();
     }
 
     JavaTaskListener createJavaTaskListener(String input) {
