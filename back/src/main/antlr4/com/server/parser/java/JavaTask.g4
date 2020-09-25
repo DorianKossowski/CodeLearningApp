@@ -17,15 +17,16 @@ statementRule
     ;
 
 statementRuleSpec
-    : ( statementMethodRuleSpec | statementTextRuleSpec | statementResolvedRuleSpec )
+    : statementMethodRuleSpec
+    | WITH ( statementTextRuleSpec | statementResolvedRuleSpec )
     ;
 
 statementResolvedRuleSpec
-    : 'with' 'resolved' ':' STRING_LITERAL
+    : 'resolved' ':' STRING_LITERAL
     ;
 
 statementTextRuleSpec
-    : 'with' 'text' ':' STRING_LITERAL
+    : 'text' ':' STRING_LITERAL
     ;
 
 statementMethodRuleSpec
@@ -37,7 +38,7 @@ methodRule
     ;
 
 methodRuleSpec
-    : 'with' ( methodNameRuleSpec | methodArgsRuleSpec | methodModifiersRuleSpec | methodResultRuleSpec )
+    : WITH ( methodNameRuleSpec | methodArgsRuleSpec | methodModifiersRuleSpec | methodResultRuleSpec )
     ;
 
 methodResultRuleSpec
@@ -66,6 +67,7 @@ valueOrEmpty
 
 ARROW : '-' '>' ;
 EMPTY : '-' ;
+WITH : 'with' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 
