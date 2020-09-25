@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class TaskVerificationServiceImpl implements TaskVerificationService {
 
     @Override
-    public void verify(String input, String task) {
+    public void verify(String task, String input) {
         TaskAst taskAst = JavaParserAdapter.parseTask(input);
 
         JavaTaskListener javaTaskListener = new JavaTaskListener(new TaskVerifier(taskAst));
