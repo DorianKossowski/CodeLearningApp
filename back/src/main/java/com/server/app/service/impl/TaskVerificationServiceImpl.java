@@ -1,5 +1,6 @@
 package com.server.app.service.impl;
 
+import com.server.app.model.dto.VerificationResultDto;
 import com.server.app.service.TaskVerificationService;
 import com.server.parser.java.JavaParserAdapter;
 import com.server.parser.java.JavaTaskParser;
@@ -7,6 +8,7 @@ import com.server.parser.java.ast.TaskAst;
 import com.server.parser.java.task.JavaTaskListener;
 import com.server.parser.java.task.JavaTaskParserBuilder;
 import com.server.parser.java.task.verifier.TaskVerifier;
+import com.server.parser.util.exception.PrintableParseException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,28 @@ import org.springframework.stereotype.Service;
 public class TaskVerificationServiceImpl implements TaskVerificationService {
 
     @Override
-    public void verify(String task, String input) {
-        JavaTaskListener javaTaskListener = createJavaTaskListener(input);
-        JavaTaskParser.RulesEOFContext rulesEOFContext = createJavaTaskRulesContext(task);
+    public VerificationResultDto verify(String task, String input) {
+        JavaTaskParser.RulesEOFContext rulesEOFContext;
+        JavaTaskListener javaTaskListener;
+        try {
+            rulesEOFContext = createJavaTaskRulesContext(task);
+        } catch (PrintableParseException e) {
+            return VerificationResultDto.invalidTask();
+        }
+        try {
+            javaTaskListener = createJavaTaskListener(input);
+        } catch (PrintableParseException e) {
+            return VerificationResultDto.invalidInput(e.getMessage(), e.getLineNumber());
+        }
+        try {
+            verify(rulesEOFContext, javaTaskListener);
+            return VerificationResultDto.valid();
+        } catch (Exception e) {
+            return VerificationResultDto.invalid(e.getMessage());
+        }
+    }
+
+    void verify(JavaTaskParser.RulesEOFContext rulesEOFContext, JavaTaskListener javaTaskListener) {
         new ParseTreeWalker().walk(javaTaskListener, rulesEOFContext);
     }
 

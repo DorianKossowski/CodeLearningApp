@@ -1,5 +1,7 @@
 package com.server.app.service;
 
+import com.server.app.model.dto.VerificationResultDto;
+
 public interface TaskVerificationService {
-    void verify(String task, String input);
+    VerificationResultDto verify(String task, String input);
 }
