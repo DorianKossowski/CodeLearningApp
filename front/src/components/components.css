@@ -76,6 +76,15 @@
   font-weight: 100;
 }
 
+.editorBottomArea {
+  display: flex;
+}
+
+.editorLogArea {
+  width: 100%;
+  padding: 10px 25px;
+}
+
 .editorButton {
   float: right;
   background-color: #343a40;

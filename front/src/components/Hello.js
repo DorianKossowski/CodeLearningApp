@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import './components.css';
+import api from '../helpers/Api.js';
 import Editor from "react-simple-code-editor";
 
 import { highlight, languages } from "prismjs/components/prism-core";
@@ -25,12 +26,29 @@ class Hello extends Component {
         description:
 `Przyjęło się, że pierwszy program jaki tworzy się w dowolnym języku to zawsze "Hello World", czyli "Witaj Świecie". Jest to prosty program który wyświetla na ekranie taki tekst.
 By tego dokonać należy najpierw dodać tak zwaną metodę main którą można uruchomić, czyli coś w rodzaju punktu startowego naszego programu.
-Teraz możemy skorzystać z funkcji println, która to wyświetla dowolny ciąg znaków na tak zwanym standardowym wyjściu.
-`
+Teraz możemy skorzystać z funkcji println, która to wyświetla dowolny ciąg znaków na tak zwanym standardowym wyjściu.`,
+        task:
+`-> method
+    with modifiers: { "public", "static" }
+    with result: "void"
+    with name: "main"
+    with args: { "String[]", - }
+-> statement
+    in method: "main"
+    with text: "System.out.print(\\"Hello World\\");"
+    error message: "Wywołanie metody z literału"`        
     }
 
     onValueChange = code => {
       this.setState({ code })
+    }
+
+    verify = () => {
+        api({
+            method: 'POST',
+            url: 'parse',
+            data: { task: this.state.task, input: this.state.code }
+        })
     }
 
     render = () => {
@@ -49,7 +67,10 @@ Teraz możemy skorzystać z funkcji println, która to wyświetla dowolny ciąg 
                     textareaId="codeArea"
                     className="editor"
                     />
-                    <button className='editorButton'>Sprawdź</button>
+                    <div className='editorBottomArea'>
+                        <div className='editorLogArea'>LOG</div>
+                        <button className='editorButton' onClick={this.verify}>Sprawdź</button>
+                    </div>
                 </div>
                 <div className='description'>{ newText }</div>
             </div>
