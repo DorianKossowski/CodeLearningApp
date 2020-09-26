@@ -1,5 +1,6 @@
 import {Container, Nav, NavDropdown, Navbar} from 'react-bootstrap/';
 import React, { Component } from 'react';
+import { LinkContainer } from "react-router-bootstrap";
 
 import MainViewContainer from './MainViewContainer';
 
@@ -10,7 +11,7 @@ class AuthorizedViewContainer extends Component {
             <Navbar variant='dark' bg='dark' expand='lg'>
                 <Container>
                 <Navbar.Brand> 
-                <Navbar><b className='logo'>KursProgramowania</b></Navbar>
+                <Navbar><LinkContainer to='/'><b className='logo'>KursProgramowania</b></LinkContainer></Navbar>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls='basic-navbar-nav' />
                 <Navbar.Collapse id='basic-navbar-nav' className='justify-content-end'>
