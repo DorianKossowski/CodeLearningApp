@@ -13,13 +13,14 @@ class TaskEditorContainer extends Component {
 
     render = () => {
         return (
-            <TaskEditor input={this.props.input} onValueChange={this.onValueChange}/>
+            <TaskEditor input={this.props.input} onValueChange={this.onValueChange} errorLineNumber={this.props.errorLineNumber} />
         );
     }
 }
 
 const mapSateToProps = state => ({
-    input: state.task.input
+    input: state.task.input,
+    errorLineNumber: state.task.errorLineNumber
 });
 
 const mapDispatchToProps = dispatch => ({

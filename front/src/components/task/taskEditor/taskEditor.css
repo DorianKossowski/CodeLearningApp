@@ -22,3 +22,7 @@
     width: 40px;
     font-weight: 100;
 }
+
+.errorLineNumber {
+    background: #ec7c7c;
+}
