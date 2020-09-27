@@ -1,5 +1,6 @@
 package com.server.app.service.impl;
 
+import com.google.common.base.Preconditions;
 import com.server.app.model.dto.VerificationResultDto;
 import com.server.app.service.TaskVerificationService;
 import com.server.parser.java.JavaParserAdapter;
@@ -17,6 +18,8 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
 
     @Override
     public VerificationResultDto verify(String task, String input) {
+        Preconditions.checkArgument(task != null, "task cannot be null");
+        Preconditions.checkArgument(input != null, "input cannot be null");
         JavaTaskParser.RulesEOFContext rulesEOFContext;
         JavaTaskListener javaTaskListener;
         try {
