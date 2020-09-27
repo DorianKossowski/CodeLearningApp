@@ -31,7 +31,7 @@ class EditorVerifyButtonContainer extends Component {
     }
 }
 
-const mapSateToProps = state => ({
+const mapStateToProps = state => ({
     task: state.task.task,
     input: state.task.input
 });
@@ -41,4 +41,4 @@ const mapDispatchToProps = dispatch => ({
     invalid: (message, lineNumber=null) => dispatch(taskActions.invalid(message, lineNumber))
 });
 
-export default connect(mapSateToProps, mapDispatchToProps)(EditorVerifyButtonContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(EditorVerifyButtonContainer);

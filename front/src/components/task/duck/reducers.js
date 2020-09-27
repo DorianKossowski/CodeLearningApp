@@ -3,6 +3,7 @@ import types from './types';
 const INIT_STATE = {
     task: '',
     input: '',
+    description: '',
     logMessage: '',
     errorLineNumber: null,
     isValid: null
@@ -14,6 +15,8 @@ const taskReducer = (state = INIT_STATE, action) => {
             return {...state, task: action.value};
         case types.SET_INPUT:
             return {...state, input: action.value};
+        case types.SET_DESCRIPTION:
+            return {...state, description: action.value};
         case types.VALID_TASK:
             return {...state, logMessage: action.message, isValid: true};
         case types.INVALID_TASK:

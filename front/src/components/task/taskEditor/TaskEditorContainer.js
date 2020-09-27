@@ -18,7 +18,7 @@ class TaskEditorContainer extends Component {
     }
 }
 
-const mapSateToProps = state => ({
+const mapStateToProps = state => ({
     input: state.task.input,
     errorLineNumber: state.task.errorLineNumber
 });
@@ -29,4 +29,4 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-export default connect(mapSateToProps, mapDispatchToProps)(TaskEditorContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(TaskEditorContainer);
