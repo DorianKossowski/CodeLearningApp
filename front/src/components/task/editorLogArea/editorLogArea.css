@@ -2,3 +2,11 @@
     width: 100%;
     padding: 10px 25px;
 }
+
+.validEditorLogArea {
+    background: #9cf19c;
+}
+
+.invalidEditorLogArea {
+    background: #ec7c7c;
+}

@@ -6,6 +6,7 @@
     padding: 10px 25px;
     text-align: center;
     text-decoration: none;
+    outline: none !important;
 }
 
 .editorButton:hover {
