@@ -41,17 +41,3 @@
 .editorBottomArea {
     display: flex;
 }
-
-.editorButton {
-    float: right;
-    background-color: #343a40;
-    border: none;
-    color: #cccccc;
-    padding: 10px 25px;
-    text-align: center;
-    text-decoration: none;
-}
-
-.editorButton:hover {
-    background-color: #15171a;
-}
