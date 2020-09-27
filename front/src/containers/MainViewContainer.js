@@ -3,7 +3,7 @@ import './containers.css';
 import React, { Component } from 'react';
 import { Route, Switch } from "react-router-dom";
 
-import Hello from '../components/task/Task'
+import TaskContainer from '../components/task';
 import Home from '../components/home/Home';
 
 class MainViewContainer extends Component {
@@ -11,7 +11,7 @@ class MainViewContainer extends Component {
         return (
             <div>
                 <Switch>
-                    <Route exact path='/hello' component={ Hello }/>
+                    <Route exact path='/task' component={ TaskContainer }/>
                     <Route exact path='/' component={ Home }/>
                 </Switch>
             </div>
