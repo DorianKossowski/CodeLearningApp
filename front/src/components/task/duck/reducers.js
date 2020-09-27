@@ -4,6 +4,7 @@ const INIT_STATE = {
     task: '',
     input: '',
     logMessage: '',
+    errorLineNumber: null,
     isValid: null
 }
 
@@ -15,8 +16,10 @@ const taskReducer = (state = INIT_STATE, action) => {
             return {...state, input: action.value};
         case types.VALID_TASK:
             return {...state, logMessage: action.message, isValid: true};
+        case types.INVALID_TASK:
+            return {...state, logMessage: action.message, errorLineNumber: action.number, isValid: false};
         case types.RESET_VALIDATION_RESULT:
-            return {...state, logMessage: INIT_STATE.logMessage, isValid: INIT_STATE.isValid};
+            return {...state, logMessage: INIT_STATE.logMessage, errorLineNumber: INIT_STATE.errorLineNumber, isValid: INIT_STATE.isValid};
         default:
             return state;
     }

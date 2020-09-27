@@ -6,7 +6,7 @@ class EditorLogArea extends Component {
 
     render = () => {
         let style = 'editorLogArea';
-        if(this.props.isValid) {
+        if(this.props.isValid != null) {
             style += this.props.isValid === true ? ' validEditorLogArea' : ' invalidEditorLogArea';
         }
         return (
