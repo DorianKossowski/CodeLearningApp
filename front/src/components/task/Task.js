@@ -20,7 +20,7 @@ const hightlightWithLineNumbers = (input, language, errorLine) =>
         })
         .join("\n");
 
-class Hello extends Component {
+class Task extends Component {
 
     state = { code: 
 `public class Hello {
@@ -90,4 +90,4 @@ Teraz możemy skorzystać z funkcji println, która to wyświetla dowolny ciąg 
     }
 }
 
-export default Hello;
+export default Task;
