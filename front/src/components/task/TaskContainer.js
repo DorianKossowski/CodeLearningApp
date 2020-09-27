@@ -8,21 +8,9 @@ import Task from './Task';
 class TaskContainer extends Component {
 
     componentDidMount = () => {
-        this.props.setTask(`-> method
-        with modifiers: { "public", "static" }
-        with result: "void"
-        with name: "main"
-        with args: { "String[]", - }
-    -> statement
-        in method: "main"
-        with text: "System.out.print(\\"Hello World\\");"
-        error message: "Wywołanie metody z literału"`);
-
-        this.props.setInput(`public class Hello {
-            public static void main(String[] args){
-                System.out.print("Hello World");
-            }
-        }`);
+        const taskData = require('../../resources/' + this.props.match.params.category + '/' + this.props.match.params.id);
+        this.props.setTask(taskData.task);
+        this.props.setInput(taskData.input);
     }
 
     render = () => {

@@ -11,7 +11,7 @@ class MainViewContainer extends Component {
         return (
             <div>
                 <Switch>
-                    <Route exact path='/task' component={ TaskContainer }/>
+                    <Route path='/task/:category/:id' component={ TaskContainer }/>
                     <Route exact path='/' component={ Home }/>
                 </Switch>
             </div>
