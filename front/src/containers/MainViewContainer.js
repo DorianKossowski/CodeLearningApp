@@ -3,8 +3,8 @@ import './containers.css';
 import React, { Component } from 'react';
 import { Route, Switch } from "react-router-dom";
 
-import Hello from '../components/Hello'
-import Home from '../components/Home';
+import Hello from '../components/task/Task'
+import Home from '../components/home/Home';
 
 class MainViewContainer extends Component {
     render = () => {

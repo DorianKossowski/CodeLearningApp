@@ -1,0 +1,62 @@
+.task {
+    display: flex;
+  }
+  
+.description {
+    width: 40%;
+    padding: 20px;
+    background: #e3e3e3;
+    height: max-content;
+}
+
+.editorWrapper {
+    width: 60%;
+}
+
+.editor {
+    counter-reset: line;
+    border: 1px solid #ced4da;
+    width: 100%;
+    height: max-content;
+}
+
+.editor #codeArea {
+    outline: none;
+    padding-left: 60px !important;
+}
+
+.editor pre {
+    padding-left: 60px !important;
+}
+
+.editor .editorLineNumber {
+    position: absolute;
+    left: 0px;
+    color: #cccccc;
+    text-align: right;
+    width: 40px;
+    font-weight: 100;
+}
+
+.editorBottomArea {
+    display: flex;
+}
+
+.editorLogArea {
+    width: 100%;
+    padding: 10px 25px;
+}
+
+.editorButton {
+    float: right;
+    background-color: #343a40;
+    border: none;
+    color: #cccccc;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.editorButton:hover {
+    background-color: #15171a;
+}
