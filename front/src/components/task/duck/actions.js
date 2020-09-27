@@ -1,5 +1,5 @@
 import types from './types';
 
-const valid = () => ({type: types.VALID_TASK})
+const valid = (validMessage) => ({type: types.VALID_TASK, message: validMessage})
 
 export default {valid};

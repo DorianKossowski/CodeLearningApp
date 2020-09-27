@@ -5,7 +5,10 @@ import EditorVerifyButton from "./EditorVerifyButton";
 import { taskActions } from '../duck';
 import api from '../../../helpers/Api';
 
+const VALID_MESSAGE = 'Poprawnie wykonano zadanie. Przejdź do następnego!';
+
 class EditorVerifyButtonContainer extends Component {
+
     verify = () => {
         api({
             method: 'POST',
@@ -14,7 +17,7 @@ class EditorVerifyButtonContainer extends Component {
         })
         .then(data => {
             if(!data.errorMessage) {
-                this.props.valid();
+                this.props.valid(VALID_MESSAGE);
             }
         })
     }
@@ -27,7 +30,7 @@ class EditorVerifyButtonContainer extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    valid: () => dispatch(taskActions.valid())
+    valid: (message) => dispatch(taskActions.valid(message))
 });
 
 export default connect(null, mapDispatchToProps)(EditorVerifyButtonContainer);

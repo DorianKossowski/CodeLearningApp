@@ -7,7 +7,7 @@ const INIT_STATE = {
 const taskReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
         case types.VALID_TASK:
-            return {...state, logMessage: 'valid!'}
+            return {...state, logMessage: action.message}
         default:
             return state;
     }
