@@ -15,6 +15,8 @@ const taskReducer = (state = INIT_STATE, action) => {
             return {...state, input: action.value};
         case types.VALID_TASK:
             return {...state, logMessage: action.message, isValid: true};
+        case types.RESET_VALIDATION_RESULT:
+            return {...state, logMessage: INIT_STATE.logMessage, isValid: INIT_STATE.isValid};
         default:
             return state;
     }

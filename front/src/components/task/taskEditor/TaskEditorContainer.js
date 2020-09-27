@@ -8,6 +8,7 @@ class TaskEditorContainer extends Component {
 
     onValueChange = code => {
         this.props.setInput(code);
+        this.props.resetValidation();
     }
 
     render = () => {
@@ -22,7 +23,8 @@ const mapSateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setInput: (value) => dispatch(taskActions.setInput(value))
+    setInput: (value) => dispatch(taskActions.setInput(value)),
+    resetValidation: () => dispatch(taskActions.resetValidation())
 });
 
 
