@@ -6,7 +6,7 @@ with args: { "String[]", - }
 -> statement
 in method: "main"
 with text: "System.out.println(\\"Hello World\\");"
-error message: "Wywołanie metody z literału"`;
+error message: "Wywołanie metody z wykorzystaniem literału"`;
 
 export const input = `public class Hello {
     public static void main(String[] args){

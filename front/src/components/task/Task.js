@@ -19,16 +19,16 @@ class Task extends Component {
                     </div>
                 </div>
                 <div className='description'>
-                    {this.prepareDescription()}
+                    {this.prepareText(this.props.description)}
                     <p className='instructionTitle'>ZADANIE:</p>
-                    {this.props.instruction}
+                    {this.prepareText(this.props.instruction)}
                 </div>
             </div>
         );
     }
 
-    prepareDescription = () => {
-        return this.props.description.split('\n').map((item, i) => {
+    prepareText = (text) => {
+        return text.split('\n').map((item, i) => {
             return <p key={i}>{item}</p>;
         });
     }
