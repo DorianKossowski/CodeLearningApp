@@ -18,7 +18,11 @@ class Task extends Component {
                         <EditorVerifyButtonContainer />
                     </div>
                 </div>
-                <div className='description'>{this.prepareDescription()}</div>
+                <div className='description'>
+                    {this.prepareDescription()}
+                    <p className='instructionTitle'>ZADANIE:</p>
+                    {this.props.instruction}
+                </div>
             </div>
         );
     }

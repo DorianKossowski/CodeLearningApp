@@ -12,24 +12,27 @@ class TaskContainer extends Component {
         this.props.setTask(taskData.task);
         this.props.setInput(taskData.input);
         this.props.setDescription(taskData.description);
+        this.props.setInstruction(taskData.instruction);
     }
 
     render = () => {
         return (
-            <Task description={this.props.description} />
+            <Task description={this.props.description} instruction={this.props.instruction} />
         );
     }
 
 }
 
 const mapStateToProps = state => ({
-    description: state.task.description
+    description: state.task.description,
+    instruction: state.task.instruction
 });
 
 const mapDispatchToProps = dispatch => ({
     setTask: (value) => dispatch(taskActions.setTask(value)),
     setInput: (value) => dispatch(taskActions.setInput(value)),
-    setDescription: (value) => dispatch(taskActions.setDescription(value))
+    setDescription: (value) => dispatch(taskActions.setDescription(value)),
+    setInstruction: (value) => dispatch(taskActions.setInstruction(value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskContainer);

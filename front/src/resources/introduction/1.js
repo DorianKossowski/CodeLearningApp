@@ -5,15 +5,17 @@ with name: "main"
 with args: { "String[]", - }
 -> statement
 in method: "main"
-with text: "System.out.print(\\"Hello World\\");"
+with text: "System.out.println(\\"Hello World\\");"
 error message: "Wywołanie metody z literału"`;
 
 export const input = `public class Hello {
     public static void main(String[] args){
-        System.out.print("Hello World");
+        System.out.println("Hello World");
     }
 }`;
 
-export const description = `Przyjęło się, że pierwszy program jaki tworzy się w dowolnym języku to zawsze "Hello World", czyli "Witaj Świecie". Jest to prosty program który wyświetla na ekranie taki tekst.
-By tego dokonać należy najpierw dodać tak zwaną metodę main którą można uruchomić, czyli coś w rodzaju punktu startowego naszego programu.
-Teraz możemy skorzystać z funkcji println, która to wyświetla dowolny ciąg znaków na tak zwanym standardowym wyjściu.`;
+export const description = `Przyjęło się, że przygodę z programowaniem rozpoczyna się od programu "Hello World". Jest to prosty kawałek kodu, który wyświetla na ekranie taki tekst.
+W celu stworzenia w języku Java tego typu programu, należy rozpocząć od dodania odpowiedniej metody main. Jest to swego rodzaju punkt startowy, który pozwoli na uruchomienie programu.
+Wewnątrz tej metody, należy następnie skorzystać z funkcji println, która to pozwala wyświetlić dowolny ciąg znaków.`;
+
+export const instruction = `Przyjrzyj się i uruchom widoczny w edytorze kod. Zawiera on instrukcje niezbędne do poprawnego działania programu "Hello World".`;

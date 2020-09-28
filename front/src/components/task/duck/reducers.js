@@ -4,6 +4,7 @@ const INIT_STATE = {
     task: '',
     input: '',
     description: '',
+    instruction: '',
     logMessage: '',
     errorLineNumber: null,
     isValid: null
@@ -17,6 +18,8 @@ const taskReducer = (state = INIT_STATE, action) => {
             return {...state, input: action.value};
         case types.SET_DESCRIPTION:
             return {...state, description: action.value};
+        case types.SET_INSTRUCTION:
+            return {...state, instruction: action.value};
         case types.VALID_TASK:
             return {...state, logMessage: action.message, isValid: true};
         case types.INVALID_TASK:
