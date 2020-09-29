@@ -1,12 +1,14 @@
-export const task = `-> method
-with modifiers: { "public", "static" }
-with result: "void"
-with name: "main"
-with args: { "String[]", - }
+export const task = `
+-> method
+    with modifiers: { "public", "static" }
+    with result: "void"
+    with name: "main"
+    with args: { "String[]", - }
 -> statement
-in method: "main"
-with text: "System.out.println(\\"My Hello World\\");"
-error message: "Wywołanie metody z wykorzystaniem literału"`;
+    in method: "main"
+    with text: "System.out.println(\\"My Hello World\\");"
+    error message: "Wywołanie metody z wykorzystaniem literału"
+`;
 
 export const input = `public class Hello {
     public void (String[] args){
