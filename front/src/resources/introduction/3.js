@@ -22,3 +22,5 @@ Przykładem wywołania metody jest instrukcja System.out.println("Hello World").
 W celu wypisania ciągu znaków, konieczne jest przekazanie do wyżej wymienionej metody parametru. Może to być literał znakowy ale również zdefiniowana wcześniej zmienna.`;
 
 export const instruction = `Przy użyciu metody println wypisz ciąg znaków "Hello World". Wykorzystaj do tego celu zmienną message.`;
+
+export const hasNext = false;

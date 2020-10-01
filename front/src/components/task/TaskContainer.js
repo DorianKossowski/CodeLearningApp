@@ -7,13 +7,14 @@ import Task from './Task';
 
 class TaskContainer extends Component {
 
+    componentDidUpdate = (prevProps) => {
+        if(this.props.match.params.id !== prevProps.match.params.id) {
+            this.fetchNewTaskData();
+        }
+    }
+
     componentDidMount = () => {
-        const taskData = require('../../resources/' + this.props.match.params.category + '/' + this.props.match.params.id);
-        this.props.resetValidation();
-        this.props.setTask(taskData.task);
-        this.props.setInput(taskData.input);
-        this.props.setDescription(taskData.description);
-        this.props.setInstruction(taskData.instruction);
+        this.fetchNewTaskData();
     }
 
     render = () => {
@@ -22,6 +23,16 @@ class TaskContainer extends Component {
         );
     }
 
+
+    fetchNewTaskData = () => {
+        const taskData = require('../../resources/' + this.props.match.params.category + '/' + this.props.match.params.id);
+        this.props.resetValidation();
+        this.props.setTask(taskData.task);
+        this.props.setInput(taskData.input);
+        this.props.setDescription(taskData.description);
+        this.props.setInstruction(taskData.instruction);
+        this.props.setHasNext(taskData.hasNext);
+    }
 }
 
 const mapStateToProps = state => ({
@@ -34,6 +45,7 @@ const mapDispatchToProps = dispatch => ({
     setInput: (value) => dispatch(taskActions.setInput(value)),
     setDescription: (value) => dispatch(taskActions.setDescription(value)),
     setInstruction: (value) => dispatch(taskActions.setInstruction(value)),
+    setHasNext: (value) => dispatch(taskActions.setHasNext(value)),
     resetValidation: () => dispatch(taskActions.resetValidation())
 });
 

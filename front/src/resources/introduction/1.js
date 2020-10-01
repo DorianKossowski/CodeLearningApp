@@ -21,3 +21,5 @@ W celu stworzenia w języku Java tego typu programu, należy rozpocząć od doda
 Wewnątrz tej metody, należy następnie skorzystać z funkcji println, która to pozwala wyświetlić dowolny ciąg znaków.`;
 
 export const instruction = `Przyjrzyj się i uruchom widoczny w edytorze kod. Zawiera on instrukcje niezbędne do poprawnego działania programu "Hello World".`;
+
+export const hasNext = true;

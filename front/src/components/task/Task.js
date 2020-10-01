@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './task.css';
 import EditorLogAreaContainer from './editorLogArea';
 import EditorVerifyButtonContainer from './editorVerifyButton';
+import EditorNextButtonContainer from './editorNextButton';
 import TaskEditorContainer from './taskEditor';
 
 
@@ -16,6 +17,9 @@ class Task extends Component {
                     <div className='editorBottomArea'>
                         <EditorLogAreaContainer />
                         <EditorVerifyButtonContainer />
+                    </div>
+                    <div className='editorBottomAreaBlock'>
+                        <EditorNextButtonContainer />
                     </div>
                 </div>
                 <div className='description'>

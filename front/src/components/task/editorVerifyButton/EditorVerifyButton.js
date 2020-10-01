@@ -6,7 +6,7 @@ class EditorVerifyButton extends Component {
 
     render = () => {
         return (
-            <button className='editorButton' onClick={this.props.verify}>Sprawdź</button>
+            <button className='editorVerifyButton' onClick={this.props.verify}>Sprawdź</button>
         );
     }
 }

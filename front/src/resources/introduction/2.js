@@ -21,3 +21,5 @@ Metoda startowa main charakteryzuje się zwracanym typem void oraz znajdującym 
 
 export const instruction = `Uzupełnij definicję metody uruchomieniowej main o jej brakujące elementy.
 Korzystając z literału znakowego wyświetl napis "My Hello World".`;
+
+export const hasNext = true;
