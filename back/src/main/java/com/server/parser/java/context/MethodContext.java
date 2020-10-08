@@ -1,6 +1,7 @@
 package com.server.parser.java.context;
 
 import com.google.common.collect.ImmutableMap;
+import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class MethodContext {
 
     public String getValue(String var) {
         return varToValue.computeIfAbsent(var, key -> {
-            throw new RuntimeException("Obiekt " + key + " nie istnieje");
+            throw new ResolvingException("Obiekt " + key + " nie istnieje");
         });
     }
 }

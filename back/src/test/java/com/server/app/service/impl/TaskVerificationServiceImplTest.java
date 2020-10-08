@@ -4,6 +4,7 @@ import com.server.app.model.dto.VerificationResultDto;
 import com.server.parser.java.JavaTaskParser;
 import com.server.parser.java.task.JavaTaskListener;
 import com.server.parser.util.exception.PrintableParseException;
+import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -86,6 +87,22 @@ class TaskVerificationServiceImplTest {
 
         // then
         assertThat(resultDto).isEqualTo(VerificationResultDto.invalidInput("msg", 1));
+    }
+
+    @Test
+    void shouldInvalidWhenResolvingError() {
+        // given
+        TaskVerificationServiceImpl verificationService = spy(new TaskVerificationServiceImpl());
+        ResolvingException exception = new ResolvingException("ERROR");
+
+        doReturn(mock(JavaTaskParser.RulesEOFContext.class)).when(verificationService).createJavaTaskRulesContext(TASK);
+        doThrow(exception).when(verificationService).createJavaTaskListener(INPUT);
+
+        // when
+        VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
+
+        // then
+        assertThat(resultDto).isEqualTo(VerificationResultDto.invalid("Problem podczas rozwiązywania: ERROR"));
     }
 
     @Test

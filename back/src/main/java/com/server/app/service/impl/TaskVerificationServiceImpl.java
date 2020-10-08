@@ -10,6 +10,7 @@ import com.server.parser.java.task.JavaTaskListener;
 import com.server.parser.java.task.JavaTaskParserBuilder;
 import com.server.parser.java.task.verifier.TaskVerifier;
 import com.server.parser.util.exception.PrintableParseException;
+import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,8 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
             javaTaskListener = createJavaTaskListener(input);
         } catch (PrintableParseException e) {
             return VerificationResultDto.invalidInput(e.getMessage(), e.getLineNumber());
+        } catch (ResolvingException e) {
+            return VerificationResultDto.invalid(e.getMessage());
         }
         try {
             verify(rulesEOFContext, javaTaskListener);
