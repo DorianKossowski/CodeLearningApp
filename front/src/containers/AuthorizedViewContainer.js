@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { LinkContainer } from "react-router-bootstrap";
 
 import MainViewContainer from './MainViewContainer';
+import MessageAlertContainer from '../components/alert';
 
 class AuthorizedViewContainer extends Component {
     render = () => {
@@ -23,6 +24,7 @@ class AuthorizedViewContainer extends Component {
                 </Navbar.Collapse>
                 </Container>
             </Navbar>
+            <MessageAlertContainer/>
             <MainViewContainer/>
             </>
         );
