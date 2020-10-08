@@ -13,7 +13,7 @@ class TaskEditorContainer extends Component {
 
     render = () => {
         return (
-            <TaskEditor input={this.props.input} onValueChange={this.onValueChange} errorLineNumber={this.props.errorLineNumber} />
+            <TaskEditor onValueChange={this.onValueChange} {...this.props} />
         );
     }
 }

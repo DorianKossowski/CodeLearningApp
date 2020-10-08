@@ -19,7 +19,7 @@ class TaskContainer extends Component {
 
     render = () => {
         return (
-            <Task description={this.props.description} instruction={this.props.instruction} />
+            <Task {...this.props} />
         );
     }
 
