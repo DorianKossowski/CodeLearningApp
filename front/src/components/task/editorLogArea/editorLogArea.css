@@ -4,9 +4,11 @@
 }
 
 .validEditorLogArea {
-    background: #9cf19c;
+    color: #155724;
+    background-color: #d4edda;
 }
 
 .invalidEditorLogArea {
-    background: #ec7c7c;
+    color: #721c24;
+    background-color: #f8d7da;
 }

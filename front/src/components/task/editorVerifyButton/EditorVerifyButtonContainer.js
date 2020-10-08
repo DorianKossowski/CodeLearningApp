@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import EditorVerifyButton from "./EditorVerifyButton";
 import { taskActions } from '../duck';
 import api from '../../../helpers/Api';
+import handleError from "../../../helpers/ErrorHandlingService";
 
 const VALID_MESSAGE = 'Poprawnie wykonano zadanie. Przejdź do następnego!';
 
@@ -22,6 +23,7 @@ class EditorVerifyButtonContainer extends Component {
                 this.props.invalid(data.errorMessage, data.lineNumber);
             }
         })
+        .catch(error => handleError(error, "Problem podczas sprawdzania: "));
     }
 
     render = () => {
