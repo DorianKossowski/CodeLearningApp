@@ -1,11 +1,17 @@
 import {Container, Nav, NavDropdown, Navbar} from 'react-bootstrap/';
 import React, { Component } from 'react';
 import { LinkContainer } from "react-router-bootstrap";
+import { connect } from 'react-redux';
 
 import MainViewContainer from './MainViewContainer';
 import MessageAlertContainer from '../components/alert';
+import { alertActions } from '../components/alert/duck';
 
 class AuthorizedViewContainer extends Component {
+    componentDidUpdate = () => {
+        this.props.resetAlert();
+    }
+
     render = () => {
         return (
             <>
@@ -31,4 +37,8 @@ class AuthorizedViewContainer extends Component {
     }
 }
 
-export default AuthorizedViewContainer;
+const mapDispatchToProps = dispatch => ({
+    resetAlert: () => dispatch(alertActions.resetAlert())
+});
+
+export default connect(null, mapDispatchToProps)(AuthorizedViewContainer);

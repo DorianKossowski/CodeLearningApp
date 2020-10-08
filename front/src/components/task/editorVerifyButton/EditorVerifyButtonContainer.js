@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import EditorVerifyButton from "./EditorVerifyButton";
+import { alertActions } from "../../alert/duck";
 import { taskActions } from '../duck';
 import api from '../../../helpers/Api';
 import handleError from "../../../helpers/ErrorHandlingService";
@@ -11,6 +12,7 @@ const VALID_MESSAGE = 'Poprawnie wykonano zadanie. Przejdź do następnego!';
 class EditorVerifyButtonContainer extends Component {
 
     verify = () => {
+        this.props.resetAlert();
         api({
             method: 'POST',
             url: 'parse',
@@ -40,7 +42,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     valid: (message) => dispatch(taskActions.valid(message)),
-    invalid: (message, lineNumber=null) => dispatch(taskActions.invalid(message, lineNumber))
+    invalid: (message, lineNumber=null) => dispatch(taskActions.invalid(message, lineNumber)),
+    resetAlert: () => dispatch(alertActions.resetAlert())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditorVerifyButtonContainer);
