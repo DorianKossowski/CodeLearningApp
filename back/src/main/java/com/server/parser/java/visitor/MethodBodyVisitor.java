@@ -20,13 +20,13 @@ public class MethodBodyVisitor extends JavaVisitor<MethodBody> {
     @Override
     public MethodBody visitMethodBody(JavaParser.MethodBodyContext ctx) {
         MethodBodyStatementVisitor methodBodyStatementVisitor = new MethodBodyStatementVisitor(methodContext);
-        LocalVarDecVisitor localVarDecVisitor = new LocalVarDecVisitor(methodContext);
+        MethodVarDecVisitor methodVarDecVisitor = new MethodVarDecVisitor(methodContext);
 
         List<Statement> statements = new ArrayList<>();
         for (int i = 0; i < ctx.getChildCount(); ++i) {
             ParseTree child = ctx.getChild(i);
-            if (child instanceof JavaParser.LocalVarDecContext) {
-                statements.add(localVarDecVisitor.visit(child));
+            if (child instanceof JavaParser.MethodVarDecContext) {
+                statements.add(methodVarDecVisitor.visit(child));
             } else if (child instanceof JavaParser.MethodBodyStatementContext) {
                 statements.add(methodBodyStatementVisitor.visit(child));
             }

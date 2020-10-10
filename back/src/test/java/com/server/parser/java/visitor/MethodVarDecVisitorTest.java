@@ -10,20 +10,20 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 
-class LocalVarDecVisitorTest extends JavaVisitorTestBase {
-    private LocalVarDecVisitor visitor;
+class MethodVarDecVisitorTest extends JavaVisitorTestBase {
+    private MethodVarDecVisitor visitor;
     private MethodContext methodContext;
 
     @BeforeEach
     void setUp() {
         methodContext = new MethodContext("");
-        visitor = new LocalVarDecVisitor(methodContext);
+        visitor = new MethodVarDecVisitor(methodContext);
     }
 
     @Test
     void shouldVisitLocalVarDec() {
         String input = "String a = \"str\"";
-        JavaParser.LocalVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::localVarDec);
+        JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
         Variable variable = visitor.visit(c);
 

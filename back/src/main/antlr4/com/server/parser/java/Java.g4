@@ -60,13 +60,13 @@ singleMethodArg
 methodBody
     : (
     ( mbs=methodBodyStatement
-    | lvd=localVarDec
+    | lvd=methodVarDec
     ) SEMICOLON
     | SEMICOLON
     )*
     ;
 
-localVarDec
+methodVarDec
     : varModifier* varDec
     ;
 

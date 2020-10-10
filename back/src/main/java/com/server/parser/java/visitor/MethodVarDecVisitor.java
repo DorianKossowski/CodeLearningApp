@@ -6,15 +6,15 @@ import com.server.parser.java.context.MethodContext;
 
 import java.util.Objects;
 
-public class LocalVarDecVisitor extends JavaVisitor<Variable> {
+public class MethodVarDecVisitor extends JavaVisitor<Variable> {
     private final MethodContext methodContext;
 
-    public LocalVarDecVisitor(MethodContext methodContext) {
+    public MethodVarDecVisitor(MethodContext methodContext) {
         this.methodContext = Objects.requireNonNull(methodContext, "methodContext cannot be null");
     }
 
     @Override
-    public Variable visitLocalVarDec(JavaParser.LocalVarDecContext ctx) {
+    public Variable visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
         Variable variable = new VarDecVisitor().visit(ctx.varDec());
         methodContext.addVar(variable.getName(), variable.getValue().getText());
         return variable;

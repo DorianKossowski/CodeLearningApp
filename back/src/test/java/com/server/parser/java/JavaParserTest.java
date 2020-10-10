@@ -145,8 +145,8 @@ public class JavaParserTest {
     }
 
     @Test
-    void shouldParseLocalVarDec() {
-        HELPER.shouldParseToEof("final String a = \"str\"", JavaParser::localVarDec);
+    void shouldParseMethodVarDec() {
+        HELPER.shouldParseToEof("final String a = \"str\"", JavaParser::methodVarDec);
     }
 
     @ParameterizedTest
