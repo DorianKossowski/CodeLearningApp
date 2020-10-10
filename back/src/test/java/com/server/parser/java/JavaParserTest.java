@@ -133,14 +133,12 @@ public class JavaParserTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "String s = \"str\"",
-            "char c = 'c'",
-            "Character c = 'c'",
-            "int i = 5",
-            "Integer i = 5",
-            "byte b = 5",
-            "Byte b = 5",
-            "long l = 5l",
-            "Long l = 5L"
+            "char c = 'c'", "Character c = 'c'",
+            "int i = 5", "Integer i = 5",
+            "byte b = 5", "Byte b = 5",
+            "long l = 5l", "Long l = 5L",
+            "float f = 5.5", "float f = 5f", "Float f = 5.F",
+            "double d = 5.5d", "Double d = .5D"
     })
     void shouldParseVarDec(String input) {
         HELPER.shouldParseToEof(input, JavaParser::varDec);

@@ -100,6 +100,7 @@ literal
     : STRING_LITERAL
     | CHAR_LITERAL
     | INTEGER_LITERAL
+    | FLOAT_LITERAL
     ;
 
 methodName
@@ -167,6 +168,7 @@ SEMICOLON : ';' ;
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 CHAR_LITERAL : '\'' . '\'' ;
 INTEGER_LITERAL : DIGIT+ [lL]?;
+FLOAT_LITERAL : DIGIT+ '.' DIGIT* [fFdD]? | '.' DIGIT+ [fFdD]? | DIGIT+ [fFdD] ;
 
 IDENTIFIER : (AZ | '_' | '$')  (AZ | DIGIT | '_' | '$')* ;
 
