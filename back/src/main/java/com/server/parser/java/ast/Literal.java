@@ -1,8 +1,16 @@
 package com.server.parser.java.ast;
 
-public class Literal extends Expression {
+import java.util.Objects;
 
-    public Literal(String text) {
-        super(text);
+public class Literal extends Expression {
+    private final Object value;
+
+    public Literal(Object value) {
+        super(Objects.requireNonNull(value, "value cannot be null").toString());
+        this.value = value;
+    }
+
+    public Object getValue() {
+        return value;
     }
 }

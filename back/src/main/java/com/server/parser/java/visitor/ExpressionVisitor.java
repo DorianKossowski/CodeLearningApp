@@ -2,7 +2,6 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Expression;
-import com.server.parser.java.ast.Literal;
 import com.server.parser.java.ast.ObjectRef;
 
 public class ExpressionVisitor extends JavaVisitor<Expression> {
@@ -20,8 +19,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
 
     @Override
     public Expression visitLiteral(JavaParser.LiteralContext ctx) {
-        String literal = new StringLiteralVisitor().visit(ctx.stringLiteral());
-        return new Literal(literal);
+        return new LiteralVisitor().visit(ctx);
     }
 
     @Override

@@ -97,10 +97,6 @@ objectRefName
     ;
 
 literal
-    : stringLiteral
-    ;
-
-stringLiteral
     : STRING_LITERAL
     | CHAR_LITERAL
     ;
