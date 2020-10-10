@@ -17,9 +17,9 @@ classHeader
     ;
 
 classBody
-    : ( fieldDec ';'
+    : ( fieldDec SEMICOLON
     | methodDec
-    | ';'
+    | SEMICOLON
     )*
     ;
 
@@ -61,8 +61,8 @@ methodBody
     : (
     ( mbs=methodBodyStatement
     | lvd=localVarDec
-    ) ';'
-    | ';'
+    ) SEMICOLON
+    | SEMICOLON
     )*
     ;
 
@@ -164,6 +164,8 @@ classModifier
 identifier
     : IDENTIFIER
     ;
+
+SEMICOLON : ';' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 CHAR_LITERAL : '\'' . '\'' ;
