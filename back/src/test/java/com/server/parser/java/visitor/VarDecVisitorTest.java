@@ -23,7 +23,9 @@ class VarDecVisitorTest extends JavaVisitorTestBase {
                 Arguments.of("char c = 'c'", "char", "c", "'c'"),
                 Arguments.of("Character c = 'c'", "Character", "c", "'c'"),
                 Arguments.of("int i = 5", "int", "i", "5"),
-                Arguments.of("Integer i = 5", "Integer", "i", "5")
+                Arguments.of("Integer i = 5", "Integer", "i", "5"),
+                Arguments.of("byte b = 5", "byte", "b", "5"),
+                Arguments.of("Byte b = 5", "Byte", "b", "5")
         );
     }
 

@@ -136,7 +136,9 @@ public class JavaParserTest {
             "char c = 'c'",
             "Character c = 'c'",
             "int i = 5",
-            "Integer i = 5"
+            "Integer i = 5",
+            "byte b = 5",
+            "Byte b = 5"
     })
     void shouldParseVarDec(String input) {
         HELPER.shouldParseToEof(input, JavaParser::varDec);
