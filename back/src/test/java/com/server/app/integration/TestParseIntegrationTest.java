@@ -62,4 +62,21 @@ class TestParseIntegrationTest extends IntegrationTestBase {
 
         performParse(inputDto, resultDto);
     }
+
+    @Test
+    void shouldReturnInvalidVerificationResultWhenObjectNotExists() throws Exception {
+        TestInputDto inputDto = createTestInputDto("app/integration/invalid-object-not-exists");
+        VerificationResultDto resultDto = VerificationResultDto.invalid("Problem podczas rozwiązywania: Obiekt obj nie istnieje");
+
+        performParse(inputDto, resultDto);
+    }
+
+    @Test
+    void shouldReturnInvalidVerificationResultWhenOWrongLiteralType() throws Exception {
+        TestInputDto inputDto = createTestInputDto("app/integration/invalid-wrong-literal-type");
+        VerificationResultDto resultDto = VerificationResultDto.invalid("Problem podczas rozwiązywania: Wyrażenie 'S'" +
+                " nie jest typu String");
+
+        performParse(inputDto, resultDto);
+    }
 }
