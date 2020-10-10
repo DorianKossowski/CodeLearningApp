@@ -20,6 +20,6 @@ class FieldDecVisitorTest extends JavaVisitorTestBase {
         assertThat(variable.getText()).isEqualTo(input);
         assertVariableDec(variable, "String", "a");
         assertThat(variable.getValue()).extracting(Expression::getText)
-                .isEqualTo("str");
+                .isEqualTo("\"str\"");
     }
 }

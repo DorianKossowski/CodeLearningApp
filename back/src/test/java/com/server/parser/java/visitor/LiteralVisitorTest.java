@@ -15,10 +15,10 @@ class LiteralVisitorTest extends JavaVisitorTestBase {
 
     static Stream<Arguments> literalsProvider() {
         return Stream.of(
-                Arguments.of("\"abc\"", "abc", String.class),
-                Arguments.of("\"a b\"", "a b", String.class),
-                Arguments.of("\"a\\\"a\"", "a\"a", String.class),
-                Arguments.of("'a'", "a", Character.class)
+                Arguments.of("\"abc\"", "\"abc\"", String.class),
+                Arguments.of("\"a b\"", "\"a b\"", String.class),
+                Arguments.of("\"a\\\"a\"", "\"a\"a\"", String.class),
+                Arguments.of("'a'", "'a'", Character.class)
         );
     }
 

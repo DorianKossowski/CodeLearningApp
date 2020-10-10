@@ -39,7 +39,7 @@ public abstract class ParserAcceptanceTestBase<P extends Parser> {
     void shouldVerifyAll(@SuppressWarnings("unused") String caseName, String testCase) {
         AcceptanceTestCaseModel testCaseModel = AcceptanceTestCaseFetcher.fetchModel(testCase);
         VerificationResultDto resultDto = VERIFICATION_SERVICE.verify(testCaseModel.getTask(), testCaseModel.getInput());
-        assertThat(resultDto).isEqualTo(VerificationResultDto.valid());
+        assertThat(resultDto.getErrorMessage()).isNull();
     }
 
     protected abstract String getPath();

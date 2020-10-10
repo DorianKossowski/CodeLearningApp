@@ -22,7 +22,7 @@ class VarDecVisitorTest extends JavaVisitorTestBase {
         assertThat(variable.getType()).isEqualTo("String");
         assertThat(variable.getName()).isEqualTo("a");
         assertThat(variable.getValue()).extracting(Expression::getText)
-                .isEqualTo("str");
+                .isEqualTo("\"str\"");
     }
 
     @Test
@@ -44,6 +44,6 @@ class VarDecVisitorTest extends JavaVisitorTestBase {
 
         assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Wyrażenie s nie jest typu String");
+                .hasMessage("Problem podczas rozwiązywania: Wyrażenie 's' nie jest typu String");
     }
 }

@@ -27,6 +27,6 @@ class MethodDecVisitorTest extends JavaVisitorTestBase {
         assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
         assertThat(((MethodCall) statement)).extracting(MethodCall::getName,
                 call -> Iterables.getOnlyElement(call.getArgs()).getText())
-                .containsExactly("println", "HELLO");
+                .containsExactly("println", "\"HELLO\"");
     }
 }

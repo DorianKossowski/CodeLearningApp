@@ -33,13 +33,13 @@ class MethodCallVisitorTest extends JavaVisitorTestBase {
         assertThat(methodCall.getText()).isEqualTo(input);
         assertThat(methodCall.getContextMethodName()).isEqualTo(METHOD_NAME);
         assertThat(methodCall.getName()).isEqualTo("System.out.print");
-        assertThat(Iterables.getOnlyElement(methodCall.getArgs()).getText()).isEqualTo("Hello World");
+        assertThat(Iterables.getOnlyElement(methodCall.getArgs()).getText()).isEqualTo("\"Hello World\"");
     }
 
     @Test
     void shouldEnhanceObjectRefs() {
         ObjectRef objectRef = new ObjectRef("obj");
-        methodContext.addVar("obj", "val");
+        methodContext.addVar("obj", "\"val\"");
 
         visitor.enhanceArguments(Collections.singletonList(objectRef));
 
@@ -48,7 +48,7 @@ class MethodCallVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldGetCorrectMethodCallValue() {
-        methodContext.addVar("var", "value");
+        methodContext.addVar("var", "\"value\"");
         String input = "System.out.print(\"literal\", var)";
         JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
 

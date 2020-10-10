@@ -16,6 +16,6 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
 
         Expression expression = visitor.visit(c);
 
-        assertThat(expression.getText()).isEqualTo(input.substring(1, input.length() - 1));
+        assertThat(expression.getText()).isEqualTo(input);
     }
 }

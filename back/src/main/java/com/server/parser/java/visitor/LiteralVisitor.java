@@ -8,15 +8,13 @@ public class LiteralVisitor extends JavaVisitor<Literal> {
 
     @Override
     public Literal visitLiteral(JavaParser.LiteralContext ctx) {
-        return new Literal(getValue(ctx));
-    }
-
-    private Object getValue(JavaParser.LiteralContext ctx) {
         if (ctx.STRING_LITERAL() != null) {
-            return JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
+            String value = JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
+            return new Literal(value, '"' + value + '"');
         }
         if (ctx.CHAR_LITERAL() != null) {
-            return ctx.CHAR_LITERAL().getText().charAt(1);
+            char value = ctx.CHAR_LITERAL().getText().charAt(1);
+            return new Literal(value, "'" + value + "'");
         }
         throw new UnsupportedOperationException("Provided literal is not supported");
     }

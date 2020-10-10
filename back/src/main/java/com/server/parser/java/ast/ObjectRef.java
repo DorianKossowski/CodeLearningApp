@@ -9,7 +9,7 @@ public class ObjectRef extends Expression {
 
     @Override
     public String getResolved() {
-        return '"' + value + '"';
+        return value;
     }
 
     public void setValue(String value) {
