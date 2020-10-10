@@ -30,6 +30,8 @@ public class VariableValidator {
             case "Integer":
             case "byte":
             case "Byte":
+            case "short":
+            case "Short":
                 Preconditions.checkArgument(literal.getValue() instanceof Integer);
                 break;
         }

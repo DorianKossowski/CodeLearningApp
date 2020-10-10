@@ -22,7 +22,9 @@ class VariableValidatorTest {
                 Arguments.of("int", new Literal(1)),
                 Arguments.of("Integer", new Literal(1)),
                 Arguments.of("Byte", new Literal(1)),
-                Arguments.of("byte", new Literal(1))
+                Arguments.of("byte", new Literal(1)),
+                Arguments.of("short", new Literal(1)),
+                Arguments.of("Short", new Literal(1))
         );
     }
 
