@@ -21,7 +21,9 @@ class LiteralVisitorTest extends JavaVisitorTestBase {
                 Arguments.of("'a'", "'a'", Character.class),
                 Arguments.of("5", "5", Integer.class),
                 Arguments.of("5l", "5", Integer.class),
-                Arguments.of("5L", "5", Integer.class)
+                Arguments.of("5L", "5", Integer.class),
+                Arguments.of("5.5f", "5.5", Double.class),
+                Arguments.of("0.5f", "0.5", Double.class)
         );
     }
 

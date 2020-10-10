@@ -20,6 +20,10 @@ public class LiteralVisitor extends JavaVisitor<Literal> {
             int value = Integer.parseInt(ctx.INTEGER_LITERAL().getText().replaceFirst("[lL]", ""));
             return new Literal(value);
         }
+        if (ctx.FLOAT_LITERAL() != null) {
+            double value = Double.parseDouble(ctx.FLOAT_LITERAL().getText());
+            return new Literal(value);
+        }
         throw new UnsupportedOperationException("Provided literal is not supported");
     }
 }
