@@ -25,7 +25,7 @@ class MethodCallVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitMethodCall() {
-        String input = "System.out.print(\"Hello World\");";
+        String input = "System.out.print(\"Hello World\")";
         JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
 
         MethodCall methodCall = visitor.visit(c);
@@ -49,11 +49,11 @@ class MethodCallVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldGetCorrectMethodCallValue() {
         methodContext.addVar("var", "value");
-        String input = "System.out.print(\"literal\", var);";
+        String input = "System.out.print(\"literal\", var)";
         JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
 
         MethodCall methodCall = visitor.visit(c);
 
-        assertThat(methodCall.getResolved()).isEqualTo("System.out.print(\"literal\", \"value\");");
+        assertThat(methodCall.getResolved()).isEqualTo("System.out.print(\"literal\", \"value\")");
     }
 }

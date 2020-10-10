@@ -1,5 +1,6 @@
 package com.server.parser;
 
+import com.server.app.model.dto.VerificationResultDto;
 import com.server.app.service.TaskVerificationService;
 import com.server.app.service.impl.TaskVerificationServiceImpl;
 import com.server.parser.util.AcceptanceTestCaseFetcher;
@@ -13,6 +14,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class ParserAcceptanceTestBase<P extends Parser> {
@@ -33,9 +36,10 @@ public abstract class ParserAcceptanceTestBase<P extends Parser> {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("testCasesMethodSource")
-    void shouldParseAll(@SuppressWarnings("unused") String caseName, String testCase) {
+    void shouldVerifyAll(@SuppressWarnings("unused") String caseName, String testCase) {
         AcceptanceTestCaseModel testCaseModel = AcceptanceTestCaseFetcher.fetchModel(testCase);
-        VERIFICATION_SERVICE.verify(testCaseModel.getTask(), testCaseModel.getInput());
+        VerificationResultDto resultDto = VERIFICATION_SERVICE.verify(testCaseModel.getTask(), testCaseModel.getInput());
+        assertThat(resultDto).isEqualTo(VerificationResultDto.valid());
     }
 
     protected abstract String getPath();

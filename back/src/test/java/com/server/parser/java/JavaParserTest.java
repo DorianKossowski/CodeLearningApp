@@ -122,17 +122,17 @@ public class JavaParserTest {
 
     @Test
     void shouldParseMethodCall() {
-        HELPER.shouldParseToEof("System.out.print(\"Hello World\");", JavaParser::methodCall);
+        HELPER.shouldParseToEof("System.out.print(\"Hello World\")", JavaParser::methodCall);
     }
 
     @Test
     void shouldParseFieldDec() {
-        HELPER.shouldParseToEof("private final String a = \"str\";", JavaParser::fieldDec);
+        HELPER.shouldParseToEof("private final String a = \"str\"", JavaParser::fieldDec);
     }
 
     @Test
     void shouldParseLocalVarDec() {
-        HELPER.shouldParseToEof("final String a = \"str\";", JavaParser::localVarDec);
+        HELPER.shouldParseToEof("final String a = \"str\"", JavaParser::localVarDec);
     }
 
     @ParameterizedTest

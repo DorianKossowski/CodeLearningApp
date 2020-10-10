@@ -22,8 +22,8 @@ class MethodBodyVisitorTest extends JavaVisitorTestBase {
 
         List<Statement> statements = methodBody.getStatements();
         assertThat(statements).hasSize(3);
-        assertThat(statements.get(0).getText()).isEqualTo("String a = \"s\";");
-        assertThat(statements.get(1).getText()).isEqualTo("System.out.println(\"sss\");");
-        assertThat(statements.get(2).getText()).isEqualTo("String b = \"s2\";");
+        assertThat(statements.get(0).getText()).isEqualTo("String a = \"s\"");
+        assertThat(statements.get(1).getText()).isEqualTo("System.out.println(\"sss\")");
+        assertThat(statements.get(2).getText()).isEqualTo("String b = \"s2\"");
     }
 }

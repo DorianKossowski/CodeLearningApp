@@ -1,19 +1,19 @@
 ### TASK ###
 -> method
-	with modifiers: { "public", "static" }
-	with result: "void"
-	with name: "main"
-	with args: { "String[]", - }
+    with modifiers: { "public", "static" }
+    with result: "void"
+    with name: "main"
+    with args: { "String[]", - }
 -> statement
-	in method: "main"
-	with text: "System.out.print(message);"
-	with resolved: "System.out.print(\"Hello World\");"
-	error message: "Wywołanie metody z użyciem zmiennej"
+    in method: "main"
+    with text: "System.out.println(message)"
+    with resolved: "System.out.println(\"Hello World\")"
+    error message: "Wywołanie metody println z użyciem zmiennej"
 
 ### INPUT ###
 public class Hello {
     public static void main(String[] args){
         String message = "Hello World";
-        System.out.print(message);
+        System.out.println(message);
     }
 }

@@ -6,8 +6,8 @@ export const task = `
     with args: { "String[]", - }
 -> statement
     in method: "main"
-    with text: "System.out.println(message);"
-    with resolved: "System.out.println(\\"Hello World\\");"
+    with text: "System.out.println(message)"
+    with resolved: "System.out.println(\\"Hello World\\")"
     error message: "Wywołanie metody println z użyciem zmiennej"
 `;
 

@@ -12,11 +12,12 @@ class FieldDecVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldCreateFromFieldDec() {
-        String input = "private final String a = \"str\";";
+        String input = "String a = \"str\"";
         JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
         Variable variable = visitor.visit(c);
 
+        assertThat(variable.getText()).isEqualTo(input);
         assertVariableDec(variable, "String", "a");
         assertThat(variable.getValue()).extracting(Expression::getText)
                 .isEqualTo("str");

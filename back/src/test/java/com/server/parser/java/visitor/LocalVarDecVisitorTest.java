@@ -22,11 +22,12 @@ class LocalVarDecVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitLocalVarDec() {
-        String input = "final String a = \"str\";";
+        String input = "String a = \"str\"";
         JavaParser.LocalVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::localVarDec);
 
         Variable variable = visitor.visit(c);
 
+        assertThat(variable.getText()).isEqualTo(input);
         assertVariableDec(variable, "String", "a");
         assertThat(variable.getValue()).extracting(Expression::getText)
                 .isEqualTo("str");

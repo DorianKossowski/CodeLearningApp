@@ -6,7 +6,7 @@ export const task = `
     with args: { "String[]", - }
 -> statement
     in method: "main"
-    with text: "System.out.println(\\"Hello World\\");"
+    with text: "System.out.println(\\"Hello World\\")"
     error message: "Wywołanie metody z wykorzystaniem literału"
 `;
 

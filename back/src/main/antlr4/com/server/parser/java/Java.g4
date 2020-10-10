@@ -17,17 +17,18 @@ classHeader
     ;
 
 classBody
-    : ( fieldDec
+    : ( fieldDec ';'
     | methodDec
+    | ';'
     )*
     ;
 
 fieldDec
-    : fieldModifier* varDec ';'
+    : fieldModifier* varDec
     ;
 
 varDec
-    : type identifier ('=' expression )?
+    : type identifier ( '=' expression )?
     ;
 
 fieldModifier
@@ -57,14 +58,16 @@ singleMethodArg
     ;
 
 methodBody
-    : ( mbs=methodBodyStatement
+    : (
+    ( mbs=methodBodyStatement
     | lvd=localVarDec
+    ) ';'
     | ';'
     )*
     ;
 
 localVarDec
-    : varModifier* varDec ';'
+    : varModifier* varDec
     ;
 
 varModifier
@@ -76,7 +79,7 @@ methodBodyStatement
     ;
 
 methodCall
-    : methodName '(' callArguments ')' ';'
+    : methodName '(' callArguments ')'
     ;
 
 callArguments
