@@ -130,6 +130,16 @@ public class JavaParserTest {
         HELPER.shouldParseToEof("private final String a = \"str\"", JavaParser::fieldDec);
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "String s = \"str\"",
+            "char c = 'c'",
+            "Character c = 'c'"
+    })
+    void shouldParseVarDec(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::varDec);
+    }
+
     @Test
     void shouldParseLocalVarDec() {
         HELPER.shouldParseToEof("final String a = \"str\"", JavaParser::localVarDec);
