@@ -27,7 +27,6 @@ class LocalVarDecVisitorTest extends JavaVisitorTestBase {
 
         Variable variable = visitor.visit(c);
 
-        assertThat(variable.getText()).isEqualTo(input);
         assertVariableDec(variable, "String", "a");
         assertThat(variable.getValue()).extracting(Expression::getText)
                 .isEqualTo("str");

@@ -23,11 +23,11 @@ classBody
     ;
 
 fieldDec
-    : fieldModifier* type varDec ';'
+    : fieldModifier* varDec ';'
     ;
 
 varDec
-    : identifier ('=' expression )?
+    : type identifier ('=' expression )?
     ;
 
 fieldModifier
@@ -64,7 +64,7 @@ methodBody
     ;
 
 localVarDec
-    : varModifier* type varDec ';'
+    : varModifier* varDec ';'
     ;
 
 varModifier

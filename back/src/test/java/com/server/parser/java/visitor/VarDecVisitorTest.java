@@ -2,9 +2,8 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.Variable;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,24 +12,26 @@ class VarDecVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitVarDec() {
-        String input = "a = \"str\"";
+        String input = "String a = \"str\"";
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
-        Map.Entry<String, Expression> varDecEntry = visitor.visit(c);
+        Variable variable = visitor.visit(c);
 
-        assertThat(varDecEntry.getKey()).isEqualTo("a");
-        assertThat(varDecEntry.getValue()).extracting(Expression::getText)
+        assertThat(variable.getType()).isEqualTo("String");
+        assertThat(variable.getName()).isEqualTo("a");
+        assertThat(variable.getValue()).extracting(Expression::getText)
                 .isEqualTo("str");
     }
 
     @Test
     void shouldVisitVarDecWithoutValue() {
-        String input = "a";
+        String input = "String a";
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
-        Map.Entry<String, Expression> varDecEntry = visitor.visit(c);
+        Variable variable = visitor.visit(c);
 
-        assertThat(varDecEntry.getKey()).isEqualTo("a");
-        assertThat(varDecEntry.getValue()).isNull();
+        assertThat(variable.getType()).isEqualTo("String");
+        assertThat(variable.getName()).isEqualTo("a");
+        assertThat(variable.getValue()).isNull();
     }
 }
