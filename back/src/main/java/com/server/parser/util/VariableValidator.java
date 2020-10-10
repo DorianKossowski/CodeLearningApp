@@ -26,6 +26,10 @@ public class VariableValidator {
             case "Character":
                 Preconditions.checkArgument(literal.getValue() instanceof Character);
                 break;
+            case "int":
+            case "Integer":
+                Preconditions.checkArgument(literal.getValue() instanceof Integer);
+                break;
         }
     }
 }

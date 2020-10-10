@@ -5,6 +5,11 @@ import com.server.parser.java.ast.Expression;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -12,17 +17,26 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class VarDecVisitorTest extends JavaVisitorTestBase {
     private final VarDecVisitor visitor = new VarDecVisitor();
 
-    @Test
-    void shouldVisitVarDec() {
-        String input = "String a = \"str\"";
+    static Stream<Arguments> decWithLiteralsProvider() {
+        return Stream.of(
+                Arguments.of("String s = \"str\"", "String", "s", "\"str\""),
+                Arguments.of("char c = 'c'", "char", "c", "'c'"),
+                Arguments.of("Character c = 'c'", "Character", "c", "'c'"),
+                Arguments.of("int i = 5", "int", "i", "5"),
+                Arguments.of("Integer i = 5", "Integer", "i", "5")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("decWithLiteralsProvider")
+    void shouldVisitVarDecWithLiteral(String input, String type, String name, String value) {
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
         Variable variable = visitor.visit(c);
 
-        assertThat(variable.getType()).isEqualTo("String");
-        assertThat(variable.getName()).isEqualTo("a");
-        assertThat(variable.getValue()).extracting(Expression::getText)
-                .isEqualTo("\"str\"");
+        assertThat(variable.getType()).isEqualTo(type);
+        assertThat(variable.getName()).isEqualTo(name);
+        assertThat(variable.getValue()).extracting(Expression::getText).isEqualTo(value);
     }
 
     @Test
