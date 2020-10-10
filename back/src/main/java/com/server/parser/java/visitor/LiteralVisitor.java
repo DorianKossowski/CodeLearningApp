@@ -17,7 +17,7 @@ public class LiteralVisitor extends JavaVisitor<Literal> {
             return new Literal(value, "'" + value + "'");
         }
         if (ctx.INTEGER_LITERAL() != null) {
-            int value = Integer.parseInt(ctx.INTEGER_LITERAL().getText());
+            int value = Integer.parseInt(ctx.INTEGER_LITERAL().getText().replaceFirst("[lL]", ""));
             return new Literal(value);
         }
         throw new UnsupportedOperationException("Provided literal is not supported");

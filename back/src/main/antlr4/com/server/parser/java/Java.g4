@@ -166,7 +166,7 @@ SEMICOLON : ';' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 CHAR_LITERAL : '\'' . '\'' ;
-INTEGER_LITERAL : DIGIT+;
+INTEGER_LITERAL : DIGIT+ [lL]?;
 
 IDENTIFIER : (AZ | '_' | '$')  (AZ | DIGIT | '_' | '$')* ;
 

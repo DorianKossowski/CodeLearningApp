@@ -19,7 +19,9 @@ class LiteralVisitorTest extends JavaVisitorTestBase {
                 Arguments.of("\"a b\"", "\"a b\"", String.class),
                 Arguments.of("\"a\\\"a\"", "\"a\"a\"", String.class),
                 Arguments.of("'a'", "'a'", Character.class),
-                Arguments.of("5", "5", Integer.class)
+                Arguments.of("5", "5", Integer.class),
+                Arguments.of("5l", "5", Integer.class),
+                Arguments.of("5L", "5", Integer.class)
         );
     }
 

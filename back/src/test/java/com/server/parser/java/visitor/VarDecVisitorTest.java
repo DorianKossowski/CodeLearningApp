@@ -27,7 +27,9 @@ class VarDecVisitorTest extends JavaVisitorTestBase {
                 Arguments.of("byte b = 5", "byte", "b", "5"),
                 Arguments.of("Byte b = 5", "Byte", "b", "5"),
                 Arguments.of("short s = 5", "short", "s", "5"),
-                Arguments.of("Short s = 5", "Short", "s", "5")
+                Arguments.of("Short s = 5", "Short", "s", "5"),
+                Arguments.of("long l = 5", "long", "l", "5"),
+                Arguments.of("Long l = 5", "Long", "l", "5")
         );
     }
 
