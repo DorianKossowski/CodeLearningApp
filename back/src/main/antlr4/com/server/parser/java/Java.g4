@@ -99,6 +99,7 @@ objectRefName
 literal
     : STRING_LITERAL
     | CHAR_LITERAL
+    | INTEGER_LITERAL
     ;
 
 methodName
@@ -165,6 +166,7 @@ SEMICOLON : ';' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 CHAR_LITERAL : '\'' . '\'' ;
+INTEGER_LITERAL : DIGIT+;
 
 IDENTIFIER : (AZ | '_' | '$')  (AZ | DIGIT | '_' | '$')* ;
 

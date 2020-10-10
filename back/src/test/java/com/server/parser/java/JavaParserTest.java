@@ -134,7 +134,9 @@ public class JavaParserTest {
     @ValueSource(strings = {
             "String s = \"str\"",
             "char c = 'c'",
-            "Character c = 'c'"
+            "Character c = 'c'",
+            "int i = 5",
+            "Integer i = 5"
     })
     void shouldParseVarDec(String input) {
         HELPER.shouldParseToEof(input, JavaParser::varDec);
