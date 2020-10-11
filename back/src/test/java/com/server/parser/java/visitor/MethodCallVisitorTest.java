@@ -31,7 +31,7 @@ class MethodCallVisitorTest extends JavaVisitorTestBase {
         MethodCall methodCall = visitor.visit(c);
 
         assertThat(methodCall.getText()).isEqualTo(input);
-        assertThat(methodCall.getContextMethodName()).isEqualTo(METHOD_NAME);
+        assertThat(methodCall.printMethodName()).isEqualTo(METHOD_NAME);
         assertThat(methodCall.getName()).isEqualTo("System.out.print");
         assertThat(Iterables.getOnlyElement(methodCall.getArgs()).getText()).isEqualTo("\"Hello World\"");
     }

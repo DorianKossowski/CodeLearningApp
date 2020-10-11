@@ -1,7 +1,8 @@
 package com.server.parser.java.task.verifier;
 
 import com.google.common.base.Verify;
-import com.server.parser.java.ast.MethodStatement;
+import com.server.parser.java.ast.MethodPrintable;
+import com.server.parser.java.ast.Statement;
 import com.server.parser.java.ast.TaskAst;
 import com.server.parser.java.task.model.StatementModel;
 
@@ -10,14 +11,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class StatementVerifier {
-    private final List<MethodStatement> statements;
-    private List<MethodStatement> availableStatements;
+    private final List<Statement> statements;
+    private List<Statement> availableStatements;
 
     public StatementVerifier(TaskAst taskAst) {
         this.statements = taskAst.getClassAst().getBody().getMethods().stream()
                 .flatMap(method -> method.getBody().getStatements().stream())
-                .filter(statement -> statement instanceof MethodStatement)
-                .map(statement -> ((MethodStatement) statement))
                 .collect(Collectors.toList());
     }
 
@@ -50,7 +49,8 @@ public class StatementVerifier {
 
     private void verifyMethodName(String methodName) {
         availableStatements = availableStatements.stream()
-                .filter(statement -> statement.getContextMethodName().equals(methodName))
+                .filter(statement -> statement instanceof MethodPrintable &&
+                        ((MethodPrintable) statement).printMethodName().equals(methodName))
                 .collect(Collectors.toList());
     }
 }

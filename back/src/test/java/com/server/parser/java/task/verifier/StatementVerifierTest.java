@@ -2,7 +2,8 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.MethodStatement;
+import com.server.parser.java.ast.MethodCall;
+import com.server.parser.java.ast.Statement;
 import com.server.parser.java.task.model.StatementModel;
 import org.junit.jupiter.api.Test;
 
@@ -18,10 +19,10 @@ class StatementVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldVerifyMethodName() {
-        MethodStatement methodStatement = mock(MethodStatement.class);
-        when(methodStatement.getContextMethodName()).thenReturn(METHOD_NAME);
+        MethodCall statement = mock(MethodCall.class);
+        when(statement.printMethodName()).thenReturn(METHOD_NAME);
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME,
-                Collections.singletonList(methodStatement)));
+                Collections.singletonList(statement)));
         StatementVerifier verifier = new StatementVerifier(mockTask(methods));
 
         verifier.verify(StatementModel.builder().withMethod(METHOD_NAME).build());
@@ -39,7 +40,7 @@ class StatementVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldVerifyText() {
-        MethodStatement statement = mock(MethodStatement.class);
+        Statement statement = mock(Statement.class);
         when(statement.getText()).thenReturn("text");
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
         StatementVerifier verifier = new StatementVerifier(mockTask(methods));
@@ -49,7 +50,7 @@ class StatementVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldVerifyResolved() {
-        MethodStatement statement = mock(MethodStatement.class);
+        Statement statement = mock(Statement.class);
         when(statement.getResolved()).thenReturn("text");
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
         StatementVerifier verifier = new StatementVerifier(mockTask(methods));

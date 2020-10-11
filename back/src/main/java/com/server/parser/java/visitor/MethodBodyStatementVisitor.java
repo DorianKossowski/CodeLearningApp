@@ -1,12 +1,12 @@
 package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.MethodStatement;
+import com.server.parser.java.ast.Statement;
 import com.server.parser.java.context.MethodContext;
 
 import java.util.Objects;
 
-public class MethodBodyStatementVisitor extends JavaVisitor<MethodStatement> {
+public class MethodBodyStatementVisitor extends JavaVisitor<Statement> {
     private final MethodContext methodContext;
 
     public MethodBodyStatementVisitor(MethodContext methodContext) {
@@ -14,7 +14,7 @@ public class MethodBodyStatementVisitor extends JavaVisitor<MethodStatement> {
     }
 
     @Override
-    public MethodStatement visitMethodBodyStatement(JavaParser.MethodBodyStatementContext ctx) {
+    public Statement visitMethodBodyStatement(JavaParser.MethodBodyStatementContext ctx) {
         return new MethodCallVisitor(methodContext).visit(ctx.methodCall());
     }
 }
