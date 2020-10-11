@@ -14,6 +14,6 @@ public abstract class Statement extends AstElement {
     }
 
     public String getResolved() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Resolving not supported for type " + getClass());
     }
 }
