@@ -14,7 +14,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "\"base string literal\"";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        Expression expression = visitor.visit(c);
+        Expression expression = visitor.visit(c, context);
 
         assertThat(expression.getText()).isEqualTo(input);
     }

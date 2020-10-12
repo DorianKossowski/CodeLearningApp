@@ -3,7 +3,6 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Expression;
 import com.server.parser.java.ast.Variable;
-import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,6 @@ import static org.assertj.core.api.Assertions.*;
 class VariableVisitorTest extends JavaVisitorTestBase {
     private final VariableVisitor visitor = new VariableVisitor();
 
-    private final JavaContext context = new JavaContext();
     private MethodContext methodContext;
 
     @BeforeEach
