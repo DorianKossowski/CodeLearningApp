@@ -32,7 +32,7 @@ class LiteralVisitorTest extends JavaVisitorTestBase {
     void shouldVisitLiteral(String input, String expected, Class<?> classLiteral) {
         JavaParser.LiteralContext c = HELPER.shouldParseToEof(input, JavaParser::literal);
 
-        Literal literal = visitor.visit(c);
+        Literal literal = visitor.visit(c, context);
 
         assertThat(literal.getValue()).isExactlyInstanceOf(classLiteral);
         assertThat(literal.getText()).isEqualTo(expected);
