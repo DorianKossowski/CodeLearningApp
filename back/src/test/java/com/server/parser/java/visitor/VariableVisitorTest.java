@@ -3,7 +3,10 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Expression;
 import com.server.parser.java.ast.Variable;
+import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -11,11 +14,19 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
-class VarDecVisitorTest extends JavaVisitorTestBase {
-    private final VarDecVisitor visitor = new VarDecVisitor();
+class VariableVisitorTest extends JavaVisitorTestBase {
+    private final VariableVisitor visitor = new VariableVisitor();
+
+    private final JavaContext context = new JavaContext();
+    private MethodContext methodContext;
+
+    @BeforeEach
+    void setUp() {
+        methodContext = new MethodContext("METHOD");
+        context.putMethodWithContext(methodContext);
+    }
 
     static Stream<Arguments> decWithLiteralsProvider() {
         return Stream.of(
@@ -42,7 +53,7 @@ class VarDecVisitorTest extends JavaVisitorTestBase {
     void shouldVisitVarDecWithLiteral(String input, String type, String name, String value) {
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
-        Variable variable = visitor.visit(c);
+        Variable variable = visitor.visit(c, context);
 
         assertThat(variable.getType()).isEqualTo(type);
         assertThat(variable.getName()).isEqualTo(name);
@@ -54,7 +65,7 @@ class VarDecVisitorTest extends JavaVisitorTestBase {
         String input = "String a";
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
-        Variable variable = visitor.visit(c);
+        Variable variable = visitor.visit(c, context);
 
         assertThat(variable.getType()).isEqualTo("String");
         assertThat(variable.getName()).isEqualTo("a");
@@ -66,8 +77,47 @@ class VarDecVisitorTest extends JavaVisitorTestBase {
         String input = "String a = 's'";
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
-        assertThatThrownBy(() -> visitor.visit(c))
+        assertThatThrownBy(() -> visitor.visit(c, context))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie 's' nie jest typu String");
+    }
+
+    @Test
+    void shouldVisitSingleMethodArg() {
+        String input = "Integer[] a";
+        JavaParser.SingleMethodArgContext c = HELPER.shouldParseToEof(input, JavaParser::singleMethodArg);
+
+        Variable variable = visitor.visit(c, context);
+
+        assertThat(variable.getText()).isEqualTo(input);
+        assertVariableDec(variable, "Integer[]", "a");
+    }
+
+    @Test
+    void shouldVisitLocalVarDec() {
+        String input = "String a = \"str\"";
+        JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
+
+        Variable variable = visitor.visit(c, context);
+
+        assertThat(variable.getText()).isEqualTo(input);
+        assertVariableDec(variable, "String", "a");
+        assertThat(variable.getValue()).extracting(Expression::getText)
+                .isEqualTo("\"str\"");
+
+        assertThat(methodContext.getVarToValue()).containsExactly(entry("a", "\"str\""));
+    }
+
+    @Test
+    void shouldCreateFromFieldDec() {
+        String input = "String a = \"str\"";
+        JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
+
+        Variable variable = visitor.visit(c, context);
+
+        assertThat(variable.getText()).isEqualTo(input);
+        assertVariableDec(variable, "String", "a");
+        assertThat(variable.getValue()).extracting(Expression::getText)
+                .isEqualTo("\"str\"");
     }
 }
