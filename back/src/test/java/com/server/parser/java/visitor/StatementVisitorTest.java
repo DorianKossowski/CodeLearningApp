@@ -25,8 +25,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @BeforeEach
     void setUp() {
-        methodContext = new MethodContext(METHOD_NAME);
-        context.putMethodWithContext(methodContext);
+        methodContext = context.createCurrentMethodContext(METHOD_NAME);
     }
 
     //*** METHOD CALL ***//

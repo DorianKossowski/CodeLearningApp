@@ -3,7 +3,6 @@ package com.server.parser.java.visitor;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.*;
-import com.server.parser.java.context.MethodContext;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -53,7 +52,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitStatementsInCorrectOrder() {
-        context.putMethodWithContext(new MethodContext(""));
+        context.createCurrentMethodContext("");
         String input = "String a = \"s\"; System.out.println(\"sss\"); String b = \"s2\";";
         JavaParser.MethodBodyContext c = HELPER.shouldParseToEof(input, JavaParser::methodBody);
 

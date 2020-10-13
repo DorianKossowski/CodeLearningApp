@@ -13,19 +13,16 @@ class JavaContextTest {
 
     @Test
     void shouldPutMethodWithContext() {
-        MethodContext methodContext = new MethodContext(METHOD_NAME);
-
-        context.putMethodWithContext(methodContext);
+        MethodContext methodContext = context.createCurrentMethodContext(METHOD_NAME);
 
         assertThat(context.getCurrentMethodContext()).isSameAs(methodContext);
     }
 
     @Test
     void shouldThrowWhenMethodAlreadyExists() {
-        MethodContext methodContext = new MethodContext(METHOD_NAME);
-        context.putMethodWithContext(methodContext);
-        
-        assertThatThrownBy(() -> context.putMethodWithContext(methodContext))
+        context.createCurrentMethodContext(METHOD_NAME);
+
+        assertThatThrownBy(() -> context.createCurrentMethodContext(METHOD_NAME))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Metoda METHOD już istnieje");
     }

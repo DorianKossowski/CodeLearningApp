@@ -14,13 +14,14 @@ public class JavaContext {
     private String currentClassName;
     private MethodContext currentMethodContext;
 
-    public void putMethodWithContext(MethodContext methodContext) {
-        String methodName = methodContext.getMethodName();
+    public MethodContext createCurrentMethodContext(String methodName) {
         if (methodWithContext.containsKey(methodName)) {
             throw new ResolvingException(String.format("Metoda %s już istnieje", methodName));
         }
+        MethodContext methodContext = new MethodContext(methodName);
         methodWithContext.put(methodName, methodContext);
         currentMethodContext = methodContext;
+        return currentMethodContext;
     }
 
     public String getCurrentClassName() {

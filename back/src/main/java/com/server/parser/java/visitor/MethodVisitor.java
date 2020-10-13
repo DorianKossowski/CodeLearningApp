@@ -4,7 +4,6 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.*;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.context.MethodContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -32,8 +31,7 @@ public class MethodVisitor extends JavaVisitor<Method> {
         @Override
         public Method visitMethodDec(JavaParser.MethodDecContext ctx) {
             MethodHeader methodHeader = visit(ctx.methodHeader());
-            MethodContext methodContext = new MethodContext(methodHeader.getName());
-            context.putMethodWithContext(methodContext);
+            context.createCurrentMethodContext(methodHeader.getName());
             MethodBody methodBody = visit(ctx.methodBody());
             return new Method(context.getCurrentClassName(), methodHeader, methodBody);
         }

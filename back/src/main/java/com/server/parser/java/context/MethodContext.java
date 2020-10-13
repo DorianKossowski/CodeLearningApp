@@ -11,7 +11,7 @@ public class MethodContext {
     private final String methodName;
     private final Map<String, String> varToValue = new HashMap<>();
 
-    public MethodContext(String name) {
+    MethodContext(String name) {
         this.methodName = Objects.requireNonNull(name, "name cannot be null");
     }
 

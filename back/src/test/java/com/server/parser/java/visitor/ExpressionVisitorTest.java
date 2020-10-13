@@ -57,9 +57,8 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitObjectRefExpression() {
-        MethodContext methodContext = new MethodContext("");
+        MethodContext methodContext = context.createCurrentMethodContext("");
         methodContext.addVar("x", "value");
-        context.putMethodWithContext(methodContext);
         String input = "x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
@@ -72,7 +71,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldThrowWhenWrongObjectRefExpression() {
-        context.putMethodWithContext(new MethodContext(""));
+        context.createCurrentMethodContext("");
         String input = "x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
