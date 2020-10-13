@@ -11,7 +11,7 @@ public class JavaVisitorsRegistry {
     private static final Map<Class<? extends AstElement>, JavaVisitor<?>> visitors = new HashMap<>();
 
     static {
-        visitors.put(Variable.class, new VariableVisitor());
+        visitors.put(Variable.class, new StatementVisitor());
         visitors.put(Expression.class, new ExpressionVisitor());
         visitors.put(Literal.class, new LiteralVisitor());
         visitors.put(Method.class, new MethodVisitor());

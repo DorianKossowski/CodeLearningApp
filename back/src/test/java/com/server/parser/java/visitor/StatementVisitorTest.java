@@ -1,7 +1,9 @@
 package com.server.parser.java.visitor;
 
+import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.MethodCall;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -15,17 +17,54 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 
-class VariableVisitorTest extends JavaVisitorTestBase {
-    private final VariableVisitor visitor = new VariableVisitor();
+class StatementVisitorTest extends JavaVisitorTestBase {
+    private final String METHOD_NAME = "methodName";
+    private final StatementVisitor visitor = new StatementVisitor();
 
     private MethodContext methodContext;
 
     @BeforeEach
     void setUp() {
-        methodContext = new MethodContext("METHOD");
+        methodContext = new MethodContext(METHOD_NAME);
         context.putMethodWithContext(methodContext);
     }
 
+    //*** METHOD CALL ***//
+    @Test
+    void shouldVisitMethodCall() {
+        String input = "System.out.print(\"Hello World\")";
+        JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
+
+        MethodCall methodCall = (MethodCall) visitor.visit(c, context);
+
+        assertThat(methodCall.getText()).isEqualTo(input);
+        assertThat(methodCall.printMethodName()).isEqualTo(METHOD_NAME);
+        assertThat(methodCall.getName()).isEqualTo("System.out.print");
+        assertThat(Iterables.getOnlyElement(methodCall.getArgs()).getText()).isEqualTo("\"Hello World\"");
+    }
+
+//    @Test
+//    void shouldEnhanceObjectRefs() {
+//        ObjectRef objectRef = new ObjectRef("obj");
+//        methodContext.addVar("obj", "\"val\"");
+//
+//        visitor.enhanceArguments(Collections.singletonList(objectRef));
+//
+//        assertThat(objectRef.getResolved()).isEqualTo("\"val\"");
+//    }
+
+//    @Test
+//    void shouldGetCorrectMethodCallValue() {
+//        methodContext.addVar("var", "\"value\"");
+//        String input = "System.out.print(\"literal\", var)";
+//        JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
+//
+//        MethodCall methodCall = (MethodCall) visitor.visit(c, context);
+//
+//        assertThat(methodCall.getResolved()).isEqualTo("System.out.print(\"literal\", \"value\")");
+//    }
+
+    //*** VARIABLE ***//
     static Stream<Arguments> decWithLiteralsProvider() {
         return Stream.of(
                 Arguments.of("String s = \"str\"", "String", "s", "\"str\""),
@@ -51,7 +90,7 @@ class VariableVisitorTest extends JavaVisitorTestBase {
     void shouldVisitVarDecWithLiteral(String input, String type, String name, String value) {
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
-        Variable variable = visitor.visit(c, context);
+        Variable variable = (Variable) visitor.visit(c, context);
 
         assertThat(variable.getType()).isEqualTo(type);
         assertThat(variable.getName()).isEqualTo(name);
@@ -63,7 +102,7 @@ class VariableVisitorTest extends JavaVisitorTestBase {
         String input = "String a";
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
-        Variable variable = visitor.visit(c, context);
+        Variable variable = (Variable) visitor.visit(c, context);
 
         assertThat(variable.getType()).isEqualTo("String");
         assertThat(variable.getName()).isEqualTo("a");
@@ -85,7 +124,7 @@ class VariableVisitorTest extends JavaVisitorTestBase {
         String input = "Integer[] a";
         JavaParser.SingleMethodArgContext c = HELPER.shouldParseToEof(input, JavaParser::singleMethodArg);
 
-        Variable variable = visitor.visit(c, context);
+        Variable variable = (Variable) visitor.visit(c, context);
 
         assertThat(variable.getText()).isEqualTo(input);
         assertVariableDec(variable, "Integer[]", "a");
@@ -96,7 +135,7 @@ class VariableVisitorTest extends JavaVisitorTestBase {
         String input = "String a = \"str\"";
         JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
-        Variable variable = visitor.visit(c, context);
+        Variable variable = (Variable) visitor.visit(c, context);
 
         assertThat(variable.getText()).isEqualTo(input);
         assertVariableDec(variable, "String", "a");
@@ -111,7 +150,7 @@ class VariableVisitorTest extends JavaVisitorTestBase {
         String input = "String a = \"str\"";
         JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
-        Variable variable = visitor.visit(c, context);
+        Variable variable = (Variable) visitor.visit(c, context);
 
         assertThat(variable.getText()).isEqualTo(input);
         assertVariableDec(variable, "String", "a");

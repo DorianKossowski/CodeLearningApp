@@ -59,8 +59,8 @@ singleMethodArg
 
 methodBody
     : (
-    ( mbs=methodBodyStatement
-    | lvd=methodVarDec
+    ( methodCall
+    | methodVarDec
     ) SEMICOLON
     | SEMICOLON
     )*
@@ -72,10 +72,6 @@ methodVarDec
 
 varModifier
     : 'final'
-    ;
-
-methodBodyStatement
-    : methodCall
     ;
 
 methodCall

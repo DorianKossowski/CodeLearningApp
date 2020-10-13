@@ -56,16 +56,13 @@ public class MethodVisitor extends JavaVisitor<Method> {
         }
 
         MethodBody visit(JavaParser.MethodBodyContext ctx) {
-            MethodBodyStatementVisitor methodBodyStatementVisitor = new MethodBodyStatementVisitor();
-            JavaVisitor<Variable> variableVisitor = context.getVisitor(Variable.class);
+            StatementVisitor statementVisitor = new StatementVisitor();
 
             List<Statement> statements = new ArrayList<>();
             for (int i = 0; i < ctx.getChildCount(); ++i) {
                 ParseTree child = ctx.getChild(i);
-                if (child instanceof JavaParser.MethodVarDecContext) {
-                    statements.add(variableVisitor.visit((ParserRuleContext) child, context));
-                } else if (child instanceof JavaParser.MethodBodyStatementContext) {
-                    statements.add(methodBodyStatementVisitor.visit((ParserRuleContext) child, context));
+                if (child instanceof ParserRuleContext) {
+                    statements.add(statementVisitor.visit((ParserRuleContext) child, context));
                 }
             }
             return new MethodBody(statements);
