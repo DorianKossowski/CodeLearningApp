@@ -11,6 +11,7 @@ import java.util.Map;
 public class JavaContext {
     private final Map<String, MethodContext> methodWithContext = new HashMap<>();
 
+    private String currentClassName;
     private MethodContext currentMethodContext;
 
     public void putMethodWithContext(MethodContext methodContext) {
@@ -20,6 +21,14 @@ public class JavaContext {
         }
         methodWithContext.put(methodName, methodContext);
         currentMethodContext = methodContext;
+    }
+
+    public String getCurrentClassName() {
+        return currentClassName;
+    }
+
+    public void setCurrentClassName(String currentClassName) {
+        this.currentClassName = currentClassName;
     }
 
     public MethodContext getCurrentMethodContext() {

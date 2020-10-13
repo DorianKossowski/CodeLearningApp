@@ -68,11 +68,13 @@ class MethodVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitMethodDec() {
+        context.setCurrentClassName("MyClass");
         String input = "void m(String[] a) { println(\"HELLO\"); }";
         JavaParser.MethodDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodDec);
 
         Method method = visitor.visit(c, context);
 
+        assertThat(method.getClassName()).isEqualTo("MyClass");
         MethodHeader header = method.getHeader();
         Statement statement = Iterables.getOnlyElement(method.getBody().getStatements());
         assertThat(header).extracting(MethodHeader::getResult, MethodHeader::getName)

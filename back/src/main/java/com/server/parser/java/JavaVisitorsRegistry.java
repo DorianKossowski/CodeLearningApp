@@ -15,6 +15,7 @@ public class JavaVisitorsRegistry {
         visitors.put(Expression.class, new ExpressionVisitor());
         visitors.put(Literal.class, new LiteralVisitor());
         visitors.put(Method.class, new MethodVisitor());
+        visitors.put(ClassAst.class, new ClassVisitor());
     }
 
     public static <T extends AstElement> JavaVisitor<T> get(Class<T> elementClass) {
