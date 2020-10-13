@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class StatementVisitor extends JavaVisitor<Statement> {
 
@@ -31,9 +32,16 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public MethodCall visitMethodCall(JavaParser.MethodCallContext ctx) {
             String methodName = textVisitor.visit(ctx.methodName());
-            List<Expression> arguments = new CallArgumentsVisitor().visit(ctx.callArguments(), context);
+            List<Expression> arguments = visit(ctx.callArguments());
             return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), context.getCurrentMethodContext().getMethodName(), methodName,
                     arguments);
+        }
+
+        private List<Expression> visit(JavaParser.CallArgumentsContext ctx) {
+            JavaVisitor<Expression> expressionVisitor = context.getVisitor(Expression.class);
+            return ctx.expression().stream()
+                    .map(expressionContext -> expressionVisitor.visit(expressionContext, context))
+                    .collect(Collectors.toList());
         }
 
         //*** VARIABLE ***//
