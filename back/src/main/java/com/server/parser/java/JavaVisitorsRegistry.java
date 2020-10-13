@@ -13,7 +13,6 @@ public class JavaVisitorsRegistry {
     static {
         visitors.put(Variable.class, new StatementVisitor());
         visitors.put(Expression.class, new ExpressionVisitor());
-        visitors.put(Literal.class, new LiteralVisitor());
         visitors.put(Method.class, new MethodVisitor());
         visitors.put(ClassAst.class, new ClassVisitor());
     }
