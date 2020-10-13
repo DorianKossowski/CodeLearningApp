@@ -32,4 +32,9 @@ public class Variable extends Statement {
     public Expression getValue() {
         return value;
     }
+
+    @Override
+    public String getResolved() {
+        return String.format("%s %s = %s", type, name, value.getResolved());
+    }
 }
