@@ -30,7 +30,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         //*** METHOD CALL ***//
         @Override
         public MethodCall visitMethodCall(JavaParser.MethodCallContext ctx) {
-            String methodName = new MethodNameVisitor().visit(ctx.methodName());
+            String methodName = textVisitor.visit(ctx.methodName());
             List<Expression> arguments = new CallArgumentsVisitor().visit(ctx.callArguments(), context);
             return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), context.getCurrentMethodContext().getMethodName(), methodName,
                     arguments);
