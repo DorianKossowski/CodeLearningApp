@@ -18,7 +18,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
     }
 
     private static class ExpressionVisitorInternal extends JavaBaseVisitor<Expression> {
-        private JavaContext context;
+        private final JavaContext context;
 
         public ExpressionVisitorInternal(JavaContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
@@ -42,7 +42,8 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
 
         @Override
         public Expression visitObjectRefName(JavaParser.ObjectRefNameContext ctx) {
-            return new ObjectRef(textVisitor.visit(ctx));
+            String text = textVisitor.visit(ctx);
+            return new ObjectRef(text, context.getCurrentMethodContext().getValue(text));
         }
     }
 }

@@ -43,26 +43,16 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThat(Iterables.getOnlyElement(methodCall.getArgs()).getText()).isEqualTo("\"Hello World\"");
     }
 
-//    @Test
-//    void shouldEnhanceObjectRefs() {
-//        ObjectRef objectRef = new ObjectRef("obj");
-//        methodContext.addVar("obj", "\"val\"");
-//
-//        visitor.enhanceArguments(Collections.singletonList(objectRef));
-//
-//        assertThat(objectRef.getResolved()).isEqualTo("\"val\"");
-//    }
+    @Test
+    void shouldGetCorrectMethodCallValue() {
+        methodContext.addVar("var", "\"value\"");
+        String input = "System.out.print(\"literal\", var)";
+        JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
 
-//    @Test
-//    void shouldGetCorrectMethodCallValue() {
-//        methodContext.addVar("var", "\"value\"");
-//        String input = "System.out.print(\"literal\", var)";
-//        JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
-//
-//        MethodCall methodCall = (MethodCall) visitor.visit(c, context);
-//
-//        assertThat(methodCall.getResolved()).isEqualTo("System.out.print(\"literal\", \"value\")");
-//    }
+        MethodCall methodCall = (MethodCall) visitor.visit(c, context);
+
+        assertThat(methodCall.getResolved()).isEqualTo("System.out.print(\"literal\", \"value\")");
+    }
 
     //*** VARIABLE ***//
     static Stream<Arguments> decWithLiteralsProvider() {

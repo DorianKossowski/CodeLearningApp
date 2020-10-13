@@ -3,7 +3,10 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.MethodCall;
+import com.server.parser.java.ast.Statement;
+import com.server.parser.java.ast.Variable;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -29,16 +32,8 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         public MethodCall visitMethodCall(JavaParser.MethodCallContext ctx) {
             String methodName = new MethodNameVisitor().visit(ctx.methodName());
             List<Expression> arguments = new CallArgumentsVisitor().visit(ctx.callArguments(), context);
-            enhanceArguments(arguments);
             return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), context.getCurrentMethodContext().getMethodName(), methodName,
                     arguments);
-        }
-
-        void enhanceArguments(List<Expression> arguments) {
-            arguments.stream()
-                    .filter(expression -> expression instanceof ObjectRef)
-                    .map(expression -> ((ObjectRef) expression))
-                    .forEach(objectRef -> objectRef.setValue(context.getCurrentMethodContext().getValue(objectRef.getText())));
         }
 
         //*** VARIABLE ***//
