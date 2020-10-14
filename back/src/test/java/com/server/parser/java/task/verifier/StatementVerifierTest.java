@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 
 class StatementVerifierTest extends VerifierTestBase {
     private static final String METHOD_NAME = "M1";
+    private static final String STATEMENT = "fun(x)";
 
     @Test
     void shouldVerifyMethodName() {
@@ -41,21 +42,21 @@ class StatementVerifierTest extends VerifierTestBase {
     @Test
     void shouldVerifyText() {
         Statement statement = mock(Statement.class);
-        when(statement.getText()).thenReturn("text");
+        when(statement.getText()).thenReturn(STATEMENT);
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
         StatementVerifier verifier = new StatementVerifier(mockTask(methods));
 
-        verifier.verify(StatementModel.builder().withText("text").build());
+        verifier.verify(StatementModel.builder().withText(STATEMENT).build());
     }
 
     @Test
     void shouldVerifyResolved() {
         Statement statement = mock(Statement.class);
-        when(statement.getResolved()).thenReturn("text");
+        when(statement.getResolved()).thenReturn(STATEMENT);
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
         StatementVerifier verifier = new StatementVerifier(mockTask(methods));
 
-        verifier.verify(StatementModel.builder().withResolved("text").build());
+        verifier.verify(StatementModel.builder().withResolved(STATEMENT).build());
     }
 
     @Test

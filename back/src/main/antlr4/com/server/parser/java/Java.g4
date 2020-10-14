@@ -58,12 +58,18 @@ singleMethodArg
     ;
 
 methodBody
-    : (
-    ( methodCall
-    | methodVarDec
-    ) SEMICOLON
+    : ( methodStatement SEMICOLON
     | SEMICOLON
     )*
+    ;
+
+methodStatement
+    : methodCall
+    | methodVarDec
+    ;
+
+statement
+    : methodStatement
     ;
 
 methodVarDec

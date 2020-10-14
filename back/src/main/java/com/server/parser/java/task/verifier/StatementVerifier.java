@@ -1,6 +1,7 @@
 package com.server.parser.java.task.verifier;
 
 import com.google.common.base.Verify;
+import com.server.parser.java.JavaParserAdapter;
 import com.server.parser.java.ast.MethodPrintable;
 import com.server.parser.java.ast.Statement;
 import com.server.parser.java.ast.TaskAst;
@@ -37,13 +38,19 @@ public class StatementVerifier {
 
     private void verifyResolved(String resolved) {
         availableStatements = availableStatements.stream()
-                .filter(statement -> statement.getResolved().equals(resolved))
+                .filter(statement -> areStatementsEqual(resolved, statement.getResolved()))
                 .collect(Collectors.toList());
+    }
+
+    private boolean areStatementsEqual(String stmt1, String stmt2) {
+        String stmt1Parsed = JavaParserAdapter.parseStatement(stmt1).getText();
+        String stmt2Parsed = JavaParserAdapter.parseStatement(stmt2).getText();
+        return stmt1Parsed.equals(stmt2Parsed);
     }
 
     private void verifyText(String text) {
         availableStatements = availableStatements.stream()
-                .filter(statement -> statement.getText().equals(text))
+                .filter(statement -> areStatementsEqual(text, statement.getText()))
                 .collect(Collectors.toList());
     }
 

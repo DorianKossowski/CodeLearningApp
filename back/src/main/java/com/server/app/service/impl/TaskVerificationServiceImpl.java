@@ -53,7 +53,7 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
     }
 
     JavaTaskListener createJavaTaskListener(String input) {
-        TaskAst taskAst = JavaParserAdapter.parseTask(input);
+        TaskAst taskAst = JavaParserAdapter.getTask(input);
         return new JavaTaskListener(new TaskVerifier(taskAst));
     }
 }
