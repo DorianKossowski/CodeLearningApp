@@ -1,0 +1,29 @@
+### TASK ###
+-> statement
+    with text: "String s = \"My String\""
+    error message: "Brak deklaracji zmiennej s typu String"
+-> statement
+    with text: "char c = 'C'"
+    error message: "Brak deklaracji zmiennej c typu char"
+-> statement
+    with text: "int i = 5"
+    error message: "Brak deklaracji zmiennej i typu int"
+-> statement
+    with text: "double d = .5d"
+    error message: "Brak deklaracji zmiennej d typu double"
+-> statement
+    with text: "Integer i2 = i"
+    with resolved: "Integer i2 = 5"
+    error message: "Brak deklaracji zmiennej i2 typu Integer"
+
+### INPUT ###
+public class Hello {
+    public static void main(String[] args){
+        String s = "My String";
+        char c = 'C';
+
+        int i = 5;
+        double d = .5d;
+        Integer i2 = i;
+    }
+}

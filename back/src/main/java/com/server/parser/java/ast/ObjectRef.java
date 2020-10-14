@@ -3,15 +3,19 @@ package com.server.parser.java.ast;
 import java.util.Objects;
 
 public class ObjectRef extends Expression {
-    private final String value;
+    private final Expression value;
 
-    public ObjectRef(String text, String value) {
+    public ObjectRef(String text, Expression value) {
         super(text);
         this.value = Objects.requireNonNull(value, "value cannot be null");
     }
 
+    public Expression getValue() {
+        return value;
+    }
+
     @Override
     public String getResolved() {
-        return value;
+        return value.getResolved();
     }
 }

@@ -3,6 +3,7 @@ package com.server.parser.java.visitor;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.Literal;
 import com.server.parser.java.ast.MethodCall;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.context.MethodContext;
@@ -15,7 +16,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class StatementVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
@@ -44,7 +46,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldGetCorrectMethodCallValue() {
-        methodContext.addVar("var", "\"value\"");
+        methodContext.addVar("var", new Literal("\"value\""));
         String input = "System.out.print(\"literal\", var)";
         JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
 
@@ -131,7 +133,8 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThat(variable.getValue()).extracting(Expression::getText)
                 .isEqualTo("\"str\"");
 
-        assertThat(methodContext.getVarToValue()).containsExactly(entry("a", "\"str\""));
+        assertThat(methodContext.getVarToValue().keySet()).containsExactly("a");
+        assertThat(methodContext.getVarToValue().get("a").getText()).isEqualTo("\"str\"");
     }
 
     @Test

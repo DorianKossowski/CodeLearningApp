@@ -1,6 +1,7 @@
 package com.server.parser.util;
 
 import com.server.parser.java.ast.Literal;
+import com.server.parser.java.ast.ObjectRef;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,5 +40,12 @@ class VariableValidatorTest {
         assertThatThrownBy(() -> VariableValidator.validate("String", new Literal('L')))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie L nie jest typu String");
+    }
+
+    @Test
+    void shouldThrowWhenInvalidObjectRef() {
+        assertThatThrownBy(() -> VariableValidator.validate("String", new ObjectRef("x", new Literal('L'))))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Wyrażenie x nie jest typu String");
     }
 }

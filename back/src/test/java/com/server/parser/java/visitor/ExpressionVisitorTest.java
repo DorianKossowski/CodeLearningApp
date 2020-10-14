@@ -58,7 +58,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldVisitObjectRefExpression() {
         MethodContext methodContext = context.createCurrentMethodContext("");
-        methodContext.addVar("x", "value");
+        methodContext.addVar("x", new Literal("value"));
         String input = "x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 

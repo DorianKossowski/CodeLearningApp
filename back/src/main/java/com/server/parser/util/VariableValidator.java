@@ -3,6 +3,7 @@ package com.server.parser.util;
 import com.google.common.base.Preconditions;
 import com.server.parser.java.ast.Expression;
 import com.server.parser.java.ast.Literal;
+import com.server.parser.java.ast.ObjectRef;
 import com.server.parser.util.exception.ResolvingException;
 
 public class VariableValidator {
@@ -11,10 +12,16 @@ public class VariableValidator {
         try {
             if (expression instanceof Literal) {
                 validateFromLiteral(type, ((Literal) expression));
+            } else if (expression instanceof ObjectRef) {
+                validateFromObjectRef(type, ((ObjectRef) expression));
             }
         } catch (IllegalArgumentException e) {
             throw new ResolvingException(String.format("Wyrażenie %s nie jest typu %s", expression.getText(), type));
         }
+    }
+
+    private static void validateFromObjectRef(String type, ObjectRef objectRef) {
+        validateFromLiteral(type, ((Literal) objectRef.getValue()));
     }
 
     private static void validateFromLiteral(String type, Literal literal) {

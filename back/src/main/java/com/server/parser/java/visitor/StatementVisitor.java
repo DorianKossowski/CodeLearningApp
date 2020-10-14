@@ -48,7 +48,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
             Variable variable = (Variable) visit(ctx.varDec());
-            context.getCurrentMethodContext().addVar(variable.getName(), variable.getValue().getText());
+            context.getCurrentMethodContext().addVar(variable.getName(), variable.getValue());
             return variable;
         }
 
