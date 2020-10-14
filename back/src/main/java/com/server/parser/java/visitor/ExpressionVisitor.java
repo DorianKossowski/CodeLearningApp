@@ -54,6 +54,10 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
                 double value = Double.parseDouble(ctx.FLOAT_LITERAL().getText());
                 return new Literal(value);
             }
+            if (ctx.BOOLEAN_LITERAL() != null) {
+                boolean value = Boolean.parseBoolean(ctx.BOOLEAN_LITERAL().getText());
+                return new Literal(value);
+            }
             throw new UnsupportedOperationException("Provided literal is not supported");
         }
 

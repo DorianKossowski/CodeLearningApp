@@ -25,7 +25,13 @@ class VariableValidatorTest {
                 Arguments.of("Byte", new Literal(1)),
                 Arguments.of("byte", new Literal(1)),
                 Arguments.of("short", new Literal(1)),
-                Arguments.of("Short", new Literal(1))
+                Arguments.of("Short", new Literal(1)),
+                Arguments.of("double", new Literal(1.0)),
+                Arguments.of("Double", new Literal(1.0)),
+                Arguments.of("float", new Literal(1.0)),
+                Arguments.of("Float", new Literal(1.0)),
+                Arguments.of("boolean", new Literal(false)),
+                Arguments.of("Boolean", new Literal(true))
         );
     }
 

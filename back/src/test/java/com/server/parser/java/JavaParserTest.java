@@ -138,7 +138,8 @@ public class JavaParserTest {
             "byte b = 5", "Byte b = 5",
             "long l = 5l", "Long l = 5L",
             "float f = 5.5", "float f = 5f", "Float f = 5.F",
-            "double d = 5.5d", "Double d = .5D"
+            "double d = 5.5d", "Double d = .5D",
+            "boolean b = false", "Double d = true"
     })
     void shouldParseVarDec(String input) {
         HELPER.shouldParseToEof(input, JavaParser::varDec);

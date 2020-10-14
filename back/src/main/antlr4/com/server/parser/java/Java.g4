@@ -103,6 +103,7 @@ literal
     | CHAR_LITERAL
     | INTEGER_LITERAL
     | FLOAT_LITERAL
+    | BOOLEAN_LITERAL
     ;
 
 methodName
@@ -171,6 +172,9 @@ STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 CHAR_LITERAL : '\'' . '\'' ;
 INTEGER_LITERAL : DIGIT+ [lL]?;
 FLOAT_LITERAL : DIGIT+ '.' DIGIT* [fFdD]? | '.' DIGIT+ [fFdD]? | DIGIT+ [fFdD] ;
+BOOLEAN_LITERAL : FALSE | TRUE ;
+FALSE: 'false' ;
+TRUE: 'true';
 
 IDENTIFIER : (AZ | '_' | '$')  (AZ | DIGIT | '_' | '$')* ;
 

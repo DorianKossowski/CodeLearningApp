@@ -41,6 +41,18 @@ public class VariableValidator {
             case "Short":
                 Preconditions.checkArgument(literal.getValue() instanceof Integer);
                 break;
+            case "float":
+            case "Float":
+            case "double":
+            case "Double":
+                Preconditions.checkArgument(literal.getValue() instanceof Double);
+                break;
+            case "boolean":
+            case "Boolean":
+                Preconditions.checkArgument(literal.getValue() instanceof Boolean);
+                break;
+            default:
+                throw new RuntimeException(String.format("Format %s not supported", type));
         }
     }
 }

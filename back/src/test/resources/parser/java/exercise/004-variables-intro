@@ -15,6 +15,9 @@
     with text: "Integer i2 = i"
     with resolved: "Integer i2 = 5"
     error message: "Brak deklaracji zmiennej i2 typu Integer"
+-> statement
+    with text: "boolean b = true"
+    error message: "Brak deklaracji zmiennej b typu boolean"
 
 ### INPUT ###
 public class Hello {
@@ -25,5 +28,7 @@ public class Hello {
         int i = 5;
         double d = .5d;
         Integer i2 = i;
+
+        boolean b = true;
     }
 }
