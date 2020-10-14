@@ -102,7 +102,7 @@ class TaskVerificationServiceImplTest {
         VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
         // then
-        assertThat(resultDto).isEqualTo(VerificationResultDto.invalid("Problem podczas rozwiązywania: ERROR"));
+        assertThat(resultDto).isEqualTo(VerificationResultDto.invalid(new Exception("Problem podczas rozwiązywania: ERROR")));
     }
 
     @Test
@@ -122,7 +122,7 @@ class TaskVerificationServiceImplTest {
         VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
         // then
-        assertThat(resultDto).isEqualTo(VerificationResultDto.invalid("msg"));
+        assertThat(resultDto).isEqualTo(VerificationResultDto.invalid(new Exception("msg")));
     }
 
     @Test

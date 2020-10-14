@@ -41,8 +41,8 @@ class TestParseIntegrationTest extends IntegrationTestBase {
     @Test
     void shouldReturnInvalidVerificationResultWhenNotSatisfy() throws Exception {
         TestInputDto inputDto = createTestInputDto("app/integration/not-satisfy-parse-input");
-        VerificationResultDto resultDto = VerificationResultDto.invalid(
-                "Oczekiwana instrukcja \"Wywołanie metody z literału\" nie istnieje");
+        Exception exception = new Exception("Oczekiwana instrukcja \"Wywołanie metody z literału\" nie istnieje");
+        VerificationResultDto resultDto = VerificationResultDto.invalid(exception);
 
         performParse(inputDto, resultDto);
     }
@@ -66,7 +66,8 @@ class TestParseIntegrationTest extends IntegrationTestBase {
     @Test
     void shouldReturnInvalidVerificationResultWhenObjectNotExists() throws Exception {
         TestInputDto inputDto = createTestInputDto("app/integration/invalid-object-not-exists");
-        VerificationResultDto resultDto = VerificationResultDto.invalid("Problem podczas rozwiązywania: Obiekt obj nie istnieje");
+        Exception exception = new Exception("Problem podczas rozwiązywania: Obiekt obj nie istnieje");
+        VerificationResultDto resultDto = VerificationResultDto.invalid(exception);
 
         performParse(inputDto, resultDto);
     }
@@ -74,8 +75,8 @@ class TestParseIntegrationTest extends IntegrationTestBase {
     @Test
     void shouldReturnInvalidVerificationResultWhenOWrongLiteralType() throws Exception {
         TestInputDto inputDto = createTestInputDto("app/integration/invalid-wrong-literal-type");
-        VerificationResultDto resultDto = VerificationResultDto.invalid("Problem podczas rozwiązywania: Wyrażenie 'S'" +
-                " nie jest typu String");
+        Exception exception = new Exception("Problem podczas rozwiązywania: Wyrażenie 'S' nie jest typu String");
+        VerificationResultDto resultDto = VerificationResultDto.invalid(exception);
 
         performParse(inputDto, resultDto);
     }

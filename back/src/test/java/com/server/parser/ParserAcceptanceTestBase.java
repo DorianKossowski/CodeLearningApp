@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class ParserAcceptanceTestBase<P extends Parser> {
     private static final TaskVerificationService VERIFICATION_SERVICE = new TaskVerificationServiceImpl();
@@ -39,7 +37,11 @@ public abstract class ParserAcceptanceTestBase<P extends Parser> {
     void shouldVerifyAll(@SuppressWarnings("unused") String caseName, String testCase) {
         AcceptanceTestCaseModel testCaseModel = AcceptanceTestCaseFetcher.fetchModel(testCase);
         VerificationResultDto resultDto = VERIFICATION_SERVICE.verify(testCaseModel.getTask(), testCaseModel.getInput());
-        assertThat(resultDto.getErrorMessage()).isNull();
+        if (resultDto.getException() != null) {
+            System.out.println(resultDto.getErrorMessage());
+            resultDto.getException().printStackTrace();
+            assert false;
+        }
     }
 
     protected abstract String getPath();

@@ -1,10 +1,14 @@
 package com.server.app.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 
 public class VerificationResultDto {
     private String errorMessage;
     private int lineNumber;
+    @JsonIgnore
+    private Exception exception;
 
     public VerificationResultDto() {
     }
@@ -30,8 +34,10 @@ public class VerificationResultDto {
         return new VerificationResultDto();
     }
 
-    public static VerificationResultDto invalid(String message) {
-        return new VerificationResultDto(message);
+    public static VerificationResultDto invalid(Exception exception) {
+        VerificationResultDto resultDto = new VerificationResultDto(exception.getMessage());
+        resultDto.exception = exception;
+        return resultDto;
     }
 
     public String getErrorMessage() {
@@ -48,6 +54,10 @@ public class VerificationResultDto {
 
     public void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
+    }
+
+    public Exception getException() {
+        return exception;
     }
 
     @Override

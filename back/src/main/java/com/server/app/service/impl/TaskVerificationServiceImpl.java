@@ -33,13 +33,13 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
         } catch (PrintableParseException e) {
             return VerificationResultDto.invalidInput(e.getMessage(), e.getLineNumber());
         } catch (ResolvingException e) {
-            return VerificationResultDto.invalid(e.getMessage());
+            return VerificationResultDto.invalid(e);
         }
         try {
             verify(rulesEOFContext, javaTaskListener);
             return VerificationResultDto.valid();
         } catch (Exception e) {
-            return VerificationResultDto.invalid(e.getMessage());
+            return VerificationResultDto.invalid(e);
         }
     }
 
