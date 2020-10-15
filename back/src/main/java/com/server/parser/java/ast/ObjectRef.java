@@ -15,7 +15,7 @@ public class ObjectRef extends Expression {
     }
 
     @Override
-    public String getResolved() {
+    public Object getResolved() {
         return value.getResolved();
     }
 }

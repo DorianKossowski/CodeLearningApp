@@ -2,7 +2,7 @@ package com.server.parser.java.ast;
 
 import java.util.Objects;
 
-public class Expression extends AstElement {
+public abstract class Expression extends AstElement {
     private final String text;
 
     public Expression(String text) {
@@ -13,7 +13,5 @@ public class Expression extends AstElement {
         return text;
     }
 
-    public String getResolved() {
-        return text;
-    }
+    public abstract Object getResolved();
 }

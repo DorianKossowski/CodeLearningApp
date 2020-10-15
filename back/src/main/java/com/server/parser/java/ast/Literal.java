@@ -3,7 +3,7 @@ package com.server.parser.java.ast;
 import java.util.Objects;
 
 public class Literal extends Expression {
-    private final Object value;
+    protected final Object value;
 
     public Literal(Object value) {
         this(Objects.requireNonNull(value, "value cannot be null"), value.toString());
@@ -15,6 +15,11 @@ public class Literal extends Expression {
     }
 
     public Object getValue() {
+        return value;
+    }
+
+    @Override
+    public Object getResolved() {
         return value;
     }
 }

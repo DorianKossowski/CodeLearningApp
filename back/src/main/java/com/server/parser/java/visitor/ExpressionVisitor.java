@@ -27,6 +27,9 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
 
         @Override
         public Expression visitExprAtom(JavaParser.ExprAtomContext ctx) {
+            if (ctx.LPAREN() != null) {
+                return visit(ctx.expression());
+            }
             if (ctx.literal() != null) {
                 return visit(ctx.literal());
             }
@@ -40,11 +43,11 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         public Expression visitLiteral(JavaParser.LiteralContext ctx) {
             if (ctx.STRING_LITERAL() != null) {
                 String value = JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
-                return new Literal(value, '"' + value + '"');
+                return new StringLiteral(value);
             }
             if (ctx.CHAR_LITERAL() != null) {
                 char value = ctx.CHAR_LITERAL().getText().charAt(1);
-                return new Literal(value, "'" + value + "'");
+                return new CharLiteral(value);
             }
             if (ctx.INTEGER_LITERAL() != null) {
                 int value = Integer.parseInt(ctx.INTEGER_LITERAL().getText().replaceFirst("[lL]", ""));
