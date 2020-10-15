@@ -76,7 +76,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         public Statement visitAssignment(JavaParser.AssignmentContext ctx) {
             String id = textVisitor.visit(ctx.identifier());
             Expression expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
-            context.getCurrentMethodContext().addVar(id, expression);
+            context.getCurrentMethodContext().updateVar(id, expression);
             return new Assignment(JavaGrammarHelper.getOriginalText(ctx), id, expression);
         }
     }

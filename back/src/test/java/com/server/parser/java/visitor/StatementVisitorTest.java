@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 class StatementVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
@@ -150,6 +151,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     //*** ASSIGNMENT ***//
     @Test
     void shouldVisitAssignment() {
+        methodContext.addVar("a", mock(Expression.class));
         String input = "a = \"str\"";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 

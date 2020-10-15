@@ -25,6 +25,14 @@ public class MethodContext {
     }
 
     public void addVar(String var, Expression value) {
+        varToValue.computeIfPresent(var, (key, $) -> {
+            throw new ResolvingException("Obiekt " + key + " już istnieje");
+        });
+        varToValue.put(var, value);
+    }
+
+    public void updateVar(String var, Expression value) {
+        getValue(var);
         varToValue.put(var, value);
     }
 
