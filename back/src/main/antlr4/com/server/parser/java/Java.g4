@@ -94,7 +94,15 @@ callArguments
     ;
 
 expression
-    : objectRefName
+   :  expression op='^' expression
+   |  expression op=('*' | '/')  expression
+   |  expression op=('+' | '-') expression
+   |  unOp=('+' | '-')? exprAtom
+   ;
+
+exprAtom
+    :  LPAREN expression RPAREN
+    | objectRefName
     | literal
     ;
 
@@ -172,6 +180,8 @@ identifier
     ;
 
 SEMICOLON : ';' ;
+LPAREN : '(' ;
+RPAREN : ')' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 CHAR_LITERAL : '\'' . '\'' ;

@@ -26,7 +26,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         }
 
         @Override
-        public Expression visitExpression(JavaParser.ExpressionContext ctx) {
+        public Expression visitExprAtom(JavaParser.ExprAtomContext ctx) {
             if (ctx.literal() != null) {
                 return visit(ctx.literal());
             }
