@@ -42,6 +42,10 @@ public abstract class ParserAcceptanceTestBase<P extends Parser> {
             resultDto.getException().printStackTrace();
             assert false;
         }
+        if (resultDto.getErrorMessage() != null) {
+            System.out.println(resultDto.getErrorMessage());
+            assert false;
+        }
     }
 
     protected abstract String getPath();
