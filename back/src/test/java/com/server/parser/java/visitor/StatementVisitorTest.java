@@ -2,10 +2,7 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.Expression;
-import com.server.parser.java.ast.Literal;
-import com.server.parser.java.ast.MethodCall;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.*;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -148,5 +145,18 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertVariableDec(variable, "String", "a");
         assertThat(variable.getValue()).extracting(Expression::getText)
                 .isEqualTo("\"str\"");
+    }
+
+    //*** ASSIGNMENT ***//
+    @Test
+    void shouldVisitAssignment() {
+        String input = "a = \"str\"";
+        JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
+
+        Assignment assignment = (Assignment) visitor.visit(c, context);
+
+        assertThat(assignment.getText()).isEqualTo(input);
+        assertThat(assignment.getId()).isEqualTo("a");
+        assertThat(assignment.getValue().getText()).isEqualTo("\"str\"");
     }
 }

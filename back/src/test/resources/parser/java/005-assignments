@@ -1,0 +1,23 @@
+### TASK ###
+-> statement
+    with text: "System.out.print(i)"
+    with resolved: "System.out.print(1)"
+-> statement
+    with text: "System.out.print(i)"
+    with resolved: "System.out.print(2)"
+-> statement
+    with text: "System.out.print(i)"
+    with resolved: "System.out.print(3)"
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        int i = 1;
+        System.out.print(i);
+        i = 2;
+        System.out.print(i);
+        int ii = 3;
+        i = ii;
+        System.out.print(i);
+    }
+}

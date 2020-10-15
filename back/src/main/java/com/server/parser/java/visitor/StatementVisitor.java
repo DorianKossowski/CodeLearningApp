@@ -3,10 +3,7 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.Expression;
-import com.server.parser.java.ast.MethodCall;
-import com.server.parser.java.ast.Statement;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.*;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -72,6 +69,15 @@ public class StatementVisitor extends JavaVisitor<Statement> {
                 expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
             }
             return new Variable(JavaGrammarHelper.getOriginalText(ctx), textVisitor.visit(ctx.type()), id, expression);
+        }
+
+        //*** ASSIGNMENT ***//
+        @Override
+        public Statement visitAssignment(JavaParser.AssignmentContext ctx) {
+            String id = textVisitor.visit(ctx.identifier());
+            Expression expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
+            context.getCurrentMethodContext().addVar(id, expression);
+            return new Assignment(JavaGrammarHelper.getOriginalText(ctx), id, expression);
         }
     }
 }

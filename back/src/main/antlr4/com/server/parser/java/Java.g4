@@ -66,6 +66,11 @@ methodBody
 methodStatement
     : methodCall
     | methodVarDec
+    | assignment
+    ;
+
+assignment
+    : identifier '=' expression
     ;
 
 statement

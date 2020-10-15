@@ -30,5 +30,6 @@ public class Hello {
         Integer i2 = i;
 
         boolean b = true;
+        b = false;
     }
 }

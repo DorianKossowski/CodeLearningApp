@@ -155,4 +155,13 @@ public class JavaParserTest {
     void shouldParseExpression(String literal) {
         HELPER.shouldParseToEof(literal, JavaParser::expression);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "s = \"str\"",
+            "s = s0"
+    })
+    void shouldParseAssignment(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::assignment);
+    }
 }
