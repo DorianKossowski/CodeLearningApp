@@ -1,0 +1,37 @@
+### TASK ###
+-> statement
+    with text: "System.out.print(a)"
+    with resolved: "System.out.print(2)"
+-> statement
+    with text: "System.out.print(-a)"
+    with resolved: "System.out.print(-2)"
+-> statement
+    with text: "System.out.print((a))"
+    with resolved: "System.out.print(2)"
+-> statement
+    with text: "System.out.print((-a))"
+    with resolved: "System.out.print(-2)"
+-> statement
+    with text: "System.out.print(-(a))"
+    with resolved: "System.out.print(-2)"
+-> statement
+    with text: "System.out.print(b)"
+    with resolved: "System.out.print(-2.5)"
+-> statement
+    with text: "System.out.print(-b)"
+    with resolved: "System.out.print(2.5)"
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        int a = 2;
+        Double b = -2.5;
+        System.out.print(a);
+        System.out.print(-a);
+        System.out.print((a));
+        System.out.print((-a));
+        System.out.print(-(a));
+        System.out.print(b);
+        System.out.print(-b);
+    }
+}

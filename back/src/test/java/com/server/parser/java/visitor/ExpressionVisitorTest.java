@@ -82,4 +82,16 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Obiekt x nie istnieje");
     }
+
+    @Test
+    void shouldThrowWhenInvalidExpressionType() {
+        MethodContext methodContext = context.createCurrentMethodContext("");
+        methodContext.addVar("x", new Literal("value"));
+        String input = "-x";
+        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
+
+        assertThatThrownBy(() -> visitor.visit(c, context))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Operacja niedostępna dla typu String");
+    }
 }

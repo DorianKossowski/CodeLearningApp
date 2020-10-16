@@ -3,10 +3,9 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.Expression;
-import com.server.parser.java.ast.Literal;
-import com.server.parser.java.ast.ObjectRef;
+import com.server.parser.java.ast.*;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Objects;
@@ -23,6 +22,33 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
 
         public ExpressionVisitorInternal(JavaContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
+        }
+
+        @Override
+        public Expression visitExpression(JavaParser.ExpressionContext ctx) {
+            if (ctx.op == null) {
+                return getResolvedUnaryExpr(ctx);
+            }
+            return super.visitExpression(ctx);
+        }
+
+        private Expression getResolvedUnaryExpr(JavaParser.ExpressionContext ctx) {
+            Expression expression = visit(ctx.exprAtom());
+            if (ctx.unOp == null) {
+                return expression;
+            }
+            return ctx.unOp.getText().equals("+") ? expression : createNegatedExpression(expression);
+        }
+
+        private Literal createNegatedExpression(Expression expression) {
+            Object value = expression.getResolved();
+            if (value instanceof Integer) {
+                return new Literal(((Integer) value) * -1);
+            }
+            if (value instanceof Double) {
+                return new Literal(((Double) value) * -1);
+            }
+            throw new ResolvingException("Operacja niedostępna dla typu " + value.getClass().getSimpleName());
         }
 
         @Override
