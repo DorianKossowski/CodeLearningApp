@@ -10,6 +10,6 @@ public class CharLiteral extends Literal {
 
     @Override
     public Object getResolved() {
-        return '\'' + value.toString() + '\'';
+        return '\'' + constant.toString() + '\'';
     }
 }

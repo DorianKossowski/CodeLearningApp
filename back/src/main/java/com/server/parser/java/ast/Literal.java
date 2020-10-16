@@ -5,23 +5,23 @@ import com.server.parser.java.ast.constant.Constant;
 import java.util.Objects;
 
 public class Literal extends Expression {
-    protected final Constant<?> value;
+    protected final Constant<?> constant;
 
-    public Literal(Constant<?> value) {
-        this(Objects.requireNonNull(value, "value cannot be null"), value.toString());
+    public Literal(Constant<?> constant) {
+        this(Objects.requireNonNull(constant, "constant cannot be null"), constant.toString());
     }
 
-    public Literal(Constant<?> value, String text) {
+    public Literal(Constant<?> constant, String text) {
         super(text);
-        this.value = Objects.requireNonNull(value, "value cannot be null");
+        this.constant = Objects.requireNonNull(constant, "constant cannot be null");
     }
 
-    public Constant<?> getValue() {
-        return value;
+    public Constant<?> getConstant() {
+        return constant;
     }
 
     @Override
     public Object getResolved() {
-        return value.getValue();
+        return constant.getValue();
     }
 }
