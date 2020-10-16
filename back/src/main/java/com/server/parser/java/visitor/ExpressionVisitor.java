@@ -4,6 +4,10 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.constant.BooleanConstant;
+import com.server.parser.java.ast.constant.DoubleConstant;
+import com.server.parser.java.ast.constant.IntConstant;
+import com.server.parser.java.ast.constant.TextConstant;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -43,10 +47,10 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         private Literal createNegatedExpression(Expression expression) {
             Object value = expression.getResolved();
             if (value instanceof Integer) {
-                return new Literal(((Integer) value) * -1);
+                return new Literal(new IntConstant((Integer) value * -1));
             }
             if (value instanceof Double) {
-                return new Literal(((Double) value) * -1);
+                return new Literal(new DoubleConstant((Double) value * -1));
             }
             throw new ResolvingException("Operacja niedostępna dla typu " + value.getClass().getSimpleName());
         }
@@ -69,23 +73,23 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         public Expression visitLiteral(JavaParser.LiteralContext ctx) {
             if (ctx.STRING_LITERAL() != null) {
                 String value = JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
-                return new StringLiteral(value);
+                return new StringLiteral(new TextConstant<>(value));
             }
             if (ctx.CHAR_LITERAL() != null) {
                 char value = ctx.CHAR_LITERAL().getText().charAt(1);
-                return new CharLiteral(value);
+                return new CharLiteral(new TextConstant<>(value));
             }
             if (ctx.INTEGER_LITERAL() != null) {
                 int value = Integer.parseInt(ctx.INTEGER_LITERAL().getText().replaceFirst("[lL]", ""));
-                return new Literal(value);
+                return new Literal(new IntConstant(value));
             }
             if (ctx.FLOAT_LITERAL() != null) {
                 double value = Double.parseDouble(ctx.FLOAT_LITERAL().getText());
-                return new Literal(value);
+                return new Literal(new DoubleConstant(value));
             }
             if (ctx.BOOLEAN_LITERAL() != null) {
                 boolean value = Boolean.parseBoolean(ctx.BOOLEAN_LITERAL().getText());
-                return new Literal(value);
+                return new Literal(new BooleanConstant(value));
             }
             throw new UnsupportedOperationException("Provided literal is not supported");
         }

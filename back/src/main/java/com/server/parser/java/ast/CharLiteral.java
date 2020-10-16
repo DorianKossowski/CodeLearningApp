@@ -1,8 +1,10 @@
 package com.server.parser.java.ast;
 
+import com.server.parser.java.ast.constant.TextConstant;
+
 public class CharLiteral extends Literal {
 
-    public CharLiteral(Object value) {
+    public CharLiteral(TextConstant value) {
         super(value, '\'' + value.toString() + '\'');
     }
 

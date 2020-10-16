@@ -5,6 +5,7 @@ import com.server.parser.java.ast.Expression;
 import com.server.parser.java.ast.Literal;
 import com.server.parser.java.ast.ObjectRef;
 import com.server.parser.java.ast.StringLiteral;
+import com.server.parser.java.ast.constant.TextConstant;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
 
         Literal literal = (Literal) visitor.visit(c, context);
 
-        assertThat(literal.getValue()).isExactlyInstanceOf(classLiteral);
+        assertThat(literal.getValue().getValue()).isExactlyInstanceOf(classLiteral);
         assertThat(literal.getText()).isEqualTo(expected);
     }
 
@@ -61,7 +62,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldVisitObjectRefExpression() {
         MethodContext methodContext = context.createCurrentMethodContext("");
-        methodContext.addVar("x", new Literal("value"));
+        methodContext.addVar("x", new Literal(new TextConstant<>("value")));
         String input = "x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
@@ -86,7 +87,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldThrowWhenInvalidExpressionType() {
         MethodContext methodContext = context.createCurrentMethodContext("");
-        methodContext.addVar("x", new Literal("value"));
+        methodContext.addVar("x", new Literal(new TextConstant<>("value")));
         String input = "-x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 

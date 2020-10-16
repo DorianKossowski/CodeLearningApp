@@ -3,6 +3,7 @@ package com.server.parser.java.visitor;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.constant.TextConstant;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +45,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldGetCorrectMethodCallValue() {
-        methodContext.addVar("var", new Literal("\"value\""));
+        methodContext.addVar("var", new Literal(new TextConstant<>("\"value\"")));
         String input = "System.out.print(\"literal\", var)";
         JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
 
