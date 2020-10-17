@@ -32,7 +32,14 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
             if (ctx.op == null) {
                 return getResolvedUnaryExpr(ctx);
             }
-            return super.visitExpression(ctx);
+            return getResolvedBinaryExpr(ctx);
+        }
+
+        private Expression getResolvedBinaryExpr(JavaParser.ExpressionContext ctx) {
+            Constant<?> c1 = visit(ctx.expression(0)).getResolved();
+            Constant<?> c2 = visit(ctx.expression(1)).getResolved();
+            Constant<?> result = c1.compute(c2, ctx.op.getText());
+            return new Literal(result);
         }
 
         private Expression getResolvedUnaryExpr(JavaParser.ExpressionContext ctx) {

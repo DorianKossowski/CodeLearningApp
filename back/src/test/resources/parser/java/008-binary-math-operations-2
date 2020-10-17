@@ -1,0 +1,33 @@
+### TASK ###
+-> statement
+    with text: "System.out.print(-(-a)+b)"
+    with resolved: "System.out.print(4.5)"
+-> statement
+    with text: "System.out.print(-(a+b))"
+    with resolved: "System.out.print(-4.5)"
+-> statement
+    with text: "System.out.print(a*b)"
+    with resolved: "System.out.print(5.0)"
+-> statement
+    with text: "System.out.print(b/a)"
+    with resolved: "System.out.print(1.25)"
+-> statement
+    with text: "System.out.print(a + b/b)"
+    with resolved: "System.out.print(3.0)"
+-> statement
+    with text: "System.out.print((a + b)/a * 2)"
+    with resolved: "System.out.print(4.5)"
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        int a = 2;
+        Double b = 2.5;
+        System.out.print(-(-a)+b);
+        System.out.print(-(a+b));
+        System.out.print(a*b);
+        System.out.print(b/a);
+        System.out.print(a + b/b);
+        System.out.print((a + b)/a * 2);
+    }
+}

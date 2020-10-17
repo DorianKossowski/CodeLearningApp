@@ -1,0 +1,25 @@
+### TASK ###
+-> statement
+    with text: "System.out.print(a+b)"
+    with resolved: "System.out.print(5)"
+-> statement
+    with text: "System.out.print(-a+b)"
+    with resolved: "System.out.print(1)"
+-> statement
+    with text: "System.out.print(a*b)"
+    with resolved: "System.out.print(6)"
+-> statement
+    with text: "System.out.print(a/b)"
+    with resolved: "System.out.print(0)"
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        int a = 2;
+        int b = 3;
+        System.out.print(a+b);
+        System.out.print(-a+b);
+        System.out.print(a*b);
+        System.out.print(a/b);
+    }
+}

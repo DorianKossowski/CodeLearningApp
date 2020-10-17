@@ -18,6 +18,10 @@
 -> statement
     with text: "boolean b = true"
     error message: "Brak deklaracji zmiennej b typu boolean"
+-> statement
+    with text: "int result = (i+i2) * 2"
+    with resolved: "int result = 20"
+    error message: "Brak deklaracji zmiennej result typu int"
 
 ### INPUT ###
 public class Hello {
@@ -28,6 +32,7 @@ public class Hello {
         int i = 5;
         double d = .5d;
         Integer i2 = i;
+        int result = (i+i2) * 2;
 
         boolean b = true;
         b = false;
