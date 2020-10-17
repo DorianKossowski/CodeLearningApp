@@ -16,12 +16,8 @@ public class Literal extends Expression {
         this.constant = Objects.requireNonNull(constant, "constant cannot be null");
     }
 
-    public Constant<?> getConstant() {
-        return constant;
-    }
-
     @Override
-    public Object getResolved() {
-        return constant.getValue();
+    public Constant<?> getResolved() {
+        return constant;
     }
 }

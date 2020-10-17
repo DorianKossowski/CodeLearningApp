@@ -44,7 +44,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
 
         Literal literal = (Literal) visitor.visit(c, context);
 
-        assertThat(literal.getConstant().getValue()).isExactlyInstanceOf(classLiteral);
+        assertThat(literal.getResolved().getValue()).isExactlyInstanceOf(classLiteral);
         assertThat(literal.getText()).isEqualTo(expected);
     }
 
@@ -70,7 +70,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
 
         assertThat(expression).isExactlyInstanceOf(ObjectRef.class);
         assertThat(expression.getText()).isEqualTo("x");
-        assertThat(expression.getResolved()).isEqualTo("value");
+        assertThat(expression.getResolved().getValue()).isEqualTo("value");
     }
 
     @Test

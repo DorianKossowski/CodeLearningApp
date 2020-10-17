@@ -1,5 +1,7 @@
 package com.server.parser.java.ast;
 
+import com.server.parser.java.ast.constant.Constant;
+
 import java.util.Objects;
 
 public class ObjectRef extends Expression {
@@ -15,7 +17,7 @@ public class ObjectRef extends Expression {
     }
 
     @Override
-    public Object getResolved() {
+    public Constant<?> getResolved() {
         return value.getResolved();
     }
 }

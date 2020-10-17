@@ -4,10 +4,7 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.*;
-import com.server.parser.java.ast.constant.BooleanConstant;
-import com.server.parser.java.ast.constant.DoubleConstant;
-import com.server.parser.java.ast.constant.IntConstant;
-import com.server.parser.java.ast.constant.TextConstant;
+import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -45,14 +42,14 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         }
 
         private Literal createNegatedExpression(Expression expression) {
-            Object value = expression.getResolved();
-            if (value instanceof Integer) {
-                return new Literal(new IntConstant((Integer) value * -1));
+            Constant<?> constant = expression.getResolved();
+            if (constant instanceof IntConstant) {
+                return new Literal(new IntConstant((Integer) constant.getValue() * -1));
             }
-            if (value instanceof Double) {
-                return new Literal(new DoubleConstant((Double) value * -1));
+            if (constant instanceof DoubleConstant) {
+                return new Literal(new DoubleConstant((Double) constant.getValue() * -1));
             }
-            throw new ResolvingException("Operacja niedostępna dla typu " + value.getClass().getSimpleName());
+            throw new ResolvingException("Operacja niedostępna dla typu " + constant.getValue().getClass().getSimpleName());
         }
 
         @Override

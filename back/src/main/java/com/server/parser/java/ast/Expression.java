@@ -1,5 +1,7 @@
 package com.server.parser.java.ast;
 
+import com.server.parser.java.ast.constant.Constant;
+
 import java.util.Objects;
 
 public abstract class Expression extends AstElement {
@@ -13,5 +15,5 @@ public abstract class Expression extends AstElement {
         return text;
     }
 
-    public abstract Object getResolved();
+    public abstract Constant<?> getResolved();
 }
