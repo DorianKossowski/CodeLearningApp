@@ -49,7 +49,8 @@ class VariableValidatorTest {
             VariableValidator.validate("String", l);
         })
                 .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Wyrażenie 'L' nie jest typu String");
+                .hasMessage("Problem podczas rozwiązywania: Wyrażenie 'L' nie jest typu String (rzutowanie nie jest " +
+                        "wspierane)");
     }
 
     @Test
@@ -59,6 +60,7 @@ class VariableValidatorTest {
             VariableValidator.validate("String", new ObjectRef("x", l));
         })
                 .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Wyrażenie x nie jest typu String");
+                .hasMessage("Problem podczas rozwiązywania: Wyrażenie x nie jest typu String (rzutowanie nie jest " +
+                        "wspierane)");
     }
 }
