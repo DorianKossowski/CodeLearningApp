@@ -1,0 +1,15 @@
+### TASK ###
+-> statement
+    with resolved: "String s = \"definicja\""
+    error message: "Brak definicji zmiennej s typu String"
+-> statement
+    with resolved: "s = \"przypisanie\""
+    error message: "Brak przypisania do zmiennej s"
+
+### INPUT ###
+public class Hello {
+    public static void main(String[] args){
+        String s = "definicja";
+        s = "przypisanie";
+    }
+}

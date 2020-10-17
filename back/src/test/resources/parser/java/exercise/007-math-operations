@@ -1,0 +1,32 @@
+### TASK ###
+-> statement
+    with text: "int r1 = (a+b)*c/2"
+    with resolved: "int r1 = 8"
+    error message: "Instrukcja r1 daje błędny wynik"
+-> statement
+    with text: "double r2 = d%e"
+    with resolved: "double r2 = 2.0"
+    error message: "Instrukcja r2 daje błędny wynik"
+-> statement
+    with text: "int r3 = -f+(-g)*h"
+    with resolved: "int r3 = -11"
+    error message: "Instrukcja r3 daje błędny wynik"
+
+### INPUT ###
+public class Hello {
+    public static void main(String[] args){
+        int a = 5;
+        int b = 3;
+        int c = 2;
+        int r1 = (a+b)*c/2; // 8
+
+        double d = 6.0;
+        int e = 4;
+        double r2 = d%e; // 2.0
+
+        int f = 1;
+        int g = -2;
+        int h = -5;
+        int r3 = -f+(-g)*h; // -11
+    }
+}

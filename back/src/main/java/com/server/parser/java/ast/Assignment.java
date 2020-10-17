@@ -19,4 +19,9 @@ public class Assignment extends Statement {
     public Expression getValue() {
         return value;
     }
+
+    @Override
+    public String getResolved() {
+        return id + '=' + value.getResolved();
+    }
 }

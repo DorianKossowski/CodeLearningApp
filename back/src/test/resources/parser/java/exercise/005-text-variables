@@ -1,0 +1,22 @@
+### TASK ###
+-> statement
+    with resolved: "char c1 = 'X'"
+    error message: "Brak definicji zmiennej c1 typu char"
+-> statement
+    with resolved: "Character c2 = 'X'"
+    error message: "Brak definicji zmiennej c2 typu Character"
+-> statement
+    with text: "System.out.println(s)"
+    with resolved: "System.out.println(\"mój \\"ŁAŃCUCH\\" znaków\")"
+    error message: "Brak wywołania metody z wykorzystaniem zmiennej s"
+
+### INPUT ###
+public class Hello {
+    public static void main(String[] args){
+        char c1 = 'X';
+        Character c2 = 'X';
+
+        String s = "mój \"ŁAŃCUCH\" znaków";
+        System.out.println(s);
+    }
+}

@@ -1,0 +1,29 @@
+### TASK ###
+-> statement
+    with resolved: "byte b = 8"
+    error message: "Brak definicji zmiennej b typu byte"
+-> statement
+    with resolved: "short s = 16"
+    error message: "Brak definicji zmiennej s typu short"
+-> statement
+    with resolved: "int i = 32"
+    error message: "Brak definicji zmiennej i typu int"
+-> statement
+    with text: "long l = 64L"
+    with resolved: "long l = 64"
+    error message: "Brak definicji zmiennej l typu long"
+-> statement
+    with resolved: "Double d = 3.14"
+    error message: "Brak definicji zmiennej d typu Double"
+
+### INPUT ###
+public class Hello {
+    public static void main(String[] args){
+        byte b = 8;
+        short s = 16;
+        int i = 32;
+        long l = 64L;
+
+        Double d = 3.14;
+    }
+}

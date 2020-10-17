@@ -1,0 +1,11 @@
+### TASK ###
+-> statement
+    with resolved: "boolean b = true"
+    error message: "Brak definicji zmiennej b typu boolean"
+
+### INPUT ###
+public class Hello {
+    public static void main(String[] args){
+        boolean b = true;
+    }
+}
