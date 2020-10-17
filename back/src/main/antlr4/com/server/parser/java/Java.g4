@@ -193,6 +193,8 @@ TRUE: 'true';
 IDENTIFIER : (AZ | '_' | '$')  (AZ | DIGIT | '_' | '$')* ;
 
 WHITESPACE : (NEW_LINE | ' ' | '\t') -> channel(HIDDEN) ;
+COMMENT : '/*' .*? '*/' -> channel(HIDDEN) ;
+LINE_COMMENT : '//' ~[\r\n]* -> channel(HIDDEN) ;
 
 fragment NEW_LINE : '\n' | '\r' '\n'? ;
 
