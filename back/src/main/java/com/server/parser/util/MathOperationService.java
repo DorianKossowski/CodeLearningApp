@@ -17,11 +17,13 @@ public class MathOperationService {
         intOperations.put("-", (v1, v2) -> new IntConstant(v1 - v2));
         intOperations.put("*", (v1, v2) -> new IntConstant(v1 * v2));
         intOperations.put("/", (v1, v2) -> new IntConstant(v1 / v2));
+        intOperations.put("%", (v1, v2) -> new IntConstant(v1 % v2));
 
         doubleOperations.put("+", (v1, v2) -> new DoubleConstant(v1 + v2));
         doubleOperations.put("-", (v1, v2) -> new DoubleConstant(v1 - v2));
         doubleOperations.put("*", (v1, v2) -> new DoubleConstant(v1 * v2));
         doubleOperations.put("/", (v1, v2) -> new DoubleConstant(v1 / v2));
+        doubleOperations.put("%", (v1, v2) -> new DoubleConstant(v1 % v2));
     }
 
     public static IntConstant compute(IntConstant value1, IntConstant value2, String operator) {
@@ -34,6 +36,9 @@ public class MathOperationService {
     private static void checkDivByZero(Number value, String operator) {
         if (operator.equals("/") && value.doubleValue() == 0) {
             throw new ResolvingException("Dzielenie przez 0 jest niedozwolone");
+        }
+        if (operator.equals("%") && value.doubleValue() == 0) {
+            throw new ResolvingException("Operacja modulo 0 jest niedozwolona");
         }
     }
 

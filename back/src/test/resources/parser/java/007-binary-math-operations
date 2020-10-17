@@ -11,6 +11,9 @@
 -> statement
     with text: "System.out.print(a/b)"
     with resolved: "System.out.print(0)"
+-> statement
+    with text: "System.out.print(b%a)"
+    with resolved: "System.out.print(1)"
 
 ### INPUT ###
 public class MyClass {
@@ -21,5 +24,6 @@ public class MyClass {
         System.out.print(-a+b);
         System.out.print(a*b);
         System.out.print(a/b);
+        System.out.print(b%a);
     }
 }

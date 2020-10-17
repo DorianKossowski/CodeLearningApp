@@ -20,7 +20,8 @@ class MathOperationServiceTest {
                 Arguments.of(new IntConstant(1), new IntConstant(2), "+", new IntConstant(3)),
                 Arguments.of(new IntConstant(1), new IntConstant(2), "-", new IntConstant(-1)),
                 Arguments.of(new IntConstant(1), new IntConstant(2), "*", new IntConstant(2)),
-                Arguments.of(new IntConstant(1), new IntConstant(2), "/", new IntConstant(0))
+                Arguments.of(new IntConstant(1), new IntConstant(2), "/", new IntConstant(0)),
+                Arguments.of(new IntConstant(1), new IntConstant(2), "%", new IntConstant(1))
         );
     }
 
@@ -38,12 +39,20 @@ class MathOperationServiceTest {
                 .hasMessage("Problem podczas rozwiązywania: Dzielenie przez 0 jest niedozwolone");
     }
 
+    @Test
+    void shouldThrowWhenModBy0() {
+        assertThatThrownBy(() -> MathOperationService.compute(new IntConstant(1), new IntConstant(0), "%"))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Operacja modulo 0 jest niedozwolona");
+    }
+
     static Stream<Arguments> intDoubleOperationProvider() {
         return Stream.of(
                 Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "+", new DoubleConstant(3.0)),
                 Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "-", new DoubleConstant(-1.0)),
                 Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "*", new DoubleConstant(2.0)),
-                Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "/", new DoubleConstant(0.5))
+                Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "/", new DoubleConstant(0.5)),
+                Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "%", new DoubleConstant(1.0))
         );
     }
 
@@ -59,7 +68,8 @@ class MathOperationServiceTest {
                 Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "+", new DoubleConstant(3.0)),
                 Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "-", new DoubleConstant(-1.0)),
                 Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "*", new DoubleConstant(2.0)),
-                Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "/", new DoubleConstant(0.5))
+                Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "/", new DoubleConstant(0.5)),
+                Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "%", new DoubleConstant(1.0))
         );
     }
 
@@ -75,7 +85,8 @@ class MathOperationServiceTest {
                 Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "+", new DoubleConstant(3.0)),
                 Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "-", new DoubleConstant(-1.0)),
                 Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "*", new DoubleConstant(2.0)),
-                Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "/", new DoubleConstant(0.5))
+                Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "/", new DoubleConstant(0.5)),
+                Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "%", new DoubleConstant(1.0))
         );
     }
 
