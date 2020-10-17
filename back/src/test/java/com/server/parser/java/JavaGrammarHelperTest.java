@@ -20,6 +20,6 @@ class JavaGrammarHelperTest {
     void shouldGetFromStringLiteral() {
         String literal = "\"A\\\"B\\\"\"";
 
-        assertThat(JavaGrammarHelper.getFromStringLiteral(literal)).isEqualTo("A\"B\"");
+        assertThat(JavaGrammarHelper.getFromStringLiteral(literal)).isEqualTo("A\\\"B\\\"");
     }
 }

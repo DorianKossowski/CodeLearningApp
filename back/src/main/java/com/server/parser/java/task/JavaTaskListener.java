@@ -1,6 +1,5 @@
 package com.server.parser.java.task;
 
-import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaTaskBaseListener;
 import com.server.parser.java.JavaTaskParser;
 import com.server.parser.java.task.model.MethodArgs;
@@ -53,14 +52,14 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     @Override
     public void enterMethodModifiersRuleSpec(JavaTaskParser.MethodModifiersRuleSpecContext ctx) {
         List<String> modifiers = ctx.STRING_LITERAL().stream()
-                .map(node -> JavaGrammarHelper.getFromStringLiteral(node.getText()))
+                .map(node -> JavaTaskGrammarHelper.getFromStringLiteral(node.getText()))
                 .collect(Collectors.toList());
         methodBuilder.withModifiers(modifiers);
     }
 
     @Override
     public void enterMethodResultRuleSpec(JavaTaskParser.MethodResultRuleSpecContext ctx) {
-        methodBuilder.withResult(JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        methodBuilder.withResult(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
 
     @Override
@@ -80,16 +79,16 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterStatementTextRuleSpec(JavaTaskParser.StatementTextRuleSpecContext ctx) {
-        statementBuilder.withText(JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        statementBuilder.withText(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
 
     @Override
     public void enterStatementResolvedRuleSpec(JavaTaskParser.StatementResolvedRuleSpecContext ctx) {
-        statementBuilder.withResolved(JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        statementBuilder.withResolved(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
 
     @Override
     public void enterErrorMessage(JavaTaskParser.ErrorMessageContext ctx) {
-        statementBuilder.withErrorMessage(JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        statementBuilder.withErrorMessage(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
 }

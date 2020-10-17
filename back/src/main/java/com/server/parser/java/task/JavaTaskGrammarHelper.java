@@ -13,4 +13,9 @@ public class JavaTaskGrammarHelper {
         }
         return Optional.of(JavaGrammarHelper.getFromStringLiteral(context.STRING_LITERAL().getText()));
     }
+
+    public static String getFromStringLiteral(String literal) {
+        literal = literal.replaceAll("\\\\\"", "\"");
+        return literal.substring(1, literal.length() - 1);
+    }
 }
