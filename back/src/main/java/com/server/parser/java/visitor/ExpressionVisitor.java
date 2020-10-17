@@ -3,7 +3,9 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.Literal;
+import com.server.parser.java.ast.ObjectRef;
 import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -70,11 +72,11 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         public Expression visitLiteral(JavaParser.LiteralContext ctx) {
             if (ctx.STRING_LITERAL() != null) {
                 String value = JavaGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
-                return new StringLiteral(new TextConstant<>(value));
+                return new Literal(new StringConstant(value));
             }
             if (ctx.CHAR_LITERAL() != null) {
                 char value = ctx.CHAR_LITERAL().getText().charAt(1);
-                return new CharLiteral(new TextConstant<>(value));
+                return new Literal(new CharacterConstant(value));
             }
             if (ctx.INTEGER_LITERAL() != null) {
                 int value = Integer.parseInt(ctx.INTEGER_LITERAL().getText().replaceFirst("[lL]", ""));

@@ -4,7 +4,7 @@ import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Objects;
 
-public class TextConstant<T> extends Constant<T> {
+public abstract class TextConstant<T> extends Constant<T> {
 
     public TextConstant(T value) {
         super(Objects.requireNonNull(value, "value cannot be null"));

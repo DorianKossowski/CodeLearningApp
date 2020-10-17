@@ -2,10 +2,7 @@ package com.server.parser.util;
 
 import com.server.parser.java.ast.Literal;
 import com.server.parser.java.ast.ObjectRef;
-import com.server.parser.java.ast.constant.BooleanConstant;
-import com.server.parser.java.ast.constant.DoubleConstant;
-import com.server.parser.java.ast.constant.IntConstant;
-import com.server.parser.java.ast.constant.TextConstant;
+import com.server.parser.java.ast.constant.*;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,9 +18,9 @@ class VariableValidatorTest {
 
     static Stream<Arguments> typeWithLiteralProvider() {
         return Stream.of(
-                Arguments.of("String", new Literal(new TextConstant<>("L"))),
-                Arguments.of("char", new Literal(new TextConstant<>('c'))),
-                Arguments.of("Character", new Literal(new TextConstant<>('c'))),
+                Arguments.of("String", new Literal(new StringConstant("L"))),
+                Arguments.of("char", new Literal(new CharacterConstant('c'))),
+                Arguments.of("Character", new Literal(new CharacterConstant('c'))),
                 Arguments.of("int", new Literal(new IntConstant(1))),
                 Arguments.of("Integer", new Literal(new IntConstant(1))),
                 Arguments.of("Byte", new Literal(new IntConstant(1))),
@@ -48,17 +45,17 @@ class VariableValidatorTest {
     @Test
     void shouldThrowWhenInvalidLiteralExpression() {
         assertThatThrownBy(() -> {
-            Literal l = new Literal(new TextConstant<>('L'));
+            Literal l = new Literal(new CharacterConstant('L'));
             VariableValidator.validate("String", l);
         })
                 .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Wyrażenie L nie jest typu String");
+                .hasMessage("Problem podczas rozwiązywania: Wyrażenie 'L' nie jest typu String");
     }
 
     @Test
     void shouldThrowWhenInvalidObjectRef() {
         assertThatThrownBy(() -> {
-            Literal l = new Literal(new TextConstant<>('L'));
+            Literal l = new Literal(new CharacterConstant('L'));
             VariableValidator.validate("String", new ObjectRef("x", l));
         })
                 .isExactlyInstanceOf(ResolvingException.class)

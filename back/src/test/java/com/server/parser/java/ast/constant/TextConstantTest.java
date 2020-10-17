@@ -9,7 +9,7 @@ class TextConstantTest {
 
     @Test
     void shouldThrowWhenStringWithInt() {
-        TextConstant<String> textConstant = new TextConstant<>("str");
+        TextConstant<String> textConstant = new StringConstant("str");
 
         assertThatThrownBy(() -> textConstant.compute(new IntConstant(1), "+"))
                 .isExactlyInstanceOf(ResolvingException.class)
@@ -18,7 +18,7 @@ class TextConstantTest {
 
     @Test
     void shouldThrowWhenCharacterWithDouble() {
-        TextConstant<Character> textConstant = new TextConstant<>('c');
+        TextConstant<Character> textConstant = new CharacterConstant('c');
 
         assertThatThrownBy(() -> textConstant.compute(new DoubleConstant(1.0), "+"))
                 .isExactlyInstanceOf(ResolvingException.class)
