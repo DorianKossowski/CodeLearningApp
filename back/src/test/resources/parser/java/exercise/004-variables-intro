@@ -12,9 +12,9 @@
     with text: "double d = .5d"
     error message: "Brak deklaracji zmiennej d typu double"
 -> statement
-    with text: "Integer i2 = i"
-    with resolved: "Integer i2 = 5"
-    error message: "Brak deklaracji zmiennej i2 typu Integer"
+    with text: "int i2 = i"
+    with resolved: "int i2 = 5"
+    error message: "Brak deklaracji zmiennej i2 typu int"
 -> statement
     with text: "boolean b = true"
     error message: "Brak deklaracji zmiennej b typu boolean"
@@ -31,7 +31,7 @@ public class Hello {
 
         int i = 5;
         double d = .5d;
-        Integer i2 = i;
+        int i2 = i;
         int result = (i+i2) * 2;
 
         boolean b = true;
