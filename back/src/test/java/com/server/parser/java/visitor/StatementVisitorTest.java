@@ -106,7 +106,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         assertThatThrownBy(() -> visitor.visit(c, context))
                 .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Wyrażenie 's' nie jest typu String (rzutowanie nie jest wspierane)");
+                .hasMessage("Problem podczas rozwiązywania: Wyrażenie 's' nie jest typu String");
     }
 
     @Test

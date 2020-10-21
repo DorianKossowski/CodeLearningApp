@@ -16,8 +16,7 @@ public class VariableValidator {
                 validateFromObjectRef(type, ((ObjectRef) expression));
             }
         } catch (IllegalArgumentException e) {
-            throw new ResolvingException(String.format("Wyrażenie %s nie jest typu %s (rzutowanie nie jest wspierane)",
-                    expression.getText(), type));
+            throw new ResolvingException(String.format("Wyrażenie %s nie jest typu %s", expression.getText(), type));
         }
     }
 

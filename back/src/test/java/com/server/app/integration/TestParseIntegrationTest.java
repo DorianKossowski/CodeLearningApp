@@ -75,7 +75,7 @@ class TestParseIntegrationTest extends IntegrationTestBase {
     @Test
     void shouldReturnInvalidVerificationResultWhenOWrongLiteralType() throws Exception {
         TestInputDto inputDto = createTestInputDto("app/integration/invalid-wrong-literal-type");
-        Exception exception = new Exception("Problem podczas rozwiązywania: Wyrażenie 'S' nie jest typu String (rzutowanie nie jest wspierane)");
+        Exception exception = new Exception("Problem podczas rozwiązywania: Wyrażenie 'S' nie jest typu String");
         VerificationResultDto resultDto = VerificationResultDto.invalid(exception);
 
         performParse(inputDto, resultDto);
