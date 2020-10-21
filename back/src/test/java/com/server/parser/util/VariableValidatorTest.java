@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -62,5 +63,16 @@ class VariableValidatorTest {
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie x nie jest typu String (rzutowanie nie jest " +
                         "wspierane)");
+    }
+
+    @Test
+    void shouldCastIntToDouble() {
+        Literal expression = new Literal(new IntConstant(1));
+
+        VariableValidator.validate("double", expression);
+
+        Constant<?> resolved = expression.getResolved();
+        assertThat(resolved).isExactlyInstanceOf(DoubleConstant.class);
+        assertThat(((DoubleConstant) resolved).getValue()).isEqualTo(1.0);
     }
 }

@@ -26,13 +26,14 @@ public class VariableValidator {
     }
 
     private static void validateFromLiteral(String type, Literal literal) {
+        Object value = literal.getResolved().getValue();
         switch (type) {
             case "String":
-                Preconditions.checkArgument(literal.getResolved().getValue() instanceof String);
+                Preconditions.checkArgument(value instanceof String);
                 break;
             case "char":
             case "Character":
-                Preconditions.checkArgument(literal.getResolved().getValue() instanceof Character);
+                Preconditions.checkArgument(value instanceof Character);
                 break;
             case "int":
             case "Integer":
@@ -42,17 +43,21 @@ public class VariableValidator {
             case "Short":
             case "long":
             case "Long":
-                Preconditions.checkArgument(literal.getResolved().getValue() instanceof Integer);
+                Preconditions.checkArgument(value instanceof Integer);
                 break;
             case "float":
             case "Float":
             case "double":
             case "Double":
-                Preconditions.checkArgument(literal.getResolved().getValue() instanceof Double);
+                if (value instanceof Double) {
+                    break;
+                }
+                Preconditions.checkArgument(value instanceof Integer);
+                literal.castFromInt(Double.class);
                 break;
             case "boolean":
             case "Boolean":
-                Preconditions.checkArgument(literal.getResolved().getValue() instanceof Boolean);
+                Preconditions.checkArgument(value instanceof Boolean);
                 break;
             default:
                 throw new RuntimeException(String.format("Format %s not supported", type));
