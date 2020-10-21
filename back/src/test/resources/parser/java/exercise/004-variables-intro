@@ -1,27 +1,27 @@
 ### TASK ###
 -> statement
     with text: "String s = \"My String\""
-    error message: "Brak deklaracji zmiennej s typu String"
+    log info: "Definicja zmiennej s typu String"
 -> statement
     with text: "char c = 'C'"
-    error message: "Brak deklaracji zmiennej c typu char"
+    log info: "Definicja zmiennej c typu char"
 -> statement
     with text: "int i = 5"
-    error message: "Brak deklaracji zmiennej i typu int"
+    log info: "Definicja zmiennej i typu int"
 -> statement
     with text: "double d = .5d"
-    error message: "Brak deklaracji zmiennej d typu double"
+    log info: "Definicja zmiennej d typu double"
 -> statement
     with text: "int i2 = i"
     with resolved: "int i2 = 5"
-    error message: "Brak deklaracji zmiennej i2 typu int"
+    log info: "Definicja zmiennej i2 typu int"
 -> statement
     with text: "boolean b = true"
-    error message: "Brak deklaracji zmiennej b typu boolean"
+    log info: "Definicja zmiennej b typu boolean"
 -> statement
     with text: "int result = (i+i2) * 2"
     with resolved: "int result = 20"
-    error message: "Brak deklaracji zmiennej result typu int"
+    log info: "Definicja zmiennej result typu int"
 
 ### INPUT ###
 public class Hello {

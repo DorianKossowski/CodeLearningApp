@@ -1,20 +1,20 @@
 export const task = `
 -> statement
     with resolved: "byte b = 8"
-    error message: "Brak definicji zmiennej b typu byte"
+    log info: "Definicja zmiennej b typu byte"
 -> statement
     with resolved: "short s = 16"
-    error message: "Brak definicji zmiennej s typu short"
+    log info: "Definicja zmiennej s typu short"
 -> statement
     with resolved: "int i = 32"
-    error message: "Brak definicji zmiennej i typu int"
+    log info: "Definicja zmiennej i typu int"
 -> statement
     with text: "long l = 64L"
     with resolved: "long l = 64"
-    error message: "Brak definicji zmiennej l typu long"
+    log info: "Definicja zmiennej l typu long"
 -> statement
     with resolved: "double d = 3.14"
-    error message: "Brak definicji zmiennej d typu double"
+    log info: "Definicja zmiennej d typu double"
 `;
 
 export const input = `public class MyClass {

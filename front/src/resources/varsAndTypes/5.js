@@ -1,7 +1,7 @@
 export const task = `
 -> statement
     with resolved: "boolean b = true"
-    error message: "Brak definicji zmiennej b typu boolean"
+    log info: "Definicja zmiennej b typu boolean"
 `;
 
 export const input = `public class MyClass {

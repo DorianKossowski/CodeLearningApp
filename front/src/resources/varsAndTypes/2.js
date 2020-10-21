@@ -1,11 +1,11 @@
 export const task = `
 -> statement
     with resolved: "char c = 'X'"
-    error message: "Brak definicji zmiennej c typu char"
+    log info: "Definicja zmiennej c1 typu char"
 -> statement
     with text: "System.out.println(s)"
     with resolved: "System.out.println(\\"mój \\\\"ŁAŃCUCH\\\\" znaków\\")"
-    error message: "Brak wywołania metody z wykorzystaniem zmiennej s"
+    log info: "Wywołanie metody z wykorzystaniem zmiennej s"
 `;
 
 export const input = `public class MyClass {

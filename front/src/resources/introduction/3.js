@@ -8,7 +8,7 @@ export const task = `
     in method: "main"
     with text: "System.out.println(message)"
     with resolved: "System.out.println(\\"Hello World\\")"
-    error message: "Wywołanie metody println z użyciem zmiennej"
+    log info: "Wywołanie metody println z użyciem zmiennej"
 `;
 
 export const input = `public class Hello {

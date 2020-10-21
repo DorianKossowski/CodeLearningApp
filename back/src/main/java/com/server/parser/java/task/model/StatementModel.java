@@ -7,7 +7,7 @@ public class StatementModel {
     private String inMethod;
     private String text;
     private String resolved;
-    private String errorMessage;
+    private String logInfo;
 
     private StatementModel() {
     }
@@ -24,8 +24,8 @@ public class StatementModel {
         return Optional.ofNullable(resolved);
     }
 
-    public Optional<String> getErrorMessage() {
-        return Optional.ofNullable(errorMessage);
+    public Optional<String> getLogInfo() {
+        return Optional.ofNullable(logInfo);
     }
 
     public static Builder builder() {
@@ -44,19 +44,19 @@ public class StatementModel {
         return Objects.equals(inMethod, that.inMethod) &&
                 Objects.equals(text, that.text) &&
                 Objects.equals(resolved, that.resolved) &&
-                Objects.equals(errorMessage, that.errorMessage);
+                Objects.equals(logInfo, that.logInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inMethod, text, resolved, errorMessage);
+        return Objects.hash(inMethod, text, resolved, logInfo);
     }
 
     public static class Builder {
         private String inMethod;
         private String text;
         private String resolved;
-        private String errorMessage;
+        private String logInfo;
 
         public Builder withMethod(String method) {
             this.inMethod = method;
@@ -73,8 +73,8 @@ public class StatementModel {
             return this;
         }
 
-        public Builder withErrorMessage(String errorMessage) {
-            this.errorMessage = errorMessage;
+        public Builder withLogInfo(String errorMessage) {
+            this.logInfo = errorMessage;
             return this;
         }
 
@@ -83,7 +83,7 @@ public class StatementModel {
             statementModel.inMethod = this.inMethod;
             statementModel.text = this.text;
             statementModel.resolved = this.resolved;
-            statementModel.errorMessage = this.errorMessage;
+            statementModel.logInfo = this.logInfo;
 
             return statementModel;
         }

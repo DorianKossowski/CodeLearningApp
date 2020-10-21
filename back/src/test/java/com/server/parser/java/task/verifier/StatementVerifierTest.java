@@ -65,7 +65,7 @@ class StatementVerifierTest extends VerifierTestBase {
         StatementVerifier verifier = new StatementVerifier(mockTask(methods));
         StatementModel model = StatementModel.builder()
                 .withMethod(METHOD_NAME)
-                .withErrorMessage("Wywołanie metody wewnątrz M1")
+                .withLogInfo("Wywołanie metody wewnątrz M1")
                 .build();
 
         assertThatThrownBy(() -> verifier.verify(model))

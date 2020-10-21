@@ -2,15 +2,15 @@ export const task = `
 -> statement
     with text: "int r1 = (a+b)*c/2"
     with resolved: "int r1 = 8"
-    error message: "Instrukcja r1 daje błędny wynik"
+    log info: "Instrukcja r1 o wartości 8"
 -> statement
     with text: "double r2 = d%e"
     with resolved: "double r2 = 2.0"
-    error message: "Instrukcja r2 daje błędny wynik"
+    log info: "Instrukcja r2 o wartości 2.0"
 -> statement
     with text: "int r3 = -f+(-g)*h"
     with resolved: "int r3 = -11"
-    error message: "Instrukcja r3 daje błędny wynik"
+    log info: "Instrukcja r3 o wartości -11"
 `;
 
 export const input = `public class MyClass {

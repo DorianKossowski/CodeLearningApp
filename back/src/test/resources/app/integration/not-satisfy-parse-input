@@ -7,7 +7,7 @@
 -> statement
 	in method: "main"
 	with text: "System.out.print(\"Hello World\")"
-	error message: "Wywołanie metody z literału"
+	log info: "Wywołanie metody z literału"
 
 ### INPUT ###
 public class Hello {

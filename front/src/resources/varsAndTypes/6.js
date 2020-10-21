@@ -1,10 +1,10 @@
 export const task = `
 -> statement
     with resolved: "String s = \\"definicja\\""
-    error message: "Brak definicji zmiennej s typu String"
+    log info: "Definicja zmiennej s typu String"
 -> statement
     with resolved: "s = \\"przypisanie\\""
-    error message: "Brak przypisania do zmiennej s"
+    log info: "Przypisanie do zmiennej s"
 `;
 
 export const input = `public class MyClass {

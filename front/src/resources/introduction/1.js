@@ -7,7 +7,7 @@ export const task = `
 -> statement
     in method: "main"
     with text: "System.out.println(\\"Hello World\\")"
-    error message: "Wywołanie metody z wykorzystaniem literału"
+    log info: "Wywołanie metody z wykorzystaniem literału"
 `;
 
 export const input = `public class Hello {

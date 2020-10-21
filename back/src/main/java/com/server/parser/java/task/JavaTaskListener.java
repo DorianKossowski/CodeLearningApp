@@ -88,7 +88,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     }
 
     @Override
-    public void enterErrorMessage(JavaTaskParser.ErrorMessageContext ctx) {
-        statementBuilder.withErrorMessage(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    public void enterLogInfo(JavaTaskParser.LogInfoContext ctx) {
+        statementBuilder.withLogInfo(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
 }

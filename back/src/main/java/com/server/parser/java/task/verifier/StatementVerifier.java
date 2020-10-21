@@ -32,7 +32,7 @@ public class StatementVerifier {
 
     private String getErrorMessage(StatementModel statementModel) {
         StringBuilder builder = new StringBuilder();
-        statementModel.getErrorMessage().ifPresent(message -> builder.append(" \"").append(message).append('"'));
+        statementModel.getLogInfo().ifPresent(message -> builder.append(" \"").append(message).append('"'));
         return String.format("Oczekiwana instrukcja%s nie istnieje", builder);
     }
 

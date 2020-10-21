@@ -28,7 +28,7 @@ public class JavaTaskParserTest {
             "statement in method: \"m\"",
             "statement with text: \"t\"",
             "statement with resolved: \"t\"",
-            "statement error message: \"t\""
+            "statement log info: \"t\""
     })
     void shouldParseStatementRule(String input) {
         HELPER.shouldParseToEof(input, JavaTaskParser::statementRule);
