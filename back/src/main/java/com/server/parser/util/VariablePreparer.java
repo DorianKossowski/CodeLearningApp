@@ -6,25 +6,25 @@ import com.server.parser.java.ast.Literal;
 import com.server.parser.java.ast.ObjectRef;
 import com.server.parser.util.exception.ResolvingException;
 
-public class VariableValidator {
+public class VariablePreparer {
 
-    public static void validate(String type, Expression expression) {
+    public static void prepare(String type, Expression expression) {
         try {
             if (expression instanceof Literal) {
-                validateFromLiteral(type, ((Literal) expression));
+                prepareFromLiteral(type, ((Literal) expression));
             } else if (expression instanceof ObjectRef) {
-                validateFromObjectRef(type, ((ObjectRef) expression));
+                prepareFromObjectRef(type, ((ObjectRef) expression));
             }
         } catch (IllegalArgumentException e) {
             throw new ResolvingException(String.format("Wyrażenie %s nie jest typu %s", expression.getText(), type));
         }
     }
 
-    private static void validateFromObjectRef(String type, ObjectRef objectRef) {
-        validateFromLiteral(type, ((Literal) objectRef.getValue()));
+    private static void prepareFromObjectRef(String type, ObjectRef objectRef) {
+        prepareFromLiteral(type, ((Literal) objectRef.getValue()));
     }
 
-    private static void validateFromLiteral(String type, Literal literal) {
+    private static void prepareFromLiteral(String type, Literal literal) {
         Object value = literal.getResolved().getValue();
         switch (type) {
             case "String":

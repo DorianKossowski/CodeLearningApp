@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class VariableValidatorTest {
+class VariablePreparerTest {
 
     static Stream<Arguments> typeWithLiteralProvider() {
         return Stream.of(
@@ -39,15 +39,15 @@ class VariableValidatorTest {
 
     @ParameterizedTest
     @MethodSource("typeWithLiteralProvider")
-    void shouldValidateCorrectLiteralExpression(String type, Literal literal) {
-        assertDoesNotThrow(() -> VariableValidator.validate(type, literal));
+    void shouldPrepareCorrectLiteralExpression(String type, Literal literal) {
+        assertDoesNotThrow(() -> VariablePreparer.prepare(type, literal));
     }
 
     @Test
     void shouldThrowWhenInvalidLiteralExpression() {
         assertThatThrownBy(() -> {
             Literal l = new Literal(new CharacterConstant('L'));
-            VariableValidator.validate("String", l);
+            VariablePreparer.prepare("String", l);
         })
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie 'L' nie jest typu String");
@@ -57,7 +57,7 @@ class VariableValidatorTest {
     void shouldThrowWhenInvalidObjectRef() {
         assertThatThrownBy(() -> {
             Literal l = new Literal(new CharacterConstant('L'));
-            VariableValidator.validate("String", new ObjectRef("x", l));
+            VariablePreparer.prepare("String", new ObjectRef("x", l));
         })
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie x nie jest typu String");
@@ -67,7 +67,7 @@ class VariableValidatorTest {
     void shouldCastIntToDouble() {
         Literal expression = new Literal(new IntConstant(1));
 
-        VariableValidator.validate("double", expression);
+        VariablePreparer.prepare("double", expression);
 
         Constant<?> resolved = expression.getResolved();
         assertThat(resolved).isExactlyInstanceOf(DoubleConstant.class);

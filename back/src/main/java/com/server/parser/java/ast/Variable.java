@@ -1,6 +1,6 @@
 package com.server.parser.java.ast;
 
-import com.server.parser.util.VariableValidator;
+import com.server.parser.util.VariablePreparer;
 
 import java.util.Objects;
 
@@ -17,7 +17,7 @@ public class Variable extends Statement {
         super(text);
         this.type = Objects.requireNonNull(type, "type cannot be null");
         this.name = Objects.requireNonNull(name, "name cannot be null");
-        VariableValidator.validate(type, value);
+        VariablePreparer.prepare(type, value);
         this.value = value;
     }
 
