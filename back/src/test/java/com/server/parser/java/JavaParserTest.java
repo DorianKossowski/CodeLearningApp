@@ -151,7 +151,10 @@ public class JavaParserTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"\"abc\"", "a", "a.b", "'a'", "(a+b)", "1 * a", "1 / a", "-5", "1 % a"})
+    @ValueSource(strings = {"\"abc\"", "a", "a.b", "'a'",
+            "(a+b)", "1 * a", "1 / a", "-5", "1 % a",
+            "a>b", "a>=b", "a<b", "a<=b"
+    })
     void shouldParseExpression(String literal) {
         HELPER.shouldParseToEof(literal, JavaParser::expression);
     }
