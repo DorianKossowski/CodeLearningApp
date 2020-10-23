@@ -94,9 +94,9 @@ callArguments
     ;
 
 expression
-   :  expression op=('*' | '/' | '%')  expression
+   :  unOp=('+' | '-')? exprAtom
+   |  expression op=('*' | '/' | '%')  expression
    |  expression op=('+' | '-') expression
-   |  unOp=('+' | '-')? exprAtom
    ;
 
 exprAtom
