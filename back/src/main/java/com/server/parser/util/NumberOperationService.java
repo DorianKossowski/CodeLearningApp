@@ -1,5 +1,6 @@
 package com.server.parser.util;
 
+import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.constant.DoubleConstant;
 import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.util.exception.ResolvingException;
@@ -8,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-public class MathOperationService {
+public class NumberOperationService {
     private final static Map<String, BiFunction<Integer, Integer, IntConstant>> intOperations = new HashMap<>();
     private final static Map<String, BiFunction<Double, Double, DoubleConstant>> doubleOperations = new HashMap<>();
 
@@ -26,7 +27,7 @@ public class MathOperationService {
         doubleOperations.put("%", (v1, v2) -> new DoubleConstant(v1 % v2));
     }
 
-    public static IntConstant compute(IntConstant value1, IntConstant value2, String operator) {
+    public static Constant<?> compute(IntConstant value1, IntConstant value2, String operator) {
         checkDivByZero(value2.getValue(), operator);
         return intOperations.computeIfAbsent(operator, ($) -> {
             throw new UnsupportedOperationException(operator + " not supported");
@@ -42,18 +43,18 @@ public class MathOperationService {
         }
     }
 
-    public static DoubleConstant compute(DoubleConstant value1, DoubleConstant value2, String operator) {
+    public static Constant<?> compute(DoubleConstant value1, DoubleConstant value2, String operator) {
         checkDivByZero(value2.getValue(), operator);
         return doubleOperations.computeIfAbsent(operator, ($) -> {
             throw new UnsupportedOperationException(operator + " not supported");
         }).apply(value1.getValue(), value2.getValue());
     }
 
-    public static DoubleConstant compute(DoubleConstant value1, IntConstant value2, String operator) {
+    public static Constant<?> compute(DoubleConstant value1, IntConstant value2, String operator) {
         return compute(value1, new DoubleConstant((double) value2.getValue()), operator);
     }
 
-    public static DoubleConstant compute(IntConstant value1, DoubleConstant value2, String operator) {
+    public static Constant<?> compute(IntConstant value1, DoubleConstant value2, String operator) {
         return compute(new DoubleConstant((double) value1.getValue()), value2, operator);
     }
 }

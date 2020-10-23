@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class MathOperationServiceTest {
+class NumberOperationServiceTest {
 
     static Stream<Arguments> intIntOperationProvider() {
         return Stream.of(
@@ -28,20 +28,20 @@ class MathOperationServiceTest {
     @ParameterizedTest
     @MethodSource("intIntOperationProvider")
     void shouldComputeIntInt(IntConstant c1, IntConstant c2, String operator, IntConstant expectedResult) {
-        IntConstant result = MathOperationService.compute(c1, c2, operator);
+        IntConstant result = (IntConstant) NumberOperationService.compute(c1, c2, operator);
         assertThat(result).isEqualTo(expectedResult);
     }
 
     @Test
     void shouldThrowWhenDivBy0() {
-        assertThatThrownBy(() -> MathOperationService.compute(new IntConstant(1), new IntConstant(0), "/"))
+        assertThatThrownBy(() -> NumberOperationService.compute(new IntConstant(1), new IntConstant(0), "/"))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Dzielenie przez 0 jest niedozwolone");
     }
 
     @Test
     void shouldThrowWhenModBy0() {
-        assertThatThrownBy(() -> MathOperationService.compute(new IntConstant(1), new IntConstant(0), "%"))
+        assertThatThrownBy(() -> NumberOperationService.compute(new IntConstant(1), new IntConstant(0), "%"))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Operacja modulo 0 jest niedozwolona");
     }
@@ -59,7 +59,7 @@ class MathOperationServiceTest {
     @ParameterizedTest
     @MethodSource("intDoubleOperationProvider")
     void shouldComputeIntDouble(IntConstant c1, DoubleConstant c2, String operator, DoubleConstant expectedResult) {
-        DoubleConstant result = MathOperationService.compute(c1, c2, operator);
+        DoubleConstant result = (DoubleConstant) NumberOperationService.compute(c1, c2, operator);
         assertThat(result).isEqualTo(expectedResult);
     }
 
@@ -76,7 +76,7 @@ class MathOperationServiceTest {
     @ParameterizedTest
     @MethodSource("doubleIntOperationProvider")
     void shouldComputeDoubleInt(DoubleConstant c1, IntConstant c2, String operator, DoubleConstant expectedResult) {
-        DoubleConstant result = MathOperationService.compute(c1, c2, operator);
+        DoubleConstant result = (DoubleConstant) NumberOperationService.compute(c1, c2, operator);
         assertThat(result).isEqualTo(expectedResult);
     }
 
@@ -93,7 +93,7 @@ class MathOperationServiceTest {
     @ParameterizedTest
     @MethodSource("doubleDoubleOperationProvider")
     void shouldComputeDoubleDouble(DoubleConstant c1, DoubleConstant c2, String operator, DoubleConstant expectedResult) {
-        DoubleConstant result = MathOperationService.compute(c1, c2, operator);
+        DoubleConstant result = (DoubleConstant) NumberOperationService.compute(c1, c2, operator);
         assertThat(result).isEqualTo(expectedResult);
     }
 }
