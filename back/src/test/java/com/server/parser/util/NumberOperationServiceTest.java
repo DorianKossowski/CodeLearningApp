@@ -1,5 +1,7 @@
 package com.server.parser.util;
 
+import com.server.parser.java.ast.constant.BooleanConstant;
+import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.constant.DoubleConstant;
 import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.util.exception.ResolvingException;
@@ -21,14 +23,18 @@ class NumberOperationServiceTest {
                 Arguments.of(new IntConstant(1), new IntConstant(2), "-", new IntConstant(-1)),
                 Arguments.of(new IntConstant(1), new IntConstant(2), "*", new IntConstant(2)),
                 Arguments.of(new IntConstant(1), new IntConstant(2), "/", new IntConstant(0)),
-                Arguments.of(new IntConstant(1), new IntConstant(2), "%", new IntConstant(1))
+                Arguments.of(new IntConstant(1), new IntConstant(2), "%", new IntConstant(1)),
+                Arguments.of(new IntConstant(1), new IntConstant(2), "<", new BooleanConstant(true)),
+                Arguments.of(new IntConstant(1), new IntConstant(2), "<=", new BooleanConstant(true)),
+                Arguments.of(new IntConstant(1), new IntConstant(2), ">", new BooleanConstant(false)),
+                Arguments.of(new IntConstant(1), new IntConstant(2), ">=", new BooleanConstant(false))
         );
     }
 
     @ParameterizedTest
     @MethodSource("intIntOperationProvider")
-    void shouldComputeIntInt(IntConstant c1, IntConstant c2, String operator, IntConstant expectedResult) {
-        IntConstant result = (IntConstant) NumberOperationService.compute(c1, c2, operator);
+    void shouldComputeIntInt(IntConstant c1, IntConstant c2, String operator, Constant<?> expectedResult) {
+        Constant<?> result = NumberOperationService.compute(c1, c2, operator);
         assertThat(result).isEqualTo(expectedResult);
     }
 
@@ -52,14 +58,18 @@ class NumberOperationServiceTest {
                 Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "-", new DoubleConstant(-1.0)),
                 Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "*", new DoubleConstant(2.0)),
                 Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "/", new DoubleConstant(0.5)),
-                Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "%", new DoubleConstant(1.0))
+                Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "%", new DoubleConstant(1.0)),
+                Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "<", new BooleanConstant(true)),
+                Arguments.of(new IntConstant(1), new DoubleConstant(2.0), "<=", new BooleanConstant(true)),
+                Arguments.of(new IntConstant(1), new DoubleConstant(2.0), ">", new BooleanConstant(false)),
+                Arguments.of(new IntConstant(1), new DoubleConstant(2.0), ">=", new BooleanConstant(false))
         );
     }
 
     @ParameterizedTest
     @MethodSource("intDoubleOperationProvider")
-    void shouldComputeIntDouble(IntConstant c1, DoubleConstant c2, String operator, DoubleConstant expectedResult) {
-        DoubleConstant result = (DoubleConstant) NumberOperationService.compute(c1, c2, operator);
+    void shouldComputeIntDouble(IntConstant c1, DoubleConstant c2, String operator, Constant<?> expectedResult) {
+        Constant<?> result = NumberOperationService.compute(c1, c2, operator);
         assertThat(result).isEqualTo(expectedResult);
     }
 
@@ -69,14 +79,18 @@ class NumberOperationServiceTest {
                 Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "-", new DoubleConstant(-1.0)),
                 Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "*", new DoubleConstant(2.0)),
                 Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "/", new DoubleConstant(0.5)),
-                Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "%", new DoubleConstant(1.0))
+                Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "%", new DoubleConstant(1.0)),
+                Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "<", new BooleanConstant(true)),
+                Arguments.of(new DoubleConstant(1.0), new IntConstant(2), "<=", new BooleanConstant(true)),
+                Arguments.of(new DoubleConstant(1.0), new IntConstant(2), ">", new BooleanConstant(false)),
+                Arguments.of(new DoubleConstant(1.0), new IntConstant(2), ">=", new BooleanConstant(false))
         );
     }
 
     @ParameterizedTest
     @MethodSource("doubleIntOperationProvider")
-    void shouldComputeDoubleInt(DoubleConstant c1, IntConstant c2, String operator, DoubleConstant expectedResult) {
-        DoubleConstant result = (DoubleConstant) NumberOperationService.compute(c1, c2, operator);
+    void shouldComputeDoubleInt(DoubleConstant c1, IntConstant c2, String operator, Constant<?> expectedResult) {
+        Constant<?> result = NumberOperationService.compute(c1, c2, operator);
         assertThat(result).isEqualTo(expectedResult);
     }
 
@@ -86,14 +100,18 @@ class NumberOperationServiceTest {
                 Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "-", new DoubleConstant(-1.0)),
                 Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "*", new DoubleConstant(2.0)),
                 Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "/", new DoubleConstant(0.5)),
-                Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "%", new DoubleConstant(1.0))
+                Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "%", new DoubleConstant(1.0)),
+                Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "<", new BooleanConstant(true)),
+                Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), "<=", new BooleanConstant(true)),
+                Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), ">", new BooleanConstant(false)),
+                Arguments.of(new DoubleConstant(1.0), new DoubleConstant(2.0), ">=", new BooleanConstant(false))
         );
     }
 
     @ParameterizedTest
     @MethodSource("doubleDoubleOperationProvider")
-    void shouldComputeDoubleDouble(DoubleConstant c1, DoubleConstant c2, String operator, DoubleConstant expectedResult) {
-        DoubleConstant result = (DoubleConstant) NumberOperationService.compute(c1, c2, operator);
+    void shouldComputeDoubleDouble(DoubleConstant c1, DoubleConstant c2, String operator, Constant<?> expectedResult) {
+        Constant<?> result = NumberOperationService.compute(c1, c2, operator);
         assertThat(result).isEqualTo(expectedResult);
     }
 }

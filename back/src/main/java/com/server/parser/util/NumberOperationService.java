@@ -1,5 +1,6 @@
 package com.server.parser.util;
 
+import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.constant.DoubleConstant;
 import com.server.parser.java.ast.constant.IntConstant;
@@ -10,8 +11,8 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public class NumberOperationService {
-    private final static Map<String, BiFunction<Integer, Integer, IntConstant>> intOperations = new HashMap<>();
-    private final static Map<String, BiFunction<Double, Double, DoubleConstant>> doubleOperations = new HashMap<>();
+    private final static Map<String, BiFunction<Integer, Integer, Constant<?>>> intOperations = new HashMap<>();
+    private final static Map<String, BiFunction<Double, Double, Constant<?>>> doubleOperations = new HashMap<>();
 
     static {
         intOperations.put("+", (v1, v2) -> new IntConstant(v1 + v2));
@@ -19,12 +20,20 @@ public class NumberOperationService {
         intOperations.put("*", (v1, v2) -> new IntConstant(v1 * v2));
         intOperations.put("/", (v1, v2) -> new IntConstant(v1 / v2));
         intOperations.put("%", (v1, v2) -> new IntConstant(v1 % v2));
+        intOperations.put("<", (v1, v2) -> new BooleanConstant(v1 < v2));
+        intOperations.put("<=", (v1, v2) -> new BooleanConstant(v1 <= v2));
+        intOperations.put(">", (v1, v2) -> new BooleanConstant(v1 > v2));
+        intOperations.put(">=", (v1, v2) -> new BooleanConstant(v1 >= v2));
 
         doubleOperations.put("+", (v1, v2) -> new DoubleConstant(v1 + v2));
         doubleOperations.put("-", (v1, v2) -> new DoubleConstant(v1 - v2));
         doubleOperations.put("*", (v1, v2) -> new DoubleConstant(v1 * v2));
         doubleOperations.put("/", (v1, v2) -> new DoubleConstant(v1 / v2));
         doubleOperations.put("%", (v1, v2) -> new DoubleConstant(v1 % v2));
+        doubleOperations.put("<", (v1, v2) -> new BooleanConstant(v1 < v2));
+        doubleOperations.put("<=", (v1, v2) -> new BooleanConstant(v1 <= v2));
+        doubleOperations.put(">", (v1, v2) -> new BooleanConstant(v1 > v2));
+        doubleOperations.put(">=", (v1, v2) -> new BooleanConstant(v1 >= v2));
     }
 
     public static Constant<?> compute(IntConstant value1, IntConstant value2, String operator) {
