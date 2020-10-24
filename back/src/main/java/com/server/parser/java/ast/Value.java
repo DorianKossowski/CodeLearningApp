@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public abstract class Value {
     //TODO creation expression?
-    private final Expression expression;
+    protected final Expression expression;
 
     protected Value(Expression expression) {
         this.expression = Objects.requireNonNull(expression, "expression cannot be null");

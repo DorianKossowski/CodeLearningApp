@@ -1,13 +1,12 @@
 package com.server.parser.java.ast;
 
 import com.server.parser.java.ast.constant.Constant;
-import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 
 public class PrimitiveNumberValue extends PrimitiveValue implements Computable {
 
-    public PrimitiveNumberValue(Expression expression) {
-        super(expression);
+    public PrimitiveNumberValue(Literal literal) {
+        super(literal);
     }
 
     @Override

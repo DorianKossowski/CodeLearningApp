@@ -1,9 +1,7 @@
 package com.server.parser.util;
 
 import com.google.common.base.Preconditions;
-import com.server.parser.java.ast.PrimitiveNumberValue;
-import com.server.parser.java.ast.PrimitiveValue;
-import com.server.parser.java.ast.Value;
+import com.server.parser.java.ast.*;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.util.exception.ResolvingException;
@@ -23,28 +21,25 @@ public class ValuePreparer {
 
     private static Value prepareFromLiteral(String type, Literal literal) {
         Object constant = literal.getConstant().c;
+        if (Character.isUpperCase(type.charAt(0))) {
+            return prepareFromObjectLiteral(type, literal, constant);
+        }
+        return prepareFromPrimitiveLiteral(type, literal, constant);
+    }
+
+    private static PrimitiveValue prepareFromPrimitiveLiteral(String type, Literal literal, Object constant) {
         switch (type) {
-            case "String":
-                Preconditions.checkArgument(constant instanceof String);
-                break;
             case "char":
-            case "Character":
                 Preconditions.checkArgument(constant instanceof Character);
                 break;
             case "int":
-            case "Integer":
             case "byte":
-            case "Byte":
             case "short":
-            case "Short":
             case "long":
-            case "Long":
                 Preconditions.checkArgument(constant instanceof Integer);
                 return new PrimitiveNumberValue(literal);
             case "float":
-            case "Float":
             case "double":
-            case "Double":
                 if (constant instanceof Double) {
                     return new PrimitiveNumberValue(literal);
                 }
@@ -52,12 +47,42 @@ public class ValuePreparer {
                 literal.castFromInt(Double.class);
                 return new PrimitiveNumberValue(literal);
             case "boolean":
-            case "Boolean":
                 Preconditions.checkArgument(constant instanceof Boolean);
                 break;
             default:
                 throw new RuntimeException(String.format("Format %s not supported", type));
         }
         return new PrimitiveValue(literal);
+    }
+
+    private static Value prepareFromObjectLiteral(String type, Literal literal, Object constant) {
+        switch (type) {
+            case "String":
+                Preconditions.checkArgument(constant instanceof String);
+                break;
+            case "Character":
+                Preconditions.checkArgument(constant instanceof Character);
+                break;
+            case "Integer":
+            case "Byte":
+            case "Short":
+            case "Long":
+                Preconditions.checkArgument(constant instanceof Integer);
+                return new ObjectNumberValue(literal);
+            case "Float":
+            case "Double":
+                if (constant instanceof Double) {
+                    return new ObjectNumberValue(literal);
+                }
+                Preconditions.checkArgument(constant instanceof Integer);
+                literal.castFromInt(Double.class);
+                return new ObjectNumberValue(literal);
+            case "Boolean":
+                Preconditions.checkArgument(constant instanceof Boolean);
+                break;
+            default:
+                throw new RuntimeException(String.format("Format %s not supported", type));
+        }
+        return new ObjectValue(literal);
     }
 }
