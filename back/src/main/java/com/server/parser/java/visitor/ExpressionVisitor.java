@@ -3,6 +3,7 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
@@ -103,7 +104,8 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         @Override
         public Expression visitObjectRefName(JavaParser.ObjectRefNameContext ctx) {
             String text = textVisitor.visit(ctx);
-            return new ObjectRef(text, context.getCurrentMethodContext().getValue(text));
+            Variable variable = context.getCurrentMethodContext().getVariable(text);
+            return new ObjectRef(text, variable.getValue().getExpression());
         }
     }
 }

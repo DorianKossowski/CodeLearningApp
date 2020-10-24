@@ -5,24 +5,24 @@ import com.server.parser.java.ast.constant.Constant;
 import java.util.Objects;
 
 public class ObjectRef extends Expression {
-    private final Expression value;
+    private final Expression expression;
 
-    public ObjectRef(String text, Expression value) {
+    public ObjectRef(String text, Expression expression) {
         super(text);
-        this.value = Objects.requireNonNull(value, "value cannot be null");
+        this.expression = Objects.requireNonNull(expression, "value cannot be null");
     }
 
     public Expression getValue() {
-        return value;
+        return expression;
     }
 
     @Override
     public Literal getLiteral() {
-        return value.getLiteral();
+        return expression.getLiteral();
     }
 
     @Override
     public Constant<?> getResolved() {
-        return value.getResolved();
+        return expression.getResolved();
     }
 }

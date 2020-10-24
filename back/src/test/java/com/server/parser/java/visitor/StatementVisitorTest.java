@@ -2,8 +2,10 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.PrimitiveValue;
+import com.server.parser.java.ast.Value;
+import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
-import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.statement.Assignment;
 import com.server.parser.java.ast.statement.MethodCall;
@@ -20,7 +22,6 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
 
 class StatementVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
@@ -49,13 +50,19 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldGetCorrectMethodCallValue() {
-        methodContext.addVar("var", new Literal(new StringConstant("value")));
+        methodContext.addVar(createVariable("var"));
         String input = "System.out.print(\"literal\", var)";
         JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
 
         MethodCall methodCall = (MethodCall) visitor.visit(c, context);
 
         assertThat(methodCall.getResolved()).isEqualTo("System.out.print(\"literal\", \"value\")");
+    }
+
+    private Variable createVariable(String name) {
+        StringConstant stringConstant = new StringConstant("value");
+        PrimitiveValue value = new PrimitiveValue(new Literal(stringConstant));
+        return new Variable("String", name, value);
     }
 
     //*** VARIABLE ***//
@@ -88,7 +95,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         assertThat(variableDef.getType()).isEqualTo(type);
         assertThat(variableDef.getName()).isEqualTo(name);
-        assertThat(variableDef.getValue()).extracting(Expression::getText).isEqualTo(value);
+        assertThat(variableDef.getValue()).extracting(Value::getResolved).isEqualTo(value);
     }
 
     @Test
@@ -133,11 +140,11 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         assertThat(variableDef.getText()).isEqualTo(input);
         assertVariableDec(variableDef, "String", "a");
-        assertThat(variableDef.getValue()).extracting(Expression::getText)
+        assertThat(variableDef.getValue()).extracting(Value::getResolved)
                 .isEqualTo("\"str\"");
 
-        assertThat(methodContext.getVarToValue().keySet()).containsExactly("a");
-        assertThat(methodContext.getVarToValue().get("a").getText()).isEqualTo("\"str\"");
+        assertThat(methodContext.getNameToVariable().keySet()).containsExactly("a");
+        assertThat(methodContext.getNameToVariable().get("a").getValue().getResolved()).isEqualTo("\"str\"");
     }
 
     @Test
@@ -149,14 +156,14 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         assertThat(variableDef.getText()).isEqualTo(input);
         assertVariableDec(variableDef, "String", "a");
-        assertThat(variableDef.getValue()).extracting(Expression::getText)
+        assertThat(variableDef.getValue()).extracting(Value::getResolved)
                 .isEqualTo("\"str\"");
     }
 
     //*** ASSIGNMENT ***//
     @Test
     void shouldVisitAssignment() {
-        methodContext.addVar("a", mock(Expression.class));
+        methodContext.addVar(createVariable("a"));
         String input = "a = \"str\"";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 

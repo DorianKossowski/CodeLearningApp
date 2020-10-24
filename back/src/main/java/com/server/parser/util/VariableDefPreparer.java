@@ -57,6 +57,6 @@ public class VariableDefPreparer {
             default:
                 throw new RuntimeException(String.format("Format %s not supported", type));
         }
-        return new PrimitiveValue(literal.getResolved());
+        return new PrimitiveValue(literal);
     }
 }

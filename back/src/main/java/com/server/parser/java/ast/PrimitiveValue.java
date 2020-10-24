@@ -1,14 +1,14 @@
 package com.server.parser.java.ast;
 
 import com.server.parser.java.ast.constant.Constant;
-
-import java.util.Objects;
+import com.server.parser.java.ast.expression.Expression;
 
 public class PrimitiveValue extends Value {
     private final Constant<?> constant;
 
-    public PrimitiveValue(Constant<?> constant) {
-        this.constant = Objects.requireNonNull(constant, "constant cannot be null");
+    public PrimitiveValue(Expression expression) {
+        super(expression);
+        this.constant = expression.getResolved();
     }
 
     public Constant<?> getConstant() {

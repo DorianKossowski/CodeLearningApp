@@ -3,6 +3,7 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.Assignment;
 import com.server.parser.java.ast.statement.MethodCall;
@@ -49,7 +50,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
             VariableDef variableDef = (VariableDef) visit(ctx.varDec());
-            context.getCurrentMethodContext().addVar(variableDef.getName(), variableDef.getValue());
+            context.getCurrentMethodContext().addVar(new Variable(variableDef));
             return variableDef;
         }
 
