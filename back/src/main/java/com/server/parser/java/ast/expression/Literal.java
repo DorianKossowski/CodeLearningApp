@@ -1,7 +1,9 @@
 package com.server.parser.java.ast.expression;
 
+import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.constant.DoubleConstant;
+import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Objects;
@@ -10,11 +12,7 @@ public class Literal extends Expression {
     private Constant<?> constant;
 
     public Literal(Constant<?> constant) {
-        this(Objects.requireNonNull(constant, "constant cannot be null"), constant.toString());
-    }
-
-    public Literal(Constant<?> constant, String text) {
-        super(text);
+        super(Objects.requireNonNull(constant, "constant cannot be null").toString());
         this.constant = Objects.requireNonNull(constant, "constant cannot be null");
     }
 
@@ -30,6 +28,11 @@ public class Literal extends Expression {
     @Override
     public Literal getLiteral() {
         return this;
+    }
+
+    @Override
+    public Value getValue() {
+        return ValuePreparer.prepare(constant.c.getClass().getSimpleName(), this);
     }
 
     @Override

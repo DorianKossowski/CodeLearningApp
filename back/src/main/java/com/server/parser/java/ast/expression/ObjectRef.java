@@ -1,5 +1,6 @@
 package com.server.parser.java.ast.expression;
 
+import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.constant.Constant;
 
 import java.util.Objects;
@@ -12,8 +13,9 @@ public class ObjectRef extends Expression {
         this.expression = Objects.requireNonNull(expression, "value cannot be null");
     }
 
-    public Expression getValue() {
-        return expression;
+    @Override
+    public Value getValue() {
+        return expression.getValue();
     }
 
     @Override
