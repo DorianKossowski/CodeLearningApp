@@ -40,14 +40,14 @@ class VariableDefPreparerTest {
     @ParameterizedTest
     @MethodSource("typeWithLiteralProvider")
     void shouldPrepareCorrectLiteralExpression(String type, Literal literal) {
-        assertDoesNotThrow(() -> VariablePreparer.prepare(type, literal));
+        assertDoesNotThrow(() -> VariableDefPreparer.prepare(type, literal));
     }
 
     @Test
     void shouldThrowWhenInvalidLiteralExpression() {
         assertThatThrownBy(() -> {
             Literal l = new Literal(new CharacterConstant('L'));
-            VariablePreparer.prepare("String", l);
+            VariableDefPreparer.prepare("String", l);
         })
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie 'L' nie jest typu String");
@@ -57,7 +57,7 @@ class VariableDefPreparerTest {
     void shouldThrowWhenInvalidObjectRef() {
         assertThatThrownBy(() -> {
             Literal l = new Literal(new CharacterConstant('L'));
-            VariablePreparer.prepare("String", new ObjectRef("x", l));
+            VariableDefPreparer.prepare("String", new ObjectRef("x", l));
         })
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie x nie jest typu String");
@@ -67,7 +67,7 @@ class VariableDefPreparerTest {
     void shouldCastIntToDouble() {
         Literal expression = new Literal(new IntConstant(1));
 
-        VariablePreparer.prepare("double", expression);
+        VariableDefPreparer.prepare("double", expression);
 
         Constant<?> resolved = expression.getResolved();
         assertThat(resolved).isExactlyInstanceOf(DoubleConstant.class);

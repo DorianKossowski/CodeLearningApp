@@ -6,7 +6,7 @@ import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.util.exception.ResolvingException;
 
-public class VariablePreparer {
+public class VariableDefPreparer {
 
     public static void prepare(String type, Expression expression) {
         try {
