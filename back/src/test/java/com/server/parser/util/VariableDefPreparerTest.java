@@ -73,4 +73,13 @@ class VariableDefPreparerTest {
         assertThat(resolved).isExactlyInstanceOf(DoubleConstant.class);
         assertThat(((DoubleConstant) resolved).getValue()).isEqualTo(1.0);
     }
+
+    @Test
+    void shouldPrepareComplexObjectRef() {
+        Literal l = new Literal(new CharacterConstant('L'));
+        ObjectRef obj1 = new ObjectRef("obj1", l);
+        ObjectRef obj2 = new ObjectRef("obj2", obj1);
+
+        assertDoesNotThrow(() -> VariableDefPreparer.prepare("char", obj2));
+    }
 }

@@ -17,6 +17,11 @@ public class ObjectRef extends Expression {
     }
 
     @Override
+    public Literal getLiteral() {
+        return value.getLiteral();
+    }
+
+    @Override
     public Constant<?> getResolved() {
         return value.getResolved();
     }

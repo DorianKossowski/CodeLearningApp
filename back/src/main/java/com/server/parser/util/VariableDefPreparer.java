@@ -3,25 +3,16 @@ package com.server.parser.util;
 import com.google.common.base.Preconditions;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
-import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.util.exception.ResolvingException;
 
 public class VariableDefPreparer {
 
     public static void prepare(String type, Expression expression) {
         try {
-            if (expression instanceof Literal) {
-                prepareFromLiteral(type, ((Literal) expression));
-            } else if (expression instanceof ObjectRef) {
-                prepareFromObjectRef(type, ((ObjectRef) expression));
-            }
+            prepareFromLiteral(type, expression.getLiteral());
         } catch (IllegalArgumentException e) {
             throw new ResolvingException(String.format("Wyrażenie %s nie jest typu %s", expression.getText(), type));
         }
-    }
-
-    private static void prepareFromObjectRef(String type, ObjectRef objectRef) {
-        prepareFromLiteral(type, ((Literal) objectRef.getValue()));
     }
 
     private static void prepareFromLiteral(String type, Literal literal) {

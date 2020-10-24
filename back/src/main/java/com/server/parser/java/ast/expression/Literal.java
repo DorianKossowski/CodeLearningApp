@@ -28,6 +28,11 @@ public class Literal extends Expression {
     }
 
     @Override
+    public Literal getLiteral() {
+        return this;
+    }
+
+    @Override
     public Constant<?> getResolved() {
         return constant;
     }

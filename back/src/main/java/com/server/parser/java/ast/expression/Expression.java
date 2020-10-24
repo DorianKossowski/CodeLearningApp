@@ -16,5 +16,7 @@ public abstract class Expression extends AstElement {
         return text;
     }
 
+    public abstract Literal getLiteral();
+
     public abstract Constant<?> getResolved();
 }
