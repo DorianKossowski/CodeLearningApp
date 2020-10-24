@@ -1,6 +1,7 @@
 package com.server.parser.util;
 
 import com.google.common.base.Preconditions;
+import com.server.parser.java.ast.PrimitiveNumberValue;
 import com.server.parser.java.ast.PrimitiveValue;
 import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.expression.Expression;
@@ -39,17 +40,17 @@ public class ValuePreparer {
             case "long":
             case "Long":
                 Preconditions.checkArgument(constant instanceof Integer);
-                break;
+                return new PrimitiveNumberValue(literal);
             case "float":
             case "Float":
             case "double":
             case "Double":
                 if (constant instanceof Double) {
-                    break;
+                    return new PrimitiveNumberValue(literal);
                 }
                 Preconditions.checkArgument(constant instanceof Integer);
                 literal.castFromInt(Double.class);
-                break;
+                return new PrimitiveNumberValue(literal);
             case "boolean":
             case "Boolean":
                 Preconditions.checkArgument(constant instanceof Boolean);

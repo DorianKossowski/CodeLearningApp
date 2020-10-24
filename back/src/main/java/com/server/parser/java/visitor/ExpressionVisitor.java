@@ -3,6 +3,8 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.Computable;
+import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.ast.expression.Expression;
@@ -30,17 +32,26 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
 
         @Override
         public Expression visitExpression(JavaParser.ExpressionContext ctx) {
-            if (ctx.op == null) {
-                return getResolvedUnaryExpr(ctx);
+            if (ctx.op != null) {
+                return getResolvedBinaryNumberExpr(ctx);
             }
-            return getResolvedBinaryExpr(ctx);
+            return getResolvedUnaryExpr(ctx);
         }
 
-        private Expression getResolvedBinaryExpr(JavaParser.ExpressionContext ctx) {
-            Constant<?> c1 = visit(ctx.expression(0)).getConstant();
-            Constant<?> c2 = visit(ctx.expression(1)).getConstant();
-            Constant<?> result = c1.compute(c2, ctx.op.getText());
-            return new Literal(result);
+        private Expression getResolvedBinaryNumberExpr(JavaParser.ExpressionContext ctx) {
+            Value v1 = visit(ctx.expression(0)).getValue();
+            Value v2 = visit(ctx.expression(1)).getValue();
+            validateValueComputability(v1);
+            validateValueComputability(v2);
+            Computable computedValue = ((Computable) v1).compute(((Computable) v2), ctx.op.getText());
+            return new Literal(computedValue.getConstant());
+        }
+
+        private void validateValueComputability(Value v1) {
+            if (!(v1 instanceof Computable)) {
+                throw new ResolvingException("Operacje matematyczne nie są wspierane dla typu " +
+                        v1.getExpression().getResolved().c.getClass().getSimpleName());
+            }
         }
 
         private Expression getResolvedUnaryExpr(JavaParser.ExpressionContext ctx) {

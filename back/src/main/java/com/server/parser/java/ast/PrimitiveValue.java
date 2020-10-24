@@ -4,7 +4,7 @@ import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Expression;
 
 public class PrimitiveValue extends Value {
-    private final Constant<?> constant;
+    protected final Constant<?> constant;
 
     public PrimitiveValue(Expression expression) {
         super(expression);
