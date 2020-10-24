@@ -2,7 +2,11 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.MethodBody;
+import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
@@ -42,12 +46,12 @@ public class MethodVisitor extends JavaVisitor<Method> {
                     .collect(Collectors.toList());
             String methodResult = ctx.methodResult().getText();
             String identifier = ctx.identifier().getText();
-            List<Variable> args = visit(ctx.methodArgs());
+            List<VariableDef> args = visit(ctx.methodArgs());
             return new MethodHeader(modifiers, methodResult, identifier, args);
         }
 
-        List<Variable> visit(JavaParser.MethodArgsContext ctx) {
-            JavaVisitor<Variable> visitor = context.getVisitor(Variable.class);
+        List<VariableDef> visit(JavaParser.MethodArgsContext ctx) {
+            JavaVisitor<VariableDef> visitor = context.getVisitor(VariableDef.class);
             return ctx.singleMethodArg().stream()
                     .map(singleMethodArgContext -> visitor.visit(singleMethodArgContext, context))
                     .collect(Collectors.toList());

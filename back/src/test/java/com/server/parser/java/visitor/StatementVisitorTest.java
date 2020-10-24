@@ -2,8 +2,12 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.Literal;
 import com.server.parser.java.ast.constant.StringConstant;
+import com.server.parser.java.ast.statement.Assignment;
+import com.server.parser.java.ast.statement.MethodCall;
+import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,11 +84,11 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitVarDecWithLiteral(String input, String type, String name, String value) {
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
-        Variable variable = (Variable) visitor.visit(c, context);
+        VariableDef variableDef = (VariableDef) visitor.visit(c, context);
 
-        assertThat(variable.getType()).isEqualTo(type);
-        assertThat(variable.getName()).isEqualTo(name);
-        assertThat(variable.getValue()).extracting(Expression::getText).isEqualTo(value);
+        assertThat(variableDef.getType()).isEqualTo(type);
+        assertThat(variableDef.getName()).isEqualTo(name);
+        assertThat(variableDef.getValue()).extracting(Expression::getText).isEqualTo(value);
     }
 
     @Test
@@ -92,11 +96,11 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "String a";
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
-        Variable variable = (Variable) visitor.visit(c, context);
+        VariableDef variableDef = (VariableDef) visitor.visit(c, context);
 
-        assertThat(variable.getType()).isEqualTo("String");
-        assertThat(variable.getName()).isEqualTo("a");
-        assertThat(variable.getValue()).isNull();
+        assertThat(variableDef.getType()).isEqualTo("String");
+        assertThat(variableDef.getName()).isEqualTo("a");
+        assertThat(variableDef.getValue()).isNull();
     }
 
     @Test
@@ -114,10 +118,10 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "Integer[] a";
         JavaParser.SingleMethodArgContext c = HELPER.shouldParseToEof(input, JavaParser::singleMethodArg);
 
-        Variable variable = (Variable) visitor.visit(c, context);
+        VariableDef variableDef = (VariableDef) visitor.visit(c, context);
 
-        assertThat(variable.getText()).isEqualTo(input);
-        assertVariableDec(variable, "Integer[]", "a");
+        assertThat(variableDef.getText()).isEqualTo(input);
+        assertVariableDec(variableDef, "Integer[]", "a");
     }
 
     @Test
@@ -125,11 +129,11 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "String a = \"str\"";
         JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
-        Variable variable = (Variable) visitor.visit(c, context);
+        VariableDef variableDef = (VariableDef) visitor.visit(c, context);
 
-        assertThat(variable.getText()).isEqualTo(input);
-        assertVariableDec(variable, "String", "a");
-        assertThat(variable.getValue()).extracting(Expression::getText)
+        assertThat(variableDef.getText()).isEqualTo(input);
+        assertVariableDec(variableDef, "String", "a");
+        assertThat(variableDef.getValue()).extracting(Expression::getText)
                 .isEqualTo("\"str\"");
 
         assertThat(methodContext.getVarToValue().keySet()).containsExactly("a");
@@ -141,11 +145,11 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "String a = \"str\"";
         JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
-        Variable variable = (Variable) visitor.visit(c, context);
+        VariableDef variableDef = (VariableDef) visitor.visit(c, context);
 
-        assertThat(variable.getText()).isEqualTo(input);
-        assertVariableDec(variable, "String", "a");
-        assertThat(variable.getValue()).extracting(Expression::getText)
+        assertThat(variableDef.getText()).isEqualTo(input);
+        assertVariableDec(variableDef, "String", "a");
+        assertThat(variableDef.getValue()).extracting(Expression::getText)
                 .isEqualTo("\"str\"");
     }
 

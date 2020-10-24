@@ -3,7 +3,11 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.statement.Assignment;
+import com.server.parser.java.ast.statement.MethodCall;
+import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -44,9 +48,9 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         //*** VARIABLE ***//
         @Override
         public Statement visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
-            Variable variable = (Variable) visit(ctx.varDec());
-            context.getCurrentMethodContext().addVar(variable.getName(), variable.getValue());
-            return variable;
+            VariableDef variableDef = (VariableDef) visit(ctx.varDec());
+            context.getCurrentMethodContext().addVar(variableDef.getName(), variableDef.getValue());
+            return variableDef;
         }
 
         @Override
@@ -58,7 +62,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         public Statement visitSingleMethodArg(JavaParser.SingleMethodArgContext ctx) {
             String type = textVisitor.visit(ctx.type());
             String id = textVisitor.visit(ctx.identifier());
-            return new Variable(JavaGrammarHelper.getOriginalText(ctx), type, id);
+            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id);
         }
 
         @Override
@@ -68,7 +72,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             if (ctx.expression() != null) {
                 expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
             }
-            return new Variable(JavaGrammarHelper.getOriginalText(ctx), textVisitor.visit(ctx.type()), id, expression);
+            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), textVisitor.visit(ctx.type()), id, expression);
         }
 
         //*** ASSIGNMENT ***//

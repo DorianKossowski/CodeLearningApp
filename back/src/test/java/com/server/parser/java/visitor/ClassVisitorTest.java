@@ -5,7 +5,7 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.ClassBody;
 import com.server.parser.java.ast.ClassHeader;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.statement.VariableDef;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +45,7 @@ class ClassVisitorTest extends JavaVisitorTestBase {
 
         assertThat(body.getMethods()).extracting(method -> method.getHeader().getName())
                 .containsExactly("m", "m2");
-        assertThat(body.getFields()).extracting(Variable::getName)
+        assertThat(body.getFields()).extracting(VariableDef::getName)
                 .containsExactly("i", "s");
     }
 }

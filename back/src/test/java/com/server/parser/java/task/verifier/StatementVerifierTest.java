@@ -2,8 +2,8 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.MethodCall;
-import com.server.parser.java.ast.Statement;
+import com.server.parser.java.ast.statement.MethodCall;
+import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.task.model.StatementModel;
 import org.junit.jupiter.api.Test;
 

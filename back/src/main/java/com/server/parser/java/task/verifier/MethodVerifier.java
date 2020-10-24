@@ -3,7 +3,7 @@ package com.server.parser.java.task.verifier;
 import com.google.common.base.Verify;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.TaskAst;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
 
@@ -65,15 +65,15 @@ public class MethodVerifier {
                 .collect(Collectors.toList());
     }
 
-    static boolean hasSameMethodArgs(List<Variable> actualArgs, List<MethodArgs> expectedArgs) {
+    static boolean hasSameMethodArgs(List<VariableDef> actualArgs, List<MethodArgs> expectedArgs) {
         if (actualArgs.size() != expectedArgs.size()) {
             return false;
         }
-        Iterator<Variable> actualArgsIt = actualArgs.iterator();
+        Iterator<VariableDef> actualArgsIt = actualArgs.iterator();
         Iterator<MethodArgs> expectedArgsIt = expectedArgs.iterator();
 
         while (actualArgsIt.hasNext()) {
-            Variable actualArg = actualArgsIt.next();
+            VariableDef actualArg = actualArgsIt.next();
             MethodArgs expectedArg = expectedArgsIt.next();
 
             boolean typeCompResult = expectedArg.getType().map(type -> actualArg.getType().equals(type)).orElse(true);

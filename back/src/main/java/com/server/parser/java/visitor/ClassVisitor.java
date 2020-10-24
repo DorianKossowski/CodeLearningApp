@@ -2,7 +2,11 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.ClassAst;
+import com.server.parser.java.ast.ClassBody;
+import com.server.parser.java.ast.ClassHeader;
+import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -39,8 +43,8 @@ public class ClassVisitor extends JavaVisitor<ClassAst> {
         }
 
         ClassBody visit(JavaParser.ClassBodyContext ctx) {
-            JavaVisitor<Variable> variableVisitor = context.getVisitor(Variable.class);
-            List<Variable> fields = ctx.fieldDec().stream()
+            JavaVisitor<VariableDef> variableVisitor = context.getVisitor(VariableDef.class);
+            List<VariableDef> fields = ctx.fieldDec().stream()
                     .map(fieldDecContext -> variableVisitor.visit(fieldDecContext, context))
                     .collect(Collectors.toList());
             JavaVisitor<Method> methodVisitor = context.getVisitor(Method.class);

@@ -2,7 +2,12 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.MethodBody;
+import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.ast.statement.MethodCall;
+import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.VariableDef;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -19,7 +24,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         String input = "(Integer[] a, double b, int c)";
         JavaParser.MethodArgsContext c = HELPER.shouldParseToEof(input, JavaParser::methodArgs);
 
-        List<Variable> arguments = visitorInternal.visit(c);
+        List<VariableDef> arguments = visitorInternal.visit(c);
 
         assertThat(arguments).hasSize(3);
         assertVariableDec(arguments.get(0), "Integer[]", "a");
@@ -32,7 +37,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         String input = "()";
         JavaParser.MethodArgsContext c = HELPER.shouldParseToEof(input, JavaParser::methodArgs);
 
-        List<Variable> arguments = visitorInternal.visit(c);
+        List<VariableDef> arguments = visitorInternal.visit(c);
 
         assertThat(arguments).isEmpty();
     }

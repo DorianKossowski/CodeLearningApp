@@ -1,6 +1,10 @@
 package com.server.parser.java;
 
-import com.server.parser.java.ast.*;
+import com.server.parser.java.ast.AstElement;
+import com.server.parser.java.ast.ClassAst;
+import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.java.visitor.*;
 
@@ -11,7 +15,7 @@ public class JavaVisitorsRegistry {
     private static final Map<Class<? extends AstElement>, JavaVisitor<?>> visitors = new HashMap<>();
 
     static {
-        visitors.put(Variable.class, new StatementVisitor());
+        visitors.put(VariableDef.class, new StatementVisitor());
         visitors.put(Expression.class, new ExpressionVisitor());
         visitors.put(Method.class, new MethodVisitor());
         visitors.put(ClassAst.class, new ClassVisitor());

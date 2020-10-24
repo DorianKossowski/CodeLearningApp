@@ -1,4 +1,6 @@
-package com.server.parser.java.ast;
+package com.server.parser.java.ast.statement;
+
+import com.server.parser.java.ast.AstElement;
 
 import java.util.Objects;
 

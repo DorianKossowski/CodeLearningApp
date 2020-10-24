@@ -2,9 +2,9 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.Verify;
 import com.server.parser.java.JavaParserAdapter;
-import com.server.parser.java.ast.MethodPrintable;
-import com.server.parser.java.ast.Statement;
 import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.statement.MethodPrintable;
+import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.task.model.StatementModel;
 
 import java.util.ArrayList;

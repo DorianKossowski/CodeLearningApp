@@ -1,8 +1,8 @@
 package com.server.parser.java.task.verifier;
 
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.Statement;
 import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.statement.Statement;
 
 import java.util.List;
 
