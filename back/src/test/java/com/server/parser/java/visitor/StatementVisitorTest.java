@@ -50,7 +50,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldGetCorrectMethodCallValue() {
-        methodContext.addVar(createVariable("var"));
+        methodContext.addVar(createStringVariable("var"));
         String input = "System.out.print(\"literal\", var)";
         JavaParser.MethodCallContext c = HELPER.shouldParseToEof(input, JavaParser::methodCall);
 
@@ -59,7 +59,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThat(methodCall.getResolved()).isEqualTo("System.out.print(\"literal\", \"value\")");
     }
 
-    private Variable createVariable(String name) {
+    private Variable createStringVariable(String name) {
         StringConstant stringConstant = new StringConstant("value");
         PrimitiveValue value = new PrimitiveValue(new Literal(stringConstant));
         return new Variable("String", name, value);
@@ -163,7 +163,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     //*** ASSIGNMENT ***//
     @Test
     void shouldVisitAssignment() {
-        methodContext.addVar(createVariable("a"));
+        methodContext.addVar(createStringVariable("a"));
         String input = "a = \"str\"";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 
@@ -172,5 +172,16 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThat(assignment.getText()).isEqualTo(input);
         assertThat(assignment.getId()).isEqualTo("a");
         assertThat(assignment.getValue().getText()).isEqualTo("\"str\"");
+    }
+
+    @Test
+    void shouldThrowWhenInvalidAssignment() {
+        methodContext.addVar(createStringVariable("a"));
+        String input = "a = 5";
+        JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
+
+        assertThatThrownBy(() -> visitor.visit(c, context))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Wyrażenie 5 nie jest typu String");
     }
 }
