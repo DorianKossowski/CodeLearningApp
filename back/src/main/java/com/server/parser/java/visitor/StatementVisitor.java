@@ -3,7 +3,7 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.Assignment;
 import com.server.parser.java.ast.statement.MethodCall;
 import com.server.parser.java.ast.statement.Statement;

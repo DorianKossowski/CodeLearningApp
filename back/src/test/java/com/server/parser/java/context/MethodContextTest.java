@@ -1,6 +1,6 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 

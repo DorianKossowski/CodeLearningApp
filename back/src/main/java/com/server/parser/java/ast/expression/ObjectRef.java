@@ -1,4 +1,4 @@
-package com.server.parser.java.ast;
+package com.server.parser.java.ast.expression;
 
 import com.server.parser.java.ast.constant.Constant;
 

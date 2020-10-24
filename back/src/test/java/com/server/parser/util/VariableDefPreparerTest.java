@@ -1,8 +1,8 @@
 package com.server.parser.util;
 
-import com.server.parser.java.ast.Literal;
-import com.server.parser.java.ast.ObjectRef;
 import com.server.parser.java.ast.constant.*;
+import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

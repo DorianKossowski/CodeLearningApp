@@ -1,10 +1,10 @@
 package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.Expression;
-import com.server.parser.java.ast.Literal;
-import com.server.parser.java.ast.ObjectRef;
 import com.server.parser.java.ast.constant.StringConstant;
+import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;

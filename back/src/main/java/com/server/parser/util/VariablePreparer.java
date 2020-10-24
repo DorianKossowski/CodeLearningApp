@@ -1,9 +1,9 @@
 package com.server.parser.util;
 
 import com.google.common.base.Preconditions;
-import com.server.parser.java.ast.Expression;
-import com.server.parser.java.ast.Literal;
-import com.server.parser.java.ast.ObjectRef;
+import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.util.exception.ResolvingException;
 
 public class VariablePreparer {

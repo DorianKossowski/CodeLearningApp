@@ -1,7 +1,7 @@
 package com.server.parser.java.context;
 
 import com.google.common.collect.ImmutableMap;
-import com.server.parser.java.ast.Expression;
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;

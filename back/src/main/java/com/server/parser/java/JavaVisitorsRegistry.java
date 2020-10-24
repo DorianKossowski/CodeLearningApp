@@ -2,8 +2,8 @@ package com.server.parser.java;
 
 import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.ast.ClassAst;
-import com.server.parser.java.ast.Expression;
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.java.visitor.*;
