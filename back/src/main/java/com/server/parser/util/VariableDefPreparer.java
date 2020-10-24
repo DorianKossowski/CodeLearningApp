@@ -1,23 +1,26 @@
 package com.server.parser.util;
 
 import com.google.common.base.Preconditions;
+import com.server.parser.java.ast.PrimitiveValue;
+import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.util.exception.ResolvingException;
 
-import java.util.Optional;
-
 public class VariableDefPreparer {
 
-    public static void prepare(String type, Expression expression) {
+    public static Value prepare(String type, Expression expression) {
         try {
-            Optional.ofNullable(expression).ifPresent(e -> prepareFromLiteral(type, e.getLiteral()));
+            if (expression != null) {
+                return prepareFromLiteral(type, expression.getLiteral());
+            }
+            return null; // TODO use NullValue
         } catch (IllegalArgumentException e) {
             throw new ResolvingException(String.format("Wyrażenie %s nie jest typu %s", expression.getText(), type));
         }
     }
 
-    private static void prepareFromLiteral(String type, Literal literal) {
+    private static Value prepareFromLiteral(String type, Literal literal) {
         Object constant = literal.getResolved().c;
         switch (type) {
             case "String":
@@ -54,5 +57,6 @@ public class VariableDefPreparer {
             default:
                 throw new RuntimeException(String.format("Format %s not supported", type));
         }
+        return new PrimitiveValue(literal.getResolved());
     }
 }

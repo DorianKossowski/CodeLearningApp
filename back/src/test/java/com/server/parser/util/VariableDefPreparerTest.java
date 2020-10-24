@@ -1,5 +1,6 @@
 package com.server.parser.util;
 
+import com.server.parser.java.ast.PrimitiveValue;
 import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.ObjectRef;
@@ -67,9 +68,9 @@ class VariableDefPreparerTest {
     void shouldCastIntToDouble() {
         Literal expression = new Literal(new IntConstant(1));
 
-        VariableDefPreparer.prepare("double", expression);
+        PrimitiveValue value = (PrimitiveValue) VariableDefPreparer.prepare("double", expression);
 
-        Constant<?> resolved = expression.getResolved();
+        Constant<?> resolved = value.getConstant();
         assertThat(resolved).isExactlyInstanceOf(DoubleConstant.class);
         assertThat(resolved.c).isEqualTo(1.0);
     }
@@ -80,6 +81,10 @@ class VariableDefPreparerTest {
         ObjectRef obj1 = new ObjectRef("obj1", l);
         ObjectRef obj2 = new ObjectRef("obj2", obj1);
 
-        assertDoesNotThrow(() -> VariableDefPreparer.prepare("char", obj2));
+        PrimitiveValue value = (PrimitiveValue) VariableDefPreparer.prepare("char", obj2);
+
+        Constant<?> resolved = value.getConstant();
+        assertThat(resolved).isExactlyInstanceOf(CharacterConstant.class);
+        assertThat(resolved.c).isEqualTo('L');
     }
 }
