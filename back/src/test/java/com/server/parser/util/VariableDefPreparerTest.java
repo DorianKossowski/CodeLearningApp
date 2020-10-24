@@ -71,7 +71,7 @@ class VariableDefPreparerTest {
 
         Constant<?> resolved = expression.getResolved();
         assertThat(resolved).isExactlyInstanceOf(DoubleConstant.class);
-        assertThat(((DoubleConstant) resolved).getValue()).isEqualTo(1.0);
+        assertThat(resolved.c).isEqualTo(1.0);
     }
 
     @Test

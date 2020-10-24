@@ -19,7 +19,7 @@ public class Literal extends Expression {
     }
 
     public <T> void castFromInt(Class<T> toType) {
-        Integer intValue = ((Integer) constant.getValue());
+        Integer intValue = ((Integer) constant.c);
         if (toType == Double.class) {
             constant = new DoubleConstant(intValue.doubleValue());
         } else {

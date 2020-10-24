@@ -37,10 +37,10 @@ public class NumberOperationService {
     }
 
     public static Constant<?> compute(IntConstant value1, IntConstant value2, String operator) {
-        checkDivByZero(value2.getValue(), operator);
+        checkDivByZero(value2.c, operator);
         return intOperations.computeIfAbsent(operator, ($) -> {
             throw new UnsupportedOperationException(operator + " not supported");
-        }).apply(value1.getValue(), value2.getValue());
+        }).apply(value1.c, value2.c);
     }
 
     private static void checkDivByZero(Number value, String operator) {
@@ -53,17 +53,17 @@ public class NumberOperationService {
     }
 
     public static Constant<?> compute(DoubleConstant value1, DoubleConstant value2, String operator) {
-        checkDivByZero(value2.getValue(), operator);
+        checkDivByZero(value2.c, operator);
         return doubleOperations.computeIfAbsent(operator, ($) -> {
             throw new UnsupportedOperationException(operator + " not supported");
-        }).apply(value1.getValue(), value2.getValue());
+        }).apply(value1.c, value2.c);
     }
 
     public static Constant<?> compute(DoubleConstant value1, IntConstant value2, String operator) {
-        return compute(value1, new DoubleConstant((double) value2.getValue()), operator);
+        return compute(value1, new DoubleConstant((double) value2.c), operator);
     }
 
     public static Constant<?> compute(IntConstant value1, DoubleConstant value2, String operator) {
-        return compute(new DoubleConstant((double) value1.getValue()), value2, operator);
+        return compute(new DoubleConstant((double) value1.c), value2, operator);
     }
 }

@@ -12,11 +12,11 @@ public abstract class TextConstant<T> extends Constant<T> {
 
     @Override
     protected Constant<?> compute(IntConstant c2, String operation) {
-        throw new ResolvingException("Operacje matematyczne nie są wspierane dla typu " + value.getClass().getSimpleName());
+        throw new ResolvingException("Operacje matematyczne nie są wspierane dla typu " + c.getClass().getSimpleName());
     }
 
     @Override
     protected Constant<?> compute(DoubleConstant c2, String operation) {
-        throw new ResolvingException("Operacje matematyczne nie są wspierane dla typu " + value.getClass().getSimpleName());
+        throw new ResolvingException("Operacje matematyczne nie są wspierane dla typu " + c.getClass().getSimpleName());
     }
 }

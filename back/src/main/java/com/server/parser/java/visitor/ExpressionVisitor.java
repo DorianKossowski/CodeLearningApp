@@ -53,12 +53,12 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         private Literal createNegatedExpression(Expression expression) {
             Constant<?> constant = expression.getResolved();
             if (constant instanceof IntConstant) {
-                return new Literal(new IntConstant((Integer) constant.getValue() * -1));
+                return new Literal(new IntConstant((Integer) constant.c * -1));
             }
             if (constant instanceof DoubleConstant) {
-                return new Literal(new DoubleConstant((Double) constant.getValue() * -1));
+                return new Literal(new DoubleConstant((Double) constant.c * -1));
             }
-            throw new ResolvingException("Operacja niedostępna dla typu " + constant.getValue().getClass().getSimpleName());
+            throw new ResolvingException("Operacja niedostępna dla typu " + constant.c.getClass().getSimpleName());
         }
 
         @Override
