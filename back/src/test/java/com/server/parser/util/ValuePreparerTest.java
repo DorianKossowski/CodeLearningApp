@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class VariableDefPreparerTest {
+class ValuePreparerTest {
 
     static Stream<Arguments> typeWithLiteralProvider() {
         return Stream.of(
@@ -41,14 +41,14 @@ class VariableDefPreparerTest {
     @ParameterizedTest
     @MethodSource("typeWithLiteralProvider")
     void shouldPrepareCorrectLiteralExpression(String type, Literal literal) {
-        assertDoesNotThrow(() -> VariableDefPreparer.prepare(type, literal));
+        assertDoesNotThrow(() -> ValuePreparer.prepare(type, literal));
     }
 
     @Test
     void shouldThrowWhenInvalidLiteralExpression() {
         assertThatThrownBy(() -> {
             Literal l = new Literal(new CharacterConstant('L'));
-            VariableDefPreparer.prepare("String", l);
+            ValuePreparer.prepare("String", l);
         })
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie 'L' nie jest typu String");
@@ -58,7 +58,7 @@ class VariableDefPreparerTest {
     void shouldThrowWhenInvalidObjectRef() {
         assertThatThrownBy(() -> {
             Literal l = new Literal(new CharacterConstant('L'));
-            VariableDefPreparer.prepare("String", new ObjectRef("x", l));
+            ValuePreparer.prepare("String", new ObjectRef("x", l));
         })
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie x nie jest typu String");
@@ -68,7 +68,7 @@ class VariableDefPreparerTest {
     void shouldCastIntToDouble() {
         Literal expression = new Literal(new IntConstant(1));
 
-        PrimitiveValue value = (PrimitiveValue) VariableDefPreparer.prepare("double", expression);
+        PrimitiveValue value = (PrimitiveValue) ValuePreparer.prepare("double", expression);
 
         Constant<?> resolved = value.getConstant();
         assertThat(resolved).isExactlyInstanceOf(DoubleConstant.class);
@@ -81,7 +81,7 @@ class VariableDefPreparerTest {
         ObjectRef obj1 = new ObjectRef("obj1", l);
         ObjectRef obj2 = new ObjectRef("obj2", obj1);
 
-        PrimitiveValue value = (PrimitiveValue) VariableDefPreparer.prepare("char", obj2);
+        PrimitiveValue value = (PrimitiveValue) ValuePreparer.prepare("char", obj2);
 
         Constant<?> resolved = value.getConstant();
         assertThat(resolved).isExactlyInstanceOf(CharacterConstant.class);

@@ -2,7 +2,7 @@ package com.server.parser.java.ast.statement;
 
 import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.util.VariableDefPreparer;
+import com.server.parser.util.ValuePreparer;
 
 import java.util.Objects;
 
@@ -21,7 +21,7 @@ public class VariableDef extends Statement {
         this.type = Objects.requireNonNull(type, "type cannot be null");
         this.name = Objects.requireNonNull(name, "name cannot be null");
         this.expression = expression;
-        this.value = VariableDefPreparer.prepare(type, expression);
+        this.value = ValuePreparer.prepare(type, expression);
     }
 
     public String getType() {

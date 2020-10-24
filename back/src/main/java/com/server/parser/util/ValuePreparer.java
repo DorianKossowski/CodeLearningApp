@@ -7,7 +7,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.util.exception.ResolvingException;
 
-public class VariableDefPreparer {
+public class ValuePreparer {
 
     public static Value prepare(String type, Expression expression) {
         try {

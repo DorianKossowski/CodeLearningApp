@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.util.VariableDefPreparer;
+import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public class MethodContext {
 
     public void updateVar(String var, Expression expression) {
         Variable variable = getVariable(var);
-        Value newValue = VariableDefPreparer.prepare(variable.getType(), expression);
+        Value newValue = ValuePreparer.prepare(variable.getType(), expression);
         variable.setValue(newValue);
     }
 
