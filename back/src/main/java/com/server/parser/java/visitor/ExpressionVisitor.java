@@ -37,8 +37,8 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         }
 
         private Expression getResolvedBinaryExpr(JavaParser.ExpressionContext ctx) {
-            Constant<?> c1 = visit(ctx.expression(0)).getResolved();
-            Constant<?> c2 = visit(ctx.expression(1)).getResolved();
+            Constant<?> c1 = visit(ctx.expression(0)).getConstant();
+            Constant<?> c2 = visit(ctx.expression(1)).getConstant();
             Constant<?> result = c1.compute(c2, ctx.op.getText());
             return new Literal(result);
         }
@@ -52,7 +52,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         }
 
         private Literal createNegatedExpression(Expression expression) {
-            Constant<?> constant = expression.getResolved();
+            Constant<?> constant = expression.getConstant();
             if (constant instanceof IntConstant) {
                 return new Literal(new IntConstant((Integer) constant.c * -1));
             }

@@ -8,7 +8,7 @@ public class PrimitiveValue extends Value {
 
     public PrimitiveValue(Expression expression) {
         super(expression);
-        this.constant = expression.getResolved();
+        this.constant = expression.getConstant();
     }
 
     public Constant<?> getConstant() {

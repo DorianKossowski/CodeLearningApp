@@ -36,4 +36,9 @@ public class Literal extends Expression {
     public Constant<?> getResolved() {
         return constant;
     }
+
+    @Override
+    public Constant<?> getConstant() {
+        return constant;
+    }
 }

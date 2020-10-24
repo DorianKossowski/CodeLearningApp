@@ -21,7 +21,7 @@ public class VariableDefPreparer {
     }
 
     private static Value prepareFromLiteral(String type, Literal literal) {
-        Object constant = literal.getResolved().c;
+        Object constant = literal.getConstant().c;
         switch (type) {
             case "String":
                 Preconditions.checkArgument(constant instanceof String);
