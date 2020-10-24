@@ -42,6 +42,6 @@ public class VariableDef extends Statement {
 
     @Override
     public String getResolved() {
-        return String.format("%s %s = %s", type, name, value.getResolved());
+        return String.format("%s %s = %s", type, name, value);
     }
 }

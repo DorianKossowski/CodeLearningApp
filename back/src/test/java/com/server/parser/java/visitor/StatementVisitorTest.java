@@ -95,7 +95,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         assertThat(variableDef.getType()).isEqualTo(type);
         assertThat(variableDef.getName()).isEqualTo(name);
-        assertThat(variableDef.getValue()).extracting(Value::getResolved).isEqualTo(value);
+        assertThat(variableDef.getValue()).extracting(Value::toString).isEqualTo(value);
     }
 
     @Test
@@ -140,11 +140,11 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         assertThat(variableDef.getText()).isEqualTo(input);
         assertVariableDec(variableDef, "String", "a");
-        assertThat(variableDef.getValue()).extracting(Value::getResolved)
+        assertThat(variableDef.getValue()).extracting(Value::toString)
                 .isEqualTo("\"str\"");
 
         assertThat(methodContext.getNameToVariable().keySet()).containsExactly("a");
-        assertThat(methodContext.getNameToVariable().get("a").getValue().getResolved()).isEqualTo("\"str\"");
+        assertThat(methodContext.getNameToVariable().get("a").getValue().toString()).isEqualTo("\"str\"");
     }
 
     @Test
@@ -156,7 +156,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         assertThat(variableDef.getText()).isEqualTo(input);
         assertVariableDec(variableDef, "String", "a");
-        assertThat(variableDef.getValue()).extracting(Value::getResolved)
+        assertThat(variableDef.getValue()).extracting(Value::toString)
                 .isEqualTo("\"str\"");
     }
 

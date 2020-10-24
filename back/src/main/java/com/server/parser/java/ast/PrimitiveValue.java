@@ -16,7 +16,7 @@ public class PrimitiveValue extends Value {
     }
 
     @Override
-    public String getResolved() {
+    public String toString() {
         return constant.toString();
     }
 }

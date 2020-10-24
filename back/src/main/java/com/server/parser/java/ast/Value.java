@@ -14,6 +14,4 @@ public abstract class Value {
     public Expression getExpression() {
         return expression;
     }
-
-    public abstract String getResolved();
 }
