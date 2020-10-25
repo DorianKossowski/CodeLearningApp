@@ -1,5 +1,6 @@
 package com.server.parser.java.ast.constant;
 
+import com.server.parser.util.EqualityService;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Objects;
@@ -24,6 +25,8 @@ public abstract class Constant<T> {
         }
         throw new ResolvingException("Operacje matematyczne nie są wspierane dla typu " + c2.c.getClass().getSimpleName());
     }
+
+    public abstract BooleanConstant equalsC(Constant<?> constant2, EqualityService.EqualityType type);
 
     @Override
     public String toString() {

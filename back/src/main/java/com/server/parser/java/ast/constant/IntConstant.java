@@ -1,5 +1,6 @@
 package com.server.parser.java.ast.constant;
 
+import com.server.parser.util.EqualityService;
 import com.server.parser.util.NumberOperationService;
 
 import java.util.Objects;
@@ -18,5 +19,10 @@ public class IntConstant extends Constant<Integer> {
     @Override
     protected Constant<?> compute(DoubleConstant c2, String operation) {
         return NumberOperationService.compute(this, c2, operation);
+    }
+
+    @Override
+    public BooleanConstant equalsC(Constant<?> constant2, EqualityService.EqualityType type) {
+        return EqualityService.check(this, constant2, type);
     }
 }
