@@ -1,9 +1,5 @@
 package com.server.parser.java.ast;
 
-import com.server.parser.java.ast.constant.Constant;
-
-public interface Computable {
-    Constant<?> getConstant();
-
+public interface Computable extends ConstantProvider {
     Computable compute(Computable v2, String operation);
 }

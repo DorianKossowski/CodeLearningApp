@@ -3,17 +3,10 @@ package com.server.parser.java.ast;
 import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Literal;
 
-public class ObjectNumberValue extends ObjectValue implements Computable {
-    private final Constant<?> constant;
+public class ObjectNumberValue extends ObjectWrapperValue implements Computable {
 
     public ObjectNumberValue(Literal literal) {
         super(literal);
-        this.constant = literal.getConstant();
-    }
-
-    @Override
-    public Constant<?> getConstant() {
-        return constant;
     }
 
     @Override
