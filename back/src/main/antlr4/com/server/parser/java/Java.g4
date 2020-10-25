@@ -98,6 +98,7 @@ expression
    | expression op=('*' | '/' | '%') expression
    | expression op=('+' | '-') expression
    | expression op=('<' | '<=' | '>' | '>=') expression
+   | expression eq=('==' | '!=') expression
    ;
 
 exprAtom
