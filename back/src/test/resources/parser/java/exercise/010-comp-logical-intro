@@ -1,12 +1,12 @@
 ### TASK ###
 -> statement
-    with text: "boolean b1 = i == i2"
-    with resolved: "boolean b1 = true"
-    log info: "Instrukcja b1 o wartości i == i2"
+    with text: "boolean b1 = i == d"
+    with resolved: "boolean b1 = false"
+    log info: "Instrukcja b1 o wartości i == d"
 -> statement
-    with text: "boolean b2 = i != i2"
-    with resolved: "boolean b2 = false"
-    log info: "Instrukcja b2 o wartości i != i2"
+    with text: "boolean b2 = i != d"
+    with resolved: "boolean b2 = true"
+    log info: "Instrukcja b2 o wartości i != d"
 -> statement
     with text: "boolean b3 = i >= d"
     with resolved: "boolean b3 = false"
@@ -32,11 +32,10 @@
 public class Hello {
     public static void main(String[] args){
         int i = 5;
-        int i2 = 5;
         double d = 10;
 
-        boolean b1 = i == i2;
-        boolean b2 = i != i2;
+        boolean b1 = i == d;
+        boolean b2 = i != d;
         boolean b3 = i >= d;
         boolean b4 = i <= d;
         boolean b5 = i > d;
