@@ -1,41 +1,49 @@
 ### TASK ###
 -> statement
-    with text: "boolean b1 = a == a2"
+    with text: "boolean b1 = i == i2"
     with resolved: "boolean b1 = true"
-    log info: "Instrukcja b1 o wartości a == a2"
+    log info: "Instrukcja b1 o wartości i == i2"
 -> statement
-    with text: "boolean b2 = a != a2"
+    with text: "boolean b2 = i != i2"
     with resolved: "boolean b2 = false"
-    log info: "Instrukcja b2 o wartości a != a2"
+    log info: "Instrukcja b2 o wartości i != i2"
 -> statement
-    with text: "boolean b3 = a >= b"
+    with text: "boolean b3 = i >= d"
     with resolved: "boolean b3 = false"
-    log info: "Instrukcja b3 o wartości a >= b"
+    log info: "Instrukcja b3 o wartości i >= d"
 -> statement
-    with text: "boolean b4 = a <= b"
+    with text: "boolean b4 = i <= d"
     with resolved: "boolean b4 = true"
-    log info: "Instrukcja b4 o wartości a <= b"
+    log info: "Instrukcja b4 o wartości i <= d"
 -> statement
-    with text: "boolean b5 = a > b"
+    with text: "boolean b5 = i > d"
     with resolved: "boolean b5 = false"
-    log info: "Instrukcja b5 o wartości a > b"
+    log info: "Instrukcja b5 o wartości i > d"
 -> statement
-    with text: "boolean b6 = a < b"
+    with text: "boolean b6 = i < d"
     with resolved: "boolean b6 = true"
-    log info: "Instrukcja b6 o wartości a < b"
+    log info: "Instrukcja b6 o wartości i < d"
+-> statement
+    with text: "boolean b7 = iObj1 == iObj2"
+    with resolved: "boolean b7 = false"
+    log info: "Instrukcja b7 o wartości iObj1 == iObj2"
 
 ### INPUT ###
 public class Hello {
     public static void main(String[] args){
-        int a = 5;
-        int a2 = 5;
-        double b = 10;
+        int i = 5;
+        int i2 = 5;
+        double d = 10;
 
-        boolean b1 = a == a2;
-        boolean b2 = a != a2;
-        boolean b3 = a >= b;
-        boolean b4 = a <= b;
-        boolean b5 = a > b;
-        boolean b6 = a < b;
+        boolean b1 = i == i2;
+        boolean b2 = i != i2;
+        boolean b3 = i >= d;
+        boolean b4 = i <= d;
+        boolean b5 = i > d;
+        boolean b6 = i < d;
+
+        Integer iObj1 = 128;
+        Integer iObj2 = 128;
+        boolean b7 = iObj1 == iObj2;
     }
 }
