@@ -32,10 +32,23 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
 
         @Override
         public Expression visitExpression(JavaParser.ExpressionContext ctx) {
+            if (ctx.eq != null) {
+                return getResolvedEqExpr(ctx);
+            }
             if (ctx.op != null) {
                 return getResolvedBinaryNumberExpr(ctx);
             }
             return getResolvedUnaryExpr(ctx);
+        }
+
+        private Expression getResolvedEqExpr(JavaParser.ExpressionContext ctx) {
+            Value v1 = visit(ctx.expression(0)).getValue();
+            Value v2 = visit(ctx.expression(1)).getValue();
+            boolean result = v1.equalsV(v2).c;
+            if (ctx.eq.getText().equals("==")) {
+                return new Literal(new BooleanConstant(result));
+            }
+            return new Literal(new BooleanConstant(!result));
         }
 
         private Expression getResolvedBinaryNumberExpr(JavaParser.ExpressionContext ctx) {
@@ -116,7 +129,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         public Expression visitObjectRefName(JavaParser.ObjectRefNameContext ctx) {
             String text = textVisitor.visit(ctx);
             Variable variable = context.getCurrentMethodContext().getVariable(text);
-            return new ObjectRef(text, variable.getValue().getExpression());
+            return new ObjectRef(text, variable.getValue());
         }
     }
 }
