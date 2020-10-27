@@ -5,7 +5,7 @@ import com.server.parser.java.ast.expression.Expression;
 import java.util.Objects;
 
 public abstract class Value implements EqualityCheckable {
-    //TODO creation expression?
+    //TODO creation expression <- Literal, Constructor?
     protected final Expression expression;
 
     protected Value(Expression expression) {

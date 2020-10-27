@@ -1,6 +1,5 @@
 package com.server.parser.java.ast;
 
-import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.util.EqualityService;
@@ -24,14 +23,14 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
     }
 
     @Override
-    public BooleanConstant equalsV(Value v2) {
+    public boolean equalsV(Value v2) {
         if (v2 instanceof PrimitiveValue) {
             PrimitiveValue primitiveValue = (PrimitiveValue) v2;
-            return constant.equalsC(primitiveValue.getConstant(), EqualityService.EqualityType.PRIMITIVE);
+            return constant.equalsC(primitiveValue.getConstant(), EqualityService.EqualityType.PRIMITIVE).c;
         }
         if (v2 instanceof ObjectWrapperValue) {
             ObjectWrapperValue wrapperValue = (ObjectWrapperValue) v2;
-            return constant.equalsC(wrapperValue.getConstant(), EqualityService.EqualityType.OBJECT);
+            return constant.equalsC(wrapperValue.getConstant(), EqualityService.EqualityType.OBJECT).c;
         }
         throw new UnsupportedOperationException();
     }

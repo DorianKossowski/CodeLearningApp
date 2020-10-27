@@ -1,6 +1,5 @@
 package com.server.parser.java.ast;
 
-import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.expression.Expression;
 
 public class ObjectValue extends Value {
@@ -16,7 +15,7 @@ public class ObjectValue extends Value {
     }
 
     @Override
-    public BooleanConstant equalsV(Value v2) {
-        return new BooleanConstant(expression == v2.expression);
+    public boolean equalsV(Value v2) {
+        return expression == v2.expression;
     }
 }
