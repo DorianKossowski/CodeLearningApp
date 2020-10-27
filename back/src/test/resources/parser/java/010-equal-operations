@@ -1,0 +1,38 @@
+### TASK ###
+-> statement
+    with text: "System.out.print(aPrimitive == aObj)"
+    with resolved: "System.out.print(true)"
+-> statement
+    with text: "System.out.print(aObj == bObj)"
+    with resolved: "System.out.print(false)"
+-> statement
+    with text: "System.out.print(aObj == a2Obj)"
+    with resolved: "System.out.print(true)"
+-> statement
+    with text: "System.out.print(s1 == s2)"
+    with resolved: "System.out.print(false)"
+-> statement
+    with text: "System.out.print(s1 == s3)"
+    with resolved: "System.out.print(true)"
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        int aPrimitive = 128;
+        Integer aObj = 128;
+        Integer bObj = 128;
+        Integer a2Obj = aObj;
+
+        System.out.print(aPrimitive == aObj);   // true
+        System.out.print(aObj == bObj);         // false
+        // System.out.print(aObj.equals(bObj)); // true
+        System.out.print(aObj == a2Obj);        // true
+
+        String s1 = "str";
+        String s2 = "str";
+        String s3 = s1;
+        System.out.print(s1 == s2);             // false
+        //System.out.print(s1.equals(s2));      // true
+        System.out.print(s1 == s3);             // true
+    }
+}

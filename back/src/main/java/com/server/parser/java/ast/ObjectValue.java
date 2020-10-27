@@ -17,6 +17,6 @@ public class ObjectValue extends Value {
 
     @Override
     public BooleanConstant equalsV(Value v2) {
-        throw new UnsupportedOperationException();
+        return new BooleanConstant(expression == v2.expression);
     }
 }
