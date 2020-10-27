@@ -23,6 +23,9 @@ public abstract class Constant<T> {
         if (c2.c instanceof Double) {
             return compute(((DoubleConstant) c2), operation);
         }
+        if (c2.c instanceof Character) {
+            return compute(new IntConstant((int) (Character) c2.c), operation);
+        }
         throw new ResolvingException("Operacje matematyczne nie są wspierane dla typu " + c2.c.getClass().getSimpleName());
     }
 

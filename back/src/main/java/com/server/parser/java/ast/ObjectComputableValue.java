@@ -3,15 +3,20 @@ package com.server.parser.java.ast;
 import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Literal;
 
-public class PrimitiveNumberValue extends PrimitiveValue implements Computable {
+public class ObjectComputableValue extends ObjectWrapperValue implements Computable {
 
-    public PrimitiveNumberValue(Literal literal) {
+    public ObjectComputableValue(Literal literal) {
         super(literal);
     }
 
     @Override
     public Computable compute(Computable v2, String operation) {
         Constant<?> computedConstant = this.constant.compute(v2.getConstant(), operation);
-        return new PrimitiveNumberValue(new Literal(computedConstant));
+        return new ObjectComputableValue(new Literal(computedConstant));
+    }
+
+    @Override
+    public String toString() {
+        return constant.toString();
     }
 }

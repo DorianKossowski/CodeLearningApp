@@ -31,21 +31,21 @@ public class ValuePreparer {
         switch (type) {
             case "char":
                 Preconditions.checkArgument(constant instanceof Character);
-                break;
+                return new PrimitiveComputableValue(literal);
             case "int":
             case "byte":
             case "short":
             case "long":
                 Preconditions.checkArgument(constant instanceof Integer);
-                return new PrimitiveNumberValue(literal);
+                return new PrimitiveComputableValue(literal);
             case "float":
             case "double":
                 if (constant instanceof Double) {
-                    return new PrimitiveNumberValue(literal);
+                    return new PrimitiveComputableValue(literal);
                 }
                 Preconditions.checkArgument(constant instanceof Integer);
                 literal.castFromInt(Double.class);
-                return new PrimitiveNumberValue(literal);
+                return new PrimitiveComputableValue(literal);
             case "boolean":
                 Preconditions.checkArgument(constant instanceof Boolean);
                 break;
@@ -59,30 +59,29 @@ public class ValuePreparer {
         switch (type) {
             case "String":
                 Preconditions.checkArgument(constant instanceof String);
-                break;
+                return new ObjectValue(literal);
             case "Character":
                 Preconditions.checkArgument(constant instanceof Character);
-                break;
+                return new ObjectComputableValue(literal);
             case "Integer":
             case "Byte":
             case "Short":
             case "Long":
                 Preconditions.checkArgument(constant instanceof Integer);
-                return new ObjectNumberValue(literal);
+                return new ObjectComputableValue(literal);
             case "Float":
             case "Double":
                 if (constant instanceof Double) {
-                    return new ObjectNumberValue(literal);
+                    return new ObjectComputableValue(literal);
                 }
                 Preconditions.checkArgument(constant instanceof Integer);
                 literal.castFromInt(Double.class);
-                return new ObjectNumberValue(literal);
+                return new ObjectComputableValue(literal);
             case "Boolean":
                 Preconditions.checkArgument(constant instanceof Boolean);
-                break;
+                return new ObjectWrapperValue(literal);
             default:
                 throw new RuntimeException(String.format("Format %s not supported", type));
         }
-        return new ObjectValue(literal);
     }
 }
