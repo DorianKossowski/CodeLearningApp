@@ -1,0 +1,25 @@
+### TASK ###
+-> statement
+    with text: "System.out.print(b - b2 < 0.0001)"
+    with resolved: "System.out.print(true)"
+-> statement
+    with text: "System.out.print(a != b)"
+    with resolved: "System.out.print(true)"
+-> statement
+    with text: "System.out.print(a2 - 'a' == 0)"
+    with resolved: "System.out.print(true)"
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        int a = 2;
+        Double b = 2.5;
+        Double b2 = b;
+
+        System.out.print(b - b2 < 0.0001);
+        System.out.print(a != b);
+        a = 97;
+        Integer a2 = a;
+        System.out.print(a2 - 'a' == 0);
+    }
+}
