@@ -22,7 +22,7 @@ public class PrimitiveValue extends Value {
     }
 
     @Override
-    public boolean equalsV(Value v2) {
+    public boolean equalsOperator(Value v2) {
         if (v2 instanceof ConstantProvider) {
             ConstantProvider constantProvider = (ConstantProvider) v2;
             return constant.equalsC(constantProvider.getConstant(), EqualityService.EqualityType.PRIMITIVE).c;

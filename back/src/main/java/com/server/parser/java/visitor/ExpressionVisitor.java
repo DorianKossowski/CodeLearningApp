@@ -44,7 +44,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         private Expression getResolvedEqExpr(JavaParser.ExpressionContext ctx) {
             Value v1 = visit(ctx.expression(0)).getValue();
             Value v2 = visit(ctx.expression(1)).getValue();
-            boolean result = v1.equalsV(v2);
+            boolean result = v1.equalsOperator(v2);
             if (ctx.eq.getText().equals("==")) {
                 return new Literal(new BooleanConstant(result));
             }

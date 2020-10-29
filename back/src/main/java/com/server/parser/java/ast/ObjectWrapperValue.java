@@ -23,7 +23,7 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
     }
 
     @Override
-    public boolean equalsV(Value v2) {
+    public boolean equalsOperator(Value v2) {
         if (v2 instanceof PrimitiveValue) {
             PrimitiveValue primitiveValue = (PrimitiveValue) v2;
             return constant.equalsC(primitiveValue.getConstant(), EqualityService.EqualityType.PRIMITIVE).c;
