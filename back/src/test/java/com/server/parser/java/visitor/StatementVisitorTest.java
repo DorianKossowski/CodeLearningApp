@@ -49,6 +49,19 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     }
 
     @Test
+    void shouldVisitMethodCallWithoutArgs() {
+        String input = "System.out.print()";
+        JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
+
+        MethodCall methodCall = (MethodCall) visitor.visit(c, context);
+
+        assertThat(methodCall.getText()).isEqualTo(input);
+        assertThat(methodCall.printMethodName()).isEqualTo(METHOD_NAME);
+        assertThat(methodCall.getName()).isEqualTo("System.out.print");
+        assertThat(methodCall.getArgs()).isEmpty();
+    }
+
+    @Test
     void shouldGetCorrectMethodCallValue() {
         methodContext.addVar(createStringVariable("var"));
         String input = "System.out.print(\"literal\", var)";

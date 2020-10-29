@@ -86,7 +86,7 @@ varModifier
     ;
 
 call
-    : callName '(' callArguments ')'
+    : callName '(' callArguments? ')'
     ;
 
 callName
@@ -113,6 +113,7 @@ expression
 
 exprAtom
     :  LPAREN expression RPAREN
+    | call
     | objectRefName
     | literal
     ;
