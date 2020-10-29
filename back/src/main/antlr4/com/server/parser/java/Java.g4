@@ -64,7 +64,7 @@ methodBody
     ;
 
 methodStatement
-    : methodCall
+    : call
     | methodVarDec
     | assignment
     ;
@@ -85,8 +85,18 @@ varModifier
     : 'final'
     ;
 
-methodCall
-    : methodName '(' callArguments ')'
+call
+    : callName '(' callArguments ')'
+    ;
+
+callName
+    : firstSeg=identifier ( '.' secSeg=identifier )?
+    | specialCallName
+    ;
+
+specialCallName
+    : 'System.out.print'
+    | 'System.out.println'
     ;
 
 callArguments
@@ -118,10 +128,6 @@ literal
     | INTEGER_LITERAL
     | FLOAT_LITERAL
     | BOOLEAN_LITERAL
-    ;
-
-methodName
-    : identifier ( '.' identifier )*
     ;
 
 methodResult

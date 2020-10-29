@@ -111,7 +111,7 @@ public class JavaParserTest {
 
     @Test
     void shouldParseMethodName() {
-        HELPER.shouldParseToEof("a.b", JavaParser::methodName);
+        HELPER.shouldParseToEof("a.b", JavaParser::callName);
     }
 
     @ParameterizedTest
@@ -122,7 +122,7 @@ public class JavaParserTest {
 
     @Test
     void shouldParseMethodCall() {
-        HELPER.shouldParseToEof("System.out.print(\"Hello World\")", JavaParser::methodCall);
+        HELPER.shouldParseToEof("System.out.print(\"Hello World\")", JavaParser::call);
     }
 
     @Test
