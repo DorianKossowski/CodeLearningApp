@@ -29,6 +29,7 @@ public abstract class Constant<T> {
         throw new ResolvingException("Operacje matematyczne nie są wspierane dla typu " + c2.c.getClass().getSimpleName());
     }
 
+    //TODO boolean
     public abstract BooleanConstant equalsC(Constant<?> constant2, EqualityService.EqualityType type);
 
     @Override

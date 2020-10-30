@@ -28,6 +28,7 @@ public class PrimitiveValue extends Value {
             ConstantProvider constantProvider = (ConstantProvider) v2;
             return constant.equalsC(constantProvider.getConstant(), EqualityService.EqualityType.PRIMITIVE).c;
         }
+        //TODO
         throw new UnsupportedOperationException();
     }
 
