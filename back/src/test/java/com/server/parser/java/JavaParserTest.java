@@ -154,7 +154,8 @@ public class JavaParserTest {
     @ValueSource(strings = {"\"abc\"", "a", "a.b", "'a'",
             "(a+b)", "1 * a", "1 / a", "-5", "1 % a",
             "a>b", "a>=b", "a<b", "a<=b", "a==b", "a!=b",
-            "f()", "a.f(1)", "f(1,2)"
+            "f()", "a.f(1)", "f(1,2)",
+            "a&&b"
     })
     void shouldParseExpression(String literal) {
         HELPER.shouldParseToEof(literal, JavaParser::expression);
