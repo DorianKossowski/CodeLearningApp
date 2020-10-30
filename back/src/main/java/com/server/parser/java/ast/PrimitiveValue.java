@@ -46,4 +46,13 @@ public class PrimitiveValue extends Value implements ConstantProvider {
         }
         throw new ResolvingException("Nie można wykonać operacji &&");
     }
+
+    @Override
+    public boolean or(Value v2) {
+        if (v2 instanceof ConstantProvider) {
+            ConstantProvider constantProvider = (ConstantProvider) v2;
+            return constant.or(constantProvider.getConstant());
+        }
+        throw new ResolvingException("Nie można wykonać operacji ||");
+    }
 }

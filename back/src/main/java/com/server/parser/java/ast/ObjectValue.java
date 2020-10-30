@@ -29,4 +29,9 @@ public class ObjectValue extends Value {
     public boolean and(Value v2) {
         throw new ResolvingException("Nie można wykonać operacji &&");
     }
+
+    @Override
+    public boolean or(Value v2) {
+        throw new ResolvingException("Nie można wykonać operacji ||");
+    }
 }
