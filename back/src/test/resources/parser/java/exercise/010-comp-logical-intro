@@ -27,6 +27,10 @@
     with text: "boolean b7 = iObj1 == iObj2"
     with resolved: "boolean b7 = false"
     log info: "Instrukcja b7 o wartości iObj1 == iObj2"
+-> statement
+    with text: "boolean b8 = iObj1.equals(iObj2)"
+    with resolved: "boolean b8 = true"
+    log info: "Instrukcja b8 o wartości iObj1.equals(iObj2)"
 
 ### INPUT ###
 public class Hello {
@@ -34,15 +38,16 @@ public class Hello {
         int i = 5;
         double d = 10;
 
-        boolean b1 = i == d;
-        boolean b2 = i != d;
-        boolean b3 = i >= d;
-        boolean b4 = i <= d;
-        boolean b5 = i > d;
-        boolean b6 = i < d;
+        boolean b1 = i == d;    // false
+        boolean b2 = i != d;    // true
+        boolean b3 = i >= d;    // false
+        boolean b4 = i <= d;    // true
+        boolean b5 = i > d;     // false
+        boolean b6 = i < d;     // true
 
         Integer iObj1 = 128;
         Integer iObj2 = 128;
-        boolean b7 = iObj1 == iObj2;
+        boolean b7 = iObj1 == iObj2;        // false
+        boolean b8 = iObj1.equals(iObj2);   // true
     }
 }

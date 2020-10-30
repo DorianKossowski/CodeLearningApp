@@ -1,7 +1,7 @@
 package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.PrimitiveValue;
+import com.server.parser.java.ast.ObjectWrapperValue;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
@@ -63,7 +63,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldVisitObjectRefExpression() {
         MethodContext methodContext = context.createCurrentMethodContext("");
-        methodContext.addVar(createVariable());
+        methodContext.addVar(createVariable("x"));
         String input = "x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
@@ -74,10 +74,10 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
         assertThat(expression.getConstant().c).isEqualTo("value");
     }
 
-    private Variable createVariable() {
+    private Variable createVariable(String name) {
         StringConstant stringConstant = new StringConstant("value");
-        PrimitiveValue value = new PrimitiveValue(new Literal(stringConstant));
-        return new Variable("String", "x", value);
+        ObjectWrapperValue value = new ObjectWrapperValue(new Literal(stringConstant));
+        return new Variable("String", name, value);
     }
 
     @Test
@@ -94,12 +94,27 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldThrowWhenInvalidExpressionType() {
         MethodContext methodContext = context.createCurrentMethodContext("");
-        methodContext.addVar(createVariable());
+        methodContext.addVar(createVariable("x"));
         String input = "-x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
         assertThatThrownBy(() -> visitor.visit(c, context))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Operacja niedostępna dla typu String");
+    }
+
+    @Test
+    void shouldVisitEqualsCall() {
+        MethodContext methodContext = context.createCurrentMethodContext("");
+        methodContext.addVar(createVariable("x"));
+        methodContext.addVar(createVariable("x2"));
+        String input = "x.equals(x2)";
+        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
+
+        Expression expression = visitor.visit(c, context);
+
+        assertThat(expression).isExactlyInstanceOf(Literal.class);
+        assertThat(expression.getText()).isEqualTo("true");
+        assertThat(expression.getConstant().c).isEqualTo(true);
     }
 }

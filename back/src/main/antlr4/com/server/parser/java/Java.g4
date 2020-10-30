@@ -100,7 +100,7 @@ specialCallName
     ;
 
 callArguments
-    : e1=expression ( ',' e2=expression )*
+    : expression ( ',' expression )*
     ;
 
 expression

@@ -1,5 +1,6 @@
 package com.server.parser.java.visitor;
 
+import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
@@ -97,9 +98,37 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
             if (ctx.objectRefName() != null) {
                 return visit(ctx.objectRefName());
             }
+            if (ctx.call() != null) {
+                return visit(ctx.call());
+            }
             throw new UnsupportedOperationException();
         }
 
+        //*** CALL ***//
+        @Override
+        public Expression visitCall(JavaParser.CallContext ctx) {
+            if (isSpecificEqualsMethod(ctx)) {
+                return visitEqualsMethod(ctx);
+            }
+            throw new UnsupportedOperationException();
+        }
+
+        private boolean isSpecificEqualsMethod(JavaParser.CallContext ctx) {
+            JavaParser.CallNameContext callNameContext = ctx.callName();
+            JavaParser.CallArgumentsContext callArgumentsContext = ctx.callArguments();
+            return callNameContext.secSeg != null && callNameContext.secSeg.getText().equals("equals") &&
+                    callArgumentsContext != null && callArgumentsContext.expression().size() == 1;
+        }
+
+        private Expression visitEqualsMethod(JavaParser.CallContext ctx) {
+            JavaParser.CallArgumentsContext callArgumentsContext = ctx.callArguments();
+            Value value = context.getCurrentMethodContext().getVariable(ctx.callName().firstSeg.getText()).getValue();
+            Value valueToCompare = context.getVisitor(Expression.class)
+                    .visit(Iterables.getOnlyElement(callArgumentsContext.expression()), context).getValue();
+            return new Literal(new BooleanConstant(value.equalsMethod(valueToCompare)));
+        }
+
+        //*** LITERAL **//
         @Override
         public Expression visitLiteral(JavaParser.LiteralContext ctx) {
             if (ctx.STRING_LITERAL() != null) {
@@ -125,6 +154,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
             throw new UnsupportedOperationException("Provided literal is not supported");
         }
 
+        //*** OBJECT REF ***//
         @Override
         public Expression visitObjectRefName(JavaParser.ObjectRefNameContext ctx) {
             String text = textVisitor.visit(ctx);
