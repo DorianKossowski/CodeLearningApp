@@ -1,0 +1,26 @@
+### TASK ###
+-> statement
+    with text: "System.out.print(b && bObj)"
+    with resolved: "System.out.print(false)"
+-> statement
+    with text: "System.out.print(b && true)"
+    with resolved: "System.out.print(false)"
+-> statement
+    with text: "System.out.print(bObj && true)"
+    with resolved: "System.out.print(true)"
+-> statement
+    with text: "System.out.print(1+1>1 && bObj)"
+    with resolved: "System.out.print(true)"
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        boolean b = false;
+        Boolean bObj = true;
+
+        System.out.print(b && bObj);
+        System.out.print(b && true);
+        System.out.print(bObj && true);
+        System.out.print(1+1>1 && bObj);
+    }
+}

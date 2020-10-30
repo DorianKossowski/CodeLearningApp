@@ -33,6 +33,9 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
 
         @Override
         public Expression visitExpression(JavaParser.ExpressionContext ctx) {
+            if (ctx.andOp != null) {
+                return getResolvedAndExpr(ctx);
+            }
             if (ctx.eq != null) {
                 return getResolvedEqExpr(ctx);
             }
@@ -40,6 +43,12 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
                 return getResolvedBinaryNumberExpr(ctx);
             }
             return getResolvedUnaryExpr(ctx);
+        }
+
+        private Expression getResolvedAndExpr(JavaParser.ExpressionContext ctx) {
+            Value v1 = visit(ctx.expression(0)).getValue();
+            Value v2 = visit(ctx.expression(1)).getValue();
+            return new Literal(new BooleanConstant(v1.and(v2)));
         }
 
         private Expression getResolvedEqExpr(JavaParser.ExpressionContext ctx) {

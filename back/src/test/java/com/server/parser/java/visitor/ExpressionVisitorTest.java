@@ -117,4 +117,16 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
         assertThat(expression.getText()).isEqualTo("true");
         assertThat(expression.getConstant().c).isEqualTo(true);
     }
+
+    @Test
+    void shouldVisitAnd() {
+        String input = "true && false";
+        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
+
+        Expression expression = visitor.visit(c, context);
+
+        assertThat(expression).isExactlyInstanceOf(Literal.class);
+        assertThat(expression.getText()).isEqualTo("false");
+        assertThat(expression.getConstant().c).isEqualTo(false);
+    }
 }
