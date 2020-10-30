@@ -32,9 +32,13 @@
     with resolved: "boolean b8 = true"
     log info: "Instrukcja b8 o wartości iObj1.equals(iObj2)"
 -> statement
-    with text: "boolean b9 = i < d && true"
-    with resolved: "boolean b9 = true"
-    log info: "Instrukcja b9 o wartości i < d && true"
+    with text: "boolean b9 = i < d && false"
+    with resolved: "boolean b9 = false"
+    log info: "Instrukcja b9 o wartości i < d && false"
+-> statement
+    with text: "boolean b10 = i < d || false"
+    with resolved: "boolean b10 = true"
+    log info: "Instrukcja b10 o wartości i < d || true"
 
 ### INPUT ###
 public class Hello {
@@ -54,6 +58,7 @@ public class Hello {
         boolean b7 = iObj1 == iObj2;        // false
         boolean b8 = iObj1.equals(iObj2);   // true
 
-        boolean b9 = i < d && true;         // true
+        boolean b9 = i < d && false;         // false
+        boolean b10 = i < d || false;        // true
     }
 }

@@ -11,6 +11,12 @@
 -> statement
     with text: "System.out.print(1+1>1 && bObj)"
     with resolved: "System.out.print(true)"
+-> statement
+    with text: "System.out.print(b || bObj)"
+    with resolved: "System.out.print(true)"
+-> statement
+    with text: "System.out.print(b || false == b)"
+    with resolved: "System.out.print(true)"
 
 ### INPUT ###
 public class MyClass {
@@ -22,5 +28,8 @@ public class MyClass {
         System.out.print(b && true);
         System.out.print(bObj && true);
         System.out.print(1+1>1 && bObj);
+
+        System.out.print(b || bObj);
+        System.out.print(b || false == b);
     }
 }
