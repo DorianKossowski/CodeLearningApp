@@ -59,7 +59,7 @@ public class ValuePreparer {
         switch (type) {
             case "String":
                 Preconditions.checkArgument(constant instanceof String);
-                return new ObjectValue(literal);
+                return new ObjectWrapperValue(literal);
             case "Character":
                 Preconditions.checkArgument(constant instanceof Character);
                 return new ObjectComputableValue(literal);

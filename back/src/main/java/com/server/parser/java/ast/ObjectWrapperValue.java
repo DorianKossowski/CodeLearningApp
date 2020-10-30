@@ -34,4 +34,12 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
         }
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public boolean equalsMethod(Value v2) {
+        if (v2 instanceof ConstantProvider) {
+            return constant.c.equals(((ConstantProvider) v2).getConstant().c);
+        }
+        return false;
+    }
 }

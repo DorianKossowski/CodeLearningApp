@@ -3,6 +3,7 @@ package com.server.parser.java.ast;
 import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.util.EqualityService;
+import com.server.parser.util.exception.ResolvingException;
 
 public class PrimitiveValue extends Value {
     protected final Constant<?> constant;
@@ -28,5 +29,10 @@ public class PrimitiveValue extends Value {
             return constant.equalsC(constantProvider.getConstant(), EqualityService.EqualityType.PRIMITIVE).c;
         }
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean equalsMethod(Value v2) {
+        throw new ResolvingException("Nie można wywołać metody equals na prymitywie");
     }
 }

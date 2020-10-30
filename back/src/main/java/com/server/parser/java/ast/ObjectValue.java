@@ -18,4 +18,9 @@ public class ObjectValue extends Value {
     public boolean equalsOperator(Value v2) {
         return expression == v2.expression;
     }
+
+    @Override
+    public boolean equalsMethod(Value v2) {
+        return expression == v2.expression;
+    }
 }
