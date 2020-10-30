@@ -25,4 +25,12 @@ public class BooleanConstant extends Constant<Boolean> {
     public BooleanConstant equalsC(Constant<?> constant2, EqualityService.EqualityType type) {
         return EqualityService.check(this, constant2, type);
     }
+
+    @Override
+    public boolean and(Constant<?> constant2) {
+        if (constant2.c instanceof Boolean) {
+            return c && (Boolean) constant2.c;
+        }
+        throw new ResolvingException("Nie można użyć operatora && dla typu " + constant2.c.getClass().getSimpleName());
+    }
 }

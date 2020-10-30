@@ -32,6 +32,10 @@ public abstract class Constant<T> {
     //TODO boolean
     public abstract BooleanConstant equalsC(Constant<?> constant2, EqualityService.EqualityType type);
 
+    public boolean and(Constant<?> constant2) {
+        throw new ResolvingException("Nie można użyć operatora && dla typu " + c.getClass().getSimpleName());
+    }
+
     @Override
     public String toString() {
         return c.toString();

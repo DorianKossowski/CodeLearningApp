@@ -1,8 +1,10 @@
 package com.server.parser.java.ast.constant;
 
+import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ConstantTest {
 
@@ -26,5 +28,33 @@ class ConstantTest {
 
         assertThat(result).isExactlyInstanceOf(DoubleConstant.class);
         assertThat(result.c).isEqualTo(0.0);
+    }
+
+    @Test
+    void shouldAndWhenBoolean() {
+        BooleanConstant b1 = new BooleanConstant(true);
+        BooleanConstant b2 = new BooleanConstant(true);
+
+        assertThat(b1.and(b2)).isTrue();
+    }
+
+    @Test
+    void shouldThrowWhenBooleanAndString() {
+        BooleanConstant b = new BooleanConstant(true);
+        StringConstant s = new StringConstant("true");
+
+        assertThatThrownBy(() -> b.and(s))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można użyć operatora && dla typu String");
+    }
+
+    @Test
+    void shouldThrowWhenIntAndBoolean() {
+        IntConstant i = new IntConstant(1);
+        BooleanConstant b = new BooleanConstant(true);
+
+        assertThatThrownBy(() -> i.and(b))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można użyć operatora && dla typu Integer");
     }
 }
