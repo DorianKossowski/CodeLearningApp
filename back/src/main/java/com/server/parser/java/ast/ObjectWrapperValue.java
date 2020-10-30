@@ -3,6 +3,7 @@ package com.server.parser.java.ast;
 import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.util.EqualityService;
+import com.server.parser.util.exception.ResolvingException;
 
 public class ObjectWrapperValue extends ObjectValue implements ConstantProvider {
     protected final Constant<?> constant;
@@ -41,5 +42,14 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
             return constant.c.equals(((ConstantProvider) v2).getConstant().c);
         }
         return false;
+    }
+
+    @Override
+    public boolean and(Value v2) {
+        if (v2 instanceof ConstantProvider) {
+            ConstantProvider constantProvider = (ConstantProvider) v2;
+            return constant.and(constantProvider.getConstant());
+        }
+        throw new ResolvingException("Nie można wykonać operacji &&");
     }
 }

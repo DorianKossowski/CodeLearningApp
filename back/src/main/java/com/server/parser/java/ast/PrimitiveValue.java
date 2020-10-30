@@ -5,7 +5,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.util.EqualityService;
 import com.server.parser.util.exception.ResolvingException;
 
-public class PrimitiveValue extends Value {
+public class PrimitiveValue extends Value implements ConstantProvider {
     protected final Constant<?> constant;
 
     public PrimitiveValue(Expression expression) {
@@ -13,6 +13,7 @@ public class PrimitiveValue extends Value {
         this.constant = expression.getConstant();
     }
 
+    @Override
     public Constant<?> getConstant() {
         return constant;
     }
@@ -35,5 +36,14 @@ public class PrimitiveValue extends Value {
     @Override
     public boolean equalsMethod(Value v2) {
         throw new ResolvingException("Nie można wywołać metody equals na prymitywie");
+    }
+
+    @Override
+    public boolean and(Value v2) {
+        if (v2 instanceof ConstantProvider) {
+            ConstantProvider constantProvider = (ConstantProvider) v2;
+            return constant.and(constantProvider.getConstant());
+        }
+        throw new ResolvingException("Nie można wykonać operacji &&");
     }
 }
