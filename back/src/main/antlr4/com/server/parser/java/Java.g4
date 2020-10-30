@@ -110,6 +110,7 @@ expression
    | expression op=('<' | '<=' | '>' | '>=') expression
    | expression eq=('==' | '!=') expression
    | expression andOp='&&' expression
+   | expression orOp='||' expression
    ;
 
 exprAtom
