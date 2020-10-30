@@ -33,4 +33,12 @@ public class BooleanConstant extends Constant<Boolean> {
         }
         throw new ResolvingException("Nie można użyć operatora && dla typu " + constant2.c.getClass().getSimpleName());
     }
+
+    @Override
+    public boolean or(Constant<?> constant2) {
+        if (constant2.c instanceof Boolean) {
+            return c || (Boolean) constant2.c;
+        }
+        throw new ResolvingException("Nie można użyć operatora || dla typu " + constant2.c.getClass().getSimpleName());
+    }
 }

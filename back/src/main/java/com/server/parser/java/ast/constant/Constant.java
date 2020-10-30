@@ -36,6 +36,10 @@ public abstract class Constant<T> {
         throw new ResolvingException("Nie można użyć operatora && dla typu " + c.getClass().getSimpleName());
     }
 
+    public boolean or(Constant<?> constant2) {
+        throw new ResolvingException("Nie można użyć operatora || dla typu " + c.getClass().getSimpleName());
+    }
+
     @Override
     public String toString() {
         return c.toString();

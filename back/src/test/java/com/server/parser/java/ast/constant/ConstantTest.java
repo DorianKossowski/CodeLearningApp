@@ -57,4 +57,13 @@ class ConstantTest {
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Nie można użyć operatora && dla typu Integer");
     }
+
+
+    @Test
+    void shouldOrWhenBoolean() {
+        BooleanConstant b1 = new BooleanConstant(true);
+        BooleanConstant b2 = new BooleanConstant(false);
+
+        assertThat(b1.or(b2)).isTrue();
+    }
 }
