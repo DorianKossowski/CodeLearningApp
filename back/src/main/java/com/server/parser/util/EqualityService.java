@@ -3,7 +3,6 @@ package com.server.parser.util;
 import com.server.parser.java.ast.constant.*;
 import com.server.parser.util.exception.ResolvingException;
 
-import java.util.*;
 import java.util.function.BiFunction;
 
 // ONLY == operator
@@ -12,71 +11,87 @@ public class EqualityService {
         PRIMITIVE, OBJECT
     }
 
-    private static final Map<EqualityType, BiFunction<Object, Object, Boolean>> typeToOperation = new HashMap<>();
-
-    static {
-        typeToOperation.put(EqualityType.PRIMITIVE, Object::equals);
-        typeToOperation.put(EqualityType.OBJECT, (c1, c2) -> c1 == c2);
-    }
+    private static final BiFunction<Object, Object, Boolean> OBJECT_EQUAL = (c1, c2) -> c1 == c2;
 
     public static BooleanConstant check(BooleanConstant constant1, Constant<?> constant2, EqualityType type) {
-        if (isValidChecking(constant2, Collections.singletonList(BooleanConstant.class))) {
-            return new BooleanConstant(typeToOperation.get(type).apply(constant1.c, constant2.c));
+        if (constant2 instanceof BooleanConstant) {
+            if (type == EqualityType.PRIMITIVE) {
+                return new BooleanConstant(constant1.c.booleanValue() == ((Boolean) constant2.c));
+            }
+            return new BooleanConstant(OBJECT_EQUAL.apply(constant1.c, constant2.c));
         }
         throw new ResolvingException("Nie można porównać typu logicznego z " + constant2.c.getClass().getSimpleName());
     }
 
     public static BooleanConstant check(CharacterConstant constant1, Constant<?> constant2, EqualityType type) {
-        List<Class<? extends Constant<?>>> possibleConstantTypes;
+        Object c2 = constant2.c;
         if (type == EqualityType.PRIMITIVE) {
-            possibleConstantTypes = Arrays.asList(CharacterConstant.class, IntConstant.class, DoubleConstant.class);
-        } else {
-            possibleConstantTypes = Collections.singletonList(CharacterConstant.class);
-        }
-        if (isValidChecking(constant2, possibleConstantTypes)) {
-            return new BooleanConstant(typeToOperation.get(type).apply(constant1.c, constant2.c));
-        }
-        throw new ResolvingException("Nie można porównać typu znakowego z " + constant2.c.getClass().getSimpleName());
-    }
-
-    private static boolean isValidChecking(Constant<?> constant2, List<Class<? extends Constant<?>>> possibleConstantTypes) {
-        for (Class<? extends Constant<?>> type : possibleConstantTypes) {
-            if (constant2.getClass() == type) {
-                return true;
+            char charValue = constant1.c;
+            boolean result;
+            if (c2 instanceof Character) {
+                result = charValue == (Character) c2;
+            } else if (c2 instanceof Integer) {
+                result = charValue == (Integer) c2;
+            } else if (c2 instanceof Double) {
+                result = charValue == (Double) c2;
+            } else {
+                throw new ResolvingException("Nie można porównać typu znakowego z " + c2.getClass().getSimpleName());
             }
+            return new BooleanConstant(result);
         }
-        return false;
+        if (constant2 instanceof CharacterConstant) {
+            return new BooleanConstant(OBJECT_EQUAL.apply(constant1.c, c2));
+        }
+        throw new ResolvingException("Nie można porównać typu znakowego z " + c2.getClass().getSimpleName());
     }
 
     public static BooleanConstant check(DoubleConstant constant1, Constant<?> constant2, EqualityType type) {
-        List<Class<? extends Constant<?>>> possibleConstantTypes;
+        Object c2 = constant2.c;
         if (type == EqualityType.PRIMITIVE) {
-            possibleConstantTypes = Arrays.asList(DoubleConstant.class, IntConstant.class, CharacterConstant.class);
-        } else {
-            possibleConstantTypes = Collections.singletonList(DoubleConstant.class);
+            double doubleValue = constant1.c;
+            boolean result;
+            if (c2 instanceof Character) {
+                result = doubleValue == (Character) c2;
+            } else if (c2 instanceof Integer) {
+                result = doubleValue == (Integer) c2;
+            } else if (c2 instanceof Double) {
+                result = doubleValue == (Double) c2;
+            } else {
+                throw new ResolvingException("Nie można porównać typu dziesiętnego z " + c2.getClass().getSimpleName());
+            }
+            return new BooleanConstant(result);
         }
-        if (isValidChecking(constant2, possibleConstantTypes)) {
-            return new BooleanConstant(typeToOperation.get(type).apply(constant1.c, constant2.c));
+        if (constant2 instanceof DoubleConstant) {
+            return new BooleanConstant(OBJECT_EQUAL.apply(constant1.c, c2));
         }
         throw new ResolvingException("Nie można porównać typu dziesiętnego z " + constant2.c.getClass().getSimpleName());
     }
 
     public static BooleanConstant check(IntConstant constant1, Constant<?> constant2, EqualityType type) {
-        List<Class<? extends Constant<?>>> possibleConstantTypes;
+        Object c2 = constant2.c;
         if (type == EqualityType.PRIMITIVE) {
-            possibleConstantTypes = Arrays.asList(IntConstant.class, DoubleConstant.class, CharacterConstant.class);
-        } else {
-            possibleConstantTypes = Collections.singletonList(IntConstant.class);
+            int intValue = constant1.c;
+            boolean result;
+            if (c2 instanceof Character) {
+                result = intValue == (Character) c2;
+            } else if (c2 instanceof Integer) {
+                result = intValue == (Integer) c2;
+            } else if (c2 instanceof Double) {
+                result = intValue == (Double) c2;
+            } else {
+                throw new ResolvingException("Nie można porównać typu całkowitego z " + c2.getClass().getSimpleName());
+            }
+            return new BooleanConstant(result);
         }
-        if (isValidChecking(constant2, possibleConstantTypes)) {
-            return new BooleanConstant(typeToOperation.get(type).apply(constant1.c, constant2.c));
+        if (constant2 instanceof IntConstant) {
+            return new BooleanConstant(OBJECT_EQUAL.apply(constant1.c, c2));
         }
         throw new ResolvingException("Nie można porównać typu całkowitego z " + constant2.c.getClass().getSimpleName());
     }
 
-    public static BooleanConstant check(StringConstant constant1, Constant<?> constant2, EqualityType type) {
-        if (isValidChecking(constant2, Collections.singletonList(StringConstant.class))) {
-            return new BooleanConstant(typeToOperation.get(type).apply(constant1.c, constant2.c));
+    public static BooleanConstant check(StringConstant constant1, Constant<?> constant2) {
+        if (constant2 instanceof StringConstant) {
+            return new BooleanConstant(OBJECT_EQUAL.apply(constant1.c, constant2.c));
         }
         throw new ResolvingException("Nie można porównać typu String z " + constant2.c.getClass().getSimpleName());
     }

@@ -1,7 +1,9 @@
 package com.server.parser.util;
 
 import com.server.parser.java.ast.constant.BooleanConstant;
+import com.server.parser.java.ast.constant.CharacterConstant;
 import com.server.parser.java.ast.constant.IntConstant;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,5 +30,15 @@ class EqualityServiceTest {
         BooleanConstant result = EqualityService.check(constant1, constant2, type);
 
         assertThat(result.c).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void shouldCheckDifferentPrimitiveTypes() {
+        IntConstant constant1 = new IntConstant(97);
+        CharacterConstant constant2 = new CharacterConstant('a');
+
+        BooleanConstant result = EqualityService.check(constant1, constant2, EqualityService.EqualityType.PRIMITIVE);
+
+        assertThat(result.c).isEqualTo(true);
     }
 }
