@@ -9,7 +9,16 @@ rules
     ;
 
 singleRule
-    : ARROW ( methodRule | statementRule )
+    : ARROW ( methodRule | statementRule | variableRule )
+    ;
+
+variableRule
+    : 'variable' variableRuleSpec+
+    ;
+
+variableRuleSpec
+    : WITH statementTextRuleSpec
+    | logInfo
     ;
 
 statementRule

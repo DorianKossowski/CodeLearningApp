@@ -33,4 +33,13 @@ public class JavaTaskParserTest {
     void shouldParseStatementRule(String input) {
         HELPER.shouldParseToEof(input, JavaTaskParser::statementRule);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "variable with text: \"v\"",
+            "variable log info: \"v\""
+    })
+    void shouldParseVariableRule(String input) {
+        HELPER.shouldParseToEof(input, JavaTaskParser::variableRule);
+    }
 }
