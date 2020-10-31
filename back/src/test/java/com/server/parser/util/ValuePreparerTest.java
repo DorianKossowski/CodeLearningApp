@@ -87,4 +87,13 @@ class ValuePreparerTest {
         assertThat(resolved).isExactlyInstanceOf(CharacterConstant.class);
         assertThat(resolved.c).isEqualTo('L');
     }
+
+    @Test
+    void shouldPreparePrimitive() {
+        Literal l = new Literal(new CharacterConstant('L'));
+
+        PrimitiveValue value = ValuePreparer.preparePrimitive("Character", l);
+
+        assertThat(value.getConstant().c).isEqualTo('L');
+    }
 }

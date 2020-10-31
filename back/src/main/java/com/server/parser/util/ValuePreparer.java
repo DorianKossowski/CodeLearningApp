@@ -55,7 +55,7 @@ public class ValuePreparer {
         return new PrimitiveValue(literal);
     }
 
-    private static Value prepareFromObjectLiteral(String type, Literal literal, Object constant) {
+    private static ObjectValue prepareFromObjectLiteral(String type, Literal literal, Object constant) {
         switch (type) {
             case "String":
                 Preconditions.checkArgument(constant instanceof String);
@@ -83,5 +83,16 @@ public class ValuePreparer {
             default:
                 throw new RuntimeException(String.format("Format %s not supported", type));
         }
+    }
+
+    public static PrimitiveValue preparePrimitive(String type, Literal literal) {
+        ObjectValue value = prepareFromObjectLiteral(type, literal, literal.getConstant().c);
+        if (value instanceof ObjectComputableValue) {
+            return new PrimitiveComputableValue(value.getExpression().getLiteral());
+        }
+        if (value instanceof ObjectWrapperValue) {
+            return new PrimitiveValue(value.getExpression());
+        }
+        throw new UnsupportedOperationException();
     }
 }

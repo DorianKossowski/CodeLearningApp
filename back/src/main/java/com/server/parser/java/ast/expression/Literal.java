@@ -32,7 +32,7 @@ public class Literal extends Expression {
 
     @Override
     public Value getValue() {
-        return ValuePreparer.prepare(constant.c.getClass().getSimpleName(), this);
+        return ValuePreparer.preparePrimitive(constant.c.getClass().getSimpleName(), this);
     }
 
     @Override
