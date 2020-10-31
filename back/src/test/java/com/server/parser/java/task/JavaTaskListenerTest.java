@@ -6,6 +6,7 @@ import com.server.parser.java.JavaTaskParser;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
 import com.server.parser.java.task.model.StatementModel;
+import com.server.parser.java.task.model.VariableModel;
 import com.server.parser.java.task.verifier.TaskVerifier;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,5 +79,25 @@ class JavaTaskListenerTest {
         WALKER.walk(listener, c);
 
         verify(verifier).verifyStatement(model);
+    }
+
+
+    static Stream<Arguments> variableSource() {
+        return Stream.of(
+                Arguments.of("Variable with text", "variable with text: \"t\"",
+                        VariableModel.builder().withText("t").build()),
+                Arguments.of("Variable log info", "variable log info: \"t\"",
+                        VariableModel.builder().withLogInfo("t").build())
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("variableSource")
+    void shouldVerifyVariable(@SuppressWarnings("unused") String name, String input, VariableModel model) {
+        JavaTaskParser.VariableRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::variableRule);
+
+        WALKER.walk(listener, c);
+
+        verify(verifier).verifyVariable(model);
     }
 }

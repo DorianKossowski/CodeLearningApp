@@ -5,6 +5,7 @@ import HomeIntroduction from './HomeIntroduction';
 import HomeVarsAndTypes from './HomeVarsAndTypes';
 
 import './home.css';
+import HomeCompAndLogic from './HomeCompAndLogic';
 
 class Home extends Component {
 
@@ -14,6 +15,7 @@ class Home extends Component {
                 <h2>Kurs programowania JAVA</h2>
                 <HomeIntroduction />
                 <HomeVarsAndTypes />
+                <HomeCompAndLogic />
             </Container>
         );
     }

@@ -5,6 +5,7 @@ import com.server.parser.java.JavaTaskParser;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
 import com.server.parser.java.task.model.StatementModel;
+import com.server.parser.java.task.model.VariableModel;
 import com.server.parser.java.task.verifier.TaskVerifier;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     private MethodModel.Builder methodBuilder;
     private StatementModel.Builder statementBuilder;
+    private VariableModel.Builder variableBuilder;
 
     public JavaTaskListener(TaskVerifier taskVerifier) {
         this.taskVerifier = Objects.requireNonNull(taskVerifier, "taskVerifier cannot be null");
@@ -77,9 +79,14 @@ public class JavaTaskListener extends JavaTaskBaseListener {
         JavaTaskGrammarHelper.extractValue(ctx.valueOrEmpty()).ifPresent(value -> statementBuilder.withMethod(value));
     }
 
+    //TODO rename to TextRuleSpec
     @Override
     public void enterStatementTextRuleSpec(JavaTaskParser.StatementTextRuleSpecContext ctx) {
-        statementBuilder.withText(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        if (ctx.parent instanceof JavaTaskParser.StatementRuleSpecContext) {
+            statementBuilder.withText(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        } else if (ctx.parent instanceof JavaTaskParser.VariableRuleSpecContext) {
+            variableBuilder.withText(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        }
     }
 
     @Override
@@ -89,6 +96,20 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterLogInfo(JavaTaskParser.LogInfoContext ctx) {
-        statementBuilder.withLogInfo(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        if (ctx.parent instanceof JavaTaskParser.StatementRuleSpecContext) {
+            statementBuilder.withLogInfo(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        } else if (ctx.parent instanceof JavaTaskParser.VariableRuleSpecContext) {
+            variableBuilder.withLogInfo(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        }
+    }
+
+    @Override
+    public void enterVariableRule(JavaTaskParser.VariableRuleContext ctx) {
+        variableBuilder = VariableModel.builder();
+    }
+
+    @Override
+    public void exitVariableRule(JavaTaskParser.VariableRuleContext ctx) {
+        taskVerifier.verifyVariable(variableBuilder.build());
     }
 }
