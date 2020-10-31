@@ -1,4 +1,4 @@
-### TASK ###
+export const task = `
 -> statement
     with text: "boolean b1 = i == d"
     with resolved: "boolean b1 = false"
@@ -39,9 +39,9 @@
     with text: "boolean b10 = i < d || false"
     with resolved: "boolean b10 = true"
     log info: "Zmienna b10 o oczekiwanej wartości i < d || true"
+`;
 
-### INPUT ###
-public class MyClass {
+export const input = `public class MyClass {
     public static void main(String[] args){
         int i = 5;
         double d = 10;
@@ -61,4 +61,12 @@ public class MyClass {
         boolean b9 = i < d && false;         // false
         boolean b10 = i < d || false;        // true
     }
-}
+}`;
+
+export const description = `Kluczowym elementem każdego języka programowania są operacje porównywania wartości zmiennych. W tym rozdziale pokazane zostaną dostępne w Javie operatory do tego typu zadań. 
+Poruszony zostanie również temat sprawdzania równości typów złożonych. Otrzymasz odpowiedź na pytanie: Kiedy należy użyć operatora == a kiedy metody equals?
+W rozdziale pokazane zostaną również operacje logiczne, dzięki czemu dowiesz się jak działają operatory && oraz ||.`;
+
+export const instruction = `Przyjrzyj się i uruchom widoczny w edytorze kod. Zawiera on instrukcje, które poznasz w tym rozdziale.`;
+
+export const hasNext = true;

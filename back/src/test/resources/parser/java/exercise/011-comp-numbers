@@ -1,0 +1,41 @@
+### TASK ###
+-> variable
+    with text: "int i"
+    log info: "Zmienna i typu int"
+-> variable
+    with text: "char c"
+    log info: "Zmienna c typu char"
+-> statement
+    with text: "boolean result = i == c"
+    with resolved: "boolean result = true"
+    log info: "Zmienna result o oczekiwanej wartości i == c"
+-> statement
+    with text: "boolean b1 = a >= b"
+    with resolved: "boolean b1 = true"
+    log info: "Zmienna b1 o oczekiwanej wartości a >= b"
+-> statement
+    with text: "boolean b2 = a*2 < b+1"
+    with resolved: "boolean b2 = true"
+    log info: "Zmienna b2 o oczekiwanej wartości a*2 < b+1"
+-> statement
+    with text: "boolean b3 = a%2 != 0"
+    with resolved: "boolean b3 = true"
+    log info: "Zmienna b3 o oczekiwanej wartości a%2 != 0"
+
+### INPUT ###
+public class MyClass {
+    public static void main(String[] args){
+        int i = 98;
+        char c = 'b';
+
+        boolean result = i == c;    // true
+
+        double a = 10.0;
+        int b = 1;
+        boolean b1 = a >= b;    // true
+        a = -1;
+        boolean b2 = a*2 < b+1; // true
+        a = 3;
+        boolean b3 = a%2 != 0;  // true
+    }
+}
