@@ -2,7 +2,7 @@ package com.server.parser.java.ast;
 
 import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Literal;
-import com.server.parser.util.EqualityService;
+import com.server.parser.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
 
 public class ObjectWrapperValue extends ObjectValue implements ConstantProvider {
@@ -27,11 +27,11 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
     public boolean equalsOperator(Value v2) {
         if (v2 instanceof PrimitiveValue) {
             PrimitiveValue primitiveValue = (PrimitiveValue) v2;
-            return constant.equalsC(primitiveValue.getConstant(), EqualityService.EqualityType.PRIMITIVE).c;
+            return constant.equalsC(primitiveValue.getConstant(), EqualityOperatorService.EqualityType.PRIMITIVE).c;
         }
         if (v2 instanceof ObjectWrapperValue) {
             ObjectWrapperValue wrapperValue = (ObjectWrapperValue) v2;
-            return constant.equalsC(wrapperValue.getConstant(), EqualityService.EqualityType.OBJECT).c;
+            return constant.equalsC(wrapperValue.getConstant(), EqualityOperatorService.EqualityType.OBJECT).c;
         }
         throw new UnsupportedOperationException();
     }

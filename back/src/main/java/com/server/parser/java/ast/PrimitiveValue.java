@@ -2,7 +2,7 @@ package com.server.parser.java.ast;
 
 import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.util.EqualityService;
+import com.server.parser.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
 
 public class PrimitiveValue extends Value implements ConstantProvider {
@@ -27,7 +27,7 @@ public class PrimitiveValue extends Value implements ConstantProvider {
     public boolean equalsOperator(Value v2) {
         if (v2 instanceof ConstantProvider) {
             ConstantProvider constantProvider = (ConstantProvider) v2;
-            return constant.equalsC(constantProvider.getConstant(), EqualityService.EqualityType.PRIMITIVE).c;
+            return constant.equalsC(constantProvider.getConstant(), EqualityOperatorService.EqualityType.PRIMITIVE).c;
         }
         //TODO
         throw new UnsupportedOperationException();

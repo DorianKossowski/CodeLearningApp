@@ -12,22 +12,22 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class EqualityServiceTest {
+class EqualityOperatorServiceTest {
 
     static Stream<Arguments> intIntOperationProvider() {
         return Stream.of(
-                Arguments.of(EqualityService.EqualityType.PRIMITIVE, true),
-                Arguments.of(EqualityService.EqualityType.OBJECT, false)
+                Arguments.of(EqualityOperatorService.EqualityType.PRIMITIVE, true),
+                Arguments.of(EqualityOperatorService.EqualityType.OBJECT, false)
         );
     }
 
     @ParameterizedTest
     @MethodSource("intIntOperationProvider")
-    void shouldCheckPrimitiveTypes(EqualityService.EqualityType type, boolean expectedResult) {
+    void shouldCheckPrimitiveTypes(EqualityOperatorService.EqualityType type, boolean expectedResult) {
         IntConstant constant1 = new IntConstant(1000);
         IntConstant constant2 = new IntConstant(1000);
 
-        BooleanConstant result = EqualityService.check(constant1, constant2, type);
+        BooleanConstant result = EqualityOperatorService.check(constant1, constant2, type);
 
         assertThat(result.c).isEqualTo(expectedResult);
     }
@@ -37,7 +37,7 @@ class EqualityServiceTest {
         IntConstant constant1 = new IntConstant(97);
         CharacterConstant constant2 = new CharacterConstant('a');
 
-        BooleanConstant result = EqualityService.check(constant1, constant2, EqualityService.EqualityType.PRIMITIVE);
+        BooleanConstant result = EqualityOperatorService.check(constant1, constant2, EqualityOperatorService.EqualityType.PRIMITIVE);
 
         assertThat(result.c).isEqualTo(true);
     }

@@ -6,7 +6,7 @@ import com.server.parser.util.exception.ResolvingException;
 import java.util.function.BiFunction;
 
 // ONLY == operator
-public class EqualityService {
+public class EqualityOperatorService {
     public enum EqualityType {
         PRIMITIVE, OBJECT
     }

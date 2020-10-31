@@ -1,6 +1,6 @@
 package com.server.parser.java.ast.constant;
 
-import com.server.parser.util.EqualityService;
+import com.server.parser.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Objects;
@@ -22,8 +22,8 @@ public class BooleanConstant extends Constant<Boolean> {
     }
 
     @Override
-    public BooleanConstant equalsC(Constant<?> constant2, EqualityService.EqualityType type) {
-        return EqualityService.check(this, constant2, type);
+    public BooleanConstant equalsC(Constant<?> constant2, EqualityOperatorService.EqualityType type) {
+        return EqualityOperatorService.check(this, constant2, type);
     }
 
     @Override

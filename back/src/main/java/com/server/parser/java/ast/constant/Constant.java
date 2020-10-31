@@ -1,6 +1,6 @@
 package com.server.parser.java.ast.constant;
 
-import com.server.parser.util.EqualityService;
+import com.server.parser.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Objects;
@@ -30,7 +30,7 @@ public abstract class Constant<T> {
     }
 
     //TODO boolean
-    public abstract BooleanConstant equalsC(Constant<?> constant2, EqualityService.EqualityType type);
+    public abstract BooleanConstant equalsC(Constant<?> constant2, EqualityOperatorService.EqualityType type);
 
     public boolean and(Constant<?> constant2) {
         throw new ResolvingException("Nie można użyć operatora && dla typu " + c.getClass().getSimpleName());
