@@ -22,7 +22,7 @@ public class DoubleConstant extends Constant<Double> {
     }
 
     @Override
-    public BooleanConstant equalsC(Constant<?> constant2, EqualityOperatorService.EqualityType type) {
+    public boolean equalsC(Constant<?> constant2, EqualityOperatorService.EqualityType type) {
         return EqualityOperatorService.check(this, constant2, type);
     }
 }

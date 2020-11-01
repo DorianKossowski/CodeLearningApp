@@ -27,11 +27,11 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
     public boolean equalsOperator(Value v2) {
         if (v2 instanceof PrimitiveValue) {
             PrimitiveValue primitiveValue = (PrimitiveValue) v2;
-            return constant.equalsC(primitiveValue.getConstant(), EqualityOperatorService.EqualityType.PRIMITIVE).c;
+            return constant.equalsC(primitiveValue.getConstant(), EqualityOperatorService.EqualityType.PRIMITIVE);
         }
         if (v2 instanceof ObjectWrapperValue) {
             ObjectWrapperValue wrapperValue = (ObjectWrapperValue) v2;
-            return constant.equalsC(wrapperValue.getConstant(), EqualityOperatorService.EqualityType.OBJECT).c;
+            return constant.equalsC(wrapperValue.getConstant(), EqualityOperatorService.EqualityType.OBJECT);
         }
         throw new UnsupportedOperationException();
     }

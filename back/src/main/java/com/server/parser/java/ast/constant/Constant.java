@@ -29,8 +29,7 @@ public abstract class Constant<T> {
         throw new ResolvingException("Operacje matematyczne nie są wspierane dla typu " + c2.c.getClass().getSimpleName());
     }
 
-    //TODO boolean
-    public abstract BooleanConstant equalsC(Constant<?> constant2, EqualityOperatorService.EqualityType type);
+    public abstract boolean equalsC(Constant<?> constant2, EqualityOperatorService.EqualityType type);
 
     public boolean and(Constant<?> constant2) {
         throw new ResolvingException("Nie można użyć operatora && dla typu " + c.getClass().getSimpleName());

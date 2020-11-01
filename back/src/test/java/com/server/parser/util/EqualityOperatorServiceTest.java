@@ -1,6 +1,5 @@
 package com.server.parser.util;
 
-import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.constant.CharacterConstant;
 import com.server.parser.java.ast.constant.IntConstant;
 import org.junit.jupiter.api.Test;
@@ -27,9 +26,9 @@ class EqualityOperatorServiceTest {
         IntConstant constant1 = new IntConstant(1000);
         IntConstant constant2 = new IntConstant(1000);
 
-        BooleanConstant result = EqualityOperatorService.check(constant1, constant2, type);
+        boolean result = EqualityOperatorService.check(constant1, constant2, type);
 
-        assertThat(result.c).isEqualTo(expectedResult);
+        assertThat(result).isEqualTo(expectedResult);
     }
 
     @Test
@@ -37,8 +36,8 @@ class EqualityOperatorServiceTest {
         IntConstant constant1 = new IntConstant(97);
         CharacterConstant constant2 = new CharacterConstant('a');
 
-        BooleanConstant result = EqualityOperatorService.check(constant1, constant2, EqualityOperatorService.EqualityType.PRIMITIVE);
+        boolean result = EqualityOperatorService.check(constant1, constant2, EqualityOperatorService.EqualityType.PRIMITIVE);
 
-        assertThat(result.c).isEqualTo(true);
+        assertThat(result).isEqualTo(true);
     }
 }
