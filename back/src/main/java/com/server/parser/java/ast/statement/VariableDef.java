@@ -2,6 +2,7 @@ package com.server.parser.java.ast.statement;
 
 import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.ValuePreparer;
 
 import java.util.Objects;
@@ -13,14 +14,14 @@ public class VariableDef extends Statement {
     private final Value value;
 
     public VariableDef(String text, String type, String name) {
-        this(text, type, name, null);
+        this(text, type, name, EmptyExpressionPreparer.prepare(type));
     }
 
     public VariableDef(String text, String type, String name, Expression expression) {
         super(text);
         this.type = Objects.requireNonNull(type, "type cannot be null");
         this.name = Objects.requireNonNull(name, "name cannot be null");
-        this.expression = expression;
+        this.expression = Objects.requireNonNull(expression, "expression cannot be null");
         this.value = ValuePreparer.prepare(type, expression);
     }
 

@@ -10,6 +10,7 @@ import com.server.parser.java.ast.statement.MethodCall;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.util.EmptyExpressionPreparer;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Collections;
@@ -71,11 +72,14 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitVarDec(JavaParser.VarDecContext ctx) {
             String id = textVisitor.visit(ctx.identifier());
-            Expression expression = null;
+            String type = textVisitor.visit(ctx.type());
+            Expression expression;
             if (ctx.expression() != null) {
                 expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
+            } else {
+                expression = EmptyExpressionPreparer.prepare(type);
             }
-            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), textVisitor.visit(ctx.type()), id, expression);
+            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id, expression);
         }
 
         //*** ASSIGNMENT ***//

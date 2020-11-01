@@ -2,6 +2,7 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.NullValue;
 import com.server.parser.java.ast.PrimitiveValue;
 import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.Variable;
@@ -112,7 +113,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     }
 
     @Test
-    void shouldVisitVarDecWithoutValue() {
+    void shouldVisitObjectVarDecWithoutValue() {
         String input = "String a";
         JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
 
@@ -120,7 +121,20 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         assertThat(variableDef.getType()).isEqualTo("String");
         assertThat(variableDef.getName()).isEqualTo("a");
-        assertThat(variableDef.getValue()).isNull();
+        assertThat(variableDef.getValue()).isExactlyInstanceOf(NullValue.class);
+    }
+
+    @Test
+    void shouldVisitPrimitiveVarDecWithoutValue() {
+        String input = "int a";
+        JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
+
+        VariableDef variableDef = (VariableDef) visitor.visit(c, context);
+
+        assertThat(variableDef.getType()).isEqualTo("int");
+        assertThat(variableDef.getName()).isEqualTo("a");
+        assertThat(variableDef.getValue()).isInstanceOf(PrimitiveValue.class);
+        assertThat(((PrimitiveValue) variableDef.getValue()).getConstant().c).isEqualTo(0);
     }
 
     @Test
