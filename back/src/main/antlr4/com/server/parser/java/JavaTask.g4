@@ -17,7 +17,7 @@ variableRule
     ;
 
 variableRuleSpec
-    : WITH statementTextRuleSpec
+    : WITH textRuleSpec
     | logInfo
     ;
 
@@ -27,7 +27,7 @@ statementRule
 
 statementRuleSpec
     : statementMethodRuleSpec
-    | WITH ( statementTextRuleSpec | statementResolvedRuleSpec )
+    | WITH ( textRuleSpec | statementResolvedRuleSpec )
     | logInfo
     ;
 
@@ -39,7 +39,7 @@ statementResolvedRuleSpec
     : 'resolved' ':' STRING_LITERAL
     ;
 
-statementTextRuleSpec
+textRuleSpec
     : 'text' ':' STRING_LITERAL
     ;
 

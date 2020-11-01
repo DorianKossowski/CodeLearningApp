@@ -79,9 +79,8 @@ public class JavaTaskListener extends JavaTaskBaseListener {
         JavaTaskGrammarHelper.extractValue(ctx.valueOrEmpty()).ifPresent(value -> statementBuilder.withMethod(value));
     }
 
-    //TODO rename to TextRuleSpec
     @Override
-    public void enterStatementTextRuleSpec(JavaTaskParser.StatementTextRuleSpecContext ctx) {
+    public void enterTextRuleSpec(JavaTaskParser.TextRuleSpecContext ctx) {
         if (ctx.parent instanceof JavaTaskParser.StatementRuleSpecContext) {
             statementBuilder.withText(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
         } else if (ctx.parent instanceof JavaTaskParser.VariableRuleSpecContext) {
