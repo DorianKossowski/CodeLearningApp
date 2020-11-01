@@ -118,6 +118,11 @@ exprAtom
     | call
     | objectRefName
     | literal
+    | nullExpr
+    ;
+
+nullExpr
+    : NULL
     ;
 
 objectRefName
@@ -189,6 +194,7 @@ identifier
     : IDENTIFIER
     ;
 
+NULL : 'null' ;
 SEMICOLON : ';' ;
 LPAREN : '(' ;
 RPAREN : ')' ;
