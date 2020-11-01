@@ -24,6 +24,14 @@ const HomeCompAndLogic = (props) => {
                     <LinkContainer to={'task/compAndLogic/2'}><a className='categoryElementText'>2. Porównywanie liczb</a></LinkContainer>
                     <div className='categoryElementUnderline'/>
                 </div>
+                <div className='categoryElement' >
+                    <LinkContainer to={'task/compAndLogic/3'}><a className='categoryElementText'>3. Porównywanie typów złożonych</a></LinkContainer>
+                    <div className='categoryElementUnderline'/>
+                </div>
+                <div className='categoryElement' >
+                    <LinkContainer to={'task/compAndLogic/4'}><a className='categoryElementText'>4. Podstawowe operacje logiczne</a></LinkContainer>
+                    <div className='categoryElementUnderline'/>
+                </div>
             </div>
         </Collapse>
     </div>

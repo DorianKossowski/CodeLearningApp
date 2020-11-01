@@ -1,0 +1,22 @@
+### TASK ###
+-> statement
+    with text: "boolean b1 = a > b && b.equals(c)"
+    with resolved: "boolean b1 = true"
+    log info: "Zmienna b1 o oczekiwanej wartości a > b && b.equals(c)"
+-> statement
+    with text: "boolean b2 = false || a - b != 1"
+    with resolved: "boolean b2 = false"
+    log info: "Zmienna b2 o oczekiwanej wartości false || a - b != 1"
+
+### INPUT ###
+public class MyClass {
+    public static void main(String[] args){
+        int a = 1;
+        Integer b = 0;
+        int c = 0;
+
+        boolean b1 = a > b && b.equals(c);    // true
+
+        boolean b2 = false || a - b != 1;     // false
+    }
+}

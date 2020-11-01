@@ -1,0 +1,26 @@
+### TASK ###
+-> variable
+    with text: "String s1"
+    log info: "Zmienna s1 typu String"
+-> variable
+    with text: "String s2"
+    log info: "Zmienna s2 typu String"
+-> statement
+    with text: "boolean b1 = s1 == s2"
+    with resolved: "boolean b1 = false"
+    log info: "Zmienna b1 o oczekiwanej wartości s1 == s2"
+-> statement
+    with text: "boolean b2 = s1.equals(s2)"
+    with resolved: "boolean b2 = true"
+    log info: "Zmienna b2 o oczekiwanej wartości s1.equals(s2)"
+
+### INPUT ###
+public class MyClass {
+    public static void main(String[] args){
+        String s1 = "napis";
+        String s2 = "napis";
+
+        boolean b1 = s1 == s2;          // false
+        boolean b2 = s1.equals(s2);     // true
+    }
+}
