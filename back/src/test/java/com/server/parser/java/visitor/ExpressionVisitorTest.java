@@ -6,6 +6,7 @@ import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -140,5 +141,16 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
         assertThat(expression).isExactlyInstanceOf(Literal.class);
         assertThat(expression.getText()).isEqualTo("true");
         assertThat(expression.getConstant().c).isEqualTo(true);
+    }
+
+    @Test
+    void shouldVisitNull() {
+        String input = "null";
+        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
+
+        Expression expression = visitor.visit(c, context);
+
+        assertThat(expression).isExactlyInstanceOf(NullExpression.class);
+        assertThat(expression.getText()).isEqualTo("null");
     }
 }

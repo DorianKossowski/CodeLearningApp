@@ -10,6 +10,7 @@ import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -119,6 +120,9 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
             if (ctx.call() != null) {
                 return visit(ctx.call());
             }
+            if (ctx.nullExpr() != null) {
+                return visit(ctx.nullExpr());
+            }
             throw new UnsupportedOperationException();
         }
 
@@ -178,6 +182,12 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
             String text = textVisitor.visit(ctx);
             Variable variable = context.getCurrentMethodContext().getVariable(text);
             return new ObjectRef(text, variable.getValue());
+        }
+
+        //*** NULL ***//
+        @Override
+        public Expression visitNullExpr(JavaParser.NullExprContext ctx) {
+            return NullExpression.INSTANCE;
         }
     }
 }
