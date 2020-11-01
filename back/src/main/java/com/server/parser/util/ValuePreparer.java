@@ -4,16 +4,17 @@ import com.google.common.base.Preconditions;
 import com.server.parser.java.ast.*;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.util.exception.ResolvingException;
 
 public class ValuePreparer {
 
     public static Value prepare(String type, Expression expression) {
         try {
-            if (expression != null) {
-                return prepareFromLiteral(type, expression.getLiteral());
+            if (expression instanceof NullExpression) {
+                return NullValue.INSTANCE;
             }
-            return null; // TODO use NullValue
+            return prepareFromLiteral(type, expression.getLiteral());
         } catch (IllegalArgumentException e) {
             throw new ResolvingException(String.format("Wyrażenie %s nie jest typu %s", expression.getText(), type));
         }

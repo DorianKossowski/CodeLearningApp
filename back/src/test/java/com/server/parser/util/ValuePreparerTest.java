@@ -1,8 +1,11 @@
 package com.server.parser.util;
 
+import com.server.parser.java.ast.NullValue;
 import com.server.parser.java.ast.PrimitiveValue;
+import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
@@ -95,5 +98,12 @@ class ValuePreparerTest {
         PrimitiveValue value = ValuePreparer.preparePrimitive("Character", l);
 
         assertThat(value.getConstant().c).isEqualTo('L');
+    }
+
+    @Test
+    void shouldPrepareWhenNull() {
+        Value value = ValuePreparer.prepare("String", NullExpression.INSTANCE);
+
+        assertThat(value).isExactlyInstanceOf(NullValue.class);
     }
 }
