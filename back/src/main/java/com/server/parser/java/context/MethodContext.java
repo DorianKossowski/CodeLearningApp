@@ -1,9 +1,9 @@
 package com.server.parser.java.context;
 
 import com.google.common.collect.ImmutableMap;
-import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.value.Value;
 import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 

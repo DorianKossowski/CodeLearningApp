@@ -1,8 +1,8 @@
 package com.server.parser.java.ast.expression;
 
 import com.server.parser.java.ast.AstElement;
-import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.constant.Constant;
+import com.server.parser.java.ast.value.Value;
 
 import java.util.Objects;
 

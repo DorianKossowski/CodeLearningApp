@@ -2,15 +2,15 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.NullValue;
-import com.server.parser.java.ast.PrimitiveValue;
-import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.statement.Assignment;
 import com.server.parser.java.ast.statement.MethodCall;
 import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.value.NullValue;
+import com.server.parser.java.ast.value.PrimitiveValue;
+import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;

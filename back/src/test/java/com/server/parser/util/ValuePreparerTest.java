@@ -1,12 +1,12 @@
 package com.server.parser.util;
 
-import com.server.parser.java.ast.NullValue;
-import com.server.parser.java.ast.PrimitiveValue;
-import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.ObjectRef;
+import com.server.parser.java.ast.value.NullValue;
+import com.server.parser.java.ast.value.PrimitiveValue;
+import com.server.parser.java.ast.value.Value;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
