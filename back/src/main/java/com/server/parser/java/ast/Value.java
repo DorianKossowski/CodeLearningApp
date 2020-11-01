@@ -4,6 +4,7 @@ import com.server.parser.java.ast.expression.Expression;
 
 import java.util.Objects;
 
+//TODO do osobnego pakietu
 public abstract class Value implements EqualityCheckable, LogicOperational {
     //TODO creation expression <- Literal, Constructor?
     protected final Expression expression;
