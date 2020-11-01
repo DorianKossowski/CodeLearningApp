@@ -4,6 +4,7 @@ import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
+import com.server.parser.util.exception.ResolvingNullPointerException;
 
 public class ObjectWrapperValue extends ObjectValue implements ConstantProvider {
     protected final Constant<?> constant;
@@ -33,11 +34,17 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
             ObjectWrapperValue wrapperValue = (ObjectWrapperValue) v2;
             return constant.equalsC(wrapperValue.getConstant(), EqualityOperatorService.EqualityType.OBJECT);
         }
+        if (v2 instanceof NullValue) {
+            return false;
+        }
         throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean equalsMethod(Value v2) {
+        if (v2 instanceof NullValue) {
+            throw new ResolvingNullPointerException();
+        }
         if (v2 instanceof ConstantProvider) {
             return constant.c.equals(((ConstantProvider) v2).getConstant().c);
         }

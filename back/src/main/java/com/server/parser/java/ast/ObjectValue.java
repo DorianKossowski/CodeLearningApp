@@ -2,6 +2,7 @@ package com.server.parser.java.ast;
 
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.util.exception.ResolvingException;
+import com.server.parser.util.exception.ResolvingNullPointerException;
 
 public class ObjectValue extends Value {
     // fields, methods ... ???
@@ -17,6 +18,9 @@ public class ObjectValue extends Value {
 
     @Override
     public boolean equalsOperator(Value v2) {
+        if (v2 instanceof NullValue) {
+            throw new ResolvingNullPointerException();
+        }
         return expression == v2.expression;
     }
 

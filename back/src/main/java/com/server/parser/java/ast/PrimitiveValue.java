@@ -29,8 +29,7 @@ public class PrimitiveValue extends Value implements ConstantProvider {
             ConstantProvider constantProvider = (ConstantProvider) v2;
             return constant.equalsC(constantProvider.getConstant(), EqualityOperatorService.EqualityType.PRIMITIVE);
         }
-        //TODO
-        throw new UnsupportedOperationException();
+        throw new ResolvingException("Nie można wykonać porównania operatorem ==");
     }
 
     @Override
