@@ -7,6 +7,10 @@ import java.util.Objects;
 
 public class IntConstant extends Constant<Integer> {
 
+    public IntConstant() {
+        this(0);
+    }
+
     public IntConstant(Integer value) {
         super(Objects.requireNonNull(value, "value cannot be null"));
     }

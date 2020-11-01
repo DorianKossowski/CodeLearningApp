@@ -7,6 +7,10 @@ import java.util.Objects;
 
 public class BooleanConstant extends Constant<Boolean> {
 
+    public BooleanConstant() {
+        this(false);
+    }
+
     public BooleanConstant(Boolean value) {
         super(Objects.requireNonNull(value, "value cannot be null"));
     }

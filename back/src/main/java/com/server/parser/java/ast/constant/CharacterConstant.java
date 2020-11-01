@@ -7,6 +7,10 @@ import java.util.Objects;
 
 public class CharacterConstant extends Constant<Character> {
 
+    public CharacterConstant() {
+        this('\0');
+    }
+
     public CharacterConstant(Character value) {
         super(Objects.requireNonNull(value, "value cannot be null"));
     }

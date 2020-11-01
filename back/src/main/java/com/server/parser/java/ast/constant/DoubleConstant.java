@@ -7,6 +7,10 @@ import java.util.Objects;
 
 public class DoubleConstant extends Constant<Double> {
 
+    public DoubleConstant() {
+        this(0.0);
+    }
+
     public DoubleConstant(Double value) {
         super(Objects.requireNonNull(value, "value cannot be null"));
     }
