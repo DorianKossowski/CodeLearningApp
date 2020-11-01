@@ -82,8 +82,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
 
         private void validateValueComputability(Value v1) {
             if (!(v1 instanceof Computable)) {
-                throw new ResolvingException("Operacje matematyczne nie są wspierane dla typu " +
-                        v1.getExpression().getResolved().c.getClass().getSimpleName());
+                throw new ResolvingException("Operacje matematyczne nie są wspierane dla " + v1.getExpression().getResolvedText());
             }
         }
 

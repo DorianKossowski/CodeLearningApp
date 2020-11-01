@@ -10,7 +10,7 @@
     with resolved: "System.out.print(false)"
 -> statement
     with text: "System.out.print(s)"
-    with resolved: "System.out.print(\"null\")"
+    with resolved: "System.out.print(null)"
 -> statement
     with text: "System.out.print(null == s)"
     with resolved: "System.out.print(true)"

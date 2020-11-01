@@ -26,8 +26,8 @@ public class ObjectRef extends Expression {
     }
 
     @Override
-    public Constant<?> getResolved() {
-        return expression.getResolved();
+    public String getResolvedText() {
+        return expression.getResolvedText();
     }
 
     @Override

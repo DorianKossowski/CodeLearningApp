@@ -33,7 +33,7 @@ public class MethodCall extends Statement implements MethodPrintable {
 
     @Override
     public String getResolved() {
-        String resolvedArgs = args.stream().map(Expression::getResolved).map(Object::toString).collect(Collectors.joining(", "));
+        String resolvedArgs = args.stream().map(Expression::getResolvedText).collect(Collectors.joining(", "));
         return name + "(" + resolvedArgs + ")";
     }
 }

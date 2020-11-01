@@ -13,7 +13,7 @@ public class ObjectValue extends Value {
 
     @Override
     public String toString() {
-        return expression.getResolved().toString();
+        return expression.getResolvedText();
     }
 
     @Override

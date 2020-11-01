@@ -21,7 +21,7 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
 
     @Override
     public String toString() {
-        return expression.getResolved().toString();
+        return expression.getResolvedText();
     }
 
     @Override

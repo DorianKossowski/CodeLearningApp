@@ -3,7 +3,6 @@ package com.server.parser.java.ast.expression;
 import com.server.parser.java.ast.NullValue;
 import com.server.parser.java.ast.Value;
 import com.server.parser.java.ast.constant.Constant;
-import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.util.exception.ResolvingNullPointerException;
 
 public class NullExpression extends Expression {
@@ -19,8 +18,8 @@ public class NullExpression extends Expression {
     }
 
     @Override
-    public Constant<?> getResolved() {
-        return new StringConstant("null");
+    public String getResolvedText() {
+        return "null";
     }
 
     @Override

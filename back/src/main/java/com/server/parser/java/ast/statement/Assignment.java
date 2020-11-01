@@ -24,6 +24,6 @@ public class Assignment extends Statement {
 
     @Override
     public String getResolved() {
-        return id + '=' + value.getResolved();
+        return id + '=' + value.getResolvedText();
     }
 }
