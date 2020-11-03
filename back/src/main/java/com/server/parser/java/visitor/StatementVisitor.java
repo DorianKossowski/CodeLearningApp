@@ -59,6 +59,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
         @Override
         public Statement visitFieldDec(JavaParser.FieldDecContext ctx) {
+            // NOT FULLY SUPPORTED YET
             return visit(ctx.varDec());
         }
 
@@ -66,7 +67,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         public Statement visitSingleMethodArg(JavaParser.SingleMethodArgContext ctx) {
             String type = textVisitor.visit(ctx.type());
             String id = textVisitor.visit(ctx.identifier());
-            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id);
+            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id, EmptyExpressionPreparer.prepare(type));
         }
 
         @Override
@@ -77,7 +78,9 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             if (ctx.expression() != null) {
                 expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
             } else {
-                expression = EmptyExpressionPreparer.prepare(type);
+                expression = ctx.parent instanceof JavaParser.FieldDecContext
+                        ? EmptyExpressionPreparer.prepare(type)
+                        : EmptyExpressionPreparer.prepareUninitialized(id);
             }
             return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id, expression);
         }

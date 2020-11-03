@@ -2,7 +2,6 @@ package com.server.parser.java.ast.statement;
 
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.value.Value;
-import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.ValuePreparer;
 
 import java.util.Objects;
@@ -12,10 +11,6 @@ public class VariableDef extends Statement {
     private final String name;
     private final Expression expression;
     private final Value value;
-
-    public VariableDef(String text, String type, String name) {
-        this(text, type, name, EmptyExpressionPreparer.prepare(type));
-    }
 
     public VariableDef(String text, String type, String name, Expression expression) {
         super(text);

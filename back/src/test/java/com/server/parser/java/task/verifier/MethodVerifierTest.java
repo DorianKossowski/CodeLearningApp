@@ -3,6 +3,7 @@ package com.server.parser.java.task.verifier;
 import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
@@ -40,7 +41,8 @@ class MethodVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldHasSameMethodArgs() {
-        List<VariableDef> actualArgs = Arrays.asList(new VariableDef("", "int", "name1"), new VariableDef("", "String", "name2"));
+        List<VariableDef> actualArgs = Arrays.asList(new VariableDef("", "int", "name1", NullExpression.INSTANCE),
+                new VariableDef("", "String", "name2", NullExpression.INSTANCE));
         List<MethodArgs> expectedArgs = Arrays.asList(new MethodArgs(null, "name1"), new MethodArgs("String", "name2"));
 
         assertThat(MethodVerifier.hasSameMethodArgs(actualArgs, expectedArgs)).isTrue();

@@ -10,6 +10,7 @@ import com.server.parser.java.ast.statement.MethodCall;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.ast.value.NullValue;
 import com.server.parser.java.ast.value.PrimitiveValue;
+import com.server.parser.java.ast.value.UninitializedValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -113,9 +114,9 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     }
 
     @Test
-    void shouldVisitObjectVarDecWithoutValue() {
+    void shouldVisitObjectFieldDecWithoutValue() {
         String input = "String a";
-        JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
+        JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
         VariableDef variableDef = (VariableDef) visitor.visit(c, context);
 
@@ -125,9 +126,9 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     }
 
     @Test
-    void shouldVisitPrimitiveVarDecWithoutValue() {
+    void shouldVisitPrimitiveFieldDecWithoutValue() {
         String input = "int a";
-        JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
+        JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
         VariableDef variableDef = (VariableDef) visitor.visit(c, context);
 
@@ -135,6 +136,18 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThat(variableDef.getName()).isEqualTo("a");
         assertThat(variableDef.getValue()).isInstanceOf(PrimitiveValue.class);
         assertThat(((PrimitiveValue) variableDef.getValue()).getConstant().c).isEqualTo(0);
+    }
+
+    @Test
+    void shouldVisitUninitializedVarDec() {
+        String input = "int a";
+        JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
+
+        VariableDef variableDef = (VariableDef) visitor.visit(c, context);
+
+        assertThat(variableDef.getType()).isEqualTo("int");
+        assertThat(variableDef.getName()).isEqualTo("a");
+        assertThat(variableDef.getValue()).isInstanceOf(UninitializedValue.class);
     }
 
     @Test
