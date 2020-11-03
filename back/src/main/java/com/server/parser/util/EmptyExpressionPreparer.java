@@ -7,6 +7,7 @@ import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
+import com.server.parser.java.ast.expression.UninitializedExpression;
 
 public class EmptyExpressionPreparer {
 
@@ -30,5 +31,9 @@ public class EmptyExpressionPreparer {
             default:
                 throw new RuntimeException(String.format("Format %s not supported", type));
         }
+    }
+
+    public static Expression prepareUninitialized(String name) {
+        return new UninitializedExpression(name);
     }
 }

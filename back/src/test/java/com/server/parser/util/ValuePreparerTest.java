@@ -4,8 +4,10 @@ import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.ObjectRef;
+import com.server.parser.java.ast.expression.UninitializedExpression;
 import com.server.parser.java.ast.value.NullValue;
 import com.server.parser.java.ast.value.PrimitiveValue;
+import com.server.parser.java.ast.value.UninitializedValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
@@ -105,5 +107,15 @@ class ValuePreparerTest {
         Value value = ValuePreparer.prepare("String", NullExpression.INSTANCE);
 
         assertThat(value).isExactlyInstanceOf(NullValue.class);
+    }
+
+    @Test
+    void shouldPrepareWhenUninitialized() {
+        UninitializedExpression expression = new UninitializedExpression("str");
+
+        Value value = ValuePreparer.prepare("String", expression);
+
+        assertThat(value).isExactlyInstanceOf(UninitializedValue.class);
+        assertThat(value.getExpression()).isSameAs(expression);
     }
 }

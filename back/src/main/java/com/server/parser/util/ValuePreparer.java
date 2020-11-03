@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
+import com.server.parser.java.ast.expression.UninitializedExpression;
 import com.server.parser.java.ast.value.*;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -13,6 +14,9 @@ public class ValuePreparer {
         try {
             if (expression instanceof NullExpression) {
                 return NullValue.INSTANCE;
+            }
+            if (expression instanceof UninitializedExpression) {
+                return new UninitializedValue((UninitializedExpression) expression);
             }
             return prepareFromLiteral(type, expression.getLiteral());
         } catch (IllegalArgumentException e) {
