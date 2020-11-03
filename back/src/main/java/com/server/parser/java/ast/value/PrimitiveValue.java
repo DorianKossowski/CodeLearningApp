@@ -5,6 +5,7 @@ import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
+import com.server.parser.util.exception.ResolvingUninitializedException;
 
 public class PrimitiveValue extends Value implements ConstantProvider {
     protected final Constant<?> constant;
@@ -30,6 +31,9 @@ public class PrimitiveValue extends Value implements ConstantProvider {
             ConstantProvider constantProvider = (ConstantProvider) v2;
             return constant.equalsC(constantProvider.getConstant(), EqualityOperatorService.EqualityType.PRIMITIVE);
         }
+        if (v2 instanceof UninitializedValue) {
+            throw new ResolvingUninitializedException(v2.expression.getText());
+        }
         throw new ResolvingException("Nie można wykonać porównania operatorem ==");
     }
 
@@ -44,6 +48,9 @@ public class PrimitiveValue extends Value implements ConstantProvider {
             ConstantProvider constantProvider = (ConstantProvider) v2;
             return constant.and(constantProvider.getConstant());
         }
+        if (v2 instanceof UninitializedValue) {
+            throw new ResolvingUninitializedException(v2.expression.getText());
+        }
         throw new ResolvingException("Nie można wykonać operacji &&");
     }
 
@@ -52,6 +59,9 @@ public class PrimitiveValue extends Value implements ConstantProvider {
         if (v2 instanceof ConstantProvider) {
             ConstantProvider constantProvider = (ConstantProvider) v2;
             return constant.or(constantProvider.getConstant());
+        }
+        if (v2 instanceof UninitializedValue) {
+            throw new ResolvingUninitializedException(v2.expression.getText());
         }
         throw new ResolvingException("Nie można wykonać operacji ||");
     }

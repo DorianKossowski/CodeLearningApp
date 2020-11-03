@@ -3,6 +3,7 @@ package com.server.parser.java.ast.value;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingNullPointerException;
+import com.server.parser.util.exception.ResolvingUninitializedException;
 
 public class ObjectValue extends Value {
     // fields, methods ... ???
@@ -20,6 +21,9 @@ public class ObjectValue extends Value {
     public boolean equalsOperator(Value v2) {
         if (v2 instanceof NullValue) {
             throw new ResolvingNullPointerException();
+        }
+        if (v2 instanceof UninitializedValue) {
+            throw new ResolvingUninitializedException(v2.expression.getText());
         }
         return expression == v2.expression;
     }

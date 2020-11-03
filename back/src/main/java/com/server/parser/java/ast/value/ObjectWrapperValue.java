@@ -6,6 +6,7 @@ import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingNullPointerException;
+import com.server.parser.util.exception.ResolvingUninitializedException;
 
 public class ObjectWrapperValue extends ObjectValue implements ConstantProvider {
     protected final Constant<?> constant;
@@ -37,6 +38,9 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
         }
         if (v2 instanceof NullValue) {
             return false;
+        }
+        if (v2 instanceof UninitializedValue) {
+            throw new ResolvingUninitializedException(v2.expression.getText());
         }
         throw new UnsupportedOperationException();
     }
