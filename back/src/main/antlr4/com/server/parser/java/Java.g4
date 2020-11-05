@@ -62,7 +62,7 @@ methodBody
     ;
 
 methodStatement
-    : statementExpression
+    : expressionStatement
     | emptyStatement
     ;
 
@@ -70,7 +70,7 @@ emptyStatement
     : SEMICOLON
     ;
 
-statementExpression
+expressionStatement
     : ( call
     | methodVarDec
     | assignment

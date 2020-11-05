@@ -33,7 +33,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         }
 
         @Override
-        public Statement visitStatementExpression(JavaParser.StatementExpressionContext ctx) {
+        public Statement visitExpressionStatement(JavaParser.ExpressionStatementContext ctx) {
             return visit(ctx.getChild(0));
         }
 
