@@ -170,4 +170,12 @@ public class JavaParserTest {
     void shouldParseAssignment(String input) {
         HELPER.shouldParseToEof(input, JavaParser::assignment);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "if(true);", "if(true) fun();", "if(a == 1) { }", "if(true) { fun(); }", "if(true) { fun(); fun(); }"
+    })
+    void shouldParseIfStmt(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::ifStatement);
+    }
 }

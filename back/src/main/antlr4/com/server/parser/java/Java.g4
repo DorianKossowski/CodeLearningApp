@@ -63,7 +63,17 @@ methodBody
 
 methodStatement
     : expressionStatement
+    | ifStatement
     | emptyStatement
+    ;
+
+ifStatement
+    : IF '(' expression ')' ifBranchContent
+    ;
+
+ifBranchContent
+    : statement
+    | '{' statement* '}'
     ;
 
 emptyStatement
@@ -202,6 +212,7 @@ identifier
     : IDENTIFIER
     ;
 
+IF : 'if' ;
 NULL : 'null' ;
 SEMICOLON : ';' ;
 LPAREN : '(' ;
