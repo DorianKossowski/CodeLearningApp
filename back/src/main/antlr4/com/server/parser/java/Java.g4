@@ -58,10 +58,10 @@ singleMethodArg
     ;
 
 methodBody
-    : methodStatement*
+    : statement*
     ;
 
-methodStatement
+statement
     : expressionStatement
     | ifStatement
     | emptyStatement
@@ -89,10 +89,6 @@ expressionStatement
 
 assignment
     : identifier '=' expression
-    ;
-
-statement
-    : methodStatement
     ;
 
 methodVarDec

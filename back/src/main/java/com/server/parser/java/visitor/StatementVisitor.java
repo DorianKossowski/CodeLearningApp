@@ -22,13 +22,13 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
     @Override
     public Statement visit(ParserRuleContext ctx, JavaContext context) {
-        return new MethodBodyStatementVisitorInternal(context).visit(ctx);
+        return new StatementVisitorInternal(context).visit(ctx);
     }
 
-    private static class MethodBodyStatementVisitorInternal extends JavaBaseVisitor<Statement> {
+    private static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
         private final JavaContext context;
 
-        private MethodBodyStatementVisitorInternal(JavaContext context) {
+        private StatementVisitorInternal(JavaContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
         }
 
