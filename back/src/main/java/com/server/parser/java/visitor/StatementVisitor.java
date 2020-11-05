@@ -32,6 +32,11 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             this.context = Objects.requireNonNull(context, "context cannot be null");
         }
 
+        @Override
+        public Statement visitStatementExpression(JavaParser.StatementExpressionContext ctx) {
+            return visit(ctx.getChild(0));
+        }
+
         //*** METHOD CALL ***//
         @Override
         public MethodCall visitCall(JavaParser.CallContext ctx) {

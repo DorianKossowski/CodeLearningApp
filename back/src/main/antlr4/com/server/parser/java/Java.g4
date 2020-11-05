@@ -58,15 +58,20 @@ singleMethodArg
     ;
 
 methodBody
-    : ( methodStatement SEMICOLON
-    | SEMICOLON
+    : ( methodStatement
+    | SEMICOLON //TODO empty statement
     )*
     ;
 
 methodStatement
-    : call
+    : statementExpression
+    ;
+
+statementExpression
+    : ( call
     | methodVarDec
     | assignment
+    ) SEMICOLON
     ;
 
 assignment

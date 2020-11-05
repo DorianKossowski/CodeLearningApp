@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 class StatementVerifierTest extends VerifierTestBase {
     private static final String METHOD_NAME = "M1";
-    private static final String STATEMENT = "fun(x)";
+    private static final String STATEMENT = "fun(x);";
 
     @Test
     void shouldVerifyMethodName() {

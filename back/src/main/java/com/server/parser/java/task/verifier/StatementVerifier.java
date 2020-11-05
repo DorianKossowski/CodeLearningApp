@@ -43,8 +43,8 @@ public class StatementVerifier {
     }
 
     private boolean areStatementsEqual(String stmt1, String stmt2) {
-        String stmt1Parsed = JavaParserAdapter.parseStatement(stmt1).getText();
-        String stmt2Parsed = JavaParserAdapter.parseStatement(stmt2).getText();
+        String stmt1Parsed = JavaParserAdapter.parseStatement(stmt1 + ';').getText();
+        String stmt2Parsed = JavaParserAdapter.parseStatement(stmt2 + ';').getText();
         return stmt1Parsed.equals(stmt2Parsed);
     }
 
