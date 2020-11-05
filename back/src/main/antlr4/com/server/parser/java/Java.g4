@@ -68,7 +68,7 @@ statement
     ;
 
 ifStatement
-    : IF '(' expression ')' ifBranchContent
+    : IF '(' cond=expression ')' ifBranchContent
     ;
 
 ifBranchContent
