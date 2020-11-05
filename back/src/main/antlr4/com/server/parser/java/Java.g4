@@ -58,13 +58,16 @@ singleMethodArg
     ;
 
 methodBody
-    : ( methodStatement
-    | SEMICOLON //TODO empty statement
-    )*
+    : methodStatement*
     ;
 
 methodStatement
     : statementExpression
+    | emptyStatement
+    ;
+
+emptyStatement
+    : SEMICOLON
     ;
 
 statementExpression
