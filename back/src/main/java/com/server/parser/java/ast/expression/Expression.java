@@ -23,5 +23,6 @@ public abstract class Expression extends AstElement {
 
     public abstract Value getValue();
 
+    //TODO make Literal class method
     public abstract Constant<?> getConstant();
 }
