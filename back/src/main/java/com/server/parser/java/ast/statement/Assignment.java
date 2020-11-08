@@ -4,7 +4,7 @@ import com.server.parser.java.ast.expression.Expression;
 
 import java.util.Objects;
 
-public class Assignment extends Statement {
+public class Assignment extends ExpressionStatement {
     private final String id;
     private final Expression value;
 

@@ -6,7 +6,7 @@ import com.server.parser.util.ValuePreparer;
 
 import java.util.Objects;
 
-public class VariableDef extends Statement {
+public class VariableDef extends ExpressionStatement {
     private final String type;
     private final String name;
     private final Expression expression;

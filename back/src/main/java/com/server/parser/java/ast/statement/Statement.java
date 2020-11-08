@@ -2,6 +2,7 @@ package com.server.parser.java.ast.statement;
 
 import com.server.parser.java.ast.AstElement;
 
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Statement extends AstElement {
@@ -18,4 +19,6 @@ public abstract class Statement extends AstElement {
     public String getResolved() {
         throw new UnsupportedOperationException("Resolving not supported for type " + getClass());
     }
+
+    public abstract List<ExpressionStatement> getExpressionStatements();
 }

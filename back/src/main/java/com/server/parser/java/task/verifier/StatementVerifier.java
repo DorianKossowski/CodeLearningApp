@@ -3,8 +3,8 @@ package com.server.parser.java.task.verifier;
 import com.google.common.base.Verify;
 import com.server.parser.java.JavaParserAdapter;
 import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.statement.ExpressionStatement;
 import com.server.parser.java.ast.statement.MethodPrintable;
-import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.task.model.StatementModel;
 
 import java.util.ArrayList;
@@ -12,12 +12,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class StatementVerifier {
-    private final List<Statement> statements;
-    private List<Statement> availableStatements;
+    private final List<ExpressionStatement> statements;
+    private List<ExpressionStatement> availableStatements;
 
     public StatementVerifier(TaskAst taskAst) {
         this.statements = taskAst.getClassAst().getBody().getMethods().stream()
                 .flatMap(method -> method.getBody().getStatements().stream())
+                .flatMap(statement -> statement.getExpressionStatements().stream())
                 .collect(Collectors.toList());
     }
 

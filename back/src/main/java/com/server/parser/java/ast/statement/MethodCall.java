@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MethodCall extends Statement implements MethodPrintable {
+public class MethodCall extends ExpressionStatement implements MethodPrintable {
     private final String contextMethodName;
     private final String name;
     private final List<Expression> args;
