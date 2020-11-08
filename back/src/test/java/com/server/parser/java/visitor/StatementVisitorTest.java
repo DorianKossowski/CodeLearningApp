@@ -5,9 +5,7 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
-import com.server.parser.java.ast.statement.Assignment;
-import com.server.parser.java.ast.statement.MethodCall;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.ast.value.NullValue;
 import com.server.parser.java.ast.value.PrimitiveValue;
 import com.server.parser.java.ast.value.UninitializedValue;
@@ -223,5 +221,18 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThatThrownBy(() -> visitor.visit(c, context))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie 5 nie jest typu String");
+    }
+
+    //*** IF ***//
+    @Test
+    void shouldVisitIf() {
+        String input = "if(true) { System.out.print(1); if(true) { System.out.print(2); } }";
+        JavaParser.IfStatementContext c = HELPER.shouldParseToEof(input, JavaParser::ifStatement);
+
+        IfStatement ifStatement = (IfStatement) visitor.visit(c, context);
+
+        assertThat(ifStatement.getText()).isEqualTo("IF Statement");
+        assertThat(ifStatement.getExpressionStatements()).extracting(ExpressionStatement::getText)
+                .containsExactly("System.out.print(1)", "System.out.print(2)");
     }
 }

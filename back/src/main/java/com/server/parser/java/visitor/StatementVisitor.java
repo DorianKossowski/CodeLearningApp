@@ -5,14 +5,13 @@ import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.Assignment;
-import com.server.parser.java.ast.statement.MethodCall;
-import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.visitor.resolver.IfStmtResolver;
 import com.server.parser.util.EmptyExpressionPreparer;
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -27,9 +26,11 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
     private static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
         private final JavaContext context;
+        private final IfStmtResolver ifStmtResolver;
 
         private StatementVisitorInternal(JavaContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
+            this.ifStmtResolver = new IfStmtResolver();
         }
 
         @Override
@@ -97,6 +98,18 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             Expression expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
             context.getCurrentMethodContext().updateVar(id, expression);
             return new Assignment(JavaGrammarHelper.getOriginalText(ctx), id, expression);
+        }
+
+        //*** IF ***//
+        @Override
+        public Statement visitIfStatement(JavaParser.IfStatementContext ctx) {
+            Expression condition = context.getVisitor(Expression.class).visit(ctx.cond, context);
+            boolean condValue = ifStmtResolver.resolveCondition(condition);
+            List<Statement> visitedStatements = new ArrayList<>();
+            if (condValue) {
+                ctx.ifBranchContent().statement().forEach(stmtContext -> visitedStatements.add(visit(stmtContext)));
+            }
+            return new IfStatement(visitedStatements);
         }
     }
 }
