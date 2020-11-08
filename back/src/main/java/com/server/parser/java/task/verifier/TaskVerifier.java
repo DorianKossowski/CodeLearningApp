@@ -9,12 +9,12 @@ import java.util.Objects;
 
 public class TaskVerifier {
     private final MethodVerifier methodVerifier;
-    private final StatementVerifier statementVerifier;
+    private final ExpressionStatementVerifier expressionStatementVerifier;
     private final VariableVerifier variableVerifier;
 
     public TaskVerifier(TaskAst taskAst) {
         this.methodVerifier = new MethodVerifier(Objects.requireNonNull(taskAst, "taskAst cannot be null"));
-        this.statementVerifier = new StatementVerifier(taskAst);
+        this.expressionStatementVerifier = new ExpressionStatementVerifier(taskAst);
         this.variableVerifier = new VariableVerifier(taskAst);
     }
 
@@ -23,7 +23,7 @@ public class TaskVerifier {
     }
 
     public void verifyStatement(StatementModel statementModel) {
-        statementVerifier.verify(statementModel);
+        expressionStatementVerifier.verify(statementModel);
     }
 
     public void verifyVariable(VariableModel variableModel) {

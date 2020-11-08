@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class StatementVerifierTest extends VerifierTestBase {
+class ExpressionStatementVerifierTest extends VerifierTestBase {
     private static final String METHOD_NAME = "M1";
     private static final String STATEMENT = "fun(x);";
 
@@ -24,7 +24,7 @@ class StatementVerifierTest extends VerifierTestBase {
         when(statement.printMethodName()).thenReturn(METHOD_NAME);
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME,
                 Collections.singletonList(statement)));
-        StatementVerifier verifier = new StatementVerifier(mockTask(methods));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
 
         verifier.verify(StatementModel.builder().withMethod(METHOD_NAME).build());
     }
@@ -32,7 +32,7 @@ class StatementVerifierTest extends VerifierTestBase {
     @Test
     void shouldThrowDuringVerifyingMethodName() {
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.emptyList()));
-        StatementVerifier verifier = new StatementVerifier(mockTask(methods));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
 
         assertThatThrownBy(() -> verifier.verify(StatementModel.builder().withMethod(METHOD_NAME).build()))
                 .isExactlyInstanceOf(VerifyException.class)
@@ -44,7 +44,7 @@ class StatementVerifierTest extends VerifierTestBase {
         Statement statement = mock(Statement.class);
         when(statement.getText()).thenReturn(STATEMENT);
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        StatementVerifier verifier = new StatementVerifier(mockTask(methods));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
 
         verifier.verify(StatementModel.builder().withText(STATEMENT).build());
     }
@@ -54,7 +54,7 @@ class StatementVerifierTest extends VerifierTestBase {
         Statement statement = mock(Statement.class);
         when(statement.getResolved()).thenReturn(STATEMENT);
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        StatementVerifier verifier = new StatementVerifier(mockTask(methods));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
 
         verifier.verify(StatementModel.builder().withResolved(STATEMENT).build());
     }
@@ -62,7 +62,7 @@ class StatementVerifierTest extends VerifierTestBase {
     @Test
     void shouldThrowCorrectErrorMessage() {
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.emptyList()));
-        StatementVerifier verifier = new StatementVerifier(mockTask(methods));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
         StatementModel model = StatementModel.builder()
                 .withMethod(METHOD_NAME)
                 .withLogInfo("Wywołanie metody wewnątrz M1")

@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class StatementVerifier {
+public class ExpressionStatementVerifier {
     private final List<ExpressionStatement> statements;
     private List<ExpressionStatement> availableStatements;
 
-    public StatementVerifier(TaskAst taskAst) {
+    public ExpressionStatementVerifier(TaskAst taskAst) {
         this.statements = taskAst.getClassAst().getBody().getMethods().stream()
                 .flatMap(method -> method.getBody().getStatements().stream())
                 .flatMap(statement -> statement.getExpressionStatements().stream())

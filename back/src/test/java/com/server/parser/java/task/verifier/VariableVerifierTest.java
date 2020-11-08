@@ -32,7 +32,7 @@ class VariableVerifierTest extends VerifierTestBase {
     @Test
     void shouldThrowCorrectErrorMessage() {
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.emptyList()));
-        StatementVerifier verifier = new StatementVerifier(mockTask(methods));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
         StatementModel model = StatementModel.builder()
                 .withMethod(METHOD_NAME)
                 .withLogInfo("Zmienna x typu int")
