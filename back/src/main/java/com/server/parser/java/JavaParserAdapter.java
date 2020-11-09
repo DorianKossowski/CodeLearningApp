@@ -16,4 +16,9 @@ public class JavaParserAdapter {
         JavaParser javaParser = ParserBuilder.build(input, JavaLexer::new, JavaParser::new);
         return javaParser.statement();
     }
+
+    public static JavaParser.ExpressionContext parseExpression(String input) {
+        JavaParser javaParser = ParserBuilder.build(input, JavaLexer::new, JavaParser::new);
+        return javaParser.expression();
+    }
 }

@@ -23,6 +23,7 @@ abstract class VerifierTestBase {
     }
 
     protected Method mockMethod(String name, List<Statement> statements) {
+        statements.forEach(statement -> doCallRealMethod().when(statement).getExpressionStatements());
         Method method = mockMethod(name);
         when(method.getBody().getStatements()).thenReturn(statements);
         return method;

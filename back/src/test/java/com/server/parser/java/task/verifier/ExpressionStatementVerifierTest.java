@@ -2,8 +2,9 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.statement.ExpressionStatement;
 import com.server.parser.java.ast.statement.MethodCall;
-import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.task.model.StatementModel;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +42,7 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldVerifyText() {
-        Statement statement = mock(Statement.class);
+        ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getText()).thenReturn(STATEMENT);
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
         ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
@@ -51,12 +52,22 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldVerifyResolved() {
-        Statement statement = mock(Statement.class);
+        ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getResolved()).thenReturn(STATEMENT);
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
         ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
 
         verifier.verify(StatementModel.builder().withResolved(STATEMENT).build());
+    }
+
+    @Test
+    void shouldVerifyIfCond() {
+        ExpressionStatement statement = mock(ExpressionStatement.class);
+        when(statement.getProperty(StatementProperties.IF_CONDITION)).thenReturn("cond");
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+
+        verifier.verify(StatementModel.builder().withIf("cond").build());
     }
 
     @Test

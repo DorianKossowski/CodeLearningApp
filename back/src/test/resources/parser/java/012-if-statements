@@ -1,0 +1,29 @@
+### TASK ###
+-> statement
+    with text: "System.out.print(\"if1\")"
+    with if: "true"
+-> statement
+    with text: "System.out.print(\"if2\")"
+    with if: "i1.equals( i2)"
+-> statement
+    with text: "System.out.print(\"if3\")"
+    with if: "b2 == false"
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        if(true) {
+            System.out.print("if1");
+        }
+
+        Integer i1 = 128;
+        Integer i2 = 128;
+        if(i1.equals(i2 )) {
+            System.out.print("if2");
+        }
+
+        boolean b1 = false;
+        Boolean b2 = b1;
+        if(b2 == false) System.out.print("if3");
+    }
+}

@@ -18,6 +18,6 @@ class IfStatementTest {
         IfStatement ifStatement = IfStatement.createIf("cond", Collections.singletonList(assignment));
 
         ExpressionStatement statement = Iterables.getOnlyElement(ifStatement.getExpressionStatements());
-        assertThat(statement.getProperty(StatementProperties.ifCondition)).isEqualTo("cond");
+        assertThat(statement.getProperty(StatementProperties.IF_CONDITION)).isEqualTo("cond");
     }
 }

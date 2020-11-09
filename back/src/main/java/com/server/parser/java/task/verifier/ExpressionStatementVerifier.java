@@ -5,6 +5,7 @@ import com.server.parser.java.JavaParserAdapter;
 import com.server.parser.java.ast.TaskAst;
 import com.server.parser.java.ast.statement.ExpressionStatement;
 import com.server.parser.java.ast.statement.MethodPrintable;
+import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.task.model.StatementModel;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class ExpressionStatementVerifier {
         statementModel.getInMethod().ifPresent(this::verifyMethodName);
         statementModel.getText().ifPresent(this::verifyText);
         statementModel.getResolved().ifPresent(this::verifyResolved);
+        statementModel.getIfCond().ifPresent(this::verifyIfCond);
         Verify.verify(!availableStatements.isEmpty(), getErrorMessage(statementModel));
     }
 
@@ -59,6 +61,13 @@ public class ExpressionStatementVerifier {
         availableStatements = availableStatements.stream()
                 .filter(statement -> statement instanceof MethodPrintable &&
                         ((MethodPrintable) statement).printMethodName().equals(methodName))
+                .collect(Collectors.toList());
+    }
+
+    private void verifyIfCond(String ifCond) {
+        String ifCondParsed = JavaParserAdapter.parseExpression(ifCond).getText();
+        availableStatements = availableStatements.stream()
+                .filter(statement -> statement.getProperty(StatementProperties.IF_CONDITION).equals(ifCondParsed))
                 .collect(Collectors.toList());
     }
 }

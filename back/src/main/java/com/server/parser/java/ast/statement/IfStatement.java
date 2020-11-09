@@ -20,7 +20,7 @@ public class IfStatement extends Statement {
     }
 
     public static IfStatement createIf(String condition, List<Statement> contentStatements) {
-        contentStatements.forEach(statement -> statement.addProperty(StatementProperties.ifCondition, condition));
+        contentStatements.forEach(statement -> statement.addProperty(StatementProperties.IF_CONDITION, condition));
         return new IfStatement(contentStatements);
     }
 }
