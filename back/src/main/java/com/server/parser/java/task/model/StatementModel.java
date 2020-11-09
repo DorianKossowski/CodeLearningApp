@@ -7,6 +7,7 @@ public class StatementModel {
     private String inMethod;
     private String text;
     private String resolved;
+    private String ifCond;
     private String logInfo;
 
     private StatementModel() {
@@ -22,6 +23,10 @@ public class StatementModel {
 
     public Optional<String> getResolved() {
         return Optional.ofNullable(resolved);
+    }
+
+    public Optional<String> getIfCond() {
+        return Optional.ofNullable(ifCond);
     }
 
     public Optional<String> getLogInfo() {
@@ -44,18 +49,20 @@ public class StatementModel {
         return Objects.equals(inMethod, that.inMethod) &&
                 Objects.equals(text, that.text) &&
                 Objects.equals(resolved, that.resolved) &&
+                Objects.equals(ifCond, that.ifCond) &&
                 Objects.equals(logInfo, that.logInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inMethod, text, resolved, logInfo);
+        return Objects.hash(inMethod, text, resolved, ifCond, logInfo);
     }
 
     public static class Builder {
         private String inMethod;
         private String text;
         private String resolved;
+        private String ifCond;
         private String logInfo;
 
         public Builder withMethod(String method) {
@@ -73,6 +80,11 @@ public class StatementModel {
             return this;
         }
 
+        public Builder withIf(String ifCond) {
+            this.ifCond = ifCond;
+            return this;
+        }
+
         public Builder withLogInfo(String errorMessage) {
             this.logInfo = errorMessage;
             return this;
@@ -83,6 +95,7 @@ public class StatementModel {
             statementModel.inMethod = this.inMethod;
             statementModel.text = this.text;
             statementModel.resolved = this.resolved;
+            statementModel.ifCond = this.ifCond;
             statementModel.logInfo = this.logInfo;
 
             return statementModel;

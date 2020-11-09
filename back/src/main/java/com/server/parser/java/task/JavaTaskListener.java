@@ -111,4 +111,9 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     public void exitVariableRule(JavaTaskParser.VariableRuleContext ctx) {
         taskVerifier.verifyVariable(variableBuilder.build());
     }
+
+    @Override
+    public void enterIfSpec(JavaTaskParser.IfSpecContext ctx) {
+        statementBuilder.withIf(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    }
 }
