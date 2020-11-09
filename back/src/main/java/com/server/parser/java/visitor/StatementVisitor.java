@@ -109,7 +109,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             if (condValue) {
                 ctx.ifBranchContent().statement().forEach(stmtContext -> visitedStatements.add(visit(stmtContext)));
             }
-            return new IfStatement(visitedStatements);
+            return IfStatement.createIf(ctx.cond.getText(), visitedStatements);
         }
     }
 }
