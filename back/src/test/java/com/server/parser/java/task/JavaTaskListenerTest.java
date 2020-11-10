@@ -69,7 +69,9 @@ class JavaTaskListenerTest {
                 Arguments.of("Statement log info", "statement log info: \"t\"",
                         StatementModel.builder().withLogInfo("t").build()),
                 Arguments.of("Statement with if", "statement with if: \"t\"",
-                        StatementModel.builder().withIf("t").build())
+                        StatementModel.builder().withIf("t").build()),
+                Arguments.of("Statement in else", "statement is in else",
+                        StatementModel.builder().isInElse(true).build())
         );
     }
 

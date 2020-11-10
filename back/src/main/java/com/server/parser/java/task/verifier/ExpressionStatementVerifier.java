@@ -30,6 +30,7 @@ public class ExpressionStatementVerifier {
         statementModel.getText().ifPresent(this::verifyText);
         statementModel.getResolved().ifPresent(this::verifyResolved);
         statementModel.getIfCond().ifPresent(this::verifyIfCond);
+        statementModel.isInElse().ifPresent(this::verifyIsInElse);
         Verify.verify(!availableStatements.isEmpty(), getErrorMessage(statementModel));
     }
 
@@ -67,7 +68,22 @@ public class ExpressionStatementVerifier {
     private void verifyIfCond(String ifCond) {
         String ifCondParsed = JavaParserAdapter.parseExpression(ifCond).getText();
         availableStatements = availableStatements.stream()
-                .filter(statement -> statement.getProperty(StatementProperties.IF_CONDITION).equals(ifCondParsed))
+                .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.IF_CONDITION), ifCondParsed))
+                .filter(statement -> statement.getProperty(StatementProperties.IN_ELSE) == null)
+                .collect(Collectors.toList());
+    }
+
+    private boolean isPropertyEqual(String property, String ifCondParsed) {
+        if (property == null) {
+            return false;
+        }
+        return property.equals(ifCondParsed);
+    }
+
+    private void verifyIsInElse(boolean isInElse) {
+        availableStatements = availableStatements.stream()
+                .filter(statement -> statement.getProperty(StatementProperties.IF_CONDITION) == null)
+                .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.IN_ELSE), String.valueOf(isInElse)))
                 .collect(Collectors.toList());
     }
 }

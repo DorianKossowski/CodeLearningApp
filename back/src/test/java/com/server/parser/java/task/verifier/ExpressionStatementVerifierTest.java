@@ -71,6 +71,16 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     }
 
     @Test
+    void shouldVerifyIsInElse() {
+        ExpressionStatement statement = mock(ExpressionStatement.class);
+        when(statement.getProperty(StatementProperties.IN_ELSE)).thenReturn("true");
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+
+        verifier.verify(StatementModel.builder().isInElse(true).build());
+    }
+
+    @Test
     void shouldThrowCorrectErrorMessage() {
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.emptyList()));
         ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));

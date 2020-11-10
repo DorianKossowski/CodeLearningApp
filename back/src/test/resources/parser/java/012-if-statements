@@ -8,6 +8,9 @@
 -> statement
     with text: "System.out.print(\"if3\")"
     with if: "b2 == false"
+-> statement
+    with text: "System.out.print(\"if4\")"
+    is in else
 
 ### INPUT ###
 public class MyClass {
@@ -25,5 +28,11 @@ public class MyClass {
         boolean b1 = false;
         Boolean b2 = b1;
         if(b2 == false) System.out.print("if3");
+
+        if(b2) {
+            System.out.print("NOT");
+        } else {
+            System.out.print("if4");
+        }
     }
 }

@@ -8,6 +8,7 @@ public class StatementModel {
     private String text;
     private String resolved;
     private String ifCond;
+    private Boolean isInElse;
     private String logInfo;
 
     private StatementModel() {
@@ -27,6 +28,10 @@ public class StatementModel {
 
     public Optional<String> getIfCond() {
         return Optional.ofNullable(ifCond);
+    }
+
+    public Optional<Boolean> isInElse() {
+        return Optional.ofNullable(isInElse);
     }
 
     public Optional<String> getLogInfo() {
@@ -50,12 +55,13 @@ public class StatementModel {
                 Objects.equals(text, that.text) &&
                 Objects.equals(resolved, that.resolved) &&
                 Objects.equals(ifCond, that.ifCond) &&
+                Objects.equals(isInElse, that.isInElse) &&
                 Objects.equals(logInfo, that.logInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inMethod, text, resolved, ifCond, logInfo);
+        return Objects.hash(inMethod, text, resolved, ifCond, isInElse, logInfo);
     }
 
     public static class Builder {
@@ -63,6 +69,7 @@ public class StatementModel {
         private String text;
         private String resolved;
         private String ifCond;
+        private Boolean isInElse;
         private String logInfo;
 
         public Builder withMethod(String method) {
@@ -85,6 +92,11 @@ public class StatementModel {
             return this;
         }
 
+        public Builder isInElse(boolean isInElse) {
+            this.isInElse = isInElse;
+            return this;
+        }
+
         public Builder withLogInfo(String errorMessage) {
             this.logInfo = errorMessage;
             return this;
@@ -96,6 +108,7 @@ public class StatementModel {
             statementModel.text = this.text;
             statementModel.resolved = this.resolved;
             statementModel.ifCond = this.ifCond;
+            statementModel.isInElse = this.isInElse;
             statementModel.logInfo = this.logInfo;
 
             return statementModel;
