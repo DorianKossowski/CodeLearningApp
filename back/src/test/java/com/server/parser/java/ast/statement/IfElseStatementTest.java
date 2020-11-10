@@ -30,4 +30,15 @@ class IfElseStatementTest {
         ExpressionStatement statement = Iterables.getOnlyElement(ifElseStatement.getExpressionStatements());
         assertThat(statement.getProperty(StatementProperties.IN_ELSE)).isEqualTo("true");
     }
+
+    @Test
+    void shouldCreateElseStatementWithMoreLevels() {
+        Assignment assignment = new Assignment("", "", mock(Expression.class));
+        IfElseStatement insideIf = IfElseStatement.createIf("", Collections.singletonList(assignment));
+
+        IfElseStatement ifElseStatement = IfElseStatement.createElse(Collections.singletonList(insideIf));
+
+        ExpressionStatement statement = Iterables.getOnlyElement(ifElseStatement.getExpressionStatements());
+        assertThat(statement.getProperty(StatementProperties.IN_ELSE)).isEqualTo("true");
+    }
 }

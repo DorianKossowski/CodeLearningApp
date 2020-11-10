@@ -19,6 +19,11 @@ public class IfElseStatement extends Statement {
         return expressionStatements;
     }
 
+    @Override
+    public void addProperty(String key, String value) {
+        contentStatements.forEach(statement -> statement.addProperty(key, value));
+    }
+
     public static IfElseStatement createIf(String condition, List<Statement> contentStatements) {
         contentStatements.forEach(statement -> statement.addProperty(StatementProperties.IF_CONDITION, condition));
         return new IfElseStatement(contentStatements);
