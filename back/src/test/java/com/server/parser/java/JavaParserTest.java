@@ -173,7 +173,8 @@ public class JavaParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "if(true);", "if(true) fun();", "if(a == 1) { }", "if(true) { fun(); }", "if(true) { fun(); fun(); }"
+            "if(true);", "if(true) fun();", "if(a == 1) { }", "if(true) { fun(); }", "if(true) { fun(); fun(); }",
+            "if(false) {} else fun();", "if(false) {} else { fun(); fun(); }",
     })
     void shouldParseIfStmt(String input) {
         HELPER.shouldParseToEof(input, JavaParser::ifStatement);

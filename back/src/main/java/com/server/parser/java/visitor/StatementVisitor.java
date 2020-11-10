@@ -107,7 +107,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             boolean condValue = ifStmtResolver.resolveCondition(condition);
             List<Statement> visitedStatements = new ArrayList<>();
             if (condValue) {
-                ctx.ifBranchContent().statement().forEach(stmtContext -> visitedStatements.add(visit(stmtContext)));
+                ctx.ifBranchContent().get(0).statement().forEach(stmtContext -> visitedStatements.add(visit(stmtContext)));
             }
             return IfStatement.createIf(ctx.cond.getText(), visitedStatements);
         }

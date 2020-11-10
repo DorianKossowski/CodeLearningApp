@@ -68,7 +68,7 @@ statement
     ;
 
 ifStatement
-    : IF '(' cond=expression ')' ifBranchContent
+    : IF '(' cond=expression ')' ifBranchContent (ELSE ifBranchContent)?
     ;
 
 ifBranchContent
@@ -209,6 +209,7 @@ identifier
     ;
 
 IF : 'if' ;
+ELSE : 'else' ;
 NULL : 'null' ;
 SEMICOLON : ';' ;
 LPAREN : '(' ;
