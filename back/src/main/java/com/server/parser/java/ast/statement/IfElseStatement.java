@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class IfStatement extends Statement {
+public class IfElseStatement extends Statement {
     private final List<Statement> contentStatements;
 
-    private IfStatement(List<Statement> contentStatements) {
+    private IfElseStatement(List<Statement> contentStatements) {
         super("IF Statement");
         this.contentStatements = Objects.requireNonNull(contentStatements, "contentStatements cannot be null");
     }
@@ -19,8 +19,13 @@ public class IfStatement extends Statement {
         return expressionStatements;
     }
 
-    public static IfStatement createIf(String condition, List<Statement> contentStatements) {
+    public static IfElseStatement createIf(String condition, List<Statement> contentStatements) {
         contentStatements.forEach(statement -> statement.addProperty(StatementProperties.IF_CONDITION, condition));
-        return new IfStatement(contentStatements);
+        return new IfElseStatement(contentStatements);
+    }
+
+    public static IfElseStatement createElse(List<Statement> contentStatements) {
+        contentStatements.forEach(statement -> statement.addProperty(StatementProperties.IN_ELSE, "true"));
+        return new IfElseStatement(contentStatements);
     }
 }

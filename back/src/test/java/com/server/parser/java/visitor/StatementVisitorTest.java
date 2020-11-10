@@ -227,12 +227,12 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldVisitIf() {
         String input = "if(true) { System.out.print(1); if(true) { System.out.print(2); } }";
-        JavaParser.IfStatementContext c = HELPER.shouldParseToEof(input, JavaParser::ifStatement);
+        JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof(input, JavaParser::ifElseStatement);
 
-        IfStatement ifStatement = (IfStatement) visitor.visit(c, context);
+        IfElseStatement ifElseStatement = (IfElseStatement) visitor.visit(c, context);
 
-        assertThat(ifStatement.getText()).isEqualTo("IF Statement");
-        assertThat(ifStatement.getExpressionStatements()).extracting(ExpressionStatement::getText)
+        assertThat(ifElseStatement.getText()).isEqualTo("IF Statement");
+        assertThat(ifElseStatement.getExpressionStatements()).extracting(ExpressionStatement::getText)
                 .containsExactly("System.out.print(1)", "System.out.print(2)");
     }
 }

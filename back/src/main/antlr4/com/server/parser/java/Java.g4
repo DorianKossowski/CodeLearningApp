@@ -63,11 +63,11 @@ methodBody
 
 statement
     : expressionStatement
-    | ifStatement
+    | ifElseStatement
     | emptyStatement
     ;
 
-ifStatement
+ifElseStatement
     : IF '(' cond=expression ')' ifBranchContent (ELSE ifBranchContent)?
     ;
 

@@ -177,6 +177,6 @@ public class JavaParserTest {
             "if(false) {} else fun();", "if(false) {} else { fun(); fun(); }",
     })
     void shouldParseIfStmt(String input) {
-        HELPER.shouldParseToEof(input, JavaParser::ifStatement);
+        HELPER.shouldParseToEof(input, JavaParser::ifElseStatement);
     }
 }
