@@ -102,14 +102,17 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
         //*** IF ***//
         @Override
-        public Statement visitIfStatement(JavaParser.IfStatementContext ctx) {
+        public Statement visitIfElseStatement(JavaParser.IfElseStatementContext ctx) {
             Expression condition = context.getVisitor(Expression.class).visit(ctx.cond, context);
             boolean condValue = ifStmtResolver.resolveCondition(condition);
             List<Statement> visitedStatements = new ArrayList<>();
             if (condValue) {
-                ctx.ifBranchContent().get(0).statement().forEach(stmtContext -> visitedStatements.add(visit(stmtContext)));
+                ctx.ifBranchContent(0).statement().forEach(stmtContext -> visitedStatements.add(visit(stmtContext)));
+            } else if (ctx.ifBranchContent(1) != null) {
+                ctx.ifBranchContent(1).statement().forEach(stmtContext -> visitedStatements.add(visit(stmtContext)));
+                return IfElseStatement.createElse(visitedStatements);
             }
-            return IfStatement.createIf(ctx.cond.getText(), visitedStatements);
+            return IfElseStatement.createIf(ctx.cond.getText(), visitedStatements);
         }
     }
 }

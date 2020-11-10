@@ -8,7 +8,7 @@ public class IfElseStatement extends Statement {
     private final List<Statement> contentStatements;
 
     private IfElseStatement(List<Statement> contentStatements) {
-        super("IF Statement");
+        super("IF ELSE Statement");
         this.contentStatements = Objects.requireNonNull(contentStatements, "contentStatements cannot be null");
     }
 
