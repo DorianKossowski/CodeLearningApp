@@ -11,6 +11,9 @@
 -> statement
     with text: "System.out.print(\"if4\")"
     is in else
+-> statement
+    with text: "System.out.print(\"if5\")"
+    with else if: "2 > 1"
 
 ### INPUT ###
 public class MyClass {
@@ -33,6 +36,12 @@ public class MyClass {
             System.out.print("NOT");
         } else {
             System.out.print("if4");
+        }
+
+        if(b2) {
+            System.out.print("NOT");
+        } else if(2 > 1) {
+            System.out.print("if5");
         }
     }
 }

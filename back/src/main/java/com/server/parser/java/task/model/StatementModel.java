@@ -8,6 +8,7 @@ public class StatementModel {
     private String text;
     private String resolved;
     private String ifCond;
+    private String elseIfCond;
     private Boolean isInElse;
     private String logInfo;
 
@@ -28,6 +29,10 @@ public class StatementModel {
 
     public Optional<String> getIfCond() {
         return Optional.ofNullable(ifCond);
+    }
+
+    public Optional<String> getElseIfCond() {
+        return Optional.ofNullable(elseIfCond);
     }
 
     public Optional<Boolean> isInElse() {
@@ -55,13 +60,14 @@ public class StatementModel {
                 Objects.equals(text, that.text) &&
                 Objects.equals(resolved, that.resolved) &&
                 Objects.equals(ifCond, that.ifCond) &&
+                Objects.equals(elseIfCond, that.elseIfCond) &&
                 Objects.equals(isInElse, that.isInElse) &&
                 Objects.equals(logInfo, that.logInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inMethod, text, resolved, ifCond, isInElse, logInfo);
+        return Objects.hash(inMethod, text, resolved, ifCond, elseIfCond, isInElse, logInfo);
     }
 
     public static class Builder {
@@ -69,6 +75,7 @@ public class StatementModel {
         private String text;
         private String resolved;
         private String ifCond;
+        private String elseIfCond;
         private Boolean isInElse;
         private String logInfo;
 
@@ -92,6 +99,11 @@ public class StatementModel {
             return this;
         }
 
+        public Builder withElseIf(String elseIfCond) {
+            this.elseIfCond = elseIfCond;
+            return this;
+        }
+
         public Builder isInElse(boolean isInElse) {
             this.isInElse = isInElse;
             return this;
@@ -108,6 +120,7 @@ public class StatementModel {
             statementModel.text = this.text;
             statementModel.resolved = this.resolved;
             statementModel.ifCond = this.ifCond;
+            statementModel.elseIfCond = this.elseIfCond;
             statementModel.isInElse = this.isInElse;
             statementModel.logInfo = this.logInfo;
 

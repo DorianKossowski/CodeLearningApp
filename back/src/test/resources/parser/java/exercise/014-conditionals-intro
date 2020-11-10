@@ -1,0 +1,21 @@
+### TASK ###
+-> statement
+    with text: "System.out.print(\"ELSE a<b\")"
+    is in else
+    log info: "Wywołanie metody print z napisem: ELSE a<b"
+
+### INPUT ###
+public class MyClass {
+    public static void main(String[] args){
+        int a = 1;
+        int b = 2;
+
+        if(a > b) {
+            System.out.print("IF a>b");
+        } else if(a == b) {
+            System.out.print("ELSE IF a==b");
+        } else {
+            System.out.print("ELSE a<b");
+        }
+    }
+}
