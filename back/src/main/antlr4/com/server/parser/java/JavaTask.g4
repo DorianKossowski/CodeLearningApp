@@ -27,9 +27,13 @@ statementRule
 
 statementRuleSpec
     : statementMethodRuleSpec
-    | WITH ( textRuleSpec | statementResolvedRuleSpec | ifSpec )
+    | WITH ( textRuleSpec | statementResolvedRuleSpec | ifSpec | elseIfSpec )
     | elseSpec
     | logInfo
+    ;
+
+elseIfSpec
+    : 'else if' ':' STRING_LITERAL
     ;
 
 elseSpec

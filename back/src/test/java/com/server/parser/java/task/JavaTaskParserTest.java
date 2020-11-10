@@ -30,6 +30,7 @@ public class JavaTaskParserTest {
             "statement with resolved: \"t\"",
             "statement log info: \"t\"",
             "statement with if: \"t\"",
+            "statement with else if: \"t\"",
             "statement is in else"
     })
     void shouldParseStatementRule(String input) {
