@@ -28,7 +28,12 @@ statementRule
 statementRuleSpec
     : statementMethodRuleSpec
     | WITH ( textRuleSpec | statementResolvedRuleSpec | ifSpec )
+    | elseSpec
     | logInfo
+    ;
+
+elseSpec
+    : 'is in else'
     ;
 
 ifSpec
