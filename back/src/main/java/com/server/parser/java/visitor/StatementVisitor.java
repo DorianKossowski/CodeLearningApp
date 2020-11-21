@@ -5,13 +5,15 @@ import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.*;
+import com.server.parser.java.ast.statement.Assignment;
+import com.server.parser.java.ast.statement.MethodCall;
+import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.IfStmtResolver;
 import com.server.parser.util.EmptyExpressionPreparer;
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -24,13 +26,13 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         return new StatementVisitorInternal(context).visit(ctx);
     }
 
-    private static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
+    public static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
         private final JavaContext context;
         private final IfStmtResolver ifStmtResolver;
 
         private StatementVisitorInternal(JavaContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
-            this.ifStmtResolver = new IfStmtResolver();
+            this.ifStmtResolver = new IfStmtResolver(this.context, this);
         }
 
         @Override
@@ -103,16 +105,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         //*** IF ***//
         @Override
         public Statement visitIfElseStatement(JavaParser.IfElseStatementContext ctx) {
-            Expression condition = context.getVisitor(Expression.class).visit(ctx.cond, context);
-            boolean condValue = ifStmtResolver.resolveCondition(condition);
-            List<Statement> visitedStatements = new ArrayList<>();
-            if (condValue) {
-                ctx.ifBranchContent(0).statement().forEach(stmtContext -> visitedStatements.add(visit(stmtContext)));
-            } else if (ctx.ifBranchContent(1) != null) {
-                ctx.ifBranchContent(1).statement().forEach(stmtContext -> visitedStatements.add(visit(stmtContext)));
-                return IfElseStatement.createElse(visitedStatements);
-            }
-            return IfElseStatement.createIf(ctx.cond.getText(), visitedStatements);
+            return ifStmtResolver.resolve(ctx);
         }
     }
 }

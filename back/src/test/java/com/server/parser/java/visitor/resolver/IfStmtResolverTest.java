@@ -4,6 +4,8 @@ import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
+import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.visitor.StatementVisitor;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +14,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class IfStmtResolverTest {
-    private final IfStmtResolver resolver = new IfStmtResolver();
+    private final IfStmtResolver resolver = new IfStmtResolver(mock(JavaContext.class),
+            mock(StatementVisitor.StatementVisitorInternal.class));
 
     @Test
     void shouldThrowWhenNotLogic() {
