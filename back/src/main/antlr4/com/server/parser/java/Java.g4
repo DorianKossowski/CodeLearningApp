@@ -69,7 +69,12 @@ statement
     : blockStatement
     | expressionStatement
     | ifElseStatement
+    | switchStatement
     | emptyStatement
+    ;
+
+switchStatement
+    : SWITCH '(' expression ')' '{' '}'
     ;
 
 blockStatement
@@ -122,7 +127,7 @@ callArguments
     ;
 
 expression
-   :  unOp=('+' | '-')? exprAtom
+   : unOp=('+' | '-')? exprAtom
    | expression op=('*' | '/' | '%') expression
    | expression op=('+' | '-') expression
    | expression op=('<' | '<=' | '>' | '>=') expression
@@ -212,12 +217,13 @@ identifier
     : IDENTIFIER
     ;
 
-IF : 'if' ;
-ELSE : 'else' ;
-NULL : 'null' ;
-SEMICOLON : ';' ;
-LPAREN : '(' ;
-RPAREN : ')' ;
+ELSE        : 'else' ;
+IF          : 'if' ;
+LPAREN      : '(' ;
+NULL        : 'null' ;
+RPAREN      : ')' ;
+SEMICOLON   : ';' ;
+SWITCH      : 'switch' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 CHAR_LITERAL : '\'' . '\'' ;

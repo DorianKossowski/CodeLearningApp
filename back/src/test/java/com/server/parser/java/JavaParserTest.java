@@ -187,4 +187,12 @@ public class JavaParserTest {
     void shouldParseBlockStmt(String input) {
         HELPER.shouldParseToEof(input, JavaParser::blockStatement);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "switch(cond) { }"
+    })
+    void shouldParseSwitchStmt(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::switchStatement);
+    }
 }
