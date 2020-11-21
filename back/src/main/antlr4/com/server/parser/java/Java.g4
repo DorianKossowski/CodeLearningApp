@@ -58,13 +58,22 @@ singleMethodArg
     ;
 
 methodBody
+    : statementList
+    ;
+
+statementList
     : statement*
     ;
 
 statement
-    : expressionStatement
+    : blockStatement
+    | expressionStatement
     | ifElseStatement
     | emptyStatement
+    ;
+
+blockStatement
+    : '{' statementList '}'
     ;
 
 ifElseStatement

@@ -179,4 +179,12 @@ public class JavaParserTest {
     void shouldParseIfStmt(String input) {
         HELPER.shouldParseToEof(input, JavaParser::ifElseStatement);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "{ }", "{ fun(); }", "{ fun1(); fun2(); }"
+    })
+    void shouldParseBlockStmt(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::blockStatement);
+    }
 }
