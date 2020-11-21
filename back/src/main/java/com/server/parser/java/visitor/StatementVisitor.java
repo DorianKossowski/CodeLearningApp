@@ -121,5 +121,11 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         public Statement visitSwitchStatement(JavaParser.SwitchStatementContext ctx) {
             return switchStmtResolver.resolve(ctx);
         }
+
+        //*** BREAK ***//
+        @Override
+        public Statement visitBreakStatement(JavaParser.BreakStatementContext ctx) {
+            return BreakStatement.INSTANCE;
+        }
     }
 }

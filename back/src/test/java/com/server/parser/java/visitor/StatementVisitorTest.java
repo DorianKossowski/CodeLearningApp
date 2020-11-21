@@ -259,4 +259,12 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThat(ifElseStatement.getExpressionStatements()).extracting(ExpressionStatement::getText)
                 .containsExactly("System.out.print(2)");
     }
+
+    //*** BREAK ***//
+    @Test
+    void shouldVisitBreak() {
+        JavaParser.BreakStatementContext c = HELPER.shouldParseToEof("break", JavaParser::breakStatement);
+
+        assertThat(visitor.visit(c, context)).isSameAs(BreakStatement.INSTANCE);
+    }
 }
