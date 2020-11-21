@@ -83,6 +83,7 @@ switchElement
 
 switchElementLabel
     : CASE expression ':'
+    | DEFAULT ':'
     ;
 
 blockStatement
@@ -226,6 +227,7 @@ identifier
     ;
 
 CASE        : 'case' ;
+DEFAULT     : 'default' ;
 ELSE        : 'else' ;
 IF          : 'if' ;
 LPAREN      : '(' ;
