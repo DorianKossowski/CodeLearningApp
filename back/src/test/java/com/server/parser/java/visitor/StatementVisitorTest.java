@@ -34,6 +34,18 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         methodContext = context.createCurrentMethodContext(METHOD_NAME);
     }
 
+    @Test
+    void shouldVisitBlockStatement() {
+        String input = "{ int a = 1; boolean b = false; }";
+        JavaParser.BlockStatementContext c = HELPER.shouldParseToEof(input, JavaParser::blockStatement);
+
+        BlockStatement statement = (BlockStatement) visitor.visit(c, context);
+
+        assertThat(statement.getText()).isEqualTo("{ BLOCK STATEMENT }");
+        assertThat(statement.getExpressionStatements()).extracting(Statement::getText)
+                .containsExactly("int a = 1", "boolean b = false");
+    }
+
     //*** METHOD CALL ***//
     @Test
     void shouldVisitMethodCall() {

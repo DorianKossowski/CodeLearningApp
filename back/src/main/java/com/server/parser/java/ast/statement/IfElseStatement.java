@@ -25,12 +25,16 @@ public class IfElseStatement extends Statement {
     }
 
     public static IfElseStatement createIf(String condition, List<Statement> contentStatements) {
-        contentStatements.forEach(statement -> statement.addProperty(StatementProperties.IF_CONDITION, condition));
+        contentStatements.forEach(statement -> addIfStatementProperty(statement, StatementProperties.IF_CONDITION, condition));
         return new IfElseStatement(contentStatements);
     }
 
+    private static void addIfStatementProperty(Statement statement, String propKey, String propValue) {
+        statement.getExpressionStatements().forEach(exprStatement -> exprStatement.addProperty(propKey, propValue));
+    }
+
     public static IfElseStatement createElse(List<Statement> contentStatements) {
-        contentStatements.forEach(statement -> statement.addProperty(StatementProperties.IN_ELSE, "true"));
+        contentStatements.forEach(statement -> addIfStatementProperty(statement, StatementProperties.IN_ELSE, "true"));
         return new IfElseStatement(contentStatements);
     }
 }

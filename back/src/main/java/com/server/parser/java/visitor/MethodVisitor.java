@@ -61,8 +61,9 @@ public class MethodVisitor extends JavaVisitor<Method> {
             StatementVisitor statementVisitor = new StatementVisitor();
 
             List<Statement> statements = new ArrayList<>();
-            for (int i = 0; i < ctx.getChildCount(); ++i) {
-                ParseTree child = ctx.getChild(i);
+            JavaParser.StatementListContext statementListContext = ctx.statementList();
+            for (int i = 0; i < statementListContext.getChildCount(); ++i) {
+                ParseTree child = statementListContext.getChild(i);
                 if (child instanceof ParserRuleContext) {
                     statements.add(statementVisitor.visit((ParserRuleContext) child, context));
                 }
