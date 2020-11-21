@@ -77,12 +77,7 @@ blockStatement
     ;
 
 ifElseStatement
-    : IF '(' cond=expression ')' ifBranchContent (ELSE ifBranchContent)?
-    ;
-
-ifBranchContent
-    : statement
-    | '{' statement* '}'
+    : IF '(' cond=expression ')' statement (ELSE statement)?
     ;
 
 emptyStatement

@@ -28,9 +28,9 @@ public class IfStmtResolver {
         boolean condValue = resolveCondition(condition);
         List<Statement> visitedStatements = new ArrayList<>();
         if (condValue) {
-            ifCtx.ifBranchContent(0).statement().forEach(stmtContext -> visitedStatements.add(statementVisitor.visit(stmtContext)));
-        } else if (ifCtx.ifBranchContent(1) != null) {
-            ifCtx.ifBranchContent(1).statement().forEach(stmtContext -> visitedStatements.add(statementVisitor.visit(stmtContext)));
+            visitedStatements.add(statementVisitor.visit(ifCtx.statement(0)));
+        } else if (ifCtx.statement(1) != null) {
+            visitedStatements.add(statementVisitor.visit(ifCtx.statement(1)));
             return IfElseStatement.createElse(visitedStatements);
         }
         return IfElseStatement.createIf(ifCtx.cond.getText(), visitedStatements);
