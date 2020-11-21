@@ -1,0 +1,11 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        int i = 2;
+
+        switch(i) {
+        }
+    }
+}

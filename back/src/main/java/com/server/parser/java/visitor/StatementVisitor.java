@@ -8,6 +8,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.IfStmtResolver;
+import com.server.parser.java.visitor.resolver.SwitchStmtResolver;
 import com.server.parser.util.EmptyExpressionPreparer;
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -26,10 +27,12 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     public static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
         private final JavaContext context;
         private final IfStmtResolver ifStmtResolver;
+        private final SwitchStmtResolver switchStmtResolver;
 
         private StatementVisitorInternal(JavaContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
             this.ifStmtResolver = new IfStmtResolver(this.context, this);
+            switchStmtResolver = new SwitchStmtResolver(this.context, this);
         }
 
         @Override
@@ -111,6 +114,12 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitIfElseStatement(JavaParser.IfElseStatementContext ctx) {
             return ifStmtResolver.resolve(ctx);
+        }
+
+        //*** SWITCH ***//
+        @Override
+        public Statement visitSwitchStatement(JavaParser.SwitchStatementContext ctx) {
+            return switchStmtResolver.resolve(ctx);
         }
     }
 }
