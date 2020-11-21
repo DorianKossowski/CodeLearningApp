@@ -190,7 +190,8 @@ public class JavaParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "switch(cond) { }"
+            "switch(cond) { }", "switch(cond) { case x: fun(); }", "switch(cond) { case x:case y: fun(); fun(); }",
+            "switch(cond) { case x: fun(); case y: fun(); case z: }"
     })
     void shouldParseSwitchStmt(String input) {
         HELPER.shouldParseToEof(input, JavaParser::switchStatement);

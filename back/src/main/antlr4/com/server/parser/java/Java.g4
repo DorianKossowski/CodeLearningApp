@@ -74,7 +74,15 @@ statement
     ;
 
 switchStatement
-    : SWITCH '(' expression ')' '{' '}'
+    : SWITCH '(' expression ')' '{' switchElement* '}'
+    ;
+
+switchElement
+    : switchElementLabel+ statementList
+    ;
+
+switchElementLabel
+    : CASE expression ':'
     ;
 
 blockStatement
@@ -217,6 +225,7 @@ identifier
     : IDENTIFIER
     ;
 
+CASE        : 'case' ;
 ELSE        : 'else' ;
 IF          : 'if' ;
 LPAREN      : '(' ;
