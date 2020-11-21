@@ -24,8 +24,7 @@ public class IfStmtResolver {
     }
 
     public Statement resolve(JavaParser.IfElseStatementContext ifCtx) {
-        Expression condition = context.getVisitor(Expression.class).visit(ifCtx.cond, context);
-        boolean condValue = resolveCondition(condition);
+        boolean condValue = resolveCondition(ifCtx.cond);
         List<Statement> visitedStatements = new ArrayList<>();
         if (condValue) {
             visitedStatements.add(statementVisitor.visit(ifCtx.statement(0)));
@@ -36,7 +35,8 @@ public class IfStmtResolver {
         return IfElseStatement.createIf(ifCtx.cond.getText(), visitedStatements);
     }
 
-    boolean resolveCondition(Expression condition) {
+    boolean resolveCondition(JavaParser.ExpressionContext expressionContext) {
+        Expression condition = context.getVisitor(Expression.class).visit(expressionContext, context);
         Value value = condition.getValue();
         if (value instanceof ConstantProvider && ((ConstantProvider) value).getConstant().c instanceof Boolean) {
             return (Boolean) ((ConstantProvider) value).getConstant().c;
