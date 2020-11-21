@@ -196,4 +196,9 @@ public class JavaParserTest {
     void shouldParseSwitchStmt(String input) {
         HELPER.shouldParseToEof(input, JavaParser::switchStatement);
     }
+
+    @Test
+    void shouldParseBreak() {
+        HELPER.shouldParseToEof("break", JavaParser::breakStatement);
+    }
 }

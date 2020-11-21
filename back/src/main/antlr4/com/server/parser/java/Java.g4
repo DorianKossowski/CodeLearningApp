@@ -102,7 +102,12 @@ expressionStatement
     : ( call
     | methodVarDec
     | assignment
+    | breakStatement
     ) SEMICOLON
+    ;
+
+breakStatement
+    : BREAK
     ;
 
 assignment
@@ -226,6 +231,7 @@ identifier
     : IDENTIFIER
     ;
 
+BREAK       : 'break' ;
 CASE        : 'case' ;
 DEFAULT     : 'default' ;
 ELSE        : 'else' ;
