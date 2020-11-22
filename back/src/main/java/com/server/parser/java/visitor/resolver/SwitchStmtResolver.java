@@ -7,25 +7,44 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.SwitchStatement;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.StatementVisitor;
+import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SwitchStmtResolver {
     private static final String EXCEPTION_SUFFIX = " nie jest jednego z typów: char, byte, short, int, Character, " +
             "Byte, Short, Integer, String";
     private final JavaContext context;
-    private final StatementVisitor.StatementVisitorInternal statementVisitor;
+    private final StatementListVisitor statementListVisitor = new StatementListVisitor();
 
-    public SwitchStmtResolver(JavaContext context, StatementVisitor.StatementVisitorInternal statementVisitor) {
+    public SwitchStmtResolver(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
-        this.statementVisitor = Objects.requireNonNull(statementVisitor, "statementVisitor cannot be null");
     }
 
     public Statement resolve(JavaParser.SwitchStatementContext switchCtx) {
-        resolveExpression(switchCtx.expression());
-        return new SwitchStatement();
+        Value value = resolveExpression(switchCtx.expression());
+        List<SwitchElement> switchElements = switchCtx.switchElement().stream()
+                .map(this::resolveSwitchElement)
+                .collect(Collectors.toList());
+        return new SwitchStatement(null);
+    }
+
+    SwitchElement resolveSwitchElement(JavaParser.SwitchElementContext switchElementContext) {
+        List<Expression> labelExpressions = resolveLabelExpressions(switchElementContext.switchElementLabel());
+        List<Statement> statements = statementListVisitor.visit(switchElementContext.statementList(), context);
+        return new SwitchElement(labelExpressions, statements);
+    }
+
+    List<Expression> resolveLabelExpressions(List<JavaParser.SwitchElementLabelContext> switchElementLabelContexts) {
+        return switchElementLabelContexts.stream().map(switchElementLabelContext -> {
+            if (switchElementLabelContext.CASE() != null) {
+                return context.getVisitor(Expression.class).visit(switchElementLabelContext.expression(), context);
+            }
+            return null;
+        }).collect(Collectors.toList());
     }
 
     Value resolveExpression(JavaParser.ExpressionContext expressionContext) {
@@ -39,5 +58,23 @@ public class SwitchStmtResolver {
             return value;
         }
         throw new ResolvingException(value.getExpression().getText() + EXCEPTION_SUFFIX);
+    }
+
+    static class SwitchElement {
+        private final List<Expression> labelExpressions;
+        private final List<Statement> statements;
+
+        private SwitchElement(List<Expression> labelExpressions, List<Statement> statements) {
+            this.labelExpressions = Objects.requireNonNull(labelExpressions, "labelExpressions cannot be null");
+            this.statements = Objects.requireNonNull(statements, "statements cannot be null");
+        }
+
+        public List<Expression> getLabelExpressions() {
+            return labelExpressions;
+        }
+
+        public List<Statement> getStatements() {
+            return statements;
+        }
     }
 }

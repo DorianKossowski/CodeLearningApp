@@ -32,7 +32,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         private StatementVisitorInternal(JavaContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
             this.ifStmtResolver = new IfStmtResolver(this.context, this);
-            this.switchStmtResolver = new SwitchStmtResolver(this.context, this);
+            this.switchStmtResolver = new SwitchStmtResolver(this.context);
         }
 
         @Override
