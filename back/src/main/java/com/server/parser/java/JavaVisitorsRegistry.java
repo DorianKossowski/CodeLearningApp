@@ -4,6 +4,7 @@ import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.java.visitor.*;
@@ -19,6 +20,7 @@ public class JavaVisitorsRegistry {
         visitors.put(Expression.class, new ExpressionVisitor());
         visitors.put(Method.class, new MethodVisitor());
         visitors.put(ClassAst.class, new ClassVisitor());
+        visitors.put(Statement.class, new StatementVisitor());
     }
 
     public static <T extends AstElement> JavaVisitor<T> get(Class<T> elementClass) {
