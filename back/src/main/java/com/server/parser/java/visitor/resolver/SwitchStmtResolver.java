@@ -5,15 +5,13 @@ import com.server.parser.java.ast.ConstantProvider;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.SwitchStatement;
+import com.server.parser.java.ast.value.PrimitiveValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SwitchStmtResolver {
@@ -37,23 +35,66 @@ public class SwitchStmtResolver {
                 .map(SwitchElement::getLabelExpressions)
                 .collect(Collectors.toList());
         validateLabels(switchLabels);
-        return new SwitchStatement(null);
+        return new SwitchStatement(resolveStatements(value, switchElements));
+    }
+
+    private List<Statement> resolveStatements(Value value, List<SwitchElement> switchElements) {
+        Integer fulfilledCaseIndex = null;
+        for (int i = 0; i < switchElements.size(); ++i) {
+            if (isLabelFulfilled(value, switchElements.get(i))) {
+                fulfilledCaseIndex = i;
+                break;
+            }
+        }
+        if (fulfilledCaseIndex != null) {
+            return resolveStatements(switchElements, fulfilledCaseIndex);
+        } else if (defaultIndex != null) {
+            return resolveStatements(switchElements, defaultIndex);
+        }
+        return Collections.emptyList();
+    }
+
+    List<Statement> resolveStatements(List<SwitchElement> switchElements, int startIndex) {
+        ArrayList<Statement> statements = new ArrayList<>();
+        for (int i = startIndex; i < switchElements.size(); ++i) {
+            // TODO handle break;
+            statements.addAll(switchElements.get(i).getStatements());
+        }
+        return statements;
+    }
+
+    boolean isLabelFulfilled(Value value, SwitchElement switchElement) {
+        boolean fulfilled;
+        for (Expression labelExpression : switchElement.getLabelExpressions()) {
+            if (labelExpression == null) {
+                continue;
+            }
+            Value labelValue = labelExpression.getValue();
+            if (value instanceof PrimitiveValue) {
+                fulfilled = value.equalsOperator(labelValue);
+            } else {
+                fulfilled = value.equalsMethod(labelValue);
+            }
+            if (fulfilled) {
+                return true;
+            }
+        }
+        return false;
     }
 
     void validateLabels(List<List<Expression>> switchLabels) {
         LinkedHashSet<String> distinctLabelExpressionTexts = new LinkedHashSet<>();
         List<String> labelExpressionTexts = new ArrayList<>();
-        for (List<Expression> switchLabel : switchLabels) {
-            validateLabel(distinctLabelExpressionTexts, labelExpressionTexts, switchLabel);
+        for (int i = 0; i < switchLabels.size(); ++i) {
+            validateLabel(distinctLabelExpressionTexts, labelExpressionTexts, switchLabels.get(i), i);
         }
     }
 
     private void validateLabel(LinkedHashSet<String> distinctLabelExpressionTexts, List<String> labelExpressionTexts,
-                               List<Expression> switchLabel) {
-        for (int i = 0; i < switchLabel.size(); ++i) {
-            Expression labelExpression = switchLabel.get(i);
+                               List<Expression> switchLabel, int switchLabelIndex) {
+        for (Expression labelExpression : switchLabel) {
             if (labelExpression == null) {
-                validateDefaultLabel(i);
+                validateDefaultLabel(switchLabelIndex);
             } else {
                 validateCaseLabel(distinctLabelExpressionTexts, labelExpressionTexts, labelExpression);
             }
@@ -62,7 +103,7 @@ public class SwitchStmtResolver {
 
     private void validateCaseLabel(LinkedHashSet<String> distinctLabelExpressionTexts, List<String> labelExpressionTexts,
                                    Expression labelExpression) {
-//          TODO handle const expressions
+//        TODO handle const expressions
 //        if (!(labelExpression instanceof Literal)) {
 //            throw new ResolvingException("Etykieta case wymaga stałego wyrażenia, którym nie jest: " + labelExpression.getText());
 //        }
@@ -74,9 +115,9 @@ public class SwitchStmtResolver {
         }
     }
 
-    private void validateDefaultLabel(int i) {
+    private void validateDefaultLabel(int switchLabelIndex) {
         if (defaultIndex == null) {
-            defaultIndex = i;
+            defaultIndex = switchLabelIndex;
         } else {
             throw new ResolvingException("Zduplikowana etykieta default w instrukcji switch");
         }
@@ -114,7 +155,7 @@ public class SwitchStmtResolver {
         private final List<Expression> labelExpressions;
         private final List<Statement> statements;
 
-        private SwitchElement(List<Expression> labelExpressions, List<Statement> statements) {
+        SwitchElement(List<Expression> labelExpressions, List<Statement> statements) {
             this.labelExpressions = Objects.requireNonNull(labelExpressions, "labelExpressions cannot be null");
             this.statements = Objects.requireNonNull(statements, "statements cannot be null");
         }

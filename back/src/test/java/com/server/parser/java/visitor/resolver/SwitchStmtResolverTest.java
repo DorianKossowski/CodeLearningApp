@@ -8,12 +8,17 @@ import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.statement.BreakStatement;
+import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -21,6 +26,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -126,5 +132,41 @@ class SwitchStmtResolverTest {
         assertThatThrownBy(() -> resolver.validateLabels(Collections.singletonList(Arrays.asList(expression, expression))))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Zduplikowana etykieta text w instrukcji switch");
+    }
+
+
+    static Stream<Arguments> isLabelFulfilledProvider() {
+        return Stream.of(
+                Arguments.of(new ObjectWrapperValue(new Literal(new StringConstant("str"))), true),
+                Arguments.of(new ObjectWrapperValue(new Literal(new StringConstant("str2"))), false)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("isLabelFulfilledProvider")
+    void shouldCheckIfLabelIsFulfilled(Value value, boolean expectedFulfilled) {
+        List<Expression> labelExpressions = Arrays.asList(new Literal(new StringConstant("str")), null);
+        SwitchStmtResolver.SwitchElement switchElement = new SwitchStmtResolver.SwitchElement(labelExpressions, Collections.emptyList());
+
+        boolean labelFulfilled = resolver.isLabelFulfilled(value, switchElement);
+
+        assertThat(labelFulfilled).isEqualTo(expectedFulfilled);
+    }
+
+    @Test
+    void shouldResolveStatements() {
+        Statement statement1 = mock(Statement.class);
+        Statement statement2 = mock(Statement.class);
+        SwitchStmtResolver.SwitchElement switchElement0 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(),
+                Collections.singletonList(mock(Statement.class)));
+        SwitchStmtResolver.SwitchElement switchElement1 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(),
+                Arrays.asList(statement1, BreakStatement.INSTANCE));
+        SwitchStmtResolver.SwitchElement switchElement2 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(),
+                Collections.singletonList(statement2));
+
+        List<Statement> statements = resolver.resolveStatements(Arrays.asList(switchElement0, switchElement1,
+                switchElement2), 1);
+
+        assertThat(statements).containsExactly(statement1, BreakStatement.INSTANCE, statement2);
     }
 }
