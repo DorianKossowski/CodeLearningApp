@@ -118,4 +118,13 @@ class SwitchStmtResolverTest {
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Zduplikowana etykieta default w instrukcji switch");
     }
+
+    @Test
+    void shouldThrowWhenDuplicatedLabels() {
+        Expression expression = mock(Expression.class);
+        when(expression.getResolvedText()).thenReturn("text");
+        assertThatThrownBy(() -> resolver.validateLabels(Collections.singletonList(Arrays.asList(expression, expression))))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Zduplikowana etykieta text w instrukcji switch");
+    }
 }

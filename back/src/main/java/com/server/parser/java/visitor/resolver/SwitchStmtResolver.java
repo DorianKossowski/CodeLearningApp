@@ -10,6 +10,8 @@ import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,13 +41,36 @@ public class SwitchStmtResolver {
     }
 
     void validateLabels(List<List<Expression>> switchLabels) {
+        LinkedHashSet<String> distinctLabelExpressionTexts = new LinkedHashSet<>();
+        List<String> labelExpressionTexts = new ArrayList<>();
         for (List<Expression> switchLabel : switchLabels) {
-            for (int i = 0; i < switchLabel.size(); ++i) {
-                Expression labelExpression = switchLabel.get(i);
-                if (labelExpression == null) {
-                    validateDefaultLabel(i);
-                }
+            validateLabel(distinctLabelExpressionTexts, labelExpressionTexts, switchLabel);
+        }
+    }
+
+    private void validateLabel(LinkedHashSet<String> distinctLabelExpressionTexts, List<String> labelExpressionTexts,
+                               List<Expression> switchLabel) {
+        for (int i = 0; i < switchLabel.size(); ++i) {
+            Expression labelExpression = switchLabel.get(i);
+            if (labelExpression == null) {
+                validateDefaultLabel(i);
+            } else {
+                validateCaseLabel(distinctLabelExpressionTexts, labelExpressionTexts, labelExpression);
             }
+        }
+    }
+
+    private void validateCaseLabel(LinkedHashSet<String> distinctLabelExpressionTexts, List<String> labelExpressionTexts,
+                                   Expression labelExpression) {
+//          TODO handle const expressions
+//        if (!(labelExpression instanceof Literal)) {
+//            throw new ResolvingException("Etykieta case wymaga stałego wyrażenia, którym nie jest: " + labelExpression.getText());
+//        }
+        String resolvedText = labelExpression.getResolvedText();
+        if (distinctLabelExpressionTexts.add(resolvedText)) {
+            labelExpressionTexts.add(resolvedText);
+        } else {
+            throw new ResolvingException(String.format("Zduplikowana etykieta %s w instrukcji switch", resolvedText));
         }
     }
 
