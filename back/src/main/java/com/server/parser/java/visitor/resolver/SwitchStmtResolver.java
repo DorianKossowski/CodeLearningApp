@@ -19,17 +19,42 @@ public class SwitchStmtResolver {
             "Byte, Short, Integer, String";
     private final JavaContext context;
     private final StatementListVisitor statementListVisitor = new StatementListVisitor();
+    private Integer defaultIndex;
 
     public SwitchStmtResolver(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
     }
 
     public Statement resolve(JavaParser.SwitchStatementContext switchCtx) {
+        defaultIndex = null;
         Value value = resolveExpression(switchCtx.expression());
         List<SwitchElement> switchElements = switchCtx.switchElement().stream()
                 .map(this::resolveSwitchElement)
                 .collect(Collectors.toList());
+        List<List<Expression>> switchLabels = switchElements.stream()
+                .map(SwitchElement::getLabelExpressions)
+                .collect(Collectors.toList());
+        validateLabels(switchLabels);
         return new SwitchStatement(null);
+    }
+
+    void validateLabels(List<List<Expression>> switchLabels) {
+        for (List<Expression> switchLabel : switchLabels) {
+            for (int i = 0; i < switchLabel.size(); ++i) {
+                Expression labelExpression = switchLabel.get(i);
+                if (labelExpression == null) {
+                    validateDefaultLabel(i);
+                }
+            }
+        }
+    }
+
+    private void validateDefaultLabel(int i) {
+        if (defaultIndex == null) {
+            defaultIndex = i;
+        } else {
+            throw new ResolvingException("Zduplikowana etykieta default w instrukcji switch");
+        }
     }
 
     SwitchElement resolveSwitchElement(JavaParser.SwitchElementContext switchElementContext) {

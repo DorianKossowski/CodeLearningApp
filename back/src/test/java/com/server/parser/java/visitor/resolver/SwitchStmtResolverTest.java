@@ -111,4 +111,11 @@ class SwitchStmtResolverTest {
         javaContext.createCurrentMethodContext("");
         return spy(new SwitchStmtResolver(javaContext));
     }
+
+    @Test
+    void shouldThrowWhenDuplicatedDefault() {
+        assertThatThrownBy(() -> resolver.validateLabels(Collections.singletonList(Arrays.asList(null, null))))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Zduplikowana etykieta default w instrukcji switch");
+    }
 }
