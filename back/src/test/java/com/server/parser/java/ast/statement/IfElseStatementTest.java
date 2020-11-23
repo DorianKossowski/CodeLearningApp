@@ -4,8 +4,6 @@ import com.google.common.collect.Iterables;
 import com.server.parser.java.ast.expression.Expression;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -15,7 +13,7 @@ class IfElseStatementTest {
     void shouldCreateIfStatement() {
         Assignment assignment = new Assignment("", "", mock(Expression.class));
 
-        IfElseStatement ifElseStatement = IfElseStatement.createIf("cond", Collections.singletonList(assignment));
+        IfElseStatement ifElseStatement = IfElseStatement.createIf("cond", assignment);
 
         ExpressionStatement statement = Iterables.getOnlyElement(ifElseStatement.getExpressionStatements());
         assertThat(statement.getProperty(StatementProperties.IF_CONDITION)).isEqualTo("cond");
@@ -25,7 +23,7 @@ class IfElseStatementTest {
     void shouldCreateElseStatement() {
         Assignment assignment = new Assignment("", "", mock(Expression.class));
 
-        IfElseStatement ifElseStatement = IfElseStatement.createElse(Collections.singletonList(assignment));
+        IfElseStatement ifElseStatement = IfElseStatement.createElse(assignment);
 
         ExpressionStatement statement = Iterables.getOnlyElement(ifElseStatement.getExpressionStatements());
         assertThat(statement.getProperty(StatementProperties.IN_ELSE)).isEqualTo("true");
@@ -34,9 +32,9 @@ class IfElseStatementTest {
     @Test
     void shouldCreateElseStatementWithMoreLevels() {
         Assignment assignment = new Assignment("", "", mock(Expression.class));
-        IfElseStatement insideIf = IfElseStatement.createIf("", Collections.singletonList(assignment));
+        IfElseStatement insideIf = IfElseStatement.createIf("", assignment);
 
-        IfElseStatement ifElseStatement = IfElseStatement.createElse(Collections.singletonList(insideIf));
+        IfElseStatement ifElseStatement = IfElseStatement.createElse(insideIf);
 
         ExpressionStatement statement = Iterables.getOnlyElement(ifElseStatement.getExpressionStatements());
         assertThat(statement.getProperty(StatementProperties.IN_ELSE)).isEqualTo("true");

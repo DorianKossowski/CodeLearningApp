@@ -10,8 +10,6 @@ import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementVisitor;
 import com.server.parser.util.exception.ResolvingException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class IfStmtResolver {
@@ -25,14 +23,13 @@ public class IfStmtResolver {
 
     public Statement resolve(JavaParser.IfElseStatementContext ifCtx) {
         boolean condValue = resolveCondition(ifCtx.cond);
-        List<Statement> visitedStatements = new ArrayList<>();
+        Statement visitedStatement = null;
         if (condValue) {
-            visitedStatements.add(statementVisitor.visit(ifCtx.statement(0)));
+            visitedStatement = statementVisitor.visit(ifCtx.statement(0));
         } else if (ifCtx.statement(1) != null) {
-            visitedStatements.add(statementVisitor.visit(ifCtx.statement(1)));
-            return IfElseStatement.createElse(visitedStatements);
+            return IfElseStatement.createElse(statementVisitor.visit(ifCtx.statement(1)));
         }
-        return IfElseStatement.createIf(ifCtx.cond.getText(), visitedStatements);
+        return IfElseStatement.createIf(ifCtx.cond.getText(), visitedStatement);
     }
 
     boolean resolveCondition(JavaParser.ExpressionContext expressionContext) {
