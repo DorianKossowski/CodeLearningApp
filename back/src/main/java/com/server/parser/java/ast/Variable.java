@@ -3,9 +3,10 @@ package com.server.parser.java.ast;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.ast.value.Value;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Variable {
+public class Variable implements Serializable {
     private final String type;
     private final String name;
     private Value value;

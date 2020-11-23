@@ -1,4 +1,6 @@
 package com.server.parser.java.ast;
 
-public abstract class AstElement {
+import java.io.Serializable;
+
+public abstract class AstElement implements Serializable {
 }

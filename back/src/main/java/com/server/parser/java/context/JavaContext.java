@@ -5,10 +5,11 @@ import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.util.exception.ResolvingException;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JavaContext {
+public class JavaContext implements Serializable {
     private final Map<String, MethodContext> methodWithContext = new HashMap<>();
 
     private String currentClassName;
