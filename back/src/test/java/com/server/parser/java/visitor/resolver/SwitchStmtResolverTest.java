@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
@@ -12,6 +13,7 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -172,5 +174,20 @@ class SwitchStmtResolverTest {
         JavaContext context = new JavaContext();
         context.createCurrentMethodContext("");
         return new SwitchStmtResolver(context);
+    }
+
+    @Test
+    void shouldValidateInSeparateContext() {
+        JavaContext javaContext = new JavaContext();
+        resolver = new SwitchStmtResolver(javaContext);
+        MethodContext methodContext = javaContext.createCurrentMethodContext("");
+        ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
+        methodContext.addVar(new Variable("String", "str", value));
+
+        JavaParser.StatementListContext c = HELPER.shouldParseToEof("str=null;", JavaParser::statementList);
+
+        resolver.validateStatementList(c);
+
+        assertThat(methodContext.getVariable("str").getValue()).isSameAs(value);
     }
 }

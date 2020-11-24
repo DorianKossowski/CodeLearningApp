@@ -10,6 +10,7 @@ import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
+import org.apache.commons.lang.SerializationUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -127,7 +128,13 @@ public class SwitchStmtResolver {
     SwitchElement resolveSwitchElement(JavaParser.SwitchElementContext switchElementContext) {
         List<Expression> labelExpressions = resolveLabelExpressions(switchElementContext.switchElementLabel());
         JavaParser.StatementListContext statementListContext = switchElementContext.statementList();
+        validateStatementList(statementListContext);
         return new SwitchElement(labelExpressions, statementListContext);
+    }
+
+    void validateStatementList(JavaParser.StatementListContext statementListContext) {
+        JavaContext validationContext = (JavaContext) SerializationUtils.clone(context);
+        statementListVisitor.visit(statementListContext, validationContext);
     }
 
     List<Expression> resolveLabelExpressions(List<JavaParser.SwitchElementLabelContext> switchElementLabelContexts) {
