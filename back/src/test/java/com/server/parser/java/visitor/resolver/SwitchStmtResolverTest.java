@@ -9,7 +9,8 @@ import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
-import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.ExpressionStatement;
+import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.ast.statement.SwitchStatement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.ast.value.Value;
@@ -158,13 +159,15 @@ class SwitchStmtResolverTest {
 
     @Test
     void shouldResolveStatements() {
-        JavaParser.SwitchStatementContext switchCtx = HELPER.shouldParseToEof("switch(1) { case 1 : fun1(); break; " +
+        JavaParser.SwitchStatementContext switchCtx = HELPER.shouldParseToEof("switch(1) { case 1: case 2: fun1(); break; " +
                 "default: funD(); }", JavaParser::switchStatement);
 
         SwitchStatement statement = createRealResolver().resolve(switchCtx);
 
-        assertThat(statement.getExpressionStatements()).extracting(Statement::getText)
-                .containsExactly("fun1()");
+        ExpressionStatement expressionStatement = Iterables.getOnlyElement(statement.getExpressionStatements());
+        assertThat(expressionStatement.getText()).isEqualTo("fun1()");
+        assertThat(expressionStatement.getProperty(StatementProperties.SWITCH_EXPRESSION)).isEqualTo("1");
+        assertThat(expressionStatement.getProperty(StatementProperties.SWITCH_LABELS)).isEqualTo("1,2");
     }
 
     private SwitchStmtResolver createRealResolver() {

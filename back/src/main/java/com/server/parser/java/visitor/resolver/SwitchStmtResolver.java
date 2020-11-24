@@ -5,6 +5,7 @@ import com.server.parser.java.ast.ConstantProvider;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.BreakStatement;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.ast.statement.SwitchStatement;
 import com.server.parser.java.ast.value.PrimitiveValue;
 import com.server.parser.java.ast.value.Value;
@@ -29,7 +30,8 @@ public class SwitchStmtResolver {
 
     public SwitchStatement resolve(JavaParser.SwitchStatementContext switchCtx) {
         defaultIndex = null;
-        Value value = resolveExpression(switchCtx.expression());
+        JavaParser.ExpressionContext expressionContext = switchCtx.expression();
+        Value value = resolveExpression(expressionContext);
         List<SwitchElement> switchElements = switchCtx.switchElement().stream()
                 .map(this::resolveSwitchElement)
                 .collect(Collectors.toList());
@@ -37,7 +39,11 @@ public class SwitchStmtResolver {
                 .map(SwitchElement::getLabelExpressions)
                 .collect(Collectors.toList());
         validateLabels(switchLabels);
-        return new SwitchStatement(resolveStatements(value, switchElements));
+        List<Statement> contentStatements = resolveStatements(value, switchElements);
+        contentStatements.forEach(statement ->
+                statement.addProperty(StatementProperties.SWITCH_EXPRESSION, expressionContext.getText())
+        );
+        return new SwitchStatement(contentStatements);
     }
 
     private List<Statement> resolveStatements(Value value, List<SwitchElement> switchElements) {
@@ -59,15 +65,23 @@ public class SwitchStmtResolver {
     List<Statement> resolveStatements(List<SwitchElement> switchElements, int startIndex) {
         ArrayList<Statement> statements = new ArrayList<>();
         for (int i = startIndex; i < switchElements.size(); ++i) {
-            List<Statement> visitedStmts = statementListVisitor.visit(switchElements.get(i).getStatementListContext(), context);
+            SwitchElement switchElement = switchElements.get(i);
+            List<Statement> visitedStmts = statementListVisitor.visit(switchElement.getStatementListContext(), context);
             for (Statement visitedStmt : visitedStmts) {
                 if (visitedStmt instanceof BreakStatement) {
                     return statements;
                 }
+                visitedStmt.addProperty(StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
                 statements.add(visitedStmt);
             }
         }
         return statements;
+    }
+
+    private String getElementJoinedLabels(SwitchElement switchElement) {
+        return switchElement.getLabelExpressions().stream()
+                .map(expression -> expression == null ? "default" : expression.getText())
+                .collect(Collectors.joining(","));
     }
 
     boolean isLabelFulfilled(Value value, SwitchElement switchElement) {
