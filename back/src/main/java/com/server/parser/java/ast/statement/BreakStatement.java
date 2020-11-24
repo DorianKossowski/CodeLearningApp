@@ -8,7 +8,7 @@ public class BreakStatement extends Statement {
     public static final BreakStatement INSTANCE = new BreakStatement();
 
     private BreakStatement() {
-        super("BREAK");
+        super("break");
     }
 
     @Override

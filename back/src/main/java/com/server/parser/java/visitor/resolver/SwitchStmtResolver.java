@@ -58,7 +58,8 @@ public class SwitchStmtResolver {
         ArrayList<Statement> statements = new ArrayList<>();
         for (int i = startIndex; i < switchElements.size(); ++i) {
             // TODO handle break;
-            statements.addAll(switchElements.get(i).getStatements());
+            List<Statement> visitedStmts = statementListVisitor.visit(switchElements.get(i).getStatementListContext(), context);
+            statements.addAll(visitedStmts);
         }
         return statements;
     }
@@ -125,8 +126,8 @@ public class SwitchStmtResolver {
 
     SwitchElement resolveSwitchElement(JavaParser.SwitchElementContext switchElementContext) {
         List<Expression> labelExpressions = resolveLabelExpressions(switchElementContext.switchElementLabel());
-        List<Statement> statements = statementListVisitor.visit(switchElementContext.statementList(), context);
-        return new SwitchElement(labelExpressions, statements);
+        JavaParser.StatementListContext statementListContext = switchElementContext.statementList();
+        return new SwitchElement(labelExpressions, statementListContext);
     }
 
     List<Expression> resolveLabelExpressions(List<JavaParser.SwitchElementLabelContext> switchElementLabelContexts) {
@@ -153,19 +154,19 @@ public class SwitchStmtResolver {
 
     static class SwitchElement {
         private final List<Expression> labelExpressions;
-        private final List<Statement> statements;
+        private final JavaParser.StatementListContext statementListContext;
 
-        SwitchElement(List<Expression> labelExpressions, List<Statement> statements) {
+        SwitchElement(List<Expression> labelExpressions, JavaParser.StatementListContext statementListContext) {
             this.labelExpressions = Objects.requireNonNull(labelExpressions, "labelExpressions cannot be null");
-            this.statements = Objects.requireNonNull(statements, "statements cannot be null");
+            this.statementListContext = Objects.requireNonNull(statementListContext, "statementListContext cannot be null");
         }
 
         public List<Expression> getLabelExpressions() {
             return labelExpressions;
         }
 
-        public List<Statement> getStatements() {
-            return statements;
+        public JavaParser.StatementListContext getStatementListContext() {
+            return statementListContext;
         }
     }
 }

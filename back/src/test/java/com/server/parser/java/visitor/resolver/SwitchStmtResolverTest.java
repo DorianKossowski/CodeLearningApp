@@ -8,7 +8,6 @@ import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
-import com.server.parser.java.ast.statement.BreakStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.ast.value.Value;
@@ -109,7 +108,7 @@ class SwitchStmtResolverTest {
         assertThat(labelExpressions).hasSize(2);
         assertThat(labelExpressions.get(0)).isSameAs(expression);
         assertThat(labelExpressions.get(1)).isNull();
-        assertThat(Iterables.getOnlyElement(switchElement.getStatements()).getText()).isEqualTo("fun()");
+        assertThat(switchElement.getStatementListContext().getText()).isEqualTo("fun();");
     }
 
     private SwitchStmtResolver createSpyResolverFromReal() {
@@ -146,7 +145,8 @@ class SwitchStmtResolverTest {
     @MethodSource("isLabelFulfilledProvider")
     void shouldCheckIfLabelIsFulfilled(Value value, boolean expectedFulfilled) {
         List<Expression> labelExpressions = Arrays.asList(new Literal(new StringConstant("str")), null);
-        SwitchStmtResolver.SwitchElement switchElement = new SwitchStmtResolver.SwitchElement(labelExpressions, Collections.emptyList());
+        SwitchStmtResolver.SwitchElement switchElement = new SwitchStmtResolver.SwitchElement(labelExpressions,
+                mock(JavaParser.StatementListContext.class));
 
         boolean labelFulfilled = resolver.isLabelFulfilled(value, switchElement);
 
@@ -155,18 +155,22 @@ class SwitchStmtResolverTest {
 
     @Test
     void shouldResolveStatements() {
-        Statement statement1 = mock(Statement.class);
-        Statement statement2 = mock(Statement.class);
+        JavaParser.StatementListContext statementListC1 = HELPER.shouldParseToEof("fun1(); break;", JavaParser::statementList);
+        JavaParser.StatementListContext statementListC2 = HELPER.shouldParseToEof("fun2();", JavaParser::statementList);
         SwitchStmtResolver.SwitchElement switchElement0 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(),
-                Collections.singletonList(mock(Statement.class)));
-        SwitchStmtResolver.SwitchElement switchElement1 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(),
-                Arrays.asList(statement1, BreakStatement.INSTANCE));
-        SwitchStmtResolver.SwitchElement switchElement2 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(),
-                Collections.singletonList(statement2));
+                mock(JavaParser.StatementListContext.class));
+        SwitchStmtResolver.SwitchElement switchElement1 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(), statementListC1);
+        SwitchStmtResolver.SwitchElement switchElement2 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(), statementListC2);
 
-        List<Statement> statements = resolver.resolveStatements(Arrays.asList(switchElement0, switchElement1,
-                switchElement2), 1);
+        List<Statement> statements = createRealResolver().resolveStatements(Arrays.asList(switchElement0, switchElement1, switchElement2), 1);
 
-        assertThat(statements).containsExactly(statement1, BreakStatement.INSTANCE, statement2);
+        assertThat(statements).extracting(Statement::getText)
+                .containsExactly("fun1()", "break", "fun2()");
+    }
+
+    private SwitchStmtResolver createRealResolver() {
+        JavaContext context = new JavaContext();
+        context.createCurrentMethodContext("");
+        return new SwitchStmtResolver(context);
     }
 }
