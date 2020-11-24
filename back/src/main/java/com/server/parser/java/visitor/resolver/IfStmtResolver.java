@@ -23,7 +23,7 @@ public class IfStmtResolver {
         this.statementVisitor = Objects.requireNonNull(statementVisitor, "statementVisitor cannot be null");
     }
 
-    public Statement resolve(JavaParser.IfElseStatementContext ifCtx) {
+    public IfElseStatement resolve(JavaParser.IfElseStatementContext ifCtx) {
         validateBranchesContent(ifCtx);
         boolean condValue = resolveCondition(ifCtx.cond);
         Statement visitedStatement = null;

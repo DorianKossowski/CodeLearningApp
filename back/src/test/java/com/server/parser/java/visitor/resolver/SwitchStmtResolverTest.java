@@ -10,6 +10,7 @@ import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.SwitchStatement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
@@ -157,17 +158,13 @@ class SwitchStmtResolverTest {
 
     @Test
     void shouldResolveStatements() {
-        JavaParser.StatementListContext statementListC1 = HELPER.shouldParseToEof("fun1(); break;", JavaParser::statementList);
-        JavaParser.StatementListContext statementListC2 = HELPER.shouldParseToEof("fun2();", JavaParser::statementList);
-        SwitchStmtResolver.SwitchElement switchElement0 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(),
-                mock(JavaParser.StatementListContext.class));
-        SwitchStmtResolver.SwitchElement switchElement1 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(), statementListC1);
-        SwitchStmtResolver.SwitchElement switchElement2 = new SwitchStmtResolver.SwitchElement(Collections.emptyList(), statementListC2);
+        JavaParser.SwitchStatementContext switchCtx = HELPER.shouldParseToEof("switch(1) { case 1 : fun1(); break; " +
+                "default: funD(); }", JavaParser::switchStatement);
 
-        List<Statement> statements = createRealResolver().resolveStatements(Arrays.asList(switchElement0, switchElement1, switchElement2), 1);
+        SwitchStatement statement = createRealResolver().resolve(switchCtx);
 
-        assertThat(statements).extracting(Statement::getText)
-                .containsExactly("fun1()", "break", "fun2()");
+        assertThat(statement.getExpressionStatements()).extracting(Statement::getText)
+                .containsExactly("fun1()");
     }
 
     private SwitchStmtResolver createRealResolver() {

@@ -10,6 +10,7 @@ import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.IfStmtResolver;
 import com.server.parser.java.visitor.resolver.SwitchStmtResolver;
 import com.server.parser.util.EmptyExpressionPreparer;
+import com.server.parser.util.exception.BreakStatementException;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Collections;
@@ -21,7 +22,25 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
     @Override
     public Statement visit(ParserRuleContext ctx, JavaContext context) {
-        return new StatementVisitorInternal(context).visit(ctx);
+        try {
+            return new StatementVisitorInternal(context).visit(ctx);
+        } catch (BreakStatementException e) {
+            if (isValidBreak(ctx)) {
+                return BreakStatement.INSTANCE;
+            }
+            throw e;
+        }
+    }
+
+    private boolean isValidBreak(ParserRuleContext ctx) {
+        ParserRuleContext parentContext = ctx.getParent();
+        while (parentContext != null) {
+            if (parentContext instanceof JavaParser.SwitchElementContext) {
+                return true;
+            }
+            parentContext = parentContext.getParent();
+        }
+        return false;
     }
 
     public static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
@@ -125,7 +144,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         //*** BREAK ***//
         @Override
         public Statement visitBreakStatement(JavaParser.BreakStatementContext ctx) {
-            return BreakStatement.INSTANCE;
+            throw new BreakStatementException();
         }
     }
 }

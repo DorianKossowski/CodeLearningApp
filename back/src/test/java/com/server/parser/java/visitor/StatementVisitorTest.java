@@ -11,6 +11,7 @@ import com.server.parser.java.ast.value.PrimitiveValue;
 import com.server.parser.java.ast.value.UninitializedValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -265,6 +266,8 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitBreak() {
         JavaParser.BreakStatementContext c = HELPER.shouldParseToEof("break", JavaParser::breakStatement);
 
-        assertThat(visitor.visit(c, context)).isSameAs(BreakStatement.INSTANCE);
+        assertThatThrownBy(() -> visitor.visit(c, context))
+                .isExactlyInstanceOf(BreakStatementException.class)
+                .hasMessage("Problem podczas rozwiązywania: 'break' poza instrukcją switch oraz pętlą");
     }
 }

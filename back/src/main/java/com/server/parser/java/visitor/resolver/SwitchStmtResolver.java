@@ -3,6 +3,7 @@ package com.server.parser.java.visitor.resolver;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ConstantProvider;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.statement.BreakStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.SwitchStatement;
 import com.server.parser.java.ast.value.PrimitiveValue;
@@ -26,7 +27,7 @@ public class SwitchStmtResolver {
         this.context = Objects.requireNonNull(context, "context cannot be null");
     }
 
-    public Statement resolve(JavaParser.SwitchStatementContext switchCtx) {
+    public SwitchStatement resolve(JavaParser.SwitchStatementContext switchCtx) {
         defaultIndex = null;
         Value value = resolveExpression(switchCtx.expression());
         List<SwitchElement> switchElements = switchCtx.switchElement().stream()
@@ -58,9 +59,13 @@ public class SwitchStmtResolver {
     List<Statement> resolveStatements(List<SwitchElement> switchElements, int startIndex) {
         ArrayList<Statement> statements = new ArrayList<>();
         for (int i = startIndex; i < switchElements.size(); ++i) {
-            // TODO handle break;
             List<Statement> visitedStmts = statementListVisitor.visit(switchElements.get(i).getStatementListContext(), context);
-            statements.addAll(visitedStmts);
+            for (Statement visitedStmt : visitedStmts) {
+                if (visitedStmt instanceof BreakStatement) {
+                    return statements;
+                }
+                statements.add(visitedStmt);
+            }
         }
         return statements;
     }
