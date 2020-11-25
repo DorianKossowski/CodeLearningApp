@@ -27,9 +27,13 @@ statementRule
 
 statementRuleSpec
     : statementMethodRuleSpec
-    | WITH ( textRuleSpec | statementResolvedRuleSpec | ifSpec | elseIfSpec | switchExpr )
+    | WITH ( textRuleSpec | statementResolvedRuleSpec | ifSpec | elseIfSpec | switchExpr | switchLabel )
     | elseSpec
     | logInfo
+    ;
+
+switchLabel
+    : 'switch' 'label' ':' STRING_LITERAL
     ;
 
 switchExpr
