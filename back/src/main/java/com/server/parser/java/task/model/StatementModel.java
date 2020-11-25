@@ -11,6 +11,7 @@ public class StatementModel {
     private String elseIfCond;
     private Boolean isInElse;
     private String switchExpr;
+    private String switchLabel;
     private String logInfo;
 
     private StatementModel() {
@@ -38,6 +39,10 @@ public class StatementModel {
 
     public Optional<String> getSwitchExpr() {
         return Optional.ofNullable(switchExpr);
+    }
+
+    public Optional<String> getSwitchLabel() {
+        return Optional.ofNullable(switchLabel);
     }
 
     public Optional<Boolean> isInElse() {
@@ -68,12 +73,13 @@ public class StatementModel {
                 Objects.equals(elseIfCond, that.elseIfCond) &&
                 Objects.equals(isInElse, that.isInElse) &&
                 Objects.equals(switchExpr, that.switchExpr) &&
+                Objects.equals(switchLabel, that.switchLabel) &&
                 Objects.equals(logInfo, that.logInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inMethod, text, resolved, ifCond, elseIfCond, isInElse, switchExpr, logInfo);
+        return Objects.hash(inMethod, text, resolved, ifCond, elseIfCond, isInElse, switchExpr, switchLabel, logInfo);
     }
 
     public static class Builder {
@@ -84,6 +90,7 @@ public class StatementModel {
         private String elseIfCond;
         private Boolean isInElse;
         private String switchExpr;
+        private String switchLabel;
         private String logInfo;
 
         public Builder withMethod(String method) {
@@ -121,6 +128,11 @@ public class StatementModel {
             return this;
         }
 
+        public Builder withSwitchLabel(String switchLabel) {
+            this.switchLabel = switchLabel;
+            return this;
+        }
+
         public Builder withLogInfo(String errorMessage) {
             this.logInfo = errorMessage;
             return this;
@@ -135,6 +147,7 @@ public class StatementModel {
             statementModel.elseIfCond = this.elseIfCond;
             statementModel.isInElse = this.isInElse;
             statementModel.switchExpr = this.switchExpr;
+            statementModel.switchLabel = this.switchLabel;
             statementModel.logInfo = this.logInfo;
 
             return statementModel;

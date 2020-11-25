@@ -33,6 +33,7 @@ public class ExpressionStatementVerifier {
         statementModel.isInElse().ifPresent(this::verifyIsInElse);
         statementModel.getElseIfCond().ifPresent(this::verifyElseIfCond);
         statementModel.getSwitchExpr().ifPresent(this::verifySwitchExpr);
+        statementModel.getSwitchLabel().ifPresent(this::verifySwitchLabel);
         Verify.verify(!availableStatements.isEmpty(), getErrorMessage(statementModel));
     }
 
@@ -102,5 +103,27 @@ public class ExpressionStatementVerifier {
         availableStatements = availableStatements.stream()
                 .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.SWITCH_EXPRESSION), switchExprParsed))
                 .collect(Collectors.toList());
+    }
+
+
+    private void verifySwitchLabel(String switchLabel) {
+        String switchLabelParsed = JavaParserAdapter.parseExpression(switchLabel).getText();
+        availableStatements = availableStatements.stream()
+                .filter(statement -> isPropertyInJoined(statement.getProperty(StatementProperties.SWITCH_LABELS), switchLabelParsed))
+                .collect(Collectors.toList());
+    }
+
+
+    private boolean isPropertyInJoined(String joinedProperty, String switchLabelParsed) {
+        if (joinedProperty == null) {
+            return false;
+        }
+        String[] properties = joinedProperty.split(",");
+        for (String property : properties) {
+            if (property.equals(switchLabelParsed)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
