@@ -32,6 +32,7 @@ public class ExpressionStatementVerifier {
         statementModel.getIfCond().ifPresent(this::verifyIfCond);
         statementModel.isInElse().ifPresent(this::verifyIsInElse);
         statementModel.getElseIfCond().ifPresent(this::verifyElseIfCond);
+        statementModel.getSwitchExpr().ifPresent(this::verifySwitchExpr);
         Verify.verify(!availableStatements.isEmpty(), getErrorMessage(statementModel));
     }
 
@@ -93,6 +94,13 @@ public class ExpressionStatementVerifier {
         availableStatements = availableStatements.stream()
                 .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.IF_CONDITION), ifCondParsed))
                 .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.IN_ELSE), String.valueOf(true)))
+                .collect(Collectors.toList());
+    }
+
+    private void verifySwitchExpr(String switchExpr) {
+        String switchExprParsed = JavaParserAdapter.parseExpression(switchExpr).getText();
+        availableStatements = availableStatements.stream()
+                .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.SWITCH_EXPRESSION), switchExprParsed))
                 .collect(Collectors.toList());
     }
 }

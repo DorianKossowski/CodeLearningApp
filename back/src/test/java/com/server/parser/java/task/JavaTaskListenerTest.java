@@ -73,7 +73,9 @@ class JavaTaskListenerTest {
                 Arguments.of("Statement with else if", "statement with else if: \"t\"",
                         StatementModel.builder().withElseIf("t").build()),
                 Arguments.of("Statement in else", "statement is in else",
-                        StatementModel.builder().isInElse(true).build())
+                        StatementModel.builder().isInElse(true).build()),
+                Arguments.of("Statement with switch expression", "statement with switch expression: \"t\"",
+                        StatementModel.builder().withSwitchExpr("t").build())
         );
     }
 

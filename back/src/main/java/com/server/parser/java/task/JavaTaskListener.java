@@ -126,4 +126,9 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     public void enterElseIfSpec(JavaTaskParser.ElseIfSpecContext ctx) {
         statementBuilder.withElseIf(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
+
+    @Override
+    public void enterSwitchExpr(JavaTaskParser.SwitchExprContext ctx) {
+        statementBuilder.withSwitchExpr(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    }
 }
