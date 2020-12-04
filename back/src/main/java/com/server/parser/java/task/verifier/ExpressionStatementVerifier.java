@@ -107,7 +107,7 @@ public class ExpressionStatementVerifier {
 
 
     private void verifySwitchLabel(String switchLabel) {
-        String switchLabelParsed = JavaParserAdapter.parseExpression(switchLabel).getText();
+        String switchLabelParsed = switchLabel.equals("default") ? "default" : JavaParserAdapter.parseExpression(switchLabel).getText();
         availableStatements = availableStatements.stream()
                 .filter(statement -> isPropertyInJoined(statement.getProperty(StatementProperties.SWITCH_LABELS), switchLabelParsed))
                 .collect(Collectors.toList());
