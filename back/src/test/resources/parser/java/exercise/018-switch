@@ -1,0 +1,21 @@
+### TASK ###
+-> statement
+    with text: "int a = 0"
+    log info: "Definicja zmiennej a"
+-> statement
+    with text: "System.out.println(\"a == 0\")"
+    with switch expression: "a"
+	with switch label: "0"
+
+### INPUT ###
+public class MyClass {
+    public static void main(String[] args){
+        int a = 0;
+
+        switch(a) {
+            case 0:
+                System.out.println("a == 0");
+                break;
+        }
+    }
+}

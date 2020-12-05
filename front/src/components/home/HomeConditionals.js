@@ -32,6 +32,14 @@ const HomeConditionals = (props) => {
                     <LinkContainer to={'task/cond/4'}><a className='categoryElementText'>4. Instrukcja if - else if</a></LinkContainer>
                     <div className='categoryElementUnderline'/>
                 </div>
+                <div className='categoryElement' >
+                    <LinkContainer to={'task/cond/5'}><a className='categoryElementText'>5. Instrukcja switch</a></LinkContainer>
+                    <div className='categoryElementUnderline'/>
+                </div>
+                <div className='categoryElement' >
+                    <LinkContainer to={'task/cond/6'}><a className='categoryElementText'>6. Instrukcja switch - default</a></LinkContainer>
+                    <div className='categoryElementUnderline'/>
+                </div>
             </div>
         </Collapse>
     </div>
