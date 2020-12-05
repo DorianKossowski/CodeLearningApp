@@ -1,0 +1,28 @@
+### TASK ###
+-> statement
+    with text: "boolean greater = a > 2"
+    log info: "Definicja zmiennej greater"
+-> statement
+    with text: "boolean lesser = a < 4"
+    log info: "Definicja zmiennej lesser"
+-> statement
+    with resolved: "System.out.println(\"a jest równe 0\")"
+    with else if: "a == 0"
+
+### INPUT ###
+public class MyClass {
+    public static void main(String[] args){
+        int a = 0;
+
+        boolean greater = a > 2;
+        boolean lesser = a < 4;
+
+        if(greater && lesser) {
+            System.out.println(a);
+        } else if(a == 0) {
+            System.out.println("a jest równe 0");
+        } else {
+            System.out.println("Nie jest z zakresu od 2 do 4. Nie jest też 0.");
+        }
+    }
+}

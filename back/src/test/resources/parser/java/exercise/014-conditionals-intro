@@ -1,8 +1,8 @@
 ### TASK ###
 -> statement
-    with text: "System.out.print(\"ELSE a<b\")"
+    with text: "System.out.println(\"ELSE a<b\")"
     is in else
-    log info: "Wywołanie metody print z napisem: ELSE a<b"
+    log info: "Wywołanie metody println z napisem: ELSE a<b"
 -> statement
     with text: "System.out.println(\"b != { 0,1 }\")"
     with switch expression: "b"
@@ -15,11 +15,11 @@ public class MyClass {
         int b = 2;
 
         if(a > b) {
-            System.out.print("IF a>b");
+            System.out.println("IF a>b");
         } else if(a == b) {
-            System.out.print("ELSE IF a==b");
+            System.out.println("ELSE IF a==b");
         } else {
-            System.out.print("ELSE a<b");
+            System.out.println("ELSE a<b");
         }
 
         switch (b) {
