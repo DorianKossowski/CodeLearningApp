@@ -32,9 +32,26 @@ class Task extends Component {
     }
 
     prepareText = (text) => {
-        return text.split('\n').map((item, i) => {
-            return <p key={i}>{item}</p>;
-        });
+        var preparedText = '';
+        const textLines = text.replace('\t', '    ').split('\n');
+        for(var currentLine = { i : 0 }; currentLine.i < textLines.length; ++currentLine.i) {
+            if(textLines[currentLine.i] === '<java>') {
+                preparedText += '<p key=' + currentLine.i + ' class="descriptionCode">' + this.prepareCodeText(textLines, currentLine) + '</p>';
+            } else {
+                preparedText += '<p key=' + currentLine.i + '>' + textLines[currentLine.i] + '</p>';
+            }
+        }
+        return <div dangerouslySetInnerHTML={{__html: preparedText}}></div>;
+    }
+
+    prepareCodeText = (textLines, currentLine) => {
+        var codeText = '';
+        currentLine.i++;
+        while(currentLine.i < textLines.length && textLines[currentLine.i] !== '</java>') {
+            codeText += textLines[currentLine.i] + '<br>';
+            currentLine.i++;
+        }
+        return codeText;
     }
 }
 
