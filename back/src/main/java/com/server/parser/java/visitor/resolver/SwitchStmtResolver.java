@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SwitchStmtResolver {
+    private static final String EXCEPTION_PREFIX = "W instrukcji switch: ";
     private static final String EXCEPTION_SUFFIX = " nie jest jednego z typów: char, byte, short, int, Character, " +
             "Byte, Short, Integer, String";
     private final JavaContext context;
@@ -169,13 +170,13 @@ public class SwitchStmtResolver {
         Expression expression = context.getVisitor(Expression.class).visit(expressionContext, context);
         Value value = expression.getValue();
         if (!(value instanceof ConstantProvider)) {
-            throw new ResolvingException(value.getExpression().getText() + EXCEPTION_SUFFIX);
+            throw new ResolvingException(EXCEPTION_PREFIX + value.getExpression().getText() + EXCEPTION_SUFFIX);
         }
         Class<?> valueClass = ((ConstantProvider) value).getConstant().c.getClass();
         if (valueClass.equals(Character.class) || valueClass.equals(Integer.class) || valueClass.equals(String.class)) {
             return value;
         }
-        throw new ResolvingException(value.getExpression().getText() + EXCEPTION_SUFFIX);
+        throw new ResolvingException(EXCEPTION_PREFIX + value.getExpression().getText() + EXCEPTION_SUFFIX);
     }
 
     static class SwitchElement {

@@ -72,8 +72,8 @@ class SwitchStmtResolverTest {
 
         assertThatThrownBy(() -> resolver.resolveExpression(expressionContext))
                 .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: true nie jest jednego z typów: char, byte, short, int, " +
-                        "Character, Byte, Short, Integer, String");
+                .hasMessage("Problem podczas rozwiązywania: W instrukcji switch: true nie jest jednego z typów: char," +
+                        " byte, short, int, Character, Byte, Short, Integer, String");
     }
 
     @Test
