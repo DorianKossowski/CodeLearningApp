@@ -67,6 +67,11 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             return visit(ctx.getChild(0));
         }
 
+        @Override
+        public Statement visitExpressionStatementSemicolon(JavaParser.ExpressionStatementSemicolonContext ctx) {
+            return visit(ctx.getChild(0));
+        }
+
         //*** METHOD CALL ***//
         @Override
         public MethodCall visitCall(JavaParser.CallContext ctx) {

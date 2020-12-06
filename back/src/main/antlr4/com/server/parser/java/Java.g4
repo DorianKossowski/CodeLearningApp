@@ -67,10 +67,14 @@ statementList
 
 statement
     : blockStatement
-    | expressionStatement
+    | expressionStatementSemicolon
     | ifElseStatement
     | switchStatement
     | emptyStatement
+    ;
+
+expressionStatementSemicolon
+    : expressionStatement SEMICOLON
     ;
 
 switchStatement
@@ -99,11 +103,10 @@ emptyStatement
     ;
 
 expressionStatement
-    : ( call
+    : call
     | methodVarDec
     | assignment
     | breakStatement
-    ) SEMICOLON
     ;
 
 breakStatement
