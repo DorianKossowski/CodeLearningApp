@@ -24,7 +24,7 @@ export const input = `public class MyClass {
     }
 }`;
 
-export const description = `W języku Java dozwolone są wszelakie operacje matematyczne. W przypadku działań na liczbach można się posłużyć takimi operandami: +, -, *, /, % (reszta z dzielenia). Oczywiście kolejność działań jest zgodna z zasadami matematycznymi, a modyfikować ją można poprzez używanie ( ). Należy dodać, że w działaniach mogą być wykorzystywane zarówno literały jak i zdefiniowane zmienne liczbowe.`;
+export const description = `W języku Java dozwolone są wszelakie <b>operacje matematyczne</b>. W przypadku działań na liczbach można się posłużyć takimi operandami: +, -, *, /, % (reszta z dzielenia). Oczywiście kolejność działań jest zgodna z zasadami matematycznymi, a modyfikować ją można poprzez używanie ( ). Należy dodać, że w działaniach mogą być wykorzystywane zarówno literały jak i zdefiniowane zmienne liczbowe.`;
 
 export const instruction = `Zdefiniuj odpowiednie zmienne, aby istnijące wyrażenia dawały rezultaty takie jak w komentarzach.`;
 

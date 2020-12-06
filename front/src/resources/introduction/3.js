@@ -17,8 +17,8 @@ export const input = `public class Hello {
     }
 }`;
 
-export const description = `W metodzie main możliwe jest korzystanie z dostępnych w języku konstrukcji. Mogą to być m.in. deklaracje zmiennych czy wywoływania innych metod.
-Przykładem wywołania metody jest instrukcja System.out.println("Hello World"). Odnosi się ona do metody println znajdującej się w klasie java.io.PrintStream. Przedrostek System.out określa w tym przypadku obiekt klasy java.io.PrintStream będący polem statycznym klasy System. Dokładne omówienie czym są m.in. klasy oraz pola znajdzie się w następny rozdziałach.
+export const description = `W metodzie <b>main</b> możliwe jest korzystanie z dostępnych w języku konstrukcji. Mogą to być m.in. deklaracje zmiennych czy wywoływania innych metod.
+Przykładem wywołania metody jest instrukcja System.out.println("Hello World"). Odnosi się ona do metody <b>println</b> znajdującej się w klasie java.io.PrintStream. Przedrostek System.out określa w tym przypadku obiekt klasy java.io.PrintStream będący polem statycznym klasy System. Dokładne omówienie czym są m.in. klasy oraz pola znajdzie się w następny rozdziałach.
 W celu wypisania ciągu znaków, konieczne jest przekazanie do wyżej wymienionej metody parametru. Może to być literał znakowy ale również zdefiniowana wcześniej zmienna.`;
 
 export const instruction = `Przy użyciu metody println wypisz ciąg znaków "Hello World". Wykorzystaj do tego celu zmienną message.`;

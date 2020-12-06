@@ -37,13 +37,13 @@ export const input = `public class MyClass {
 }`;
 
 export const description = `W celu porównywania ze sobą dwóch wartości korzysta się z następujących operatorów:
-== - równy
-!= - różny
->= - większy lub równy
-<= - mniejszy lub równy
->  -  większy
-<  - mniejszy
-Wynikiem użycia powyższych operatorów jest wartość logiczna true lub false.
+<b>==</b> - równy
+<b>!=</b> - różny
+<b>>=</b> - większy lub równy
+<b><=</b> - mniejszy lub równy
+<b>></b>  -  większy
+<b><</b>  - mniejszy
+Wynikiem użycia powyższych operatorów jest wartość logiczna <b>true</b> lub <b>false</b>.
 `;
 
 export const instruction = `Zdefiniuj zmienne i orac c, które są kolejno typów int oraz char, w taki sposób aby wynik operacji sprawdzenia równości był prawdą. (podpowiedź: system kodowania znaków ASCII).

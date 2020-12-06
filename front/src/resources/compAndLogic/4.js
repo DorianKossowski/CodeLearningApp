@@ -18,7 +18,7 @@ export const input = `public class MyClass {
     }
 }`;
 
-export const description = `W Javie istnieją również operacje logiczne. Jedne z nich to koniunkcja &&, która daje prawde tylko wtedy, kiedy oba warunki są spełnione oraz alternatywa ||, która daje fałsz tylko wtedy, gdy oba warunki są fałszywe. Operacje te są przydatne w syutacji, gdy potrzeba jest złączenia kilku warunków. Przykładem może być sprawdzenie czy liczba jest jednocześnie dodatnia i parzysta.
+export const description = `W Javie istnieją również <b>operacje logiczne</b>. Jedne z nich to koniunkcja <b>&&</b>, która daje prawde tylko wtedy, kiedy oba warunki są spełnione oraz alternatywa <b>||</b>, która daje fałsz tylko wtedy, gdy oba warunki są fałszywe. Operacje te są przydatne w syutacji, gdy potrzeba jest złączenia kilku warunków. Przykładem może być sprawdzenie czy liczba jest jednocześnie dodatnia i parzysta.
 `;
 
 export const instruction = `Zdefiniuj zmienne a, b oraz c tak, aby wartości b1 oraz b2 były równe tym w komentarzach.`;
