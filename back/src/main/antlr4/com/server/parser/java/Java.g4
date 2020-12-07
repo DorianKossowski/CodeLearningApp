@@ -70,7 +70,14 @@ statement
     | expressionStatementSemicolon
     | ifElseStatement
     | switchStatement
+    | forStatement
     | emptyStatement
+    ;
+
+forStatement
+    : FOR
+    '(' initExpr=expressionStatement? ';' condExpr=expression? ';' updateExpr=expressionStatement? ')'
+    statement
     ;
 
 expressionStatementSemicolon
@@ -238,6 +245,7 @@ BREAK       : 'break' ;
 CASE        : 'case' ;
 DEFAULT     : 'default' ;
 ELSE        : 'else' ;
+FOR         : 'for' ;
 IF          : 'if' ;
 LPAREN      : '(' ;
 NULL        : 'null' ;
