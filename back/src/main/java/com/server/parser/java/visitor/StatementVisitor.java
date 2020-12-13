@@ -78,7 +78,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             String methodName = textVisitor.visit(ctx.callName());
             List<Expression> arguments;
             arguments = ctx.callArguments() == null ? Collections.emptyList() : visit(ctx.callArguments());
-            return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), context.getCurrentMethodContext().getMethodName(), methodName,
+            return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(), methodName,
                     arguments);
         }
 
@@ -93,7 +93,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
             VariableDef variableDef = (VariableDef) visit(ctx.varDec());
-            context.getCurrentMethodContext().addVar(new Variable(variableDef));
+            context.addVariable(new Variable(variableDef));
             return variableDef;
         }
 
@@ -103,6 +103,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             return visit(ctx.varDec());
         }
 
+        // TODO save method args in context
         @Override
         public Statement visitSingleMethodArg(JavaParser.SingleMethodArgContext ctx) {
             String type = textVisitor.visit(ctx.type());
@@ -130,7 +131,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         public Statement visitAssignment(JavaParser.AssignmentContext ctx) {
             String id = textVisitor.visit(ctx.identifier());
             Expression expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
-            context.getCurrentMethodContext().updateVar(id, expression);
+            context.updateVariable(id, expression);
             return new Assignment(JavaGrammarHelper.getOriginalText(ctx), id, expression);
         }
 

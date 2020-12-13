@@ -63,12 +63,12 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitObjectRefExpression() {
-        MethodContext methodContext = context.createCurrentMethodContext("");
-        methodContext.addVar(createVariable("x"));
+        MethodContext methodContext = createMethodContext();
+        methodContext.addVariable(createVariable("x"));
         String input = "x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        Expression expression = visitor.visit(c, context);
+        Expression expression = visitor.visit(c, methodContext);
 
         assertThat(expression).isExactlyInstanceOf(ObjectRef.class);
         assertThat(expression.getText()).isEqualTo("x");
@@ -83,36 +83,36 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldThrowWhenWrongObjectRefExpression() {
-        context.createCurrentMethodContext("");
+        MethodContext methodContext = createMethodContext();
         String input = "x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        assertThatThrownBy(() -> visitor.visit(c, context))
+        assertThatThrownBy(() -> visitor.visit(c, methodContext))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Obiekt x nie istnieje");
     }
 
     @Test
     void shouldThrowWhenInvalidExpressionType() {
-        MethodContext methodContext = context.createCurrentMethodContext("");
-        methodContext.addVar(createVariable("x"));
+        MethodContext methodContext = createMethodContext();
+        methodContext.addVariable(createVariable("x"));
         String input = "-x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        assertThatThrownBy(() -> visitor.visit(c, context))
+        assertThatThrownBy(() -> visitor.visit(c, methodContext))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Operacja niedostępna dla typu String");
     }
 
     @Test
     void shouldVisitEqualsCall() {
-        MethodContext methodContext = context.createCurrentMethodContext("");
-        methodContext.addVar(createVariable("x"));
-        methodContext.addVar(createVariable("x2"));
+        MethodContext methodContext = createMethodContext();
+        methodContext.addVariable(createVariable("x"));
+        methodContext.addVariable(createVariable("x2"));
         String input = "x.equals(x2)";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        Expression expression = visitor.visit(c, context);
+        Expression expression = visitor.visit(c, methodContext);
 
         assertThat(expression).isExactlyInstanceOf(Literal.class);
         assertThat(expression.getText()).isEqualTo("true");

@@ -143,7 +143,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
 
         private Expression visitEqualsMethod(JavaParser.CallContext ctx) {
             JavaParser.CallArgumentsContext callArgumentsContext = ctx.callArguments();
-            Value value = context.getCurrentMethodContext().getVariable(ctx.callName().firstSeg.getText()).getValue();
+            Value value = context.getVariable(ctx.callName().firstSeg.getText()).getValue();
             Value valueToCompare = context.getVisitor(Expression.class)
                     .visit(Iterables.getOnlyElement(callArgumentsContext.expression()), context).getValue();
             return new Literal(new BooleanConstant(value.equalsMethod(valueToCompare)));
@@ -179,7 +179,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         @Override
         public Expression visitObjectRefName(JavaParser.ObjectRefNameContext ctx) {
             String text = textVisitor.visit(ctx);
-            Variable variable = context.getCurrentMethodContext().getVariable(text);
+            Variable variable = context.getVariable(text);
             return new ObjectRef(text, variable.getValue());
         }
 

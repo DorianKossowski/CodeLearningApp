@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+// TODO: make more generic Call class
 public class MethodCall extends ExpressionStatement implements MethodPrintable {
     private final String contextMethodName;
     private final String name;

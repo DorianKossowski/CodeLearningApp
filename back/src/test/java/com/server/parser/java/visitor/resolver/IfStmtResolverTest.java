@@ -8,6 +8,7 @@ import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
+import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.visitor.StatementVisitor;
@@ -52,11 +53,11 @@ class IfStmtResolverTest {
 
     @Test
     void shouldValidateInSeparateContext() {
-        JavaContext javaContext = new JavaContext();
-        resolver = new IfStmtResolver(javaContext, mock(StatementVisitor.StatementVisitorInternal.class));
-        MethodContext methodContext = javaContext.createCurrentMethodContext("");
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
-        methodContext.addVar(new Variable("String", "str", value));
+        methodContext.addVariable(new Variable("String", "str", value));
+        resolver = new IfStmtResolver(methodContext, mock(StatementVisitor.StatementVisitorInternal.class));
 
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) str = \"true\"; else str = \"false\";",
                 JavaParser::ifElseStatement);

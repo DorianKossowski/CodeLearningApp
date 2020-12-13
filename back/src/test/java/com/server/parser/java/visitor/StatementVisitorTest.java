@@ -2,6 +2,7 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
@@ -10,6 +11,7 @@ import com.server.parser.java.ast.value.NullValue;
 import com.server.parser.java.ast.value.PrimitiveValue;
 import com.server.parser.java.ast.value.UninitializedValue;
 import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.ResolvingException;
@@ -19,6 +21,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +35,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @BeforeEach
     void setUp() {
-        methodContext = context.createCurrentMethodContext(METHOD_NAME);
+        methodContext = createMethodContext(METHOD_NAME);
     }
 
     @Test
@@ -40,7 +43,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "{ int a = 1; boolean b = false; }";
         JavaParser.BlockStatementContext c = HELPER.shouldParseToEof(input, JavaParser::blockStatement);
 
-        BlockStatement statement = (BlockStatement) visitor.visit(c, context);
+        BlockStatement statement = (BlockStatement) visitor.visit(c, methodContext);
 
         assertThat(statement.getText()).isEqualTo("{ BLOCK STATEMENT }");
         assertThat(statement.getExpressionStatements()).extracting(Statement::getText)
@@ -53,7 +56,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "System.out.print(\"Hello World\")";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
-        MethodCall methodCall = (MethodCall) visitor.visit(c, context);
+        MethodCall methodCall = (MethodCall) visitor.visit(c, methodContext);
 
         assertThat(methodCall.getText()).isEqualTo(input);
         assertThat(methodCall.printMethodName()).isEqualTo(METHOD_NAME);
@@ -66,7 +69,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "System.out.print()";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
-        MethodCall methodCall = (MethodCall) visitor.visit(c, context);
+        MethodCall methodCall = (MethodCall) visitor.visit(c, methodContext);
 
         assertThat(methodCall.getText()).isEqualTo(input);
         assertThat(methodCall.printMethodName()).isEqualTo(METHOD_NAME);
@@ -76,11 +79,11 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldGetCorrectMethodCallValue() {
-        methodContext.addVar(createStringVariable("var"));
+        methodContext.addVariable(createStringVariable("var"));
         String input = "System.out.print(\"literal\", var)";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
-        MethodCall methodCall = (MethodCall) visitor.visit(c, context);
+        MethodCall methodCall = (MethodCall) visitor.visit(c, methodContext);
 
         assertThat(methodCall.getResolved()).isEqualTo("System.out.print(\"literal\", \"value\")");
     }
@@ -187,7 +190,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "String a = \"str\"";
         JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
-        VariableDef variableDef = (VariableDef) visitor.visit(c, context);
+        VariableDef variableDef = (VariableDef) visitor.visit(c, methodContext);
 
         assertThat(variableDef.getText()).isEqualTo(input);
         assertVariableDec(variableDef, "String", "a");
@@ -214,11 +217,11 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     //*** ASSIGNMENT ***//
     @Test
     void shouldVisitAssignment() {
-        methodContext.addVar(createStringVariable("a"));
+        methodContext.addVariable(createStringVariable("a"));
         String input = "a = \"str\"";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 
-        Assignment assignment = (Assignment) visitor.visit(c, context);
+        Assignment assignment = (Assignment) visitor.visit(c, methodContext);
 
         assertThat(assignment.getText()).isEqualTo(input);
         assertThat(assignment.getId()).isEqualTo("a");
@@ -227,11 +230,11 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldThrowWhenInvalidAssignment() {
-        methodContext.addVar(createStringVariable("a"));
+        methodContext.addVariable(createStringVariable("a"));
         String input = "a = 5";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 
-        assertThatThrownBy(() -> visitor.visit(c, context))
+        assertThatThrownBy(() -> visitor.visit(c, methodContext))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie 5 nie jest typu String");
     }
@@ -242,11 +245,19 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "if(true) { System.out.print(1); if(true) { System.out.print(2); } }";
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof(input, JavaParser::ifElseStatement);
 
-        IfElseStatement ifElseStatement = (IfElseStatement) visitor.visit(c, context);
+        IfElseStatement ifElseStatement = (IfElseStatement) visitor.visit(c, createRealMethodContext());
 
         assertThat(ifElseStatement.getText()).isEqualTo("IF ELSE Statement");
         assertThat(ifElseStatement.getExpressionStatements()).extracting(ExpressionStatement::getText)
                 .containsExactly("System.out.print(1)", "System.out.print(2)");
+    }
+
+    private MethodContext createRealMethodContext() {
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
+        MethodHeader methodHeader = new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList());
+        methodContext.save(methodHeader);
+        return methodContext;
     }
 
     @Test
@@ -254,7 +265,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "if(false) System.out.print(1); else { System.out.print(2); }";
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof(input, JavaParser::ifElseStatement);
 
-        IfElseStatement ifElseStatement = (IfElseStatement) visitor.visit(c, context);
+        IfElseStatement ifElseStatement = (IfElseStatement) visitor.visit(c, createRealMethodContext());
 
         assertThat(ifElseStatement.getText()).isEqualTo("IF ELSE Statement");
         assertThat(ifElseStatement.getExpressionStatements()).extracting(ExpressionStatement::getText)

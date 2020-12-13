@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.constant.StringConstant;
@@ -14,6 +15,7 @@ import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.ast.statement.SwitchStatement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -102,7 +104,7 @@ class SwitchStmtResolverTest {
     void shouldResolveSwitchElement() {
         String input = "case 1:default: fun(); ";
         JavaParser.SwitchElementContext c = HELPER.shouldParseToEof(input, JavaParser::switchElement);
-        SwitchStmtResolver spyResolver = createSpyResolverFromReal();
+        SwitchStmtResolver spyResolver = spy(createRealResolver());
         Expression expression = mock(Expression.class);
         doReturn(Arrays.asList(expression, null)).when(spyResolver).resolveLabelExpressions(c.switchElementLabel());
 
@@ -113,12 +115,6 @@ class SwitchStmtResolverTest {
         assertThat(labelExpressions.get(0)).isSameAs(expression);
         assertThat(labelExpressions.get(1)).isNull();
         assertThat(switchElement.getStatementListContext().getText()).isEqualTo("fun();");
-    }
-
-    private SwitchStmtResolver createSpyResolverFromReal() {
-        JavaContext javaContext = new JavaContext();
-        javaContext.createCurrentMethodContext("");
-        return spy(new SwitchStmtResolver(javaContext));
     }
 
     @Test
@@ -171,18 +167,20 @@ class SwitchStmtResolverTest {
     }
 
     private SwitchStmtResolver createRealResolver() {
-        JavaContext context = new JavaContext();
-        context.createCurrentMethodContext("");
-        return new SwitchStmtResolver(context);
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
+        MethodHeader methodHeader = new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList());
+        methodContext.save(methodHeader);
+        return new SwitchStmtResolver(methodContext);
     }
 
     @Test
     void shouldValidateInSeparateContext() {
-        JavaContext javaContext = new JavaContext();
-        resolver = new SwitchStmtResolver(javaContext);
-        MethodContext methodContext = javaContext.createCurrentMethodContext("");
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
-        methodContext.addVar(new Variable("String", "str", value));
+        methodContext.addVariable(new Variable("String", "str", value));
+        resolver = new SwitchStmtResolver(methodContext);
 
         JavaParser.StatementListContext c = HELPER.shouldParseToEof("str=null;", JavaParser::statementList);
 
