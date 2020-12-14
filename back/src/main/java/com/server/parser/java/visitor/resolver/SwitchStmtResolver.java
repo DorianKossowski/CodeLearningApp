@@ -36,6 +36,10 @@ public class SwitchStmtResolver {
         List<SwitchElement> switchElements = switchCtx.switchElement().stream()
                 .map(this::resolveSwitchElement)
                 .collect(Collectors.toList());
+        List<JavaParser.StatementListContext> switchStatementContexts = switchElements.stream()
+                .map(SwitchElement::getStatementListContext)
+                .collect(Collectors.toList());
+        validateStatementLists(switchStatementContexts);
         List<List<Expression>> switchLabels = switchElements.stream()
                 .map(SwitchElement::getLabelExpressions)
                 .collect(Collectors.toList());
@@ -148,13 +152,12 @@ public class SwitchStmtResolver {
     SwitchElement resolveSwitchElement(JavaParser.SwitchElementContext switchElementContext) {
         List<Expression> labelExpressions = resolveLabelExpressions(switchElementContext.switchElementLabel());
         JavaParser.StatementListContext statementListContext = switchElementContext.statementList();
-        validateStatementList(statementListContext);
         return new SwitchElement(labelExpressions, statementListContext);
     }
 
-    void validateStatementList(JavaParser.StatementListContext statementListContext) {
+    void validateStatementLists(List<JavaParser.StatementListContext> statementListContexts) {
         JavaContext validationContext = (JavaContext) SerializationUtils.clone(context);
-        statementListVisitor.visit(statementListContext, validationContext);
+        statementListContexts.forEach(statementListContext -> statementListVisitor.visit(statementListContext, validationContext));
     }
 
     List<Expression> resolveLabelExpressions(List<JavaParser.SwitchElementLabelContext> switchElementLabelContexts) {

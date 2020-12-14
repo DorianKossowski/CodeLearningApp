@@ -184,7 +184,7 @@ class SwitchStmtResolverTest {
 
         JavaParser.StatementListContext c = HELPER.shouldParseToEof("str=null;", JavaParser::statementList);
 
-        resolver.validateStatementList(c);
+        resolver.validateStatementLists(Collections.singletonList(c));
 
         assertThat(methodContext.getVariable("str").getValue()).isSameAs(value);
     }
