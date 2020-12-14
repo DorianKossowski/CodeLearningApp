@@ -22,4 +22,6 @@ public interface JavaContext extends Serializable {
 
     // TODO make only for MethodContext
     String getMethodName();
+
+    JavaContext createLocalContext();
 }

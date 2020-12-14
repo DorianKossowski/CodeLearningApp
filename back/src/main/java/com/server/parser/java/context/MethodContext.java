@@ -21,6 +21,11 @@ public class MethodContext implements JavaContext {
         this.classContext = Objects.requireNonNull(classContext, "classContext cannot be null");
     }
 
+    @Override
+    public JavaContext createLocalContext() {
+        return new LocalContext(nameToVariable, getMethodName());
+    }
+
     public void save(MethodHeader methodHeader) {
         this.methodHeader = Objects.requireNonNull(methodHeader, "methodHeader cannot be null");
         classContext.saveCurrentMethodContext(this, methodHeader);

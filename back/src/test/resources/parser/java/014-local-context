@@ -1,0 +1,48 @@
+### TASK ###
+-> statement
+    with text: "System.out.println(i)"
+    with resolved: "System.out.println(2)"
+-> statement
+    with text: "System.out.println(i2)"
+    with resolved: "System.out.println(1)"
+-> statement
+    with text: "System.out.println(i3)"
+    with resolved: "System.out.println(1)"
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        {
+            int i = 0;
+        }
+        int i = 0;
+        {
+            i = 1;
+            {
+                i = 2;
+            }
+        }
+        System.out.println(i);
+
+        // ### //
+        if(true) {
+            int i2 = 0;
+        }
+        int i2 = 0;
+        if(false) {}
+        else i2 = 1;
+        System.out.println(i2);
+
+        // ### //
+        switch(i) {
+            default:
+                int i3;
+        }
+        int i3 = 0;
+        switch(i) {
+            default:
+                i3 = 1;
+        }
+        System.out.println(i3);
+    }
+}

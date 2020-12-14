@@ -45,19 +45,16 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
     public static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
         private final JavaContext context;
-        private final IfStmtResolver ifStmtResolver;
-        private final SwitchStmtResolver switchStmtResolver;
 
         private StatementVisitorInternal(JavaContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
-            this.ifStmtResolver = new IfStmtResolver(this.context, this);
-            this.switchStmtResolver = new SwitchStmtResolver(this.context);
         }
 
         @Override
         public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
+            StatementVisitorInternal localVisitor = new StatementVisitorInternal(context.createLocalContext());
             List<Statement> statements = ctx.statementList().statement().stream()
-                    .map(this::visit)
+                    .map(localVisitor::visit)
                     .collect(Collectors.toList());
             return new BlockStatement(statements);
         }
@@ -138,13 +135,13 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         //*** IF ***//
         @Override
         public Statement visitIfElseStatement(JavaParser.IfElseStatementContext ctx) {
-            return ifStmtResolver.resolve(ctx);
+            return IfStmtResolver.resolve(context, this, ctx);
         }
 
         //*** SWITCH ***//
         @Override
         public Statement visitSwitchStatement(JavaParser.SwitchStatementContext ctx) {
-            return switchStmtResolver.resolve(ctx);
+            return SwitchStmtResolver.resolve(context.createLocalContext(), ctx);
         }
 
         //*** BREAK ***//

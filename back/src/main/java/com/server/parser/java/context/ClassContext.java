@@ -54,4 +54,9 @@ public class ClassContext implements JavaContext {
     public String getMethodName() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public JavaContext createLocalContext() {
+        throw new UnsupportedOperationException();
+    }
 }
