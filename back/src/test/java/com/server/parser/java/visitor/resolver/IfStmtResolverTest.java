@@ -11,7 +11,6 @@ import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
-import com.server.parser.java.visitor.StatementVisitor;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,12 +29,9 @@ class IfStmtResolverTest {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private JavaContext javaContext;
 
-    private IfStmtResolver resolver;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        resolver = new IfStmtResolver(javaContext, mock(StatementVisitor.StatementVisitorInternal.class));
     }
 
     @Test
@@ -46,7 +42,7 @@ class IfStmtResolverTest {
         when(condition.getValue()).thenReturn(value);
         when(javaContext.getVisitor(Expression.class).visit(expressionContext, javaContext)).thenReturn(condition);
 
-        assertThatThrownBy(() -> resolver.resolveCondition(expressionContext))
+        assertThatThrownBy(() -> IfStmtResolver.resolveCondition(javaContext, expressionContext))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: \"str\" nie jest typu logicznego");
     }
@@ -57,12 +53,11 @@ class IfStmtResolverTest {
         MethodContext methodContext = context.createEmptyMethodContext();
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
         methodContext.addVariable(new Variable("String", "str", value));
-        resolver = new IfStmtResolver(methodContext, mock(StatementVisitor.StatementVisitorInternal.class));
 
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) str = \"true\"; else str = \"false\";",
                 JavaParser::ifElseStatement);
 
-        resolver.validateBranchesContent(c);
+        IfStmtResolver.validateBranchesContent(methodContext, c);
 
         assertThat(methodContext.getVariable("str").getValue()).isSameAs(value);
     }
@@ -73,9 +68,8 @@ class IfStmtResolverTest {
         MethodContext methodContext = context.createEmptyMethodContext();
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) String str = \"true\";",
                 JavaParser::ifElseStatement);
-        resolver = new IfStmtResolver(methodContext, mock(StatementVisitor.StatementVisitorInternal.class));
 
-        assertThatThrownBy(() -> resolver.validateBranchesContent(c))
+        assertThatThrownBy(() -> IfStmtResolver.validateBranchesContent(methodContext, c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Deklaracja String str = \"true\" nie jest w tym miejscu dozwolona");
     }
