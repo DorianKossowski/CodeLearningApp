@@ -21,37 +21,32 @@ public class SwitchStmtResolver {
     private static final String EXCEPTION_PREFIX = "W instrukcji switch: ";
     private static final String EXCEPTION_SUFFIX = " nie jest jednego z typów: char, byte, short, int, Character, " +
             "Byte, Short, Integer, String";
-    private final JavaContext context;
-    private final StatementListVisitor statementListVisitor = new StatementListVisitor();
-    private Integer defaultIndex;
+    private static final StatementListVisitor statementListVisitor = new StatementListVisitor();
+    private static Integer defaultIndex;
 
-    public SwitchStmtResolver(JavaContext context) {
-        this.context = Objects.requireNonNull(context, "context cannot be null");
-    }
-
-    public SwitchStatement resolve(JavaParser.SwitchStatementContext switchCtx) {
+    public static SwitchStatement resolve(JavaContext context, JavaParser.SwitchStatementContext switchCtx) {
         defaultIndex = null;
         JavaParser.ExpressionContext expressionContext = switchCtx.expression();
-        Value value = resolveExpression(expressionContext);
+        Value value = resolveExpression(context, expressionContext);
         List<SwitchElement> switchElements = switchCtx.switchElement().stream()
-                .map(this::resolveSwitchElement)
+                .map(switchElementContext -> SwitchStmtResolver.resolveSwitchElement(context, switchElementContext))
                 .collect(Collectors.toList());
         List<JavaParser.StatementListContext> switchStatementContexts = switchElements.stream()
                 .map(SwitchElement::getStatementListContext)
                 .collect(Collectors.toList());
-        validateStatementLists(switchStatementContexts);
+        validateStatementLists(context, switchStatementContexts);
         List<List<Expression>> switchLabels = switchElements.stream()
                 .map(SwitchElement::getLabelExpressions)
                 .collect(Collectors.toList());
         validateLabels(switchLabels);
-        List<Statement> contentStatements = resolveStatements(value, switchElements);
+        List<Statement> contentStatements = resolveStatements(context, value, switchElements);
         contentStatements.forEach(statement ->
                 statement.addProperty(StatementProperties.SWITCH_EXPRESSION, expressionContext.getText())
         );
         return new SwitchStatement(contentStatements);
     }
 
-    private List<Statement> resolveStatements(Value value, List<SwitchElement> switchElements) {
+    private static List<Statement> resolveStatements(JavaContext context, Value value, List<SwitchElement> switchElements) {
         Integer fulfilledCaseIndex = null;
         for (int i = 0; i < switchElements.size(); ++i) {
             if (isLabelFulfilled(value, switchElements.get(i))) {
@@ -60,14 +55,14 @@ public class SwitchStmtResolver {
             }
         }
         if (fulfilledCaseIndex != null) {
-            return resolveStatements(switchElements, fulfilledCaseIndex);
+            return resolveStatements(context, switchElements, fulfilledCaseIndex);
         } else if (defaultIndex != null) {
-            return resolveStatements(switchElements, defaultIndex);
+            return resolveStatements(context, switchElements, defaultIndex);
         }
         return Collections.emptyList();
     }
 
-    List<Statement> resolveStatements(List<SwitchElement> switchElements, int startIndex) {
+    static List<Statement> resolveStatements(JavaContext context, List<SwitchElement> switchElements, int startIndex) {
         ArrayList<Statement> statements = new ArrayList<>();
         for (int i = startIndex; i < switchElements.size(); ++i) {
             SwitchElement switchElement = switchElements.get(i);
@@ -83,13 +78,13 @@ public class SwitchStmtResolver {
         return statements;
     }
 
-    private String getElementJoinedLabels(SwitchElement switchElement) {
+    private static String getElementJoinedLabels(SwitchElement switchElement) {
         return switchElement.getLabelExpressions().stream()
                 .map(expression -> expression == null ? "default" : expression.getText())
                 .collect(Collectors.joining(","));
     }
 
-    boolean isLabelFulfilled(Value value, SwitchElement switchElement) {
+    static boolean isLabelFulfilled(Value value, SwitchElement switchElement) {
         boolean fulfilled;
         for (Expression labelExpression : switchElement.getLabelExpressions()) {
             if (labelExpression == null) {
@@ -108,7 +103,7 @@ public class SwitchStmtResolver {
         return false;
     }
 
-    void validateLabels(List<List<Expression>> switchLabels) {
+    static void validateLabels(List<List<Expression>> switchLabels) {
         LinkedHashSet<String> distinctLabelExpressionTexts = new LinkedHashSet<>();
         List<String> labelExpressionTexts = new ArrayList<>();
         for (int i = 0; i < switchLabels.size(); ++i) {
@@ -116,8 +111,8 @@ public class SwitchStmtResolver {
         }
     }
 
-    private void validateLabel(LinkedHashSet<String> distinctLabelExpressionTexts, List<String> labelExpressionTexts,
-                               List<Expression> switchLabel, int switchLabelIndex) {
+    static private void validateLabel(LinkedHashSet<String> distinctLabelExpressionTexts, List<String> labelExpressionTexts,
+                                      List<Expression> switchLabel, int switchLabelIndex) {
         for (Expression labelExpression : switchLabel) {
             if (labelExpression == null) {
                 validateDefaultLabel(switchLabelIndex);
@@ -127,8 +122,8 @@ public class SwitchStmtResolver {
         }
     }
 
-    private void validateCaseLabel(LinkedHashSet<String> distinctLabelExpressionTexts, List<String> labelExpressionTexts,
-                                   Expression labelExpression) {
+    static private void validateCaseLabel(LinkedHashSet<String> distinctLabelExpressionTexts,
+                                          List<String> labelExpressionTexts, Expression labelExpression) {
 //        TODO handle const expressions
 //        if (!(labelExpression instanceof Literal)) {
 //            throw new ResolvingException("Etykieta case wymaga stałego wyrażenia, którym nie jest: " + labelExpression.getText());
@@ -141,7 +136,7 @@ public class SwitchStmtResolver {
         }
     }
 
-    private void validateDefaultLabel(int switchLabelIndex) {
+    private static void validateDefaultLabel(int switchLabelIndex) {
         if (defaultIndex == null) {
             defaultIndex = switchLabelIndex;
         } else {
@@ -149,18 +144,20 @@ public class SwitchStmtResolver {
         }
     }
 
-    SwitchElement resolveSwitchElement(JavaParser.SwitchElementContext switchElementContext) {
-        List<Expression> labelExpressions = resolveLabelExpressions(switchElementContext.switchElementLabel());
+    static SwitchElement resolveSwitchElement(JavaContext context,
+                                              JavaParser.SwitchElementContext switchElementContext) {
+        List<Expression> labelExpressions = resolveLabelExpressions(context, switchElementContext.switchElementLabel());
         JavaParser.StatementListContext statementListContext = switchElementContext.statementList();
         return new SwitchElement(labelExpressions, statementListContext);
     }
 
-    void validateStatementLists(List<JavaParser.StatementListContext> statementListContexts) {
+    static void validateStatementLists(JavaContext context, List<JavaParser.StatementListContext> statementListContexts) {
         JavaContext validationContext = (JavaContext) SerializationUtils.clone(context);
         statementListContexts.forEach(statementListContext -> statementListVisitor.visit(statementListContext, validationContext));
     }
 
-    List<Expression> resolveLabelExpressions(List<JavaParser.SwitchElementLabelContext> switchElementLabelContexts) {
+    static List<Expression> resolveLabelExpressions(JavaContext context,
+                                                    List<JavaParser.SwitchElementLabelContext> switchElementLabelContexts) {
         return switchElementLabelContexts.stream().map(switchElementLabelContext -> {
             if (switchElementLabelContext.CASE() != null) {
                 return context.getVisitor(Expression.class).visit(switchElementLabelContext.expression(), context);
@@ -169,7 +166,7 @@ public class SwitchStmtResolver {
         }).collect(Collectors.toList());
     }
 
-    Value resolveExpression(JavaParser.ExpressionContext expressionContext) {
+    static Value resolveExpression(JavaContext context, JavaParser.ExpressionContext expressionContext) {
         Expression expression = context.getVisitor(Expression.class).visit(expressionContext, context);
         Value value = expression.getValue();
         if (!(value instanceof ConstantProvider)) {
