@@ -5,6 +5,7 @@ import com.server.parser.java.ast.ConstantProvider;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.IfElseStatement;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.JavaVisitor;
@@ -39,9 +40,17 @@ public class IfStmtResolver {
         JavaContext validationContext = (JavaContext) SerializationUtils.clone(context);
         JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class);
 
-        visitor.visit(ifCtx.statement(0), validationContext);
+        Statement ifContentStmt = visitor.visit(ifCtx.statement(0), validationContext);
+        validateBranchContent(ifContentStmt, ifContentStmt.getText());
         if (ifCtx.statement(1) != null) {
-            visitor.visit(ifCtx.statement(1), validationContext);
+            Statement elseContentStmt = visitor.visit(ifCtx.statement(1), validationContext);
+            validateBranchContent(elseContentStmt, ifContentStmt.getText());
+        }
+    }
+
+    private void validateBranchContent(Statement ifContentStmt, String text) {
+        if (ifContentStmt instanceof VariableDef) {
+            throw new ResolvingException(String.format("Deklaracja %s nie jest w tym miejscu dozwolona", text));
         }
     }
 

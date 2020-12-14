@@ -66,4 +66,17 @@ class IfStmtResolverTest {
 
         assertThat(methodContext.getVariable("str").getValue()).isSameAs(value);
     }
+
+    @Test
+    void shouldThrowWhenSingleVariableDefAsContent() {
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
+        JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) String str = \"true\";",
+                JavaParser::ifElseStatement);
+        resolver = new IfStmtResolver(methodContext, mock(StatementVisitor.StatementVisitorInternal.class));
+
+        assertThatThrownBy(() -> resolver.validateBranchesContent(c))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Deklaracja String str = \"true\" nie jest w tym miejscu dozwolona");
+    }
 }
