@@ -3,15 +3,14 @@ package com.server.parser.java.visitor.resolver;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.constant.BooleanConstant;
+import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
-import com.server.parser.java.ast.statement.ForStatement;
-import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
+import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.JavaVisitor;
+import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,8 @@ import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ForStmtResolverTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
@@ -32,26 +32,6 @@ class ForStmtResolverTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-    }
-
-    @Test
-    void shouldVisitForElements() {
-        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(int i=0; i<1; i = i+1);",
-                JavaParser::forStatement);
-        JavaVisitor<Statement> statementVisitor = mock(JavaVisitor.class);
-        JavaVisitor<Expression> expressionVisitor = mock(JavaVisitor.class);
-        when(javaContext.getVisitor(Statement.class)).thenReturn(statementVisitor);
-        when(javaContext.getVisitor(Expression.class)).thenReturn(expressionVisitor);
-        when(expressionVisitor.visit(c.condExpr, javaContext))
-                .thenReturn(new Literal(new BooleanConstant(true)))
-                .thenReturn(new Literal(new BooleanConstant(false)));
-
-        ForStatement forStatement = ForStmtResolver.resolve(javaContext, c);
-
-        assertThat(forStatement.getExpressionStatements()).isEmpty();
-        verify(statementVisitor).visit(c.initExpr, javaContext);
-        verify(expressionVisitor, times(2)).visit(c.condExpr, javaContext);
-        verify(statementVisitor).visit(c.updateExpr, javaContext);
     }
 
     @Test
@@ -74,4 +54,30 @@ class ForStmtResolverTest {
                 .hasMessage("Problem podczas rozwiązywania: \"str\" nie jest typu logicznego");
     }
 
+    @Test
+    void shouldValidateInSeparateContext() {
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
+        ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
+        methodContext.addVariable(new Variable("String", "str", value));
+
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(int i=0; i<1; i=i+1) str = \"true\";",
+                JavaParser::forStatement);
+
+        ForStmtResolver.validateContent(methodContext, c.statement());
+
+        assertThat(methodContext.getVariable("str").getValue()).isSameAs(value);
+    }
+
+    @Test
+    void shouldThrowWhenSingleVariableDefAsContent() {
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) String str = \"true\";",
+                JavaParser::forStatement);
+
+        assertThatThrownBy(() -> ForStmtResolver.validateContent(methodContext, c.statement()))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Deklaracja String str = \"true\" nie jest w tym miejscu dozwolona");
+    }
 }

@@ -7,6 +7,7 @@ import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.visitor.resolver.ForStmtResolver;
 import com.server.parser.java.visitor.resolver.IfStmtResolver;
 import com.server.parser.java.visitor.resolver.SwitchStmtResolver;
 import com.server.parser.util.EmptyExpressionPreparer;
@@ -148,6 +149,13 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitBreakStatement(JavaParser.BreakStatementContext ctx) {
             throw new BreakStatementException();
+        }
+
+        //*** FOR ***//
+        @Override
+        public Statement visitForStatement(JavaParser.ForStatementContext ctx) {
+            JavaContext localContext = context.createLocalContext();
+            return ForStmtResolver.resolve(localContext, ctx);
         }
     }
 }
