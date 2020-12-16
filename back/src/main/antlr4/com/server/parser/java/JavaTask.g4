@@ -27,9 +27,13 @@ statementRule
 
 statementRuleSpec
     : statementMethodRuleSpec
-    | WITH ( textRuleSpec | statementResolvedRuleSpec | ifSpec | elseIfSpec | switchExpr | switchLabel )
+    | WITH ( textRuleSpec | statementResolvedRuleSpec | ifSpec | elseIfSpec | switchExpr | switchLabel | forIteration )
     | elseSpec
     | logInfo
+    ;
+
+forIteration
+    : 'for' 'iteration' ':' STRING_LITERAL
     ;
 
 switchLabel
