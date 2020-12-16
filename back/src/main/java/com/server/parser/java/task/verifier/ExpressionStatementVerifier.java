@@ -32,6 +32,8 @@ public class ExpressionStatementVerifier {
         statementModel.getIfCond().ifPresent(this::verifyIfCond);
         statementModel.isInElse().ifPresent(this::verifyIsInElse);
         statementModel.getElseIfCond().ifPresent(this::verifyElseIfCond);
+        statementModel.getSwitchExpr().ifPresent(this::verifySwitchExpr);
+        statementModel.getSwitchLabel().ifPresent(this::verifySwitchLabel);
         Verify.verify(!availableStatements.isEmpty(), getErrorMessage(statementModel));
     }
 
@@ -94,5 +96,34 @@ public class ExpressionStatementVerifier {
                 .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.IF_CONDITION), ifCondParsed))
                 .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.IN_ELSE), String.valueOf(true)))
                 .collect(Collectors.toList());
+    }
+
+    private void verifySwitchExpr(String switchExpr) {
+        String switchExprParsed = JavaParserAdapter.parseExpression(switchExpr).getText();
+        availableStatements = availableStatements.stream()
+                .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.SWITCH_EXPRESSION), switchExprParsed))
+                .collect(Collectors.toList());
+    }
+
+
+    private void verifySwitchLabel(String switchLabel) {
+        String switchLabelParsed = switchLabel.equals("default") ? "default" : JavaParserAdapter.parseExpression(switchLabel).getText();
+        availableStatements = availableStatements.stream()
+                .filter(statement -> isPropertyInJoined(statement.getProperty(StatementProperties.SWITCH_LABELS), switchLabelParsed))
+                .collect(Collectors.toList());
+    }
+
+
+    private boolean isPropertyInJoined(String joinedProperty, String switchLabelParsed) {
+        if (joinedProperty == null) {
+            return false;
+        }
+        String[] properties = joinedProperty.split(",");
+        for (String property : properties) {
+            if (property.equals(switchLabelParsed)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

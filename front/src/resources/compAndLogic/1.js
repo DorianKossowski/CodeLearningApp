@@ -63,9 +63,9 @@ export const input = `public class MyClass {
     }
 }`;
 
-export const description = `Kluczowym elementem każdego języka programowania są operacje porównywania wartości zmiennych. W tym rozdziale pokazane zostaną dostępne w Javie operatory do tego typu zadań. 
-Poruszony zostanie również temat sprawdzania równości typów złożonych. Otrzymasz odpowiedź na pytanie: Kiedy należy użyć operatora == a kiedy metody equals?
-W rozdziale pokazane zostaną również operacje logiczne, dzięki czemu dowiesz się jak działają operatory && oraz ||.`;
+export const description = `Kluczowym elementem każdego języka programowania są <b>operacje porównywania</b> wartości zmiennych. W tym rozdziale pokazane zostaną dostępne w Javie operatory do tego typu zadań. 
+Poruszony zostanie również temat sprawdzania równości <b>typów złożonych</b>. Otrzymasz odpowiedź na pytanie: Kiedy należy użyć operatora == a kiedy metody equals?
+W rozdziale pokazane zostaną również <b>operacje logiczne</b>, dzięki czemu dowiesz się jak działają operatory && oraz ||.`;
 
 export const instruction = `Przyjrzyj się i uruchom widoczny w edytorze kod. Zawiera on instrukcje, które poznasz w tym rozdziale.`;
 

@@ -5,14 +5,11 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodBody;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -58,16 +55,8 @@ public class MethodVisitor extends JavaVisitor<Method> {
         }
 
         MethodBody visit(JavaParser.MethodBodyContext ctx) {
-            StatementVisitor statementVisitor = new StatementVisitor();
-
-            List<Statement> statements = new ArrayList<>();
-            for (int i = 0; i < ctx.getChildCount(); ++i) {
-                ParseTree child = ctx.getChild(i);
-                if (child instanceof ParserRuleContext) {
-                    statements.add(statementVisitor.visit((ParserRuleContext) child, context));
-                }
-            }
-            return new MethodBody(statements);
+            StatementListVisitor statementListVisitor = new StatementListVisitor();
+            return new MethodBody(statementListVisitor.visit(ctx.statementList(), context));
         }
     }
 }

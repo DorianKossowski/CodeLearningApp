@@ -11,6 +11,7 @@ import com.server.parser.java.ast.value.PrimitiveValue;
 import com.server.parser.java.ast.value.UninitializedValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,18 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     @BeforeEach
     void setUp() {
         methodContext = context.createCurrentMethodContext(METHOD_NAME);
+    }
+
+    @Test
+    void shouldVisitBlockStatement() {
+        String input = "{ int a = 1; boolean b = false; }";
+        JavaParser.BlockStatementContext c = HELPER.shouldParseToEof(input, JavaParser::blockStatement);
+
+        BlockStatement statement = (BlockStatement) visitor.visit(c, context);
+
+        assertThat(statement.getText()).isEqualTo("{ BLOCK STATEMENT }");
+        assertThat(statement.getExpressionStatements()).extracting(Statement::getText)
+                .containsExactly("int a = 1", "boolean b = false");
     }
 
     //*** METHOD CALL ***//
@@ -246,5 +259,15 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThat(ifElseStatement.getText()).isEqualTo("IF ELSE Statement");
         assertThat(ifElseStatement.getExpressionStatements()).extracting(ExpressionStatement::getText)
                 .containsExactly("System.out.print(2)");
+    }
+
+    //*** BREAK ***//
+    @Test
+    void shouldVisitBreak() {
+        JavaParser.BreakStatementContext c = HELPER.shouldParseToEof("break", JavaParser::breakStatement);
+
+        assertThatThrownBy(() -> visitor.visit(c, context))
+                .isExactlyInstanceOf(BreakStatementException.class)
+                .hasMessage("Problem podczas rozwiązywania: 'break' poza instrukcją switch oraz pętlą");
     }
 }

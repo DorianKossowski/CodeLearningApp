@@ -7,11 +7,12 @@ import com.server.parser.java.ast.value.Value;
 import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class MethodContext {
+public class MethodContext implements Serializable {
     private final String methodName;
     private final Map<String, Variable> nameToVariable = new HashMap<>();
 

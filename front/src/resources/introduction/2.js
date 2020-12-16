@@ -16,8 +16,8 @@ export const input = `public class Hello {
     }
 }`;
 
-export const description = `Jak wspomniane zostało w poprzednim ćwiczeniu, od metody main ropoczyna się działanie programu. W jej wnętrzu możliwe jest używanie wszelakich instrukcji jak np. wywołanie metody println.
-Metoda startowa main charakteryzuje się zwracanym typem void oraz znajdującym się w nawiasach argumentem w postaci tablicy łańcuchów znaków - String[]. Wymagane są również odpowiednie modyfikatory - public oraz static.`;
+export const description = `Jak wspomniane zostało w poprzednim ćwiczeniu, od metody <b>main</b> ropoczyna się działanie programu. W jej wnętrzu możliwe jest używanie wszelakich instrukcji jak np. wywołanie metody <b>println</b>.
+Metoda startowa <b>main</b> charakteryzuje się zwracanym typem <b>void</b> oraz znajdującym się w nawiasach argumentem w postaci tablicy łańcuchów znaków - <b>String[]</b>. Wymagane są również odpowiednie modyfikatory - <b>public</b> oraz <b>static</b>.`;
 
 export const instruction = `Uzupełnij definicję metody uruchomieniowej main o jej brakujące elementy.
 Korzystając z literału znakowego wyświetl napis "My Hello World".`;

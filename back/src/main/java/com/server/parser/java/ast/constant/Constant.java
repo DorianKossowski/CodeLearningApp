@@ -3,9 +3,10 @@ package com.server.parser.java.ast.constant;
 import com.server.parser.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Constant<T> {
+public abstract class Constant<T> implements Serializable {
     public final T c;
 
     protected Constant(T c) {

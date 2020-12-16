@@ -58,22 +58,40 @@ singleMethodArg
     ;
 
 methodBody
+    : statementList
+    ;
+
+statementList
     : statement*
     ;
 
 statement
-    : expressionStatement
+    : blockStatement
+    | expressionStatement
     | ifElseStatement
+    | switchStatement
     | emptyStatement
     ;
 
-ifElseStatement
-    : IF '(' cond=expression ')' ifBranchContent (ELSE ifBranchContent)?
+switchStatement
+    : SWITCH '(' expression ')' '{' switchElement* '}'
     ;
 
-ifBranchContent
-    : statement
-    | '{' statement* '}'
+switchElement
+    : switchElementLabel+ statementList
+    ;
+
+switchElementLabel
+    : CASE expression ':'
+    | DEFAULT ':'
+    ;
+
+blockStatement
+    : '{' statementList '}'
+    ;
+
+ifElseStatement
+    : IF '(' cond=expression ')' statement (ELSE statement)?
     ;
 
 emptyStatement
@@ -84,7 +102,12 @@ expressionStatement
     : ( call
     | methodVarDec
     | assignment
+    | breakStatement
     ) SEMICOLON
+    ;
+
+breakStatement
+    : BREAK
     ;
 
 assignment
@@ -118,7 +141,7 @@ callArguments
     ;
 
 expression
-   :  unOp=('+' | '-')? exprAtom
+   : unOp=('+' | '-')? exprAtom
    | expression op=('*' | '/' | '%') expression
    | expression op=('+' | '-') expression
    | expression op=('<' | '<=' | '>' | '>=') expression
@@ -208,12 +231,16 @@ identifier
     : IDENTIFIER
     ;
 
-IF : 'if' ;
-ELSE : 'else' ;
-NULL : 'null' ;
-SEMICOLON : ';' ;
-LPAREN : '(' ;
-RPAREN : ')' ;
+BREAK       : 'break' ;
+CASE        : 'case' ;
+DEFAULT     : 'default' ;
+ELSE        : 'else' ;
+IF          : 'if' ;
+LPAREN      : '(' ;
+NULL        : 'null' ;
+RPAREN      : ')' ;
+SEMICOLON   : ';' ;
+SWITCH      : 'switch' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 CHAR_LITERAL : '\'' . '\'' ;

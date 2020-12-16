@@ -179,4 +179,26 @@ public class JavaParserTest {
     void shouldParseIfStmt(String input) {
         HELPER.shouldParseToEof(input, JavaParser::ifElseStatement);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "{ }", "{ fun(); }", "{ fun1(); fun2(); }"
+    })
+    void shouldParseBlockStmt(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::blockStatement);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "switch(cond) { }", "switch(cond) { case x: fun(); }", "switch(cond) { case x:case y: fun(); fun(); }",
+            "switch(cond) { case x: fun(); case y: fun(); case z: }", "switch(cond) { default: fun(); }"
+    })
+    void shouldParseSwitchStmt(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::switchStatement);
+    }
+
+    @Test
+    void shouldParseBreak() {
+        HELPER.shouldParseToEof("break", JavaParser::breakStatement);
+    }
 }

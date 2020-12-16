@@ -1,0 +1,50 @@
+### TASK ###
+-> statement
+    with text: "System.out.println(\"CASE 1\")"
+	with switch expression: "i"
+    with switch label: "0"
+-> statement
+    with text: "System.out.println(\"CASE 1_2\")"
+    with switch expression: "i"
+	with switch label: "1"
+-> statement
+    with text: "System.out.println(\"CASE 2\")"
+    with switch expression: "i"
+	with switch label: "2"
+-> statement
+    with text: "System.out.println(\"DEFAULT v2\")"
+    with switch expression: "i"
+	with switch label: "default"
+-> statement
+    with text: "System.out.println(\"CASE 2v2\")"
+    with switch expression: "i"
+	with switch label: "2"
+
+### INPUT ###
+public class MyClass {
+    public int main(){
+        int i = 0;
+
+        switch(i) {
+            case 0:
+            case 1:
+                System.out.println("CASE 1");
+                System.out.println("CASE 1_2");
+            case 2:
+                System.out.println("CASE 2");
+        }
+
+        switch(i) {
+            case 1:
+                System.out.println("CASE 1v2");
+                System.out.println("CASE 1_2v2");
+            default:
+                System.out.println("DEFAULT v2");
+            case 2:
+                System.out.println("CASE 2v2");
+                break;
+            case 3:
+               System.out.println("CASE 3v2");
+        }
+    }
+}

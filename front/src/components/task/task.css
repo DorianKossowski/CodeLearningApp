@@ -9,6 +9,12 @@
     height: max-content;
 }
 
+.descriptionCode {
+    background: #ccc;
+    padding: 10px;
+    white-space: pre-wrap;
+}
+
 .editorWrapper {
     width: 60%;
 }

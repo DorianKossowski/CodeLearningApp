@@ -7,11 +7,11 @@ import com.server.parser.java.ast.statement.IfElseStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.java.visitor.StatementVisitor;
 import com.server.parser.util.exception.ResolvingException;
+import org.apache.commons.lang.SerializationUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class IfStmtResolver {
@@ -23,20 +23,30 @@ public class IfStmtResolver {
         this.statementVisitor = Objects.requireNonNull(statementVisitor, "statementVisitor cannot be null");
     }
 
-    public Statement resolve(JavaParser.IfElseStatementContext ifCtx) {
-        Expression condition = context.getVisitor(Expression.class).visit(ifCtx.cond, context);
-        boolean condValue = resolveCondition(condition);
-        List<Statement> visitedStatements = new ArrayList<>();
+    public IfElseStatement resolve(JavaParser.IfElseStatementContext ifCtx) {
+        validateBranchesContent(ifCtx);
+        boolean condValue = resolveCondition(ifCtx.cond);
+        Statement visitedStatement = null;
         if (condValue) {
-            ifCtx.ifBranchContent(0).statement().forEach(stmtContext -> visitedStatements.add(statementVisitor.visit(stmtContext)));
-        } else if (ifCtx.ifBranchContent(1) != null) {
-            ifCtx.ifBranchContent(1).statement().forEach(stmtContext -> visitedStatements.add(statementVisitor.visit(stmtContext)));
-            return IfElseStatement.createElse(visitedStatements);
+            visitedStatement = statementVisitor.visit(ifCtx.statement(0));
+        } else if (ifCtx.statement(1) != null) {
+            return IfElseStatement.createElse(statementVisitor.visit(ifCtx.statement(1)));
         }
-        return IfElseStatement.createIf(ifCtx.cond.getText(), visitedStatements);
+        return IfElseStatement.createIf(ifCtx.cond.getText(), visitedStatement);
     }
 
-    boolean resolveCondition(Expression condition) {
+    void validateBranchesContent(JavaParser.IfElseStatementContext ifCtx) {
+        JavaContext validationContext = (JavaContext) SerializationUtils.clone(context);
+        JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class);
+
+        visitor.visit(ifCtx.statement(0), validationContext);
+        if (ifCtx.statement(1) != null) {
+            visitor.visit(ifCtx.statement(1), validationContext);
+        }
+    }
+
+    boolean resolveCondition(JavaParser.ExpressionContext expressionContext) {
+        Expression condition = context.getVisitor(Expression.class).visit(expressionContext, context);
         Value value = condition.getValue();
         if (value instanceof ConstantProvider && ((ConstantProvider) value).getConstant().c instanceof Boolean) {
             return (Boolean) ((ConstantProvider) value).getConstant().c;

@@ -3,7 +3,6 @@ package com.server.parser.java.visitor;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.MethodBody;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.MethodCall;
 import com.server.parser.java.ast.statement.Statement;
@@ -53,21 +52,6 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
         assertThat(header.getResult()).isEqualTo("void");
         assertThat(header.getName()).isEqualTo("m");
-    }
-
-    @Test
-    void shouldVisitStatementsInCorrectOrder() {
-        context.createCurrentMethodContext("");
-        String input = "String a = \"s\"; System.out.println(\"sss\"); String b = \"s2\";";
-        JavaParser.MethodBodyContext c = HELPER.shouldParseToEof(input, JavaParser::methodBody);
-
-        MethodBody methodBody = visitorInternal.visit(c);
-
-        List<Statement> statements = methodBody.getStatements();
-        assertThat(statements).hasSize(3);
-        assertThat(statements.get(0).getText()).isEqualTo("String a = \"s\"");
-        assertThat(statements.get(1).getText()).isEqualTo("System.out.println(\"sss\")");
-        assertThat(statements.get(2).getText()).isEqualTo("String b = \"s2\"");
     }
 
     @Test

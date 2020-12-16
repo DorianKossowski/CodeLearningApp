@@ -13,8 +13,11 @@ export const input = `public class MyClass {
     }
 }`;
 
-export const description = `Poza podstawową definicją zmiennej, gdzie zostaje jej nadana wartość, istnieje również możliwość ponownego przypisania do niej innej wartości. Można do tego użyć nowego literału lub też innej wcześniej zdefiniowanej zmiennej. Należy mieć na uwadze, że typ nowej wartości musi się zgadzać z typem zmiennej. Operacja przypisania ma nasępujący schemat: NAZWA_ZMIENNEJ = NOWA_WARTOŚĆ.
-Mechanizm ponownego przypisywania pozwala na używanie różnych wartości zależnych od kontekstu, bez konieczności tworzenia wielu zmiennych.`;
+export const description = `Poza podstawową definicją zmiennej, gdzie zostaje jej nadana wartość, istnieje również możliwość ponownego <b>przypisania</b> do niej innej wartości. Można do tego użyć nowego literału lub też innej wcześniej zdefiniowanej zmiennej. Należy mieć na uwadze, że typ nowej wartości musi się zgadzać z typem zmiennej. Operacja przypisania ma nasępujący schemat:
+<java>
+NAZWA_ZMIENNEJ = NOWA_WARTOŚĆ;
+</java>
+Mechanizm ponownego <b>przypisywania</b> pozwala na używanie różnych wartości zależnych od kontekstu, bez konieczności tworzenia wielu zmiennych.`;
 
 export const instruction = `Zdefiniuj zmienną s, która będzie przechowywać napis "definicja", a następnie przypisz do niej nowy łańcuch znaków "przypisanie".`;
 

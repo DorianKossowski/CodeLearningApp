@@ -92,6 +92,26 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     }
 
     @Test
+    void shouldVerifySwitchExpr() {
+        ExpressionStatement statement = mock(ExpressionStatement.class);
+        when(statement.getProperty(StatementProperties.SWITCH_EXPRESSION)).thenReturn("expr");
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+
+        verifier.verify(StatementModel.builder().withSwitchExpr("expr").build());
+    }
+
+    @Test
+    void shouldVerifySwitchLabel() {
+        ExpressionStatement statement = mock(ExpressionStatement.class);
+        when(statement.getProperty(StatementProperties.SWITCH_LABELS)).thenReturn("label");
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+
+        verifier.verify(StatementModel.builder().withSwitchLabel("label").build());
+    }
+
+    @Test
     void shouldThrowCorrectErrorMessage() {
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.emptyList()));
         ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
