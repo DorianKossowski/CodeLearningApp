@@ -176,5 +176,11 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             JavaContext localContext = context.createLocalContext();
             return ForStmtResolver.resolve(localContext, ctx);
         }
+
+        //*** EMPTY ***//
+        @Override
+        public Statement visitEmptyStatement(JavaParser.EmptyStatementContext ctx) {
+            return EmptyStatement.INSTANCE;
+        }
     }
 }

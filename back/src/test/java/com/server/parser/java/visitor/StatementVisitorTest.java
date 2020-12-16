@@ -291,4 +291,12 @@ class StatementVisitorTest extends JavaVisitorTestBase {
                 .isExactlyInstanceOf(BreakStatementException.class)
                 .hasMessage("Problem podczas rozwiązywania: 'break' poza instrukcją switch oraz pętlą");
     }
+
+    //*** EMPTY ***//
+    @Test
+    void shouldVisitEmpty() {
+        JavaParser.EmptyStatementContext c = HELPER.shouldParseToEof(";", JavaParser::emptyStatement);
+
+        assertThat(visitor.visit(c, context)).isSameAs(EmptyStatement.INSTANCE);
+    }
 }
