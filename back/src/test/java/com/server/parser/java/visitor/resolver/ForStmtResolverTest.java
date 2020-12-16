@@ -1,12 +1,15 @@
 package com.server.parser.java.visitor.resolver;
 
+import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
@@ -17,6 +20,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -79,5 +85,18 @@ class ForStmtResolverTest {
         assertThatThrownBy(() -> ForStmtResolver.validateContent(methodContext, c.statement()))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Deklaracja String str = \"true\" nie jest w tym miejscu dozwolona");
+    }
+
+    @Test
+    void shouldBreakIn() {
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) { break; fun(); }",
+                JavaParser::forStatement);
+
+        List<Statement> statements = ForStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
+        Statement statement = Iterables.getOnlyElement(statements);
+        assertThat(statement.getExpressionStatements()).isEmpty();
     }
 }

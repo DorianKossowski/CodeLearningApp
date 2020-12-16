@@ -23,14 +23,24 @@ public class ForStmtResolver {
             statementJavaVisitor.visit(forCtx.initExpr, context);
         }
         validateContent(context, forCtx.statement());
+        List<Statement> contentStatements = resolveContent(context, forCtx, statementJavaVisitor);
+        return new ForStatement(contentStatements);
+    }
+
+    static List<Statement> resolveContent(JavaContext context, JavaParser.ForStatementContext forCtx,
+                                          JavaVisitor<Statement> statementJavaVisitor) {
         List<Statement> contentStatements = new ArrayList<>();
         while (shouldIterate(context, forCtx)) {
-            ///BODY
+            Statement statement = statementJavaVisitor.visit(forCtx.statement(), context);
+            contentStatements.add(statement);
+            if (statement.hasBreak()) {
+                return contentStatements;
+            }
             if (forCtx.updateExpr != null) {
                 statementJavaVisitor.visit(forCtx.updateExpr, context);
             }
         }
-        return new ForStatement(contentStatements);
+        return contentStatements;
     }
 
     static void validateContent(JavaContext context, JavaParser.StatementContext statementContext) {
