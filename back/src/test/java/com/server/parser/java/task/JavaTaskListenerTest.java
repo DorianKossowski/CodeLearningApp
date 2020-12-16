@@ -77,7 +77,9 @@ class JavaTaskListenerTest {
                 Arguments.of("Statement with switch expression", "statement with switch expression: \"t\"",
                         StatementModel.builder().withSwitchExpr("t").build()),
                 Arguments.of("Statement with switch label", "statement with switch label: \"t\"",
-                        StatementModel.builder().withSwitchLabel("t").build())
+                        StatementModel.builder().withSwitchLabel("t").build()),
+                Arguments.of("Statement with for iteration", "statement with for iteration: \"1\"",
+                        StatementModel.builder().withForIteration(1).build())
         );
     }
 

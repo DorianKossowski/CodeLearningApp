@@ -136,4 +136,10 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     public void enterSwitchLabel(JavaTaskParser.SwitchLabelContext ctx) {
         statementBuilder.withSwitchLabel(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
+
+    @Override
+    public void enterForIteration(JavaTaskParser.ForIterationContext ctx) {
+        String stringLiteral = JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
+        statementBuilder.withForIteration(Integer.parseInt(stringLiteral));
+    }
 }
