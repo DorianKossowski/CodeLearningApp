@@ -50,6 +50,16 @@ class StatementVisitorTest extends JavaVisitorTestBase {
                 .containsExactly("int a = 1", "boolean b = false");
     }
 
+    @Test
+    void shouldVisitBlockStatementWithBreak() {
+        String input = "for(int i=0; i<1; i=i+1){  { break; }  boolean b = false; }";
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof(input, JavaParser::forStatement);
+
+        ForStatement statement = (ForStatement) visitor.visit(c, methodContext);
+
+        assertThat(statement.getExpressionStatements()).isEmpty();
+    }
+
     //*** METHOD CALL ***//
     @Test
     void shouldVisitMethodCall() {

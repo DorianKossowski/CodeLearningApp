@@ -15,4 +15,9 @@ public class BreakStatement extends Statement {
     public List<ExpressionStatement> getExpressionStatements() {
         return Collections.emptyList();
     }
+
+    @Override
+    public boolean hasBreak() {
+        return true;
+    }
 }

@@ -14,6 +14,7 @@ import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.exception.BreakStatementException;
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -33,10 +34,11 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         }
     }
 
-    private boolean isValidBreak(ParserRuleContext ctx) {
+    private static boolean isValidBreak(ParserRuleContext ctx) {
         ParserRuleContext parentContext = ctx.getParent();
         while (parentContext != null) {
-            if (parentContext instanceof JavaParser.SwitchElementContext) {
+            if (parentContext instanceof JavaParser.SwitchElementContext
+                    || parentContext instanceof JavaParser.ForStatementContext) {
                 return true;
             }
             parentContext = parentContext.getParent();
@@ -53,11 +55,28 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
         @Override
         public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
+            return new BlockStatement(visitBlockContentStatements(ctx));
+        }
+
+        private List<Statement> visitBlockContentStatements(JavaParser.BlockStatementContext ctx) {
             StatementVisitorInternal localVisitor = new StatementVisitorInternal(context.createLocalContext());
-            List<Statement> statements = ctx.statementList().statement().stream()
-                    .map(localVisitor::visit)
-                    .collect(Collectors.toList());
-            return new BlockStatement(statements);
+            List<Statement> statements = new ArrayList<>();
+            for (JavaParser.StatementContext statementContext : ctx.statementList().statement()) {
+                try {
+                    Statement statement = localVisitor.visit(statementContext);
+                    statements.add(statement);
+                    if (statement.hasBreak()) {
+                        return statements;
+                    }
+                } catch (BreakStatementException e) {
+                    if (isValidBreak(ctx)) {
+                        statements.add(BreakStatement.INSTANCE);
+                        return statements;
+                    }
+                    throw e;
+                }
+            }
+            return statements;
         }
 
         @Override

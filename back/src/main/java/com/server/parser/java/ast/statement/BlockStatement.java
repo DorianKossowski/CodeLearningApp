@@ -18,4 +18,10 @@ public class BlockStatement extends Statement {
         statements.forEach(statement -> expressionStatements.addAll(statement.getExpressionStatements()));
         return expressionStatements;
     }
+
+    @Override
+    public boolean hasBreak() {
+        return statements.stream()
+                .anyMatch(Statement::hasBreak);
+    }
 }
