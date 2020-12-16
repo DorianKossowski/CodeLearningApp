@@ -15,7 +15,7 @@ import org.apache.commons.lang.SerializationUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForStmtResolver {
+public class ForStmtResolver extends LoopResolver {
 
     public static ForStatement resolve(JavaContext context, JavaParser.ForStatementContext forCtx) {
         JavaVisitor<Statement> statementJavaVisitor = context.getVisitor(Statement.class);
@@ -29,8 +29,10 @@ public class ForStmtResolver {
 
     static List<Statement> resolveContent(JavaContext context, JavaParser.ForStatementContext forCtx,
                                           JavaVisitor<Statement> statementJavaVisitor) {
+        int iteration = 0;
         List<Statement> contentStatements = new ArrayList<>();
         while (shouldIterate(context, forCtx)) {
+            validateMaxIteration(iteration);
             Statement statement = statementJavaVisitor.visit(forCtx.statement(), context);
             contentStatements.add(statement);
             if (statement.hasBreak()) {
@@ -39,6 +41,7 @@ public class ForStmtResolver {
             if (forCtx.updateExpr != null) {
                 statementJavaVisitor.visit(forCtx.updateExpr, context);
             }
+            iteration++;
         }
         return contentStatements;
     }

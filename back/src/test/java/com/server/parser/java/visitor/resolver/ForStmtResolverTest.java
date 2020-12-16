@@ -99,4 +99,18 @@ class ForStmtResolverTest {
         Statement statement = Iterables.getOnlyElement(statements);
         assertThat(statement.getExpressionStatements()).isEmpty();
     }
+
+    @Test
+    void shouldThrowWhenInfinityLoop() {
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(int i=0; i<1001; i=i+1);",
+                JavaParser::forStatement);
+
+        assertThatThrownBy(() -> ForStmtResolver.resolve(methodContext, c))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Ogranicz liczbę iteracji! Maksymalna dostępna liczba " +
+                        "iteracji w pętli to 1000");
+    }
 }
