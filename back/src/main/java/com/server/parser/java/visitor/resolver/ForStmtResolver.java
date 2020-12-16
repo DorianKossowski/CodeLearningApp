@@ -5,6 +5,7 @@ import com.server.parser.java.ast.ConstantProvider;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.ForStatement;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
@@ -34,6 +35,7 @@ public class ForStmtResolver extends LoopResolver {
         while (shouldIterate(context, forCtx)) {
             validateMaxIteration(iteration);
             Statement statement = statementJavaVisitor.visit(forCtx.statement(), context);
+            addIterationProperty(statement, iteration);
             contentStatements.add(statement);
             if (statement.hasBreak()) {
                 return contentStatements;
@@ -44,6 +46,11 @@ public class ForStmtResolver extends LoopResolver {
             iteration++;
         }
         return contentStatements;
+    }
+
+    private static void addIterationProperty(Statement statement, int iteration) {
+        statement.getExpressionStatements()
+                .forEach(exprStatement -> exprStatement.addProperty(StatementProperties.FOR_ITERATION, String.valueOf(iteration)));
     }
 
     static void validateContent(JavaContext context, JavaParser.StatementContext statementContext) {

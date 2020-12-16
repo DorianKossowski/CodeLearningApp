@@ -24,8 +24,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 class StatementVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
@@ -298,5 +297,19 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         JavaParser.EmptyStatementContext c = HELPER.shouldParseToEof(";", JavaParser::emptyStatement);
 
         assertThat(visitor.visit(c, context)).isSameAs(EmptyStatement.INSTANCE);
+    }
+
+    //*** FOR ***//
+    @Test
+    void shouldVisitFor() {
+        String input = "for(int i=0; i<2; i=i+1) { System.out.print(i+1); }";
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof(input, JavaParser::forStatement);
+
+        ForStatement forStatement = (ForStatement) visitor.visit(c, createRealMethodContext());
+
+        assertThat(forStatement.getText()).isEqualTo("FOR Statement");
+        assertThat(forStatement.getExpressionStatements()).extracting(ExpressionStatement::getResolved,
+                statement -> statement.getProperty(StatementProperties.FOR_ITERATION))
+                .containsExactly(tuple("System.out.print(1)", "0"), tuple("System.out.print(2)", "1"));
     }
 }
