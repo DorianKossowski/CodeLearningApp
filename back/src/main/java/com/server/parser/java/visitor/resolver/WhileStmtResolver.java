@@ -2,6 +2,7 @@ package com.server.parser.java.visitor.resolver;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.ast.statement.WhileStatement;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.JavaVisitor;
@@ -25,6 +26,7 @@ public class WhileStmtResolver extends LoopResolver {
         while (resolveCondition(context, whileCtx.expression())) {
             validateMaxIteration(iteration);
             Statement statement = statementJavaVisitor.visit(whileCtx.statement(), context);
+            addIterationProperty(statement, iteration);
             contentStatements.add(statement);
             if (statement.hasBreak()) {
                 return contentStatements;
@@ -32,5 +34,10 @@ public class WhileStmtResolver extends LoopResolver {
             iteration++;
         }
         return contentStatements;
+    }
+
+    private static void addIterationProperty(Statement statement, int iteration) {
+        statement.getExpressionStatements()
+                .forEach(exprStatement -> exprStatement.addProperty(StatementProperties.WHILE_ITERATION, String.valueOf(iteration)));
     }
 }

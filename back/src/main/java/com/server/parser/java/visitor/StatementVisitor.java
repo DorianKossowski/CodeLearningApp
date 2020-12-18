@@ -10,6 +10,7 @@ import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.ForStmtResolver;
 import com.server.parser.java.visitor.resolver.IfStmtResolver;
 import com.server.parser.java.visitor.resolver.SwitchStmtResolver;
+import com.server.parser.java.visitor.resolver.WhileStmtResolver;
 import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.exception.BreakStatementException;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -38,7 +39,8 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         ParserRuleContext parentContext = ctx.getParent();
         while (parentContext != null) {
             if (parentContext instanceof JavaParser.SwitchElementContext
-                    || parentContext instanceof JavaParser.ForStatementContext) {
+                    || parentContext instanceof JavaParser.ForStatementContext
+                    || parentContext instanceof JavaParser.WhileStatementContext) {
                 return true;
             }
             parentContext = parentContext.getParent();
@@ -175,6 +177,13 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         public Statement visitForStatement(JavaParser.ForStatementContext ctx) {
             JavaContext localContext = context.createLocalContext();
             return ForStmtResolver.resolve(localContext, ctx);
+        }
+
+        //*** WHILE ***//
+        @Override
+        public Statement visitWhileStatement(JavaParser.WhileStatementContext ctx) {
+            JavaContext localContext = context.createLocalContext();
+            return WhileStmtResolver.resolve(localContext, ctx);
         }
 
         //*** EMPTY ***//
