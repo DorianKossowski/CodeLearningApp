@@ -209,4 +209,9 @@ public class JavaParserTest {
     void shouldParseForStmt(String input) {
         HELPER.shouldParseToEof(input, JavaParser::forStatement);
     }
+
+    @Test
+    void shouldParseWhileStmt() {
+        HELPER.shouldParseToEof("while (true) { fun(); }", JavaParser::whileStatement);
+    }
 }

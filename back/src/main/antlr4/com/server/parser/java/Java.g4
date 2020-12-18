@@ -71,7 +71,12 @@ statement
     | ifElseStatement
     | switchStatement
     | forStatement
+    | whileStatement
     | emptyStatement
+    ;
+
+whileStatement
+    : WHILE '(' expression ')' statement
     ;
 
 forStatement
@@ -252,6 +257,7 @@ NULL        : 'null' ;
 RPAREN      : ')' ;
 SEMICOLON   : ';' ;
 SWITCH      : 'switch' ;
+WHILE       : 'while' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 CHAR_LITERAL : '\'' . '\'' ;
