@@ -2,26 +2,35 @@ package com.server.parser.java.visitor.resolver;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.ast.statement.WhileStatement;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.JavaVisitor;
-import com.server.parser.util.exception.ResolvingException;
-import org.apache.commons.lang.SerializationUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WhileStmtResolver extends LoopResolver {
 
     public static WhileStatement resolve(JavaContext context, JavaParser.WhileStatementContext whileCtx) {
-        validateContent(context, whileCtx.statement());
-        return new WhileStatement(null);
+        JavaVisitor<Statement> statementJavaVisitor = context.getVisitor(Statement.class);
+        validateLoopContent(context, whileCtx.statement());
+        List<Statement> contentStatements = resolveContent(context, whileCtx, statementJavaVisitor);
+        return new WhileStatement(contentStatements);
     }
 
-    static void validateContent(JavaContext context, JavaParser.StatementContext statementContext) {
-        JavaContext validationContext = (JavaContext) SerializationUtils.clone(context);
-        JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class);
-        Statement statement = visitor.visit(statementContext, validationContext);
-        if (statement instanceof VariableDef) {
-            throw new ResolvingException(String.format("Deklaracja %s nie jest w tym miejscu dozwolona", statement.getText()));
+    static List<Statement> resolveContent(JavaContext context, JavaParser.WhileStatementContext whileCtx,
+                                          JavaVisitor<Statement> statementJavaVisitor) {
+        int iteration = 0;
+        List<Statement> contentStatements = new ArrayList<>();
+        while (resolveCondition(context, whileCtx.expression())) {
+            validateMaxIteration(iteration);
+            Statement statement = statementJavaVisitor.visit(whileCtx.statement(), context);
+            contentStatements.add(statement);
+            if (statement.hasBreak()) {
+                return contentStatements;
+            }
+            iteration++;
         }
+        return contentStatements;
     }
 }
