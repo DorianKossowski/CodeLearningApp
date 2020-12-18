@@ -5,11 +5,7 @@ import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.Variable;
-import com.server.parser.java.ast.constant.StringConstant;
-import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
@@ -43,33 +39,6 @@ class ForStmtResolverTest {
         JavaParser.ForStatementContext forContext = mock(JavaParser.ForStatementContext.class);
 
         assertThat(ForStmtResolver.shouldIterate(javaContext, forContext)).isTrue();
-    }
-
-    @Test
-    void shouldValidateInSeparateContext() {
-        ClassContext context = new ClassContext();
-        MethodContext methodContext = context.createEmptyMethodContext();
-        ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
-        methodContext.addVariable(new Variable("String", "str", value));
-
-        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(int i=0; i<1; i=i+1) str = \"true\";",
-                JavaParser::forStatement);
-
-        ForStmtResolver.validateContent(methodContext, c.statement());
-
-        assertThat(methodContext.getVariable("str").getValue()).isSameAs(value);
-    }
-
-    @Test
-    void shouldThrowWhenSingleVariableDefAsContent() {
-        ClassContext context = new ClassContext();
-        MethodContext methodContext = context.createEmptyMethodContext();
-        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) String str = \"true\";",
-                JavaParser::forStatement);
-
-        assertThatThrownBy(() -> ForStmtResolver.validateContent(methodContext, c.statement()))
-                .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Deklaracja String str = \"true\" nie jest w tym miejscu dozwolona");
     }
 
     @Test
