@@ -7,7 +7,6 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
-import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
@@ -27,7 +26,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class ForStmtResolverTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
@@ -45,19 +43,6 @@ class ForStmtResolverTest {
         JavaParser.ForStatementContext forContext = mock(JavaParser.ForStatementContext.class);
 
         assertThat(ForStmtResolver.shouldIterate(javaContext, forContext)).isTrue();
-    }
-
-    @Test
-    void shouldThrowWhenNotLogic() {
-        JavaParser.ExpressionContext expressionContext = mock(JavaParser.ExpressionContext.class);
-        Expression condition = mock(Expression.class);
-        ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("str")));
-        when(condition.getValue()).thenReturn(value);
-        when(javaContext.getVisitor(Expression.class).visit(expressionContext, javaContext)).thenReturn(condition);
-
-        assertThatThrownBy(() -> ForStmtResolver.resolveCondition(javaContext, expressionContext))
-                .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: \"str\" nie jest typu logicznego");
     }
 
     @Test

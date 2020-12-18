@@ -2,7 +2,7 @@ package com.server.parser.java.visitor.resolver;
 
 import com.server.parser.util.exception.ResolvingException;
 
-public class LoopResolver {
+public class LoopResolver extends StatementResolver {
     static final int MAX_ITER_NUMBER = 1000;
 
     static void validateMaxIteration(int iterNumber) {
