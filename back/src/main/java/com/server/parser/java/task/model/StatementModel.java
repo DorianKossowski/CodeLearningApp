@@ -14,6 +14,7 @@ public class StatementModel {
     private String switchLabel;
     private Integer forIteration;
     private Integer whileIteration;
+    private Integer doWhileIteration;
     private String logInfo;
 
     private StatementModel() {
@@ -59,6 +60,10 @@ public class StatementModel {
         return Optional.ofNullable(whileIteration);
     }
 
+    public Optional<Integer> getDoWhileIteration() {
+        return Optional.ofNullable(doWhileIteration);
+    }
+
     public Optional<String> getLogInfo() {
         return Optional.ofNullable(logInfo);
     }
@@ -86,13 +91,14 @@ public class StatementModel {
                 Objects.equals(switchLabel, that.switchLabel) &&
                 Objects.equals(forIteration, that.forIteration) &&
                 Objects.equals(whileIteration, that.whileIteration) &&
+                Objects.equals(doWhileIteration, that.doWhileIteration) &&
                 Objects.equals(logInfo, that.logInfo);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(inMethod, text, resolved, ifCond, elseIfCond, isInElse, switchExpr, switchLabel, forIteration,
-                whileIteration, logInfo);
+                whileIteration, doWhileIteration, logInfo);
     }
 
     public static class Builder {
@@ -106,6 +112,7 @@ public class StatementModel {
         private String switchLabel;
         private Integer forIteration;
         private Integer whileIteration;
+        private Integer doWhileIteration;
         private String logInfo;
 
         public Builder withMethod(String method) {
@@ -158,6 +165,11 @@ public class StatementModel {
             return this;
         }
 
+        public Builder withDoWhileIteration(Integer doWhileIteration) {
+            this.doWhileIteration = doWhileIteration;
+            return this;
+        }
+
         public Builder withLogInfo(String errorMessage) {
             this.logInfo = errorMessage;
             return this;
@@ -175,6 +187,7 @@ public class StatementModel {
             statementModel.switchLabel = this.switchLabel;
             statementModel.forIteration = this.forIteration;
             statementModel.whileIteration = this.whileIteration;
+            statementModel.doWhileIteration = this.doWhileIteration;
             statementModel.logInfo = this.logInfo;
 
             return statementModel;
