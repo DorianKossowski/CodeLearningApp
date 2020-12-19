@@ -72,7 +72,12 @@ statement
     | switchStatement
     | forStatement
     | whileStatement
+    | doWhileStatement
     | emptyStatement
+    ;
+
+doWhileStatement
+    : DO statement WHILE '(' expression ')' SEMICOLON
     ;
 
 whileStatement
@@ -249,6 +254,7 @@ identifier
 BREAK       : 'break' ;
 CASE        : 'case' ;
 DEFAULT     : 'default' ;
+DO          : 'do' ;
 ELSE        : 'else' ;
 FOR         : 'for' ;
 IF          : 'if' ;
