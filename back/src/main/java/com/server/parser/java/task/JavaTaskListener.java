@@ -142,4 +142,10 @@ public class JavaTaskListener extends JavaTaskBaseListener {
         String stringLiteral = JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
         statementBuilder.withForIteration(Integer.parseInt(stringLiteral));
     }
+
+    @Override
+    public void enterWhileIteration(JavaTaskParser.WhileIterationContext ctx) {
+        String stringLiteral = JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
+        statementBuilder.withWhileIteration(Integer.parseInt(stringLiteral));
+    }
 }

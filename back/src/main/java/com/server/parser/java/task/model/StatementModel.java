@@ -13,6 +13,7 @@ public class StatementModel {
     private String switchExpr;
     private String switchLabel;
     private Integer forIteration;
+    private Integer whileIteration;
     private String logInfo;
 
     private StatementModel() {
@@ -54,6 +55,10 @@ public class StatementModel {
         return Optional.ofNullable(forIteration);
     }
 
+    public Optional<Integer> getWhileIteration() {
+        return Optional.ofNullable(whileIteration);
+    }
+
     public Optional<String> getLogInfo() {
         return Optional.ofNullable(logInfo);
     }
@@ -80,12 +85,14 @@ public class StatementModel {
                 Objects.equals(switchExpr, that.switchExpr) &&
                 Objects.equals(switchLabel, that.switchLabel) &&
                 Objects.equals(forIteration, that.forIteration) &&
+                Objects.equals(whileIteration, that.whileIteration) &&
                 Objects.equals(logInfo, that.logInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inMethod, text, resolved, ifCond, elseIfCond, isInElse, switchExpr, switchLabel, forIteration, logInfo);
+        return Objects.hash(inMethod, text, resolved, ifCond, elseIfCond, isInElse, switchExpr, switchLabel, forIteration,
+                whileIteration, logInfo);
     }
 
     public static class Builder {
@@ -98,6 +105,7 @@ public class StatementModel {
         private String switchExpr;
         private String switchLabel;
         private Integer forIteration;
+        private Integer whileIteration;
         private String logInfo;
 
         public Builder withMethod(String method) {
@@ -145,6 +153,11 @@ public class StatementModel {
             return this;
         }
 
+        public Builder withWhileIteration(Integer whileIteration) {
+            this.whileIteration = whileIteration;
+            return this;
+        }
+
         public Builder withLogInfo(String errorMessage) {
             this.logInfo = errorMessage;
             return this;
@@ -161,6 +174,7 @@ public class StatementModel {
             statementModel.switchExpr = this.switchExpr;
             statementModel.switchLabel = this.switchLabel;
             statementModel.forIteration = this.forIteration;
+            statementModel.whileIteration = this.whileIteration;
             statementModel.logInfo = this.logInfo;
 
             return statementModel;
