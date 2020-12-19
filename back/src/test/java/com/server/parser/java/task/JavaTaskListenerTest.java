@@ -83,7 +83,7 @@ class JavaTaskListenerTest {
                 Arguments.of("Statement with while iteration", "statement with while iteration: \"1\"",
                         StatementModel.builder().withWhileIteration(1).build()),
                 Arguments.of("Statement with do while iteration", "statement with do while iteration: \"1\"",
-                        StatementModel.builder().withWhileIteration(1).build())
+                        StatementModel.builder().withDoWhileIteration(1).build())
         );
     }
 

@@ -36,6 +36,7 @@ public class ExpressionStatementVerifier {
         statementModel.getSwitchLabel().ifPresent(this::verifySwitchLabel);
         statementModel.getForIteration().ifPresent(this::verifyForIteration);
         statementModel.getWhileIteration().ifPresent(this::verifyWhileIteration);
+        statementModel.getDoWhileIteration().ifPresent(this::verifyDoWhileIteration);
         Verify.verify(!availableStatements.isEmpty(), getErrorMessage(statementModel));
     }
 
@@ -129,6 +130,12 @@ public class ExpressionStatementVerifier {
                 .collect(Collectors.toList());
     }
 
+    private void verifyDoWhileIteration(Integer doWhileIteration) {
+        availableStatements = availableStatements.stream()
+                .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.DO_WHILE_ITERATION),
+                        String.valueOf(doWhileIteration)))
+                .collect(Collectors.toList());
+    }
 
     private boolean isPropertyInJoined(String joinedProperty, String switchLabelParsed) {
         if (joinedProperty == null) {
