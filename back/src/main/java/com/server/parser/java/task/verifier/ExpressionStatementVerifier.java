@@ -117,13 +117,15 @@ public class ExpressionStatementVerifier {
 
     private void verifyForIteration(Integer forIteration) {
         availableStatements = availableStatements.stream()
-                .filter(statement -> Integer.parseInt(statement.getProperty(StatementProperties.FOR_ITERATION)) == forIteration)
+                .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.FOR_ITERATION),
+                        String.valueOf(forIteration)))
                 .collect(Collectors.toList());
     }
 
     private void verifyWhileIteration(Integer whileIteration) {
         availableStatements = availableStatements.stream()
-                .filter(statement -> Integer.parseInt(statement.getProperty(StatementProperties.WHILE_ITERATION)) == whileIteration)
+                .filter(statement -> isPropertyEqual(statement.getProperty(StatementProperties.WHILE_ITERATION),
+                        String.valueOf(whileIteration)))
                 .collect(Collectors.toList());
     }
 

@@ -319,11 +319,28 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         MethodContext realMethodContext = createRealMethodContext();
         realMethodContext.addVariable(new Variable("int", "i", new PrimitiveComputableValue(new Literal(new IntConstant(0)))));
-        WhileStatement forStatement = (WhileStatement) visitor.visit(c, realMethodContext);
+        WhileStatement whileStatement = (WhileStatement) visitor.visit(c, realMethodContext);
 
-        assertThat(forStatement.getText()).isEqualTo("WHILE Statement");
-        assertThat(forStatement.getExpressionStatements()).extracting(ExpressionStatement::getResolved,
+        assertThat(whileStatement.getText()).isEqualTo("WHILE Statement");
+        assertThat(whileStatement.getExpressionStatements()).extracting(ExpressionStatement::getResolved,
                 statement -> statement.getProperty(StatementProperties.WHILE_ITERATION))
+                .containsExactly(tuple("System.out.print(1)", "0"), tuple("i=1", "0"),
+                        tuple("System.out.print(2)", "1"), tuple("i=2", "1"));
+    }
+
+    //*** DO WHILE ***//
+    @Test
+    void shouldVisitDoWhile() {
+        String input = "do { System.out.print(i+1); i = i+1; } while(i<2);";
+        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof(input, JavaParser::doWhileStatement);
+
+        MethodContext realMethodContext = createRealMethodContext();
+        realMethodContext.addVariable(new Variable("int", "i", new PrimitiveComputableValue(new Literal(new IntConstant(0)))));
+        DoWhileStatement doWhileStatement = (DoWhileStatement) visitor.visit(c, realMethodContext);
+
+        assertThat(doWhileStatement.getText()).isEqualTo("DO WHILE Statement");
+        assertThat(doWhileStatement.getExpressionStatements()).extracting(ExpressionStatement::getResolved,
+                statement -> statement.getProperty(StatementProperties.DO_WHILE_ITERATION))
                 .containsExactly(tuple("System.out.print(1)", "0"), tuple("i=1", "0"),
                         tuple("System.out.print(2)", "1"), tuple("i=2", "1"));
     }

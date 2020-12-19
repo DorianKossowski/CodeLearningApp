@@ -9,4 +9,5 @@ public class StatementProperties {
 
     public static final String FOR_ITERATION = "forIteration";
     public static final String WHILE_ITERATION = "whileIteration";
+    public static final String DO_WHILE_ITERATION = "doWhileIteration";
 }
