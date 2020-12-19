@@ -35,6 +35,7 @@ public class ExpressionStatementVerifier {
         statementModel.getSwitchExpr().ifPresent(this::verifySwitchExpr);
         statementModel.getSwitchLabel().ifPresent(this::verifySwitchLabel);
         statementModel.getForIteration().ifPresent(this::verifyForIteration);
+        statementModel.getWhileIteration().ifPresent(this::verifyWhileIteration);
         Verify.verify(!availableStatements.isEmpty(), getErrorMessage(statementModel));
     }
 
@@ -117,6 +118,12 @@ public class ExpressionStatementVerifier {
     private void verifyForIteration(Integer forIteration) {
         availableStatements = availableStatements.stream()
                 .filter(statement -> Integer.parseInt(statement.getProperty(StatementProperties.FOR_ITERATION)) == forIteration)
+                .collect(Collectors.toList());
+    }
+
+    private void verifyWhileIteration(Integer whileIteration) {
+        availableStatements = availableStatements.stream()
+                .filter(statement -> Integer.parseInt(statement.getProperty(StatementProperties.WHILE_ITERATION)) == whileIteration)
                 .collect(Collectors.toList());
     }
 
