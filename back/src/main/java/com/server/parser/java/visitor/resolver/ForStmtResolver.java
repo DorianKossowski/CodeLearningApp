@@ -29,7 +29,7 @@ public class ForStmtResolver extends LoopResolver {
         while (shouldIterate(context, forCtx)) {
             validateMaxIteration(iteration);
             Statement statement = statementJavaVisitor.visit(forCtx.statement(), context);
-            addIterationProperty(statement, iteration);
+            addIterationProperty(statement, StatementProperties.FOR_ITERATION, iteration);
             contentStatements.add(statement);
             if (statement.hasBreak()) {
                 return contentStatements;
@@ -40,11 +40,6 @@ public class ForStmtResolver extends LoopResolver {
             iteration++;
         }
         return contentStatements;
-    }
-
-    private static void addIterationProperty(Statement statement, int iteration) {
-        statement.getExpressionStatements()
-                .forEach(exprStatement -> exprStatement.addProperty(StatementProperties.FOR_ITERATION, String.valueOf(iteration)));
     }
 
     static boolean shouldIterate(JavaContext context, JavaParser.ForStatementContext forCtx) {

@@ -25,4 +25,9 @@ public class LoopResolver extends StatementResolver {
             throw new ResolvingException(String.format("Deklaracja %s nie jest w tym miejscu dozwolona", statement.getText()));
         }
     }
+
+    static void addIterationProperty(Statement statement, String propertyName, int iteration) {
+        statement.getExpressionStatements()
+                .forEach(exprStatement -> exprStatement.addProperty(propertyName, String.valueOf(iteration)));
+    }
 }

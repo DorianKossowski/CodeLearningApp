@@ -26,7 +26,7 @@ public class WhileStmtResolver extends LoopResolver {
         while (resolveCondition(context, whileCtx.expression())) {
             validateMaxIteration(iteration);
             Statement statement = statementJavaVisitor.visit(whileCtx.statement(), context);
-            addIterationProperty(statement, iteration);
+            addIterationProperty(statement, StatementProperties.WHILE_ITERATION, iteration);
             contentStatements.add(statement);
             if (statement.hasBreak()) {
                 return contentStatements;
@@ -34,10 +34,5 @@ public class WhileStmtResolver extends LoopResolver {
             iteration++;
         }
         return contentStatements;
-    }
-
-    private static void addIterationProperty(Statement statement, int iteration) {
-        statement.getExpressionStatements()
-                .forEach(exprStatement -> exprStatement.addProperty(StatementProperties.WHILE_ITERATION, String.valueOf(iteration)));
     }
 }
