@@ -4,7 +4,7 @@ import {LinkContainer} from 'react-router-bootstrap';
 import {FaCaretDown, FaCaretUp} from 'react-icons/fa';
 
 const HomeConditionals = (props) => {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const DynamiCaretTag = open ? FaCaretUp : FaCaretDown;
     return (
