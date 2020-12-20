@@ -10,7 +10,7 @@ const HomeIntroduction = (props) => {
     return (
     <div className='category'>
         <div className='categoryTitleArea'>
-            <p className='categoryTitle'>Wprowadzenie</p>
+            <p className='categoryTitle' onClick={() => setOpen(!open)}>Wprowadzenie</p>
             <DynamiCaretTag className='titleCaret' onClick={() => setOpen(!open)} aria-controls='elements' aria-expanded={open} />
         </div>
         <div className='categoryTitleUnderline'/>

@@ -22,6 +22,10 @@
     width: 100%;
 }
 
+.categoryTitle:hover {
+    cursor: pointer;
+}
+
 .titleCaret {
     margin-top: 10px;
     cursor: pointer;

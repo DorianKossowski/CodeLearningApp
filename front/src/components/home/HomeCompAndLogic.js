@@ -10,7 +10,7 @@ const HomeCompAndLogic = (props) => {
     return (
     <div className='category'>
         <div className='categoryTitleArea'>
-            <p className='categoryTitle'>Porównania i operatory logiczne</p>
+            <p className='categoryTitle' onClick={() => setOpen(!open)}>Porównania i operatory logiczne</p>
             <DynamiCaretTag className='titleCaret' onClick={() => setOpen(!open)} aria-controls='elements' aria-expanded={open} />
         </div>
         <div className='categoryTitleUnderline'/>

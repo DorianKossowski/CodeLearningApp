@@ -10,7 +10,7 @@ const HomeConditionals = (props) => {
     return (
     <div className='category'>
         <div className='categoryTitleArea'>
-            <p className='categoryTitle'>Instrukcje warunkowe</p>
+            <p className='categoryTitle' onClick={() => setOpen(!open)}>Instrukcje warunkowe</p>
             <DynamiCaretTag className='titleCaret' onClick={() => setOpen(!open)} aria-controls='elements' aria-expanded={open} />
         </div>
         <div className='categoryTitleUnderline'/>

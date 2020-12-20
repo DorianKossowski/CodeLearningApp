@@ -10,7 +10,7 @@ const HomeVarsAndTypes = (props) => {
     return (
     <div className='category'>
         <div className='categoryTitleArea'>
-            <p className='categoryTitle'>Zmienne oraz ich typy</p>
+            <p className='categoryTitle' onClick={() => setOpen(!open)}>Zmienne oraz ich typy</p>
             <DynamiCaretTag className='titleCaret' onClick={() => setOpen(!open)} aria-controls='elements' aria-expanded={open} />
         </div>
         <div className='categoryTitleUnderline'/>
