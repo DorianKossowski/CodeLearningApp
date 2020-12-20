@@ -1,0 +1,32 @@
+### TASK ###
+-> statement
+    with resolved: "suma = 1"
+    with do while iteration: "0"
+    log info: "Przypisanie do zmiennej suma w 0 iteracji do while"
+-> statement
+    with resolved: "suma = 3"
+    with do while iteration: "1"
+    log info: "Przypisanie do zmiennej suma w 1 iteracji do while"
+-> statement
+    with resolved: "suma = 6"
+    with do while iteration: "2"
+    log info: "Przypisanie do zmiennej suma w 2 iteracji do while"
+-> statement
+    with text: "System.out.println(suma)"
+    with resolved: "System.out.println(6)"
+    log info: "Wywołanie metody println ze zmienną suma"
+
+### INPUT ###
+public class MyClass {
+    public static void main(String[] args){
+        int suma = 0;
+
+        int i=1;
+        do {
+            suma = suma + i;
+            i = i+1;
+        } while(i<=3);
+
+        System.out.println(suma);
+    }
+}

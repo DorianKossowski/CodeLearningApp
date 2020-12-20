@@ -1,0 +1,39 @@
+### TASK ###
+-> statement
+    with text: "System.out.println(x)"
+    with resolved: "System.out.println(5)"
+    with for iteration: "0"
+    log info: "Wywołanie metody println ze zmienną x w 0 iteracji for"
+-> statement
+    with text: "System.out.println(x)"
+    with resolved: "System.out.println(10)"
+    with for iteration: "1"
+    log info: "Wywołanie metody println ze zmienną x w 1 iteracji for"
+-> statement
+    with text: "System.out.println(x)"
+    with resolved: "System.out.println(15)"
+    with for iteration: "2"
+    log info: "Wywołanie metody println ze zmienną x w 2 iteracji for"
+-> statement
+    with text: "System.out.println(x)"
+    with resolved: "System.out.println(20)"
+    with for iteration: "3"
+    log info: "Wywołanie metody println ze zmienną x w 3 iteracji for"
+-> statement
+    with text: "System.out.println(x)"
+    with resolved: "System.out.println(25)"
+    with for iteration: "4"
+    log info: "Wywołanie metody println ze zmienną x w 4 iteracji for"
+
+
+### INPUT ###
+public class MyClass {
+    public static void main(String[] args){
+        int x = 0;
+
+        for(int i=0; i<5; i = i+1) {
+            x = x + 5;
+            System.out.println(x);
+        }
+    }
+}

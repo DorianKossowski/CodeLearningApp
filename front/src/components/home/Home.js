@@ -4,6 +4,7 @@ import { Container } from 'react-bootstrap';
 import HomeIntroduction from './HomeIntroduction';
 import HomeVarsAndTypes from './HomeVarsAndTypes';
 import HomeConditionals from './HomeConditionals';
+import HomeLoops from './HomeLoops';
 
 import './home.css';
 import HomeCompAndLogic from './HomeCompAndLogic';
@@ -18,6 +19,7 @@ class Home extends Component {
                 <HomeVarsAndTypes />
                 <HomeCompAndLogic />
                 <HomeConditionals />
+                <HomeLoops />
             </Container>
         );
     }
