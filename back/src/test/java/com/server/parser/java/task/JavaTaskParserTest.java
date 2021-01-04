@@ -12,6 +12,15 @@ public class JavaTaskParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
+            "class with name: \"x\"",
+            "class log info: \"t\"",
+    })
+    void shouldParseClassRule(String input) {
+        HELPER.shouldParseToEof(input, JavaTaskParser::classRule);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
             "method with name: \"x\"",
             "method with args: {\"x\", -}",
             "method with args: {-, \"x\"}, {\"x\", \"x\"}",

@@ -9,7 +9,20 @@ rules
     ;
 
 singleRule
-    : ARROW ( methodRule | statementRule | variableRule )
+    : ARROW ( classRule | methodRule | statementRule | variableRule )
+    ;
+
+classRule
+    : 'class' classRuleSpec+
+    ;
+
+classRuleSpec
+    : WITH classNameSpec
+    | logInfo
+    ;
+
+classNameSpec
+    : 'name' ':' STRING_LITERAL
     ;
 
 variableRule
