@@ -1,5 +1,6 @@
 package com.server.parser.java.task.verifier;
 
+import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.TaskAst;
 import com.server.parser.java.ast.statement.Statement;
@@ -14,6 +15,12 @@ abstract class VerifierTestBase {
         TaskAst taskAst = mock(TaskAst.class, RETURNS_DEEP_STUBS);
         when(taskAst.getClassAst().getBody().getMethods()).thenReturn(methods);
         return taskAst;
+    }
+
+    protected ClassAst mockClass(String name) {
+        ClassAst classAst = mock(ClassAst.class, RETURNS_DEEP_STUBS);
+        when(classAst.getHeader().getName()).thenReturn(name);
+        return classAst;
     }
 
     protected Method mockMethod(String name) {
