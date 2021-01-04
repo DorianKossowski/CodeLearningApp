@@ -2,10 +2,7 @@ package com.server.parser.java.task;
 
 import com.server.parser.java.JavaTaskBaseListener;
 import com.server.parser.java.JavaTaskParser;
-import com.server.parser.java.task.model.MethodArgs;
-import com.server.parser.java.task.model.MethodModel;
-import com.server.parser.java.task.model.StatementModel;
-import com.server.parser.java.task.model.VariableModel;
+import com.server.parser.java.task.model.*;
 import com.server.parser.java.task.verifier.TaskVerifier;
 
 import java.util.ArrayList;
@@ -17,6 +14,7 @@ import java.util.stream.Collectors;
 public class JavaTaskListener extends JavaTaskBaseListener {
     private final TaskVerifier taskVerifier;
 
+    private ClassModel.Builder classBuilder;
     private MethodModel.Builder methodBuilder;
     private StatementModel.Builder statementBuilder;
     private VariableModel.Builder variableBuilder;
@@ -99,6 +97,8 @@ public class JavaTaskListener extends JavaTaskBaseListener {
             statementBuilder.withLogInfo(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
         } else if (ctx.parent instanceof JavaTaskParser.VariableRuleSpecContext) {
             variableBuilder.withLogInfo(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        } else if (ctx.parent instanceof JavaTaskParser.ClassRuleSpecContext) {
+            classBuilder.withLogInfo(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
         }
     }
 
@@ -153,5 +153,20 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     public void enterDoWhileIteration(JavaTaskParser.DoWhileIterationContext ctx) {
         String stringLiteral = JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
         statementBuilder.withDoWhileIteration(Integer.parseInt(stringLiteral));
+    }
+
+    @Override
+    public void enterClassRule(JavaTaskParser.ClassRuleContext ctx) {
+        classBuilder = ClassModel.builder();
+    }
+
+    @Override
+    public void exitClassRule(JavaTaskParser.ClassRuleContext ctx) {
+        taskVerifier.verifyClass(classBuilder.build());
+    }
+
+    @Override
+    public void enterClassNameSpec(JavaTaskParser.ClassNameSpecContext ctx) {
+        classBuilder.withName(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
 }

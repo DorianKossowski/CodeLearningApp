@@ -1,0 +1,8 @@
+### TASK ###
+-> class
+    with name: "MyClass"
+
+### INPUT ###
+public class MyClass {
+
+}

@@ -3,10 +3,7 @@ package com.server.parser.java.task;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaTaskLexer;
 import com.server.parser.java.JavaTaskParser;
-import com.server.parser.java.task.model.MethodArgs;
-import com.server.parser.java.task.model.MethodModel;
-import com.server.parser.java.task.model.StatementModel;
-import com.server.parser.java.task.model.VariableModel;
+import com.server.parser.java.task.model.*;
 import com.server.parser.java.task.verifier.TaskVerifier;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +29,23 @@ class JavaTaskListenerTest {
     void setUp() {
         verifier = mock(TaskVerifier.class);
         listener = new JavaTaskListener(verifier);
+    }
+
+    static Stream<Arguments> classSource() {
+        return Stream.of(
+                Arguments.of("Class with name", "class with name: \"x\"", ClassModel.builder().withName("x").build()),
+                Arguments.of("Class with log info", "class log info: \"t\"", ClassModel.builder().withLogInfo("t").build())
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("classSource")
+    void shouldVerifyClass(@SuppressWarnings("unused") String name, String input, ClassModel model) {
+        JavaTaskParser.ClassRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::classRule);
+
+        WALKER.walk(listener, c);
+
+        verify(verifier).verifyClass(model);
     }
 
     static Stream<Arguments> methodSource() {
