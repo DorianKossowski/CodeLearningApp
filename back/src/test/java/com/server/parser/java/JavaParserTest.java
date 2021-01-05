@@ -69,6 +69,14 @@ public class JavaParserTest {
     }
 
     @ParameterizedTest
+    @ValueSource(strings = {
+            "public m(String[] args)", "m()", "private m(Integer i, Double d)", "protected m(int x)"
+    })
+    void shouldParseConstructorHeader(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::constructorHeader);
+    }
+
+    @ParameterizedTest
     @ValueSource(strings = {"", "int a", "int a, String[] b"})
     void shouldParseMethodArgs(String input) {
         HELPER.shouldParseToEof("(" + input + ")", JavaParser::methodArgs);
@@ -92,6 +100,11 @@ public class JavaParserTest {
     @Test
     void shouldParseMethodDec() {
         HELPER.shouldParseToEof("void m(String[] a) { println(\"HELLO\"); }", JavaParser::methodDec);
+    }
+
+    @Test
+    void shouldParseConstructorDec() {
+        HELPER.shouldParseToEof("m(String[] a) { println(\"HELLO\"); }", JavaParser::constructorDec);
     }
 
     @Test
