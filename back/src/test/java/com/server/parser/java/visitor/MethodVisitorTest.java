@@ -4,8 +4,6 @@ import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.statement.MethodCall;
-import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.VariableDef;
 import org.junit.jupiter.api.Test;
 
@@ -64,12 +62,10 @@ class MethodVisitorTest extends JavaVisitorTestBase {
 
         assertThat(method.getClassName()).isEqualTo("MyClass");
         MethodHeader header = method.getHeader();
-        Statement statement = Iterables.getOnlyElement(method.getBody().getStatements());
         assertThat(header).extracting(MethodHeader::getResult, MethodHeader::getName)
                 .containsExactly("void", "m");
         assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
-        assertThat(((MethodCall) statement)).extracting(MethodCall::getName,
-                call -> Iterables.getOnlyElement(call.getArgs()).getText())
-                .containsExactly("println", "\"HELLO\"");
+        assertThat(Iterables.getOnlyElement(method.getBodyContext().statementList().statement()).getText())
+                .isEqualTo("println(\"HELLO\");");
     }
 }

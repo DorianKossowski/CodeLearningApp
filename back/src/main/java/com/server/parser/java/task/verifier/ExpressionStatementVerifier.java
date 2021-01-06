@@ -17,8 +17,7 @@ public class ExpressionStatementVerifier {
     private List<ExpressionStatement> availableStatements;
 
     public ExpressionStatementVerifier(TaskAst taskAst) {
-        this.statements = taskAst.getClassAst().getBody().getMethods().stream()
-                .flatMap(method -> method.getBody().getStatements().stream())
+        this.statements = taskAst.getCalledStatements().stream()
                 .flatMap(statement -> statement.getExpressionStatements().stream())
                 .collect(Collectors.toList());
     }

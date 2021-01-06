@@ -34,8 +34,7 @@ public class MethodVisitor extends JavaVisitor<Method> {
         public Method visitMethodDec(JavaParser.MethodDecContext ctx) {
             MethodHeader methodHeader = visit(ctx.methodHeader());
             context.save(methodHeader);
-            MethodBody methodBody = visit(ctx.methodBody());
-            return new Method(context.getClassName(), methodHeader, methodBody);
+            return new Method(context, methodHeader, ctx.methodBody());
         }
 
         MethodHeader visit(JavaParser.MethodHeaderContext ctx) {

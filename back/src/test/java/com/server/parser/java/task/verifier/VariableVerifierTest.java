@@ -23,15 +23,15 @@ class VariableVerifierTest extends VerifierTestBase {
         VariableDef variableDef = mock(VariableDef.class);
         when(variableDef.getType()).thenReturn("int");
         when(variableDef.getName()).thenReturn("x");
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(variableDef)));
-        VariableVerifier verifier = new VariableVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        VariableVerifier verifier = new VariableVerifier(mockTask(methods, Collections.singletonList(variableDef)));
 
         verifier.verify(VariableModel.builder().withText(STATEMENT).build());
     }
 
     @Test
     void shouldThrowCorrectErrorMessage() {
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.emptyList()));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
         ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
         StatementModel model = StatementModel.builder()
                 .withMethod(METHOD_NAME)

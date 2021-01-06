@@ -1,27 +1,34 @@
 package com.server.parser.java.ast;
 
+import com.server.parser.java.JavaParser;
+import com.server.parser.java.context.MethodContext;
+
 import java.util.Objects;
 
 public class Method extends AstElement {
-    private final String className;
+    private final MethodContext methodContext;
     private final MethodHeader header;
-    private final MethodBody body;
+    private final JavaParser.MethodBodyContext bodyContext;
 
-    public Method(String className, MethodHeader header, MethodBody body) {
-        this.className = Objects.requireNonNull(className, "className cannot be null");
+    public Method(MethodContext methodContext, MethodHeader header, JavaParser.MethodBodyContext bodyContext) {
+        this.methodContext = Objects.requireNonNull(methodContext, "methodContext cannot be null");
         this.header = Objects.requireNonNull(header, "header cannot be null");
-        this.body = Objects.requireNonNull(body, "body cannot be null");
+        this.bodyContext = Objects.requireNonNull(bodyContext, "bodyContext cannot be null");
+    }
+
+    public MethodContext getMethodContext() {
+        return methodContext;
     }
 
     public String getClassName() {
-        return className;
+        return methodContext.getClassName();
     }
 
     public MethodHeader getHeader() {
         return header;
     }
 
-    public MethodBody getBody() {
-        return body;
+    public JavaParser.MethodBodyContext getBodyContext() {
+        return bodyContext;
     }
 }

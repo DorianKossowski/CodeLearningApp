@@ -15,8 +15,7 @@ public class VariableVerifier {
     private List<VariableDef> availableVariableDefs;
 
     public VariableVerifier(TaskAst taskAst) {
-        this.variableDefs = taskAst.getClassAst().getBody().getMethods().stream()
-                .flatMap(method -> method.getBody().getStatements().stream())
+        this.variableDefs = taskAst.getCalledStatements().stream()
                 .filter(statement -> statement instanceof VariableDef)
                 .map(statement -> ((VariableDef) statement))
                 .collect(Collectors.toList());

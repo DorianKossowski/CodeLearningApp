@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TaskAstVisitorTest extends JavaVisitorTestBase {
+class TaskVisitorTest extends JavaVisitorTestBase {
     private final TaskVisitor visitor = new TaskVisitor();
 
     @Test
@@ -17,5 +17,14 @@ class TaskAstVisitorTest extends JavaVisitorTestBase {
         TaskAst taskAst = visitor.visit(c);
 
         assertThat(taskAst.getClassAst().getHeader().getName()).isEqualTo("c");
+    }
+
+    @Test
+    void shouldGetMainMethod() {
+        String input = "public class c { public static void main(String[] args){} }";
+        JavaParser.TaskContext c = HELPER.shouldParseToEof(input, JavaParser::task);
+        TaskAst taskAst = visitor.visit(c);
+
+        assertThat(visitor.getMainMethod(taskAst.getClassAst())).isPresent();
     }
 }
