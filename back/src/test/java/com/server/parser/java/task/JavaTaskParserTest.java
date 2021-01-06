@@ -13,6 +13,7 @@ public class JavaTaskParserTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "class with name: \"x\"",
+            "class with constructor with name: \"t\" with args: { \"int\", - }",
             "class log info: \"t\"",
     })
     void shouldParseClassRule(String input) {
@@ -22,6 +23,7 @@ public class JavaTaskParserTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "method with name: \"x\"",
+            "method with args: ",
             "method with args: {\"x\", -}",
             "method with args: {-, \"x\"}, {\"x\", \"x\"}",
             "method with modifiers: {\"x\"}",

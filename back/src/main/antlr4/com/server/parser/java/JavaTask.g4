@@ -17,8 +17,20 @@ classRule
     ;
 
 classRuleSpec
-    : WITH classNameSpec
+    : WITH ( classNameSpec | classConstructorSpec )
     | logInfo
+    ;
+
+classConstructorSpec
+    : 'constructor' constructorRuleSpec+
+    ;
+
+constructorRuleSpec
+    : WITH ( constructorNameRuleSpec | methodArgsRuleSpec )
+    ;
+
+constructorNameRuleSpec
+    : 'name' ':' STRING_LITERAL
     ;
 
 classNameSpec
@@ -111,11 +123,15 @@ methodModifiersRuleSpec
     ;
 
 methodArgsRuleSpec
-    : 'args' ':' argsElement ( ',' argsElement )*
+    : 'args' ':' argsElements
     ;
 
 methodNameRuleSpec
     : 'name' ':' valueOrEmpty
+    ;
+
+argsElements
+    : ( argsElement ( ',' argsElement )* )?
     ;
 
 argsElement
