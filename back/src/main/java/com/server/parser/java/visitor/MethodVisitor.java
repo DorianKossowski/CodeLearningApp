@@ -2,15 +2,17 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.ConstructorHeader;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.MethodBody;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -54,9 +56,25 @@ public class MethodVisitor extends JavaVisitor<Method> {
                     .collect(Collectors.toList());
         }
 
-        MethodBody visit(JavaParser.MethodBodyContext ctx) {
-            StatementListVisitor statementListVisitor = new StatementListVisitor();
-            return new MethodBody(statementListVisitor.visit(ctx.statementList(), context));
+        @Override
+        public Method visitConstructorDec(JavaParser.ConstructorDecContext ctx) {
+            MethodHeader constructorHeader = visit(ctx.constructorHeader());
+            context.save(constructorHeader);
+            return new Method(context, constructorHeader, ctx.methodBody());
+        }
+
+        MethodHeader visit(JavaParser.ConstructorHeaderContext ctx) {
+            List<String> modifiers = new ArrayList<>();
+            if (ctx.constructorModifier() != null) {
+                modifiers.add(ctx.constructorModifier().getText());
+            }
+            String identifier = ctx.identifier().getText();
+            if (!identifier.equals(context.getClassName())) {
+                throw new ResolvingException(
+                        String.format("Konstruktor %s różny od nazwy klasy %s", identifier, context.getClassName()));
+            }
+            List<VariableDef> args = visit(ctx.methodArgs());
+            return new ConstructorHeader(modifiers, identifier, args);
         }
     }
 }

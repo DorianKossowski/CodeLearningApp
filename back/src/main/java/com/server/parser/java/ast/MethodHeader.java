@@ -13,7 +13,7 @@ public class MethodHeader extends AstElement {
 
     public MethodHeader(List<String> modifiers, String result, String name, List<VariableDef> arguments) {
         this.modifiers = Objects.requireNonNull(modifiers, "modifiers cannot be null");
-        this.result = Objects.requireNonNull(result, "result cannot be null");
+        this.result = result;
         this.name = Objects.requireNonNull(name, "name cannot be null");
         this.arguments = Objects.requireNonNull(arguments, "arguments cannot be null");
     }
@@ -32,6 +32,10 @@ public class MethodHeader extends AstElement {
 
     public List<VariableDef> getArguments() {
         return arguments;
+    }
+
+    public boolean isConstructor() {
+        return result == null;
     }
 
     @Override
