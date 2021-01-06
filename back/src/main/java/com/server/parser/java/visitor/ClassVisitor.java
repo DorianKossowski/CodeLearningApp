@@ -49,11 +49,14 @@ public class ClassVisitor extends JavaVisitor<ClassAst> {
                     .map(fieldDecContext -> variableVisitor.visit(fieldDecContext, context))
                     .collect(Collectors.toList());
             JavaVisitor<Method> methodVisitor = context.getVisitor(Method.class);
+            List<Method> constructors = ctx.constructorDec().stream()
+                    .map(constructorDecContext -> methodVisitor.visit(constructorDecContext, context.createEmptyMethodContext()))
+                    .collect(Collectors.toList());
             List<Method> methods = ctx.methodDec().stream()
                     .map(methodDecContext -> methodVisitor.visit(methodDecContext, context.createEmptyMethodContext()))
                     .collect(Collectors.toList());
 
-            return new ClassBody(fields, methods);
+            return new ClassBody(fields, constructors, methods);
         }
     }
 }
