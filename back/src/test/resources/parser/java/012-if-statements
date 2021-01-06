@@ -17,7 +17,7 @@
 
 ### INPUT ###
 public class MyClass {
-    public int main(){
+    public static void main(String[] args){
         if(true) {
             System.out.print("if1");
         }
