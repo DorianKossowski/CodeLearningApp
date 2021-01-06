@@ -26,8 +26,8 @@ public class MethodModel {
         return Optional.ofNullable(result);
     }
 
-    public List<MethodArgs> getArgs() {
-        return args;
+    public Optional<List<MethodArgs>> getArgs() {
+        return Optional.ofNullable(args);
     }
 
     public static Builder builder() {
@@ -58,7 +58,7 @@ public class MethodModel {
         private List<String> modifiers = new ArrayList<>();
         private String result;
         private String name;
-        private List<MethodArgs> args = new ArrayList<>();
+        private List<MethodArgs> args;
 
         public Builder withModifiers(List<String> modifiers) {
             this.modifiers = modifiers;

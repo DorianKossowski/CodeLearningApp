@@ -32,10 +32,7 @@ public class MethodVerifier {
         }
         methodModel.getResult().ifPresent(this::verifyMethodResult);
         methodModel.getName().ifPresent(this::verifyMethodName);
-        if (!methodModel.getArgs().isEmpty()) {
-            verifyMethodArgs(methodModel.getArgs());
-        }
-
+        methodModel.getArgs().ifPresent(this::verifyMethodArgs);
         Verify.verify(!availableMethods.isEmpty(), getErrorMessage(methodModel));
     }
 

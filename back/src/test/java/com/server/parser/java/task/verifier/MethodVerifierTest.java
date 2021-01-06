@@ -67,4 +67,14 @@ class MethodVerifierTest extends VerifierTestBase {
 
         methodVerifier.verify(MethodModel.builder().withResult("int").build());
     }
+
+    @Test
+    void shouldHasSameEmptyArgs() {
+        Method method = mockMethod("NAME");
+        when(method.getHeader().getArguments()).thenReturn(Collections.emptyList());
+        Task task = mockTask(Collections.singletonList(method));
+        MethodVerifier methodVerifier = new MethodVerifier(task);
+
+        methodVerifier.verify(MethodModel.builder().withArgs(Collections.emptyList()).build());
+    }
 }
