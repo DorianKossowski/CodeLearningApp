@@ -5,7 +5,7 @@ import com.server.app.model.dto.VerificationResultDto;
 import com.server.app.service.TaskVerificationService;
 import com.server.parser.java.JavaParserAdapter;
 import com.server.parser.java.JavaTaskParser;
-import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.task.JavaTaskListener;
 import com.server.parser.java.task.JavaTaskParserBuilder;
 import com.server.parser.java.task.verifier.TaskVerifier;
@@ -53,7 +53,7 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
     }
 
     JavaTaskListener createJavaTaskListener(String input) {
-        TaskAst taskAst = JavaParserAdapter.getTask(input);
-        return new JavaTaskListener(new TaskVerifier(taskAst));
+        Task task = JavaParserAdapter.getTask(input);
+        return new JavaTaskListener(new TaskVerifier(task));
     }
 }

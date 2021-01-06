@@ -2,7 +2,7 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.task.model.MethodArgs;
@@ -23,16 +23,16 @@ class MethodVerifierTest extends VerifierTestBase {
     void shouldVerifyMethodName() {
         String name = "NAME";
         String name2 = "NAME2";
-        TaskAst taskAst = mockTask(Arrays.asList(mockMethod(name), mockMethod(name2)));
-        MethodVerifier methodVerifier = new MethodVerifier(taskAst);
+        Task task = mockTask(Arrays.asList(mockMethod(name), mockMethod(name2)));
+        MethodVerifier methodVerifier = new MethodVerifier(task);
 
         methodVerifier.verify(MethodModel.builder().withName(name).build());
     }
 
     @Test
     void shouldThrowDuringVerifyingMethodName() {
-        TaskAst taskAst = mockTask(Collections.singletonList(mockMethod("NAME")));
-        MethodVerifier methodVerifier = new MethodVerifier(taskAst);
+        Task task = mockTask(Collections.singletonList(mockMethod("NAME")));
+        MethodVerifier methodVerifier = new MethodVerifier(task);
 
         assertThatThrownBy(() -> methodVerifier.verify(MethodModel.builder().withName("NOT_NAME").build()))
                 .isExactlyInstanceOf(VerifyException.class)
@@ -52,8 +52,8 @@ class MethodVerifierTest extends VerifierTestBase {
     void shouldHasSameModifiers() {
         Method method = mockMethod("NAME");
         when(method.getHeader().getModifiers()).thenReturn(Collections.singletonList("public"));
-        TaskAst taskAst = mockTask(Collections.singletonList(method));
-        MethodVerifier methodVerifier = new MethodVerifier(taskAst);
+        Task task = mockTask(Collections.singletonList(method));
+        MethodVerifier methodVerifier = new MethodVerifier(task);
 
         methodVerifier.verify(MethodModel.builder().withModifiers(Collections.singletonList("public")).build());
     }
@@ -62,8 +62,8 @@ class MethodVerifierTest extends VerifierTestBase {
     void shouldHasSameResult() {
         Method method = mockMethod("NAME");
         when(method.getHeader().getResult()).thenReturn("int");
-        TaskAst taskAst = mockTask(Collections.singletonList(method));
-        MethodVerifier methodVerifier = new MethodVerifier(taskAst);
+        Task task = mockTask(Collections.singletonList(method));
+        MethodVerifier methodVerifier = new MethodVerifier(task);
 
         methodVerifier.verify(MethodModel.builder().withResult("int").build());
     }

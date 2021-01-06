@@ -1,6 +1,6 @@
 package com.server.parser.java.task.verifier;
 
-import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.task.model.ClassModel;
 import com.server.parser.java.task.model.MethodModel;
 import com.server.parser.java.task.model.StatementModel;
@@ -14,11 +14,11 @@ public class TaskVerifier {
     private final ExpressionStatementVerifier expressionStatementVerifier;
     private final VariableVerifier variableVerifier;
 
-    public TaskVerifier(TaskAst taskAst) {
-        this.classVerifier = new ClassVerifier(Objects.requireNonNull(taskAst, "taskAst cannot be null"));
-        this.methodVerifier = new MethodVerifier(taskAst);
-        this.expressionStatementVerifier = new ExpressionStatementVerifier(taskAst);
-        this.variableVerifier = new VariableVerifier(taskAst);
+    public TaskVerifier(Task task) {
+        this.classVerifier = new ClassVerifier(Objects.requireNonNull(task, "task cannot be null"));
+        this.methodVerifier = new MethodVerifier(task);
+        this.expressionStatementVerifier = new ExpressionStatementVerifier(task);
+        this.variableVerifier = new VariableVerifier(task);
     }
 
     public void verifyClass(ClassModel classModel) {

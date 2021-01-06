@@ -2,7 +2,7 @@ package com.server.parser.java.task.verifier;
 
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.statement.Statement;
 
 import java.util.Collections;
@@ -12,16 +12,16 @@ import static org.mockito.Mockito.*;
 
 abstract class VerifierTestBase {
 
-    protected TaskAst mockTask(List<Method> methods) {
+    protected Task mockTask(List<Method> methods) {
         return mockTask(methods, Collections.emptyList());
     }
 
-    protected TaskAst mockTask(List<Method> methods, List<Statement> statements) {
+    protected Task mockTask(List<Method> methods, List<Statement> statements) {
         statements.forEach(statement -> doCallRealMethod().when(statement).getExpressionStatements());
-        TaskAst taskAst = mock(TaskAst.class, RETURNS_DEEP_STUBS);
-        when(taskAst.getClassAst().getBody().getMethods()).thenReturn(methods);
-        when(taskAst.getCalledStatements()).thenReturn(statements);
-        return taskAst;
+        Task task = mock(Task.class, RETURNS_DEEP_STUBS);
+        when(task.getClassAst().getBody().getMethods()).thenReturn(methods);
+        when(task.getCalledStatements()).thenReturn(statements);
+        return task;
     }
 
     protected ClassAst mockClass(String name) {

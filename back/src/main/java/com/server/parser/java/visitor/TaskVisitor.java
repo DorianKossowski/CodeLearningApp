@@ -4,7 +4,7 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.ClassContext;
@@ -15,23 +15,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class TaskVisitor extends JavaBaseVisitor<TaskAst> {
+public class TaskVisitor extends JavaBaseVisitor<Task> {
     private final JavaContext context = new ClassContext();
 
     @Override
-    public TaskAst visitTaskEOF(JavaParser.TaskEOFContext ctx) {
+    public Task visitTaskEOF(JavaParser.TaskEOFContext ctx) {
         return visitTask(ctx.task());
     }
 
     @Override
-    public TaskAst visitTask(JavaParser.TaskContext ctx) {
+    public Task visitTask(JavaParser.TaskContext ctx) {
         ClassAst classAst = context.getVisitor(ClassAst.class).visit(ctx.classDec(), context);
 
         StatementListVisitor statementListVisitor = new StatementListVisitor();
         Optional<List<Statement>> calledStmts = getMainMethod(classAst)
                 .map(mainMethod -> statementListVisitor.visit(mainMethod.getBodyContext(), mainMethod.getMethodContext()));
 
-        return new TaskAst(classAst, calledStmts.orElse(Collections.emptyList()));
+        return new Task(classAst, calledStmts.orElse(Collections.emptyList()));
     }
 
     Optional<Method> getMainMethod(ClassAst classAst) {

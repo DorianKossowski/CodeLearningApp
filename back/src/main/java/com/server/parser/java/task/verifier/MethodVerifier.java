@@ -2,7 +2,7 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.Verify;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
@@ -17,8 +17,8 @@ public class MethodVerifier {
     private final List<Method> methods;
     private List<Method> availableMethods;
 
-    public MethodVerifier(TaskAst taskAst) {
-        this.methods = Objects.requireNonNull(taskAst, "taskAst cannot be null").getClassAst().getBody().getMethods();
+    public MethodVerifier(Task task) {
+        this.methods = Objects.requireNonNull(task, "task cannot be null").getClassAst().getBody().getMethods();
     }
 
     public void verify(MethodModel methodModel) {

@@ -2,7 +2,7 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Verify;
-import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.task.model.VariableModel;
 
@@ -14,8 +14,8 @@ public class VariableVerifier {
     private final List<VariableDef> variableDefs;
     private List<VariableDef> availableVariableDefs;
 
-    public VariableVerifier(TaskAst taskAst) {
-        this.variableDefs = taskAst.getCalledStatements().stream()
+    public VariableVerifier(Task task) {
+        this.variableDefs = task.getCalledStatements().stream()
                 .filter(statement -> statement instanceof VariableDef)
                 .map(statement -> ((VariableDef) statement))
                 .collect(Collectors.toList());
