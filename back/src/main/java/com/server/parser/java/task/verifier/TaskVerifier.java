@@ -10,12 +10,14 @@ import java.util.Objects;
 
 public class TaskVerifier {
     private final ClassVerifier classVerifier;
+    private final ConstructorVerifier constructorVerifier;
     private final MethodVerifier methodVerifier;
     private final ExpressionStatementVerifier expressionStatementVerifier;
     private final VariableVerifier variableVerifier;
 
     public TaskVerifier(Task task) {
         this.classVerifier = new ClassVerifier(Objects.requireNonNull(task, "task cannot be null"));
+        this.constructorVerifier = new ConstructorVerifier(task);
         this.methodVerifier = new MethodVerifier(task);
         this.expressionStatementVerifier = new ExpressionStatementVerifier(task);
         this.variableVerifier = new VariableVerifier(task);
@@ -23,6 +25,10 @@ public class TaskVerifier {
 
     public void verifyClass(ClassModel classModel) {
         classVerifier.verify(classModel);
+    }
+
+    public void verifyConstructor(MethodModel methodModel) {
+        constructorVerifier.verify(methodModel);
     }
 
     public void verifyMethod(MethodModel methodModel) {

@@ -21,6 +21,10 @@ public class MethodVerifier {
         this.methods = Objects.requireNonNull(task, "task cannot be null").getClassAst().getBody().getMethods();
     }
 
+    protected MethodVerifier(List<Method> methods) {
+        this.methods = Objects.requireNonNull(methods, "methods cannot be null");
+    }
+
     public void verify(MethodModel methodModel) {
         availableMethods = new ArrayList<>(methods);
         if (!methodModel.getModifiers().isEmpty()) {
@@ -35,7 +39,7 @@ public class MethodVerifier {
         Verify.verify(!availableMethods.isEmpty(), getErrorMessage(methodModel));
     }
 
-    private String getErrorMessage(MethodModel methodModel) {
+    protected String getErrorMessage(MethodModel methodModel) {
         StringBuilder builder = new StringBuilder();
         methodModel.getName().ifPresent(name -> builder.append(" \"").append(name).append('"'));
         return String.format("Oczekiwana metoda%s nie istnieje", builder);
