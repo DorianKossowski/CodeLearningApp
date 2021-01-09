@@ -17,6 +17,7 @@ public class MethodContext implements JavaContext {
     private MethodHeader methodHeader;
     private final Map<String, Variable> nameToVariable = new HashMap<>();
 
+    // TODO handle fields
     MethodContext(ClassContext classContext) {
         this.classContext = Objects.requireNonNull(classContext, "classContext cannot be null");
     }

@@ -1,7 +1,9 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.value.Value;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ClassContextTest {
+    private static final String NAME = "name";
+
     @Mock
     private MethodContext methodContext;
     @Mock
@@ -74,5 +78,23 @@ class ClassContextTest {
             assertThatCode(() -> context.saveCurrentMethodContext(methodContext, methodHeader2))
                     .doesNotThrowAnyException();
         }
+    }
+
+    @Test
+    void shouldAddLocalVariable() {
+        Variable variable = new Variable("", NAME, mock(Value.class));
+        context.addField(variable);
+
+        assertThat(context.getField(NAME)).isSameAs(variable);
+    }
+
+    @Test
+    void shouldThrowWhenAddFieldAgain() {
+        Variable variable = new Variable("", NAME, mock(Value.class));
+        context.addField(variable);
+
+        assertThatThrownBy(() -> context.addField(variable))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Pole name już istnieje");
     }
 }

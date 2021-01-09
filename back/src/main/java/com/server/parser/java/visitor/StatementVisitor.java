@@ -116,8 +116,9 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
         @Override
         public Statement visitFieldDec(JavaParser.FieldDecContext ctx) {
-            // NOT FULLY SUPPORTED YET
-            return visit(ctx.varDec());
+            VariableDef variableDef = (VariableDef) visit(ctx.varDec());
+            context.addField(new Variable(variableDef));
+            return variableDef;
         }
 
         // TODO save method args in context

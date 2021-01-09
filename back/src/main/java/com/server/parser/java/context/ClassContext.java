@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClassContext implements JavaContext {
+    private final Map<String, Variable> nameToField = new HashMap<>();
     private final Map<MethodHeader, MethodContext> methodWithContext = new HashMap<>();
     private String name;
 
@@ -33,6 +34,19 @@ public class ClassContext implements JavaContext {
 
     Map<MethodHeader, MethodContext> getMethodWithContext() {
         return methodWithContext;
+    }
+
+    @Override
+    public void addField(Variable var) {
+        String varName = var.getName();
+        nameToField.computeIfPresent(varName, (key, $) -> {
+            throw new ResolvingException("Pole " + key + " już istnieje");
+        });
+        nameToField.put(varName, var);
+    }
+
+    public Variable getField(String name) {
+        return nameToField.get(name);
     }
 
     @Override

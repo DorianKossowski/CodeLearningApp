@@ -14,6 +14,10 @@ public interface JavaContext extends Serializable {
         return JavaVisitorsRegistry.get(elementClass);
     }
 
+    default void addField(Variable variable) {
+        throw new UnsupportedOperationException();
+    }
+
     Variable getVariable(String name);
 
     void addVariable(Variable variable);
