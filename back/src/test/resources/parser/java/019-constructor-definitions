@@ -1,0 +1,19 @@
+### TASK ###
+-> class
+    with constructor
+        with name: "MyClass"
+        with args:
+-> class
+    with constructor
+        with name: "MyClass"
+        with args: { "int", - }
+
+### INPUT ###
+public class MyClass {
+
+    MyClass() {
+    }
+
+    public MyClass(int x) {
+    }
+}

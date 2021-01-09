@@ -4,6 +4,7 @@ import com.server.parser.java.ast.statement.VariableDef;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MethodHeader extends AstElement {
     private final List<String> modifiers;
@@ -47,12 +48,20 @@ public class MethodHeader extends AstElement {
             return false;
         }
         MethodHeader that = (MethodHeader) o;
-        return Objects.equals(name, that.name);
+        return Objects.equals(name, that.name) &&
+                Objects.equals(getVariablesType(arguments), getVariablesType(that.arguments)) &&
+                Objects.equals(isConstructor(), that.isConstructor());
+    }
+
+    private static List<String> getVariablesType(List<VariableDef> variables) {
+        return variables.stream()
+                .map(VariableDef::getType)
+                .collect(Collectors.toList());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, getVariablesType(arguments), isConstructor());
     }
 
     @Override
