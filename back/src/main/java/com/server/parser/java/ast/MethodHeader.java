@@ -39,6 +39,10 @@ public class MethodHeader extends AstElement {
         return result == null;
     }
 
+    public boolean isStatic() {
+        return modifiers.contains("static");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
