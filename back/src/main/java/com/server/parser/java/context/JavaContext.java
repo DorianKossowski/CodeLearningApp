@@ -18,14 +18,24 @@ public interface JavaContext extends Serializable {
         throw new UnsupportedOperationException();
     }
 
-    Variable getVariable(String name);
+    default Variable getVariable(String name) {
+        throw new UnsupportedOperationException();
+    }
 
-    void addVariable(Variable variable);
+    default void addVariable(Variable variable) {
+        throw new UnsupportedOperationException();
+    }
 
-    void updateVariable(String name, Expression expression);
+    default void updateVariable(String name, Expression expression) {
+        throw new UnsupportedOperationException();
+    }
 
     // TODO make only for MethodContext
-    String getMethodName();
+    default String getMethodName() {
+        throw new UnsupportedOperationException();
+    }
 
-    JavaContext createLocalContext();
+    default JavaContext createLocalContext() {
+        throw new UnsupportedOperationException();
+    }
 }

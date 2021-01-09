@@ -2,7 +2,6 @@ package com.server.parser.java.context;
 
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
-import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
@@ -47,30 +46,5 @@ public class ClassContext implements JavaContext {
 
     public Variable getField(String name) {
         return nameToField.get(name);
-    }
-
-    @Override
-    public Variable getVariable(String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addVariable(Variable variable) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void updateVariable(String name, Expression expression) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String getMethodName() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public JavaContext createLocalContext() {
-        throw new UnsupportedOperationException();
     }
 }
