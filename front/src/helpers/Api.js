@@ -26,7 +26,7 @@ const request = (options) => {
     }
 
     const client = axios.create({
-        baseURL: 'https://learningappserver.eu-gb.mybluemix.net/'
+        baseURL: 'https://learningappback.eu-gb.mybluemix.net/'
     });
 
     return client(options)
