@@ -33,7 +33,8 @@ public class JavaTaskParserTest {
             "statement with else if: \"t\"",
             "statement is in else",
             "statement with switch expression: \"t\"",
-            "statement with switch label: \"t\""
+            "statement with switch label: \"t\"",
+            "statement with for iteration: \"t\""
     })
     void shouldParseStatementRule(String input) {
         HELPER.shouldParseToEof(input, JavaTaskParser::statementRule);

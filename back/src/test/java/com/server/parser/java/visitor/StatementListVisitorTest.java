@@ -13,11 +13,10 @@ class StatementListVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitStatementsInCorrectOrder() {
-        context.createCurrentMethodContext("");
         String input = "String a = \"s\"; System.out.println(\"sss\"); String b = \"s2\";";
         JavaParser.StatementListContext c = HELPER.shouldParseToEof(input, JavaParser::statementList);
 
-        List<Statement> statements = visitor.visit(c, context);
+        List<Statement> statements = visitor.visit(c, createMethodContext());
 
         assertThat(statements).hasSize(3);
         assertThat(statements.get(0).getText()).isEqualTo("String a = \"s\"");

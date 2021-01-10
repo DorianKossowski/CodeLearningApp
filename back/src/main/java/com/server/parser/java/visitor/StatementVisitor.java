@@ -7,12 +7,14 @@ import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.visitor.resolver.ForStmtResolver;
 import com.server.parser.java.visitor.resolver.IfStmtResolver;
 import com.server.parser.java.visitor.resolver.SwitchStmtResolver;
 import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.exception.BreakStatementException;
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -32,10 +34,11 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         }
     }
 
-    private boolean isValidBreak(ParserRuleContext ctx) {
+    private static boolean isValidBreak(ParserRuleContext ctx) {
         ParserRuleContext parentContext = ctx.getParent();
         while (parentContext != null) {
-            if (parentContext instanceof JavaParser.SwitchElementContext) {
+            if (parentContext instanceof JavaParser.SwitchElementContext
+                    || parentContext instanceof JavaParser.ForStatementContext) {
                 return true;
             }
             parentContext = parentContext.getParent();
@@ -45,25 +48,44 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
     public static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
         private final JavaContext context;
-        private final IfStmtResolver ifStmtResolver;
-        private final SwitchStmtResolver switchStmtResolver;
 
         private StatementVisitorInternal(JavaContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
-            this.ifStmtResolver = new IfStmtResolver(this.context, this);
-            this.switchStmtResolver = new SwitchStmtResolver(this.context);
         }
 
         @Override
         public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
-            List<Statement> statements = ctx.statementList().statement().stream()
-                    .map(this::visit)
-                    .collect(Collectors.toList());
-            return new BlockStatement(statements);
+            return new BlockStatement(visitBlockContentStatements(ctx));
+        }
+
+        private List<Statement> visitBlockContentStatements(JavaParser.BlockStatementContext ctx) {
+            StatementVisitorInternal localVisitor = new StatementVisitorInternal(context.createLocalContext());
+            List<Statement> statements = new ArrayList<>();
+            for (JavaParser.StatementContext statementContext : ctx.statementList().statement()) {
+                try {
+                    Statement statement = localVisitor.visit(statementContext);
+                    statements.add(statement);
+                    if (statement.hasBreak()) {
+                        return statements;
+                    }
+                } catch (BreakStatementException e) {
+                    if (isValidBreak(ctx)) {
+                        statements.add(BreakStatement.INSTANCE);
+                        return statements;
+                    }
+                    throw e;
+                }
+            }
+            return statements;
         }
 
         @Override
         public Statement visitExpressionStatement(JavaParser.ExpressionStatementContext ctx) {
+            return visit(ctx.getChild(0));
+        }
+
+        @Override
+        public Statement visitExpressionStatementSemicolon(JavaParser.ExpressionStatementSemicolonContext ctx) {
             return visit(ctx.getChild(0));
         }
 
@@ -73,7 +95,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             String methodName = textVisitor.visit(ctx.callName());
             List<Expression> arguments;
             arguments = ctx.callArguments() == null ? Collections.emptyList() : visit(ctx.callArguments());
-            return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), context.getCurrentMethodContext().getMethodName(), methodName,
+            return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(), methodName,
                     arguments);
         }
 
@@ -88,7 +110,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
             VariableDef variableDef = (VariableDef) visit(ctx.varDec());
-            context.getCurrentMethodContext().addVar(new Variable(variableDef));
+            context.addVariable(new Variable(variableDef));
             return variableDef;
         }
 
@@ -98,6 +120,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             return visit(ctx.varDec());
         }
 
+        // TODO save method args in context
         @Override
         public Statement visitSingleMethodArg(JavaParser.SingleMethodArgContext ctx) {
             String type = textVisitor.visit(ctx.type());
@@ -125,26 +148,39 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         public Statement visitAssignment(JavaParser.AssignmentContext ctx) {
             String id = textVisitor.visit(ctx.identifier());
             Expression expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
-            context.getCurrentMethodContext().updateVar(id, expression);
+            context.updateVariable(id, expression);
             return new Assignment(JavaGrammarHelper.getOriginalText(ctx), id, expression);
         }
 
         //*** IF ***//
         @Override
         public Statement visitIfElseStatement(JavaParser.IfElseStatementContext ctx) {
-            return ifStmtResolver.resolve(ctx);
+            return IfStmtResolver.resolve(context, this, ctx);
         }
 
         //*** SWITCH ***//
         @Override
         public Statement visitSwitchStatement(JavaParser.SwitchStatementContext ctx) {
-            return switchStmtResolver.resolve(ctx);
+            return SwitchStmtResolver.resolve(context.createLocalContext(), ctx);
         }
 
         //*** BREAK ***//
         @Override
         public Statement visitBreakStatement(JavaParser.BreakStatementContext ctx) {
             throw new BreakStatementException();
+        }
+
+        //*** FOR ***//
+        @Override
+        public Statement visitForStatement(JavaParser.ForStatementContext ctx) {
+            JavaContext localContext = context.createLocalContext();
+            return ForStmtResolver.resolve(localContext, ctx);
+        }
+
+        //*** EMPTY ***//
+        @Override
+        public Statement visitEmptyStatement(JavaParser.EmptyStatementContext ctx) {
+            return EmptyStatement.INSTANCE;
         }
     }
 }

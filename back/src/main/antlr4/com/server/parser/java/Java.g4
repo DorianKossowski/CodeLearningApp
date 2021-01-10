@@ -67,10 +67,21 @@ statementList
 
 statement
     : blockStatement
-    | expressionStatement
+    | expressionStatementSemicolon
     | ifElseStatement
     | switchStatement
+    | forStatement
     | emptyStatement
+    ;
+
+forStatement
+    : FOR
+    '(' initExpr=expressionStatement? ';' condExpr=expression? ';' updateExpr=expressionStatement? ')'
+    statement
+    ;
+
+expressionStatementSemicolon
+    : expressionStatement SEMICOLON
     ;
 
 switchStatement
@@ -99,11 +110,10 @@ emptyStatement
     ;
 
 expressionStatement
-    : ( call
+    : call
     | methodVarDec
     | assignment
     | breakStatement
-    ) SEMICOLON
     ;
 
 breakStatement
@@ -235,6 +245,7 @@ BREAK       : 'break' ;
 CASE        : 'case' ;
 DEFAULT     : 'default' ;
 ELSE        : 'else' ;
+FOR         : 'for' ;
 IF          : 'if' ;
 LPAREN      : '(' ;
 NULL        : 'null' ;

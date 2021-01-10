@@ -201,4 +201,12 @@ public class JavaParserTest {
     void shouldParseBreak() {
         HELPER.shouldParseToEof("break", JavaParser::breakStatement);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "for(;;) fun();", "for(int x = 0; ;);", "for(x=0; x<1; ) {}", "for(; x<1; x = x+1) { fun(); fun(); }"
+    })
+    void shouldParseForStmt(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::forStatement);
+    }
 }

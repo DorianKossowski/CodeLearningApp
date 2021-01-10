@@ -124,4 +124,14 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
                 .isExactlyInstanceOf(VerifyException.class)
                 .hasMessage("Oczekiwana instrukcja \"Wywołanie metody wewnątrz M1\" nie istnieje");
     }
+
+    @Test
+    void shouldVerifyForIteration() {
+        ExpressionStatement statement = mock(ExpressionStatement.class);
+        when(statement.getProperty(StatementProperties.FOR_ITERATION)).thenReturn("1");
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+
+        verifier.verify(StatementModel.builder().withForIteration(1).build());
+    }
 }

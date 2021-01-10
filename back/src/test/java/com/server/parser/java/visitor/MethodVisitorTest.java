@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MethodVisitorTest extends JavaVisitorTestBase {
     private final MethodVisitor visitor = new MethodVisitor();
     private final MethodVisitor.MethodVisitorInternal visitorInternal =
-            new MethodVisitor.MethodVisitorInternal(context);
+            new MethodVisitor.MethodVisitorInternal(createMethodContext());
 
     @Test
     void shouldVisitMethodArgs() {
@@ -56,11 +56,11 @@ class MethodVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitMethodDec() {
-        context.setCurrentClassName("MyClass");
+        context.setName("MyClass");
         String input = "void m(String[] a) { println(\"HELLO\"); }";
         JavaParser.MethodDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodDec);
 
-        Method method = visitor.visit(c, context);
+        Method method = visitor.visit(c, createMethodContext());
 
         assertThat(method.getClassName()).isEqualTo("MyClass");
         MethodHeader header = method.getHeader();

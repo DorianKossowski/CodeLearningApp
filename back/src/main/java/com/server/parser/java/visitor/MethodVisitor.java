@@ -7,6 +7,7 @@ import com.server.parser.java.ast.MethodBody;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.context.MethodContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
@@ -18,23 +19,23 @@ public class MethodVisitor extends JavaVisitor<Method> {
 
     @Override
     public Method visit(ParserRuleContext ctx, JavaContext context) {
-        return new MethodVisitorInternal(context).visit(ctx);
+        return new MethodVisitorInternal((MethodContext) context).visit(ctx);
     }
 
     // package-private for tests purpose only
     static class MethodVisitorInternal extends JavaBaseVisitor<Method> {
-        private final JavaContext context;
+        private final MethodContext context;
 
-        MethodVisitorInternal(JavaContext context) {
+        MethodVisitorInternal(MethodContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
         }
 
         @Override
         public Method visitMethodDec(JavaParser.MethodDecContext ctx) {
             MethodHeader methodHeader = visit(ctx.methodHeader());
-            context.createCurrentMethodContext(methodHeader.getName());
+            context.save(methodHeader);
             MethodBody methodBody = visit(ctx.methodBody());
-            return new Method(context.getCurrentClassName(), methodHeader, methodBody);
+            return new Method(context.getClassName(), methodHeader, methodBody);
         }
 
         MethodHeader visit(JavaParser.MethodHeaderContext ctx) {

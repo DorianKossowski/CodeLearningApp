@@ -37,7 +37,7 @@ class ClassVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitClassBody() {
-        context.setCurrentClassName("MyClass");
+        context.setName("MyClass");
         String input = "int i; void m(){} void m2(){} private String s;";
         JavaParser.ClassBodyContext c = HELPER.shouldParseToEof(input, JavaParser::classBody);
 

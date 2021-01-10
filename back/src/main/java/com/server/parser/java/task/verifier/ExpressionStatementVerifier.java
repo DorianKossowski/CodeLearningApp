@@ -34,6 +34,7 @@ public class ExpressionStatementVerifier {
         statementModel.getElseIfCond().ifPresent(this::verifyElseIfCond);
         statementModel.getSwitchExpr().ifPresent(this::verifySwitchExpr);
         statementModel.getSwitchLabel().ifPresent(this::verifySwitchLabel);
+        statementModel.getForIteration().ifPresent(this::verifyForIteration);
         Verify.verify(!availableStatements.isEmpty(), getErrorMessage(statementModel));
     }
 
@@ -110,6 +111,12 @@ public class ExpressionStatementVerifier {
         String switchLabelParsed = switchLabel.equals("default") ? "default" : JavaParserAdapter.parseExpression(switchLabel).getText();
         availableStatements = availableStatements.stream()
                 .filter(statement -> isPropertyInJoined(statement.getProperty(StatementProperties.SWITCH_LABELS), switchLabelParsed))
+                .collect(Collectors.toList());
+    }
+
+    private void verifyForIteration(Integer forIteration) {
+        availableStatements = availableStatements.stream()
+                .filter(statement -> Integer.parseInt(statement.getProperty(StatementProperties.FOR_ITERATION)) == forIteration)
                 .collect(Collectors.toList());
     }
 

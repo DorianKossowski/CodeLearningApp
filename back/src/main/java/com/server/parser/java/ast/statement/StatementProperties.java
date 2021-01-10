@@ -6,4 +6,6 @@ public class StatementProperties {
 
     public static final String SWITCH_EXPRESSION = "switchExpr";
     public static final String SWITCH_LABELS = "switchLabels";
+
+    public static final String FOR_ITERATION = "forIteration";
 }

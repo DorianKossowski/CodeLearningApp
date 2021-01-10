@@ -32,4 +32,8 @@ public abstract class Statement extends AstElement {
     }
 
     public abstract List<ExpressionStatement> getExpressionStatements();
+
+    public boolean hasBreak() {
+        return false;
+    }
 }

@@ -7,6 +7,7 @@ import com.server.parser.java.ast.ClassBody;
 import com.server.parser.java.ast.ClassHeader;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -18,21 +19,21 @@ public class ClassVisitor extends JavaVisitor<ClassAst> {
 
     @Override
     public ClassAst visit(ParserRuleContext ctx, JavaContext context) {
-        return new ClassVisitorInternal(context).visit(ctx);
+        return new ClassVisitorInternal((ClassContext) context).visit(ctx);
     }
 
     // package-private for tests purpose only
     static class ClassVisitorInternal extends JavaBaseVisitor<ClassAst> {
-        private final JavaContext context;
+        private final ClassContext context;
 
-        ClassVisitorInternal(JavaContext context) {
+        ClassVisitorInternal(ClassContext context) {
             this.context = Objects.requireNonNull(context, "context cannot be null");
         }
 
         @Override
         public ClassAst visitClassDec(JavaParser.ClassDecContext ctx) {
             ClassHeader header = visit(ctx.classHeader());
-            context.setCurrentClassName(header.getName());
+            context.setName(header.getName());
             ClassBody body = visit(ctx.classBody());
             return new ClassAst(header, body);
         }
@@ -49,7 +50,7 @@ public class ClassVisitor extends JavaVisitor<ClassAst> {
                     .collect(Collectors.toList());
             JavaVisitor<Method> methodVisitor = context.getVisitor(Method.class);
             List<Method> methods = ctx.methodDec().stream()
-                    .map(methodDecContext -> methodVisitor.visit(methodDecContext, context))
+                    .map(methodDecContext -> methodVisitor.visit(methodDecContext, context.createEmptyMethodContext()))
                     .collect(Collectors.toList());
 
             return new ClassBody(fields, methods);

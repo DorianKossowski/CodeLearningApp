@@ -1,12 +1,15 @@
 package com.server.parser.java.visitor.resolver;
 
+import com.google.common.collect.Iterables;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
@@ -18,12 +21,15 @@ import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class IfStmtResolverTest {
+class ForStmtResolverTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
@@ -35,6 +41,13 @@ class IfStmtResolverTest {
     }
 
     @Test
+    void shouldIterateWhenLackOfCondition() {
+        JavaParser.ForStatementContext forContext = mock(JavaParser.ForStatementContext.class);
+
+        assertThat(ForStmtResolver.shouldIterate(javaContext, forContext)).isTrue();
+    }
+
+    @Test
     void shouldThrowWhenNotLogic() {
         JavaParser.ExpressionContext expressionContext = mock(JavaParser.ExpressionContext.class);
         Expression condition = mock(Expression.class);
@@ -42,7 +55,7 @@ class IfStmtResolverTest {
         when(condition.getValue()).thenReturn(value);
         when(javaContext.getVisitor(Expression.class).visit(expressionContext, javaContext)).thenReturn(condition);
 
-        assertThatThrownBy(() -> IfStmtResolver.resolveCondition(javaContext, expressionContext))
+        assertThatThrownBy(() -> ForStmtResolver.resolveCondition(javaContext, expressionContext))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: \"str\" nie jest typu logicznego");
     }
@@ -54,10 +67,10 @@ class IfStmtResolverTest {
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
         methodContext.addVariable(new Variable("String", "str", value));
 
-        JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) str = \"true\"; else str = \"false\";",
-                JavaParser::ifElseStatement);
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(int i=0; i<1; i=i+1) str = \"true\";",
+                JavaParser::forStatement);
 
-        IfStmtResolver.validateBranchesContent(methodContext, c);
+        ForStmtResolver.validateContent(methodContext, c.statement());
 
         assertThat(methodContext.getVariable("str").getValue()).isSameAs(value);
     }
@@ -66,11 +79,38 @@ class IfStmtResolverTest {
     void shouldThrowWhenSingleVariableDefAsContent() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) String str = \"true\";",
-                JavaParser::ifElseStatement);
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) String str = \"true\";",
+                JavaParser::forStatement);
 
-        assertThatThrownBy(() -> IfStmtResolver.validateBranchesContent(methodContext, c))
+        assertThatThrownBy(() -> ForStmtResolver.validateContent(methodContext, c.statement()))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Deklaracja String str = \"true\" nie jest w tym miejscu dozwolona");
+    }
+
+    @Test
+    void shouldBreakIn() {
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) { break; fun(); }",
+                JavaParser::forStatement);
+
+        List<Statement> statements = ForStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
+        Statement statement = Iterables.getOnlyElement(statements);
+        assertThat(statement.getExpressionStatements()).isEmpty();
+    }
+
+    @Test
+    void shouldThrowWhenInfinityLoop() {
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(int i=0; i<1001; i=i+1);",
+                JavaParser::forStatement);
+
+        assertThatThrownBy(() -> ForStmtResolver.resolve(methodContext, c))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Ogranicz liczbę iteracji! Maksymalna dostępna liczba " +
+                        "iteracji w pętli to 1000");
     }
 }
