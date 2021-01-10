@@ -1,0 +1,39 @@
+### TASK ###
+-> statement
+    with text: "System.out.println(i)"
+    with resolved: "System.out.println(5)"
+-> statement
+    with text: "System.out.println(i)"
+    with resolved: "System.out.println(10)"
+-> statement
+    with text: "System.out.println(i)"
+    with resolved: "System.out.println(0)"
+-> statement
+    with text: "System.out.println(i+1)"
+    with resolved: "System.out.println(11)"
+-> statement
+    with text: "System.out.println(i-1)"
+    with resolved: "System.out.println(99)"
+-> statement
+    with text: "System.out.println(s)"
+    with resolved: "System.out.println(null)"
+
+### INPUT ###
+public class MyClass {
+    private static int i = 5;
+    public String s;
+
+    public static void main(String[] args){
+        System.out.println(i);
+        i = 10;
+        System.out.println(i);
+        {
+            int i = 0;
+            System.out.println(i);
+        }
+        System.out.println(i+1);
+        int i = 100;
+        System.out.println(i-1);
+        System.out.println(s);
+    }
+}

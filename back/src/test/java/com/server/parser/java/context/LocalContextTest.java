@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.*;
 class LocalContextTest {
     private static final String NAME = "name";
     private static final String NAME_2 = "name2";
+    private final Map<String, Variable> nameToField = new HashMap<>();
     private final Map<String, Variable> nameToVariable = new HashMap<>();
 
     @Mock
@@ -28,7 +29,7 @@ class LocalContextTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         variable = new Variable("type", NAME, value);
-        localContext = new LocalContext(nameToVariable, "");
+        localContext = new LocalContext(nameToField, nameToVariable, "");
     }
 
     @Test
@@ -57,6 +58,13 @@ class LocalContextTest {
     @Test
     void shouldGetVariable() {
         nameToVariable.put(NAME, variable);
+
+        assertThat(localContext.getVariable(NAME)).isSameAs(variable);
+    }
+
+    @Test
+    void shouldGetField() {
+        nameToField.put(NAME, variable);
 
         assertThat(localContext.getVariable(NAME)).isSameAs(variable);
     }

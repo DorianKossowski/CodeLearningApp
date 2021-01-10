@@ -15,16 +15,17 @@ import java.util.Objects;
 public class MethodContext implements JavaContext {
     private final ClassContext classContext;
     private MethodHeader methodHeader;
+    private final Map<String, Variable> nameToField;
     private final Map<String, Variable> nameToVariable = new HashMap<>();
 
-    // TODO handle fields
     MethodContext(ClassContext classContext) {
         this.classContext = Objects.requireNonNull(classContext, "classContext cannot be null");
+        this.nameToField = classContext.getFields();
     }
 
     @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(nameToVariable, getMethodName());
+        return new LocalContext(nameToField, nameToVariable, getMethodName());
     }
 
     public void save(MethodHeader methodHeader) {
@@ -63,8 +64,12 @@ public class MethodContext implements JavaContext {
 
     @Override
     public Variable getVariable(String var) {
-        return nameToVariable.computeIfAbsent(var, key -> {
-            throw new ResolvingException("Obiekt " + key + " nie istnieje");
-        });
+        if (nameToVariable.containsKey(var)) {
+            return nameToVariable.get(var);
+        }
+        if (nameToField.containsKey(var)) {
+            return nameToField.get(var);
+        }
+        throw new ResolvingException("Obiekt " + var + " nie istnieje");
     }
 }

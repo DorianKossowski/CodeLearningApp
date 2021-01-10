@@ -85,7 +85,7 @@ class ClassContextTest {
         Variable variable = new Variable("", NAME, mock(Value.class));
         context.addField(variable);
 
-        assertThat(context.getField(NAME)).isSameAs(variable);
+        assertThat(context.getFields().get(NAME)).isSameAs(variable);
     }
 
     @Test

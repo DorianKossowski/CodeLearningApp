@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LocalContext implements JavaContext {
+    private final Map<String, Variable> nameToField;
     private final Map<String, Variable> nameToVariable;
     private final String methodName;
     private final Map<String, Variable> localNameToVariable = new HashMap<>();
 
-    LocalContext(Map<String, Variable> nameToVariable, String methodName) {
+    LocalContext(Map<String, Variable> nameToField, Map<String, Variable> nameToVariable, String methodName) {
+        this.nameToField = Objects.requireNonNull(nameToField, "nameToField cannot be null");
         this.nameToVariable = Objects.requireNonNull(nameToVariable, "nameToVariable cannot be null");
         this.methodName = Objects.requireNonNull(methodName, "methodName cannot be null");
     }
@@ -34,7 +36,7 @@ public class LocalContext implements JavaContext {
 
     @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(getConcatenatedNameToVariables(), methodName);
+        return new LocalContext(nameToField, getConcatenatedNameToVariables(), methodName);
     }
 
     private Map<String, Variable> getConcatenatedNameToVariables() {
@@ -70,6 +72,9 @@ public class LocalContext implements JavaContext {
         }
         if (nameToVariable.containsKey(var)) {
             return nameToVariable.get(var);
+        }
+        if (nameToField.containsKey(var)) {
+            return nameToField.get(var);
         }
         throw new ResolvingException("Obiekt " + var + " nie istnieje");
     }

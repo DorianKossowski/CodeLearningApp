@@ -44,7 +44,7 @@ public class ClassContext implements JavaContext {
         nameToField.put(varName, var);
     }
 
-    public Variable getField(String name) {
-        return nameToField.get(name);
+    Map<String, Variable> getFields() {
+        return nameToField;
     }
 }
