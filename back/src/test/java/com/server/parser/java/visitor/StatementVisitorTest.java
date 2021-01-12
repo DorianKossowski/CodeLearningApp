@@ -205,6 +205,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertVariableDec(variableDef, Collections.singletonList("final"), "String", "a");
         assertThat(variableDef.getValue()).extracting(Value::toString)
                 .isEqualTo("\"str\"");
+        assertThat(variableDef.printMethodName()).isEqualTo(METHOD_NAME);
 
         assertThat(methodContext.getNameToVariable().keySet()).containsExactly("a");
         Variable variable = methodContext.getNameToVariable().get("a");

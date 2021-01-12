@@ -115,6 +115,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
                     .map(RuleContext::getText)
                     .collect(Collectors.toList());
             variableDef.setModifiers(modifiers);
+            variableDef.setContextMethodName(context.getMethodName());
             context.addVariable(new Variable(variableDef));
             return variableDef;
         }

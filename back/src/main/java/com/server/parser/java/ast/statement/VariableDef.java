@@ -7,14 +7,16 @@ import com.server.parser.util.ValuePreparer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
-public class VariableDef extends ExpressionStatement {
+public class VariableDef extends ExpressionStatement implements MethodPrintable {
     private List<String> modifiers = new ArrayList<>();
     private final String type;
     private final String name;
     private final Expression expression;
     private final Value value;
     private final boolean explicitInitialization;
+    private String contextMethodName;
 
     public VariableDef(String text, String type, String name, Expression expression, boolean explicitInitialization) {
         super(text);
@@ -49,6 +51,10 @@ public class VariableDef extends ExpressionStatement {
         return value;
     }
 
+    public void setContextMethodName(String contextMethodName) {
+        this.contextMethodName = contextMethodName;
+    }
+
     @Override
     public String getResolved() {
         StringBuilder text = new StringBuilder().append(String.format("%s %s %s", String.join(" ", modifiers), type,
@@ -57,5 +63,10 @@ public class VariableDef extends ExpressionStatement {
             text.append(" = ").append(value);
         }
         return text.toString();
+    }
+
+    @Override
+    public String printMethodName() {
+        return Optional.ofNullable(contextMethodName).orElse("");
     }
 }
