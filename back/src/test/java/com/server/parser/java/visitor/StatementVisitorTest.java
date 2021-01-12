@@ -19,6 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
@@ -194,29 +195,33 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitLocalVarDec() {
-        String input = "String a = \"str\"";
+        String input = "final String a = \"str\"";
         JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
         VariableDef variableDef = (VariableDef) visitor.visit(c, methodContext);
 
-        assertThat(variableDef.getText()).isEqualTo(input);
-        assertVariableDec(variableDef, "String", "a");
+        assertThat(variableDef.getText()).isEqualTo("String a = \"str\"");
+        assertThat(variableDef.getResolved()).isEqualTo(input);
+        assertVariableDec(variableDef, Collections.singletonList("final"), "String", "a");
         assertThat(variableDef.getValue()).extracting(Value::toString)
                 .isEqualTo("\"str\"");
 
         assertThat(methodContext.getNameToVariable().keySet()).containsExactly("a");
-        assertThat(methodContext.getNameToVariable().get("a").getValue().toString()).isEqualTo("\"str\"");
+        Variable variable = methodContext.getNameToVariable().get("a");
+        assertThat(Iterables.getOnlyElement(variable.getModifiers())).isEqualTo("final");
+        assertThat(variable.getValue().toString()).isEqualTo("\"str\"");
     }
 
     @Test
     void shouldCreateFromFieldDec() {
-        String input = "String a = \"str\"";
+        String input = "private static String a = \"str\"";
         JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
         VariableDef variableDef = (VariableDef) visitor.visit(c, context);
 
-        assertThat(variableDef.getText()).isEqualTo(input);
-        assertVariableDec(variableDef, "String", "a");
+        assertThat(variableDef.getText()).isEqualTo("String a = \"str\"");
+        assertThat(variableDef.getResolved()).isEqualTo(input);
+        assertVariableDec(variableDef, Arrays.asList("private", "static"), "String", "a");
         assertThat(variableDef.getValue()).extracting(Value::toString)
                 .isEqualTo("\"str\"");
     }

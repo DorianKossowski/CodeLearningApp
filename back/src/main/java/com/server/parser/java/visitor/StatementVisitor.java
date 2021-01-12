@@ -11,6 +11,7 @@ import com.server.parser.java.visitor.resolver.*;
 import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.exception.BreakStatementException;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -110,6 +111,10 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
             VariableDef variableDef = (VariableDef) visit(ctx.varDec());
+            List<String> modifiers = ctx.varModifier().stream()
+                    .map(RuleContext::getText)
+                    .collect(Collectors.toList());
+            variableDef.setModifiers(modifiers);
             context.addVariable(new Variable(variableDef));
             return variableDef;
         }
@@ -117,6 +122,10 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitFieldDec(JavaParser.FieldDecContext ctx) {
             VariableDef variableDef = (VariableDef) visit(ctx.varDec());
+            List<String> modifiers = ctx.fieldModifier().stream()
+                    .map(RuleContext::getText)
+                    .collect(Collectors.toList());
+            variableDef.setModifiers(modifiers);
             context.addField(new Variable(variableDef));
             return variableDef;
         }
