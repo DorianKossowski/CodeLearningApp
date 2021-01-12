@@ -1,4 +1,9 @@
 ### TASK ###
+-> method
+    with modifiers: { "public" }
+    with result: "int"
+    with name: "main"
+    with args:
 
 ### INPUT ###
 public class MyClass {

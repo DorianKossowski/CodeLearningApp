@@ -1,4 +1,9 @@
 ### TASK ###
+-> method
+    with modifiers: { "public", "static" }
+    with result: "void"
+    with name: "main"
+    with args: { "String[]", - }
 
 ### INPUT ###
 public class MyClass {
