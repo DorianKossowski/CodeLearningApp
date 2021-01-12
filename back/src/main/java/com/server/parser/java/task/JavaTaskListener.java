@@ -57,7 +57,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     }
 
     @Override
-    public void enterMethodModifiersRuleSpec(JavaTaskParser.MethodModifiersRuleSpecContext ctx) {
+    public void enterModifiersRuleSpec(JavaTaskParser.ModifiersRuleSpecContext ctx) {
         List<String> modifiers = ctx.STRING_LITERAL().stream()
                 .map(node -> JavaTaskGrammarHelper.getFromStringLiteral(node.getText()))
                 .collect(Collectors.toList());

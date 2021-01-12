@@ -17,8 +17,28 @@ classRule
     ;
 
 classRuleSpec
-    : WITH ( classNameSpec | classConstructorSpec )
+    : WITH ( classNameSpec | classConstructorSpec | classFieldSpec )
     | logInfo
+    ;
+
+classFieldSpec
+    : 'field' fieldRuleSpec+
+    ;
+
+fieldRuleSpec
+    : WITH ( modifiersRuleSpec | typeRuleSpec | fieldNameRuleSpec | valueRuleSpec | logInfo )
+    ;
+
+valueRuleSpec
+    : 'value' ':' STRING_LITERAL
+    ;
+
+fieldNameRuleSpec
+    : 'name' ':' STRING_LITERAL
+    ;
+
+typeRuleSpec
+    : 'type' ':' STRING_LITERAL
     ;
 
 classConstructorSpec
@@ -111,14 +131,14 @@ methodRule
     ;
 
 methodRuleSpec
-    : WITH ( methodNameRuleSpec | methodArgsRuleSpec | methodModifiersRuleSpec | methodResultRuleSpec )
+    : WITH ( methodNameRuleSpec | methodArgsRuleSpec | modifiersRuleSpec | methodResultRuleSpec )
     ;
 
 methodResultRuleSpec
     : 'result' ':' STRING_LITERAL
     ;
 
-methodModifiersRuleSpec
+modifiersRuleSpec
     : 'modifiers' ':' '{' STRING_LITERAL ( ',' STRING_LITERAL )* '}'
     ;
 
