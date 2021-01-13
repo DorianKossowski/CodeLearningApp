@@ -275,7 +275,7 @@ TRUE: 'true';
 
 IDENTIFIER : (AZ | '_' | '$')  (AZ | DIGIT | '_' | '$')* ;
 
-WHITESPACE : (NEW_LINE | ' ' | '\t') -> channel(HIDDEN) ;
+WHITESPACE : (NEW_LINE | ' ' | '\t' | '\u200B' | 'u000C') -> channel(HIDDEN) ;
 COMMENT : '/*' .*? '*/' -> channel(HIDDEN) ;
 LINE_COMMENT : '//' ~[\r\n]* -> channel(HIDDEN) ;
 
