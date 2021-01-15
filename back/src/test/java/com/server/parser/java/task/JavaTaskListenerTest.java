@@ -48,6 +48,31 @@ class JavaTaskListenerTest {
         verify(verifier).verifyClass(model);
     }
 
+    static Stream<Arguments> fieldSource() {
+        return Stream.of(
+                Arguments.of("Field with modifiers", "class with field with modifiers: {\"x\", \"y\"}",
+                        FieldModel.builder().withModifiers(Arrays.asList("x", "y")).build()),
+                Arguments.of("Field with type", "class with field with type: \"x\"",
+                        FieldModel.builder().withType("x").build()),
+                Arguments.of("Field with name", "class with field with name: \"x\"",
+                        FieldModel.builder().withName("x").build()),
+                Arguments.of("Field with value", "class with field with value: \"x\"",
+                        FieldModel.builder().withValue("x").build()),
+                Arguments.of("Field with log info", "class with field with log info: \"t\"",
+                        FieldModel.builder().withLogInfo("t").build())
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("fieldSource")
+    void shouldVerifyField(@SuppressWarnings("unused") String name, String input, FieldModel model) {
+        JavaTaskParser.ClassRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::classRule);
+
+        WALKER.walk(listener, c);
+
+        verify(verifier).verifyField(model);
+    }
+
     static Stream<Arguments> methodSource() {
         return Stream.of(
                 Arguments.of("Method with name", "method with name: \"x\"",
