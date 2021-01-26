@@ -1,5 +1,6 @@
 ### TASK ###
 -> class
+    with modifiers: { "public" }
     with name: "MyClass"
 
 ### INPUT ###

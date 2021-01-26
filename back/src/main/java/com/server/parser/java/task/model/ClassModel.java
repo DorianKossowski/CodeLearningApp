@@ -1,13 +1,20 @@
 package com.server.parser.java.task.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public class ClassModel {
+    private List<String> modifiers;
     private String name;
     private String logInfo;
 
     private ClassModel() {
+    }
+
+    public List<String> getModifiers() {
+        return modifiers;
     }
 
     public Optional<String> getName() {
@@ -31,18 +38,25 @@ public class ClassModel {
             return false;
         }
         ClassModel that = (ClassModel) o;
-        return Objects.equals(name, that.name) &&
+        return Objects.equals(modifiers, that.modifiers) &&
+                Objects.equals(name, that.name) &&
                 Objects.equals(logInfo, that.logInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, logInfo);
+        return Objects.hash(modifiers, name, logInfo);
     }
 
     public static class Builder {
+        private List<String> modifiers = new ArrayList<>();
         private String name;
         private String logInfo;
+
+        public Builder withModifiers(List<String> modifiers) {
+            this.modifiers = modifiers;
+            return this;
+        }
 
         public Builder withName(String name) {
             this.name = name;
@@ -56,6 +70,7 @@ public class ClassModel {
 
         public ClassModel build() {
             ClassModel model = new ClassModel();
+            model.modifiers = this.modifiers;
             model.name = this.name;
             model.logInfo = this.logInfo;
             return model;

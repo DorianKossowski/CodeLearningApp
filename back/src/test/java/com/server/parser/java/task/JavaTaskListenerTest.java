@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
@@ -33,6 +34,8 @@ class JavaTaskListenerTest {
 
     static Stream<Arguments> classSource() {
         return Stream.of(
+                Arguments.of("Class with modifiers", "class with modifiers: { \"x\" }",
+                        ClassModel.builder().withModifiers(Collections.singletonList("x")).build()),
                 Arguments.of("Class with name", "class with name: \"x\"", ClassModel.builder().withName("x").build()),
                 Arguments.of("Class with log info", "class log info: \"t\"", ClassModel.builder().withLogInfo("t").build())
         );

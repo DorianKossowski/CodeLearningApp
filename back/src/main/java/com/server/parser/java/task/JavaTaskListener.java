@@ -66,6 +66,8 @@ public class JavaTaskListener extends JavaTaskBaseListener {
             methodBuilder.withModifiers(modifiers);
         } else if (ctx.getParent() instanceof JavaTaskParser.FieldRuleSpecContext) {
             fieldBuilder.withModifiers(modifiers);
+        } else if (ctx.getParent() instanceof JavaTaskParser.ClassRuleSpecContext) {
+            classBuilder.withModifiers(modifiers);
         }
     }
 
