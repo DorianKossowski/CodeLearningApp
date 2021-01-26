@@ -8,6 +8,7 @@ import HomeLoops from './HomeLoops';
 
 import './home.css';
 import HomeCompAndLogic from './HomeCompAndLogic';
+import HomeObjectIntroduction from './HomeObjectIntroduction';
 
 class Home extends Component {
 
@@ -20,6 +21,7 @@ class Home extends Component {
                 <HomeCompAndLogic />
                 <HomeConditionals />
                 <HomeLoops />
+                <HomeObjectIntroduction />
             </Container>
         );
     }

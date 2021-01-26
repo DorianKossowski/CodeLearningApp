@@ -1,0 +1,45 @@
+### TASK ###
+-> class
+    with field
+        with modifiers: { "static" }
+        with type: "String"
+        with name: "name"
+        with value: "\"MyStaticName\""
+-> class
+    with field
+        with type: "int"
+        with name: "someValue"
+-> class
+    with constructor
+        with name: "MyClass"
+        with args: { "int", "val" }
+-> method
+    with result: "void"
+    with name: "myMethod"
+    with args:
+-> method
+    with result: "void"
+    with name: "myMethod"
+    with args: { "int", - }
+
+### INPUT ###
+public class MyClass {
+    static String name = "MyStaticName";
+    int someValue;
+
+    MyClass(int val) {
+        someValue = val;
+    }
+
+    public static void main(String[] args){
+        String s = name;
+    }
+
+    void myMethod() {
+        System.out.println("Some method1");
+    }
+
+    void myMethod(int i) {
+        System.out.println("Some method2");
+    }
+}
