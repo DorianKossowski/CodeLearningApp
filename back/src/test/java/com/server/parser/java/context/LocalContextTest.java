@@ -29,7 +29,7 @@ class LocalContextTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         variable = new Variable("type", NAME, value);
-        localContext = new LocalContext(nameToField, nameToVariable, "");
+        localContext = new LocalContext(nameToField, nameToVariable, "", false);
     }
 
     @Test
@@ -67,6 +67,16 @@ class LocalContextTest {
         nameToField.put(NAME, variable);
 
         assertThat(localContext.getVariable(NAME)).isSameAs(variable);
+    }
+
+    @Test
+    void shouldThrowWhenGettingNonStaticFieldFromStatic() {
+        nameToField.put(NAME, variable);
+        localContext = new LocalContext(nameToField, nameToVariable, "", true);
+
+        assertThatThrownBy(() -> localContext.getVariable(NAME))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można użyć name ze statycznego kontekstu");
     }
 
     @Test

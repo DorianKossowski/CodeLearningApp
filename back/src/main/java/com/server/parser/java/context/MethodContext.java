@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+// TODO refactor contexts
 public class MethodContext implements JavaContext {
     private final ClassContext classContext;
     private MethodHeader methodHeader;
@@ -25,7 +26,7 @@ public class MethodContext implements JavaContext {
 
     @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(nameToField, nameToVariable, getMethodName());
+        return new LocalContext(nameToField, nameToVariable, getMethodName(), methodHeader.isStatic());
     }
 
     public void save(MethodHeader methodHeader) {
@@ -68,7 +69,11 @@ public class MethodContext implements JavaContext {
             return nameToVariable.get(var);
         }
         if (nameToField.containsKey(var)) {
-            return nameToField.get(var);
+            Variable variable = nameToField.get(var);
+            if (methodHeader.isStatic() && !variable.isStatic()) {
+                throw new ResolvingException("Nie można użyć " + var + " ze statycznego kontekstu");
+            }
+            return variable;
         }
         throw new ResolvingException("Obiekt " + var + " nie istnieje");
     }

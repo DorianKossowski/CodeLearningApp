@@ -48,4 +48,8 @@ public class Variable implements Serializable {
     public void setValue(Value value) {
         this.value = value;
     }
+
+    public boolean isStatic() {
+        return modifiers.contains("static");
+    }
 }

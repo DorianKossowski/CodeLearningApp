@@ -17,12 +17,15 @@ public class LocalContext implements JavaContext {
     private final Map<String, Variable> nameToField;
     private final Map<String, Variable> nameToVariable;
     private final String methodName;
+    private final boolean isStaticContext;
     private final Map<String, Variable> localNameToVariable = new HashMap<>();
 
-    LocalContext(Map<String, Variable> nameToField, Map<String, Variable> nameToVariable, String methodName) {
+    LocalContext(Map<String, Variable> nameToField, Map<String, Variable> nameToVariable, String methodName,
+                 boolean isStaticContext) {
         this.nameToField = Objects.requireNonNull(nameToField, "nameToField cannot be null");
         this.nameToVariable = Objects.requireNonNull(nameToVariable, "nameToVariable cannot be null");
         this.methodName = Objects.requireNonNull(methodName, "methodName cannot be null");
+        this.isStaticContext = isStaticContext;
     }
 
     Map<String, Variable> getNameToVariable() {
@@ -36,7 +39,7 @@ public class LocalContext implements JavaContext {
 
     @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(nameToField, getConcatenatedNameToVariables(), methodName);
+        return new LocalContext(nameToField, getConcatenatedNameToVariables(), methodName, isStaticContext);
     }
 
     private Map<String, Variable> getConcatenatedNameToVariables() {
@@ -74,7 +77,11 @@ public class LocalContext implements JavaContext {
             return nameToVariable.get(var);
         }
         if (nameToField.containsKey(var)) {
-            return nameToField.get(var);
+            Variable variable = nameToField.get(var);
+            if (isStaticContext && !variable.isStatic()) {
+                throw new ResolvingException("Nie można użyć " + var + " ze statycznego kontekstu");
+            }
+            return variable;
         }
         throw new ResolvingException("Obiekt " + var + " nie istnieje");
     }

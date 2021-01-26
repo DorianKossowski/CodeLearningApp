@@ -1,8 +1,11 @@
 package com.server.parser.java.context;
 
+import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,10 +40,27 @@ class MethodContextTest {
         ClassContext classContext = new ClassContext();
         Variable var = mock(Variable.class);
         when(var.getName()).thenReturn("var");
+        when(var.isStatic()).thenReturn(false);
         classContext.addField(var);
         MethodContext methodContext = new MethodContext(classContext);
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
 
         assertThat(methodContext.getVariable("var")).isSameAs(var);
+    }
+
+    @Test
+    void shouldThrowWhenGettingNonStaticFieldFromStatic() {
+        ClassContext classContext = new ClassContext();
+        Variable var = mock(Variable.class);
+        when(var.getName()).thenReturn("var");
+        when(var.isStatic()).thenReturn(false);
+        classContext.addField(var);
+        MethodContext methodContext = new MethodContext(classContext);
+        methodContext.save(new MethodHeader(Collections.singletonList("static"), "", "", Collections.emptyList()));
+
+        assertThatThrownBy(() -> methodContext.getVariable("var"))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można użyć var ze statycznego kontekstu");
     }
 
     @Test
