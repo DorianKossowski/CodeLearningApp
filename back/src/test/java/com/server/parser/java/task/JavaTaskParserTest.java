@@ -12,6 +12,7 @@ public class JavaTaskParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
+            "class with modifiers: { \"x\", \"y\" }",
             "class with name: \"x\"",
             "class with constructor with name: \"t\" with args: { \"int\", - }",
             "class with field with modifiers: {\"public\", \"static\"} with type: \"int\" with name: \"t\" " +

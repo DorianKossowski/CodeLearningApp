@@ -17,7 +17,7 @@ classRule
     ;
 
 classRuleSpec
-    : WITH ( classNameSpec | classConstructorSpec | classFieldSpec )
+    : WITH ( modifiersRuleSpec | classNameSpec | classConstructorSpec | classFieldSpec )
     | logInfo
     ;
 
