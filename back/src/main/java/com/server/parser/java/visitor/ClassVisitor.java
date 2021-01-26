@@ -10,6 +10,7 @@ import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
 
 import java.util.List;
 import java.util.Objects;
@@ -39,8 +40,11 @@ public class ClassVisitor extends JavaVisitor<ClassAst> {
         }
 
         ClassHeader visit(JavaParser.ClassHeaderContext ctx) {
+            List<String> modifiers = ctx.classModifier().stream()
+                    .map(RuleContext::getText)
+                    .collect(Collectors.toList());
             String id = textVisitor.visit(ctx.identifier());
-            return new ClassHeader(id);
+            return new ClassHeader(modifiers, id);
         }
 
         ClassBody visit(JavaParser.ClassBodyContext ctx) {

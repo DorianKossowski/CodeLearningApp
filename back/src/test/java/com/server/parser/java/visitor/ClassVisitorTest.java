@@ -32,6 +32,7 @@ class ClassVisitorTest extends JavaVisitorTestBase {
 
         ClassHeader header = visitorInternal.visit(c);
 
+        assertThat(Iterables.getOnlyElement(header.getModifiers())).isEqualTo("public");
         assertThat(header.getName()).isEqualTo("c");
     }
 
