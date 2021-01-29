@@ -1,6 +1,5 @@
 package com.server.parser.java.task.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,8 +12,8 @@ public class ClassModel {
     private ClassModel() {
     }
 
-    public List<String> getModifiers() {
-        return modifiers;
+    public Optional<List<String>> getModifiers() {
+        return Optional.ofNullable(modifiers);
     }
 
     public Optional<String> getName() {
@@ -49,7 +48,7 @@ public class ClassModel {
     }
 
     public static class Builder {
-        private List<String> modifiers = new ArrayList<>();
+        private List<String> modifiers;
         private String name;
         private String logInfo;
 

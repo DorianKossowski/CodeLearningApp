@@ -1,6 +1,5 @@
 package com.server.parser.java.task.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,8 +14,8 @@ public class FieldModel {
     private FieldModel() {
     }
 
-    public List<String> getModifiers() {
-        return modifiers;
+    public Optional<List<String>> getModifiers() {
+        return Optional.ofNullable(modifiers);
     }
 
     public Optional<String> getType() {
@@ -58,7 +57,7 @@ public class FieldModel {
     }
 
     public static class Builder {
-        private List<String> modifiers = new ArrayList<>();
+        private List<String> modifiers;
         private String type;
         private String name;
         private String value;

@@ -36,6 +36,8 @@ class JavaTaskListenerTest {
         return Stream.of(
                 Arguments.of("Class with modifiers", "class with modifiers: { \"x\" }",
                         ClassModel.builder().withModifiers(Collections.singletonList("x")).build()),
+                Arguments.of("Class without modifiers", "class with modifiers: ",
+                        ClassModel.builder().withModifiers(Collections.emptyList()).build()),
                 Arguments.of("Class with name", "class with name: \"x\"", ClassModel.builder().withName("x").build()),
                 Arguments.of("Class with log info", "class log info: \"t\"", ClassModel.builder().withLogInfo("t").build())
         );
@@ -55,6 +57,8 @@ class JavaTaskListenerTest {
         return Stream.of(
                 Arguments.of("Field with modifiers", "class with field with modifiers: {\"x\", \"y\"}",
                         FieldModel.builder().withModifiers(Arrays.asList("x", "y")).build()),
+                Arguments.of("Field without modifiers", "class with field with modifiers:",
+                        FieldModel.builder().withModifiers(Collections.emptyList()).build()),
                 Arguments.of("Field with type", "class with field with type: \"x\"",
                         FieldModel.builder().withType("x").build()),
                 Arguments.of("Field with name", "class with field with name: \"x\"",
@@ -85,6 +89,8 @@ class JavaTaskListenerTest {
                                 new MethodArgs("String[]", "x"))).build()),
                 Arguments.of("Method with modifiers", "method with modifiers: {\"x\", \"y\"}",
                         MethodModel.builder().withModifiers(Arrays.asList("x", "y")).build()),
+                Arguments.of("Method without modifiers", "method with modifiers: ",
+                        MethodModel.builder().withModifiers(Collections.emptyList()).build()),
                 Arguments.of("Method with result", "method with result: \"x\"",
                         MethodModel.builder().withResult("x").build())
         );

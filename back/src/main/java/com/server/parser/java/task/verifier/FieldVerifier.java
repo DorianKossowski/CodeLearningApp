@@ -20,9 +20,7 @@ public class FieldVerifier {
 
     public void verify(FieldModel fieldModel) {
         availableFields = new ArrayList<>(fields);
-        if (!fieldModel.getModifiers().isEmpty()) {
-            verifyFieldModifiers(fieldModel.getModifiers());
-        }
+        fieldModel.getModifiers().ifPresent(this::verifyFieldModifiers);
         fieldModel.getType().ifPresent(this::verifyFieldType);
         fieldModel.getName().ifPresent(this::verifyFieldName);
         fieldModel.getValue().ifPresent(this::verifyFieldValue);
@@ -43,8 +41,15 @@ public class FieldVerifier {
 
     private void verifyFieldModifiers(List<String> modifiers) {
         availableFields = availableFields.stream()
-                .filter(field -> field.getModifiers().containsAll(modifiers))
+                .filter(field -> hasSameModifiers(field.getModifiers(), modifiers))
                 .collect(Collectors.toList());
+    }
+
+    private boolean hasSameModifiers(List<String> actualModifiers, List<String> modifiers) {
+        if (modifiers.size() == 0) {
+            return actualModifiers.isEmpty();
+        }
+        return actualModifiers.containsAll(modifiers);
     }
 
     private void verifyFieldName(String name) {

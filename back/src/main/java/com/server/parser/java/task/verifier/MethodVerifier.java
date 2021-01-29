@@ -27,9 +27,7 @@ public class MethodVerifier {
 
     public void verify(MethodModel methodModel) {
         availableMethods = new ArrayList<>(methods);
-        if (!methodModel.getModifiers().isEmpty()) {
-            verifyMethodModifiers(methodModel.getModifiers());
-        }
+        methodModel.getModifiers().ifPresent(this::verifyMethodModifiers);
         methodModel.getResult().ifPresent(this::verifyMethodResult);
         methodModel.getName().ifPresent(this::verifyMethodName);
         methodModel.getArgs().ifPresent(this::verifyMethodArgs);
@@ -50,8 +48,15 @@ public class MethodVerifier {
 
     private void verifyMethodModifiers(List<String> modifiers) {
         availableMethods = availableMethods.stream()
-                .filter(method -> method.getHeader().getModifiers().containsAll(modifiers))
+                .filter(method -> hasSameModifiers(method.getHeader().getModifiers(), modifiers))
                 .collect(Collectors.toList());
+    }
+
+    private boolean hasSameModifiers(List<String> actualModifiers, List<String> modifiers) {
+        if (modifiers.size() == 0) {
+            return actualModifiers.isEmpty();
+        }
+        return actualModifiers.containsAll(modifiers);
     }
 
     private void verifyMethodName(String name) {
