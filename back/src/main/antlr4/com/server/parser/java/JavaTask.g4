@@ -139,7 +139,7 @@ methodResultRuleSpec
     ;
 
 modifiersRuleSpec
-    : 'modifiers' ':' '{' STRING_LITERAL ( ',' STRING_LITERAL )* '}'
+    : 'modifiers' ':' ( '{' STRING_LITERAL ( ',' STRING_LITERAL )* '}' )?
     ;
 
 methodArgsRuleSpec

@@ -29,6 +29,7 @@ public class JavaTaskParserTest {
             "method with args: ",
             "method with args: {\"x\", -}",
             "method with args: {-, \"x\"}, {\"x\", \"x\"}",
+            "method with modifiers: ",
             "method with modifiers: {\"x\"}",
             "method with modifiers: {\"x\", \"x\"}",
             "method with result: \"x\""
