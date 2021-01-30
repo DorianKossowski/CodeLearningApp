@@ -1,0 +1,29 @@
+### TASK ###
+-> method
+    with modifiers:
+    with result: "void"
+    with name: "method"
+    with args:
+-> method
+    with modifiers:
+    with result: "void"
+    with name: "method"
+    with args: { "String", - }
+-> method
+    with modifiers:
+    with result: "void"
+    with name: "method"
+    with args: { "String[]", - }
+
+### INPUT ###
+public class MyFirstClass {
+
+    void method() {
+    }
+
+    void method(String s) {
+    }
+
+    void method(String[] s) {
+    }
+}

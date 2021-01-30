@@ -1,0 +1,20 @@
+### TASK ###
+-> class
+    with field
+        with modifiers: { "static" }
+        with type: "String"
+        with name: "s"
+        with value: "\"MyStatic\""
+-> statement
+    with text: "System.out.println(s)"
+    with resolved: "System.out.println(\"MyStatic\")"
+    log info: "Wywołanie metody z wykorzystaniem pola s"
+
+### INPUT ###
+public class MyFirstClass {
+    static String s = "MyStatic";
+
+    public static void main(String[] args){
+        System.out.println(s);
+    }
+}

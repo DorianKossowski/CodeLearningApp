@@ -28,6 +28,22 @@ const HomeObjectIntroduction = (props) => {
                     <LinkContainer to={'task/objectIntroduction/3'}><a className='categoryElementText'>3. Definicja konstruktorów</a></LinkContainer>
                     <div className='categoryElementUnderline'/>
                 </div>
+                <div className='categoryElement' >
+                    <LinkContainer to={'task/objectIntroduction/4'}><a className='categoryElementText'>4. Definicja metod</a></LinkContainer>
+                    <div className='categoryElementUnderline'/>
+                </div>
+                <div className='categoryElement' >
+                    <LinkContainer to={'task/objectIntroduction/5'}><a className='categoryElementText'>5. Przeciążanie metod</a></LinkContainer>
+                    <div className='categoryElementUnderline'/>
+                </div>
+                <div className='categoryElement' >
+                    <LinkContainer to={'task/objectIntroduction/6'}><a className='categoryElementText'>6. Pola klasy</a></LinkContainer>
+                    <div className='categoryElementUnderline'/>
+                </div>
+                <div className='categoryElement' >
+                    <LinkContainer to={'task/objectIntroduction/7'}><a className='categoryElementText'>7. Pola i metody statyczne</a></LinkContainer>
+                    <div className='categoryElementUnderline'/>
+                </div>
             </div>
         </Collapse>
     </div>

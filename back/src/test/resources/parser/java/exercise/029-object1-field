@@ -1,0 +1,19 @@
+### TASK ###
+-> class
+    with field
+        with modifiers: { "private" }
+        with type: "boolean"
+        with name: "b"
+-> class
+    with field
+        with modifiers: { "private" }
+        with type: "int"
+        with name: "i"
+        with value: "1"
+
+### INPUT ###
+public class MyFirstClass {
+
+    private boolean b;
+    private int i=1;
+}
