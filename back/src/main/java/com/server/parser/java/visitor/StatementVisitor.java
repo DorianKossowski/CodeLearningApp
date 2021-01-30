@@ -10,6 +10,7 @@ import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.*;
 import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.exception.BreakStatementException;
+import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
@@ -96,8 +97,11 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             String methodName = textVisitor.visit(ctx.callName());
             List<Expression> arguments;
             arguments = ctx.callArguments() == null ? Collections.emptyList() : visit(ctx.callArguments());
-            return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(), methodName,
-                    arguments);
+            if (methodName.startsWith("System.out.print") && arguments.size() != 1) {
+                throw new ResolvingException(String.format("Metoda %s musi przyjmować tylko jeden argument (wywołano z %d)",
+                        methodName, arguments.size()));
+            }
+            return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(), methodName, arguments);
         }
 
         private List<Expression> visit(JavaParser.CallArgumentsContext ctx) {

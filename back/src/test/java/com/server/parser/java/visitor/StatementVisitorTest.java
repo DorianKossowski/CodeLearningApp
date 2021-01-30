@@ -74,32 +74,42 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitMethodCallWithoutArgs() {
-        String input = "System.out.print()";
+        String input = "someMethod()";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
         MethodCall methodCall = (MethodCall) visitor.visit(c, methodContext);
 
         assertThat(methodCall.getText()).isEqualTo(input);
         assertThat(methodCall.printMethodName()).isEqualTo(METHOD_NAME);
-        assertThat(methodCall.getName()).isEqualTo("System.out.print");
+        assertThat(methodCall.getName()).isEqualTo("someMethod");
         assertThat(methodCall.getArgs()).isEmpty();
     }
 
     @Test
     void shouldGetCorrectMethodCallValue() {
         methodContext.addVariable(createStringVariable("var"));
-        String input = "System.out.print(\"literal\", var)";
+        String input = "someMethod(\"literal\", var)";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
         MethodCall methodCall = (MethodCall) visitor.visit(c, methodContext);
 
-        assertThat(methodCall.getResolved()).isEqualTo("System.out.print(\"literal\", \"value\")");
+        assertThat(methodCall.getResolved()).isEqualTo("someMethod(\"literal\", \"value\")");
     }
 
     private Variable createStringVariable(String name) {
         StringConstant stringConstant = new StringConstant("value");
         PrimitiveValue value = new PrimitiveValue(new Literal(stringConstant));
         return new Variable("String", name, value);
+    }
+
+    @Test
+    void shouldThrowWhenInvalidArgsForPrint() {
+        String input = "System.out.print()";
+        JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
+
+        assertThatThrownBy(() -> visitor.visit(c, methodContext))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Metoda System.out.print musi przyjmować tylko jeden argument (wywołano z 0)");
     }
 
     //*** VARIABLE ***//
