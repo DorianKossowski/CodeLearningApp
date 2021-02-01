@@ -46,6 +46,18 @@ public abstract class ParserAcceptanceTestBase<P extends Parser> {
             System.out.println(resultDto.getErrorMessage());
             assert false;
         }
+        if (!equalsIgnoreNewlineStyle(resultDto.getOutput(), testCaseModel.getOutput())) {
+            System.out.printf("Different output!\nExpected:\n%s\nActual:\n%s%n", testCaseModel.getOutput(), resultDto.getOutput());
+            assert false;
+        }
+    }
+
+    private static boolean equalsIgnoreNewlineStyle(String s1, String s2) {
+        return s1 != null && s2 != null && normalizeLineEnds(s1).equals(normalizeLineEnds(s2));
+    }
+
+    private static String normalizeLineEnds(String s) {
+        return s.replace("\r\n", "\n").replace('\r', '\n');
     }
 
     protected abstract String getPath();

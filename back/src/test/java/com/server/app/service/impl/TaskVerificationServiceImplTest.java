@@ -1,7 +1,9 @@
 package com.server.app.service.impl;
 
 import com.server.app.model.dto.VerificationResultDto;
+import com.server.parser.java.JavaParserAdapter;
 import com.server.parser.java.JavaTaskParser;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.task.JavaTaskListener;
 import com.server.parser.util.exception.PrintableParseException;
 import com.server.parser.util.exception.ResolvingException;
@@ -21,16 +23,20 @@ class TaskVerificationServiceImplTest {
     void shouldCreateJavaTaskListener() {
         String input = "public class C {}";
 
-        JavaTaskListener listener = verificationService.createJavaTaskListener(input);
+        JavaTaskListener listener = verificationService.createJavaTaskListener(getTask(input));
 
         assertThat(listener).isNotNull();
+    }
+
+    private Task getTask(String input) {
+        return JavaParserAdapter.getTask(input);
     }
 
     @Test
     void shouldThrowWhenBadInput() {
         String input = "public class C {\nxxx;\n}";
 
-        PrintableParseException exception = catchThrowableOfType(() -> verificationService.createJavaTaskListener(input),
+        PrintableParseException exception = catchThrowableOfType(() -> verificationService.createJavaTaskListener(getTask(input)),
                 PrintableParseException.class);
 
         assertThat(exception.getLineNumber()).isEqualTo(2);
@@ -79,8 +85,10 @@ class TaskVerificationServiceImplTest {
         when(exception.getMessage()).thenReturn("msg");
         when(exception.getLineNumber()).thenReturn(1);
 
+        Task task = mock(Task.class);
+        doReturn(task).when(verificationService).getTask(INPUT);
         doReturn(mock(JavaTaskParser.RulesEOFContext.class)).when(verificationService).createJavaTaskRulesContext(TASK);
-        doThrow(exception).when(verificationService).createJavaTaskListener(INPUT);
+        doThrow(exception).when(verificationService).createJavaTaskListener(task);
 
         // when
         VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
@@ -95,8 +103,10 @@ class TaskVerificationServiceImplTest {
         TaskVerificationServiceImpl verificationService = spy(new TaskVerificationServiceImpl());
         ResolvingException exception = new ResolvingException("ERROR");
 
+        Task task = mock(Task.class);
+        doReturn(task).when(verificationService).getTask(INPUT);
         doReturn(mock(JavaTaskParser.RulesEOFContext.class)).when(verificationService).createJavaTaskRulesContext(TASK);
-        doThrow(exception).when(verificationService).createJavaTaskListener(INPUT);
+        doThrow(exception).when(verificationService).createJavaTaskListener(task);
 
         // when
         VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
@@ -115,7 +125,9 @@ class TaskVerificationServiceImplTest {
         JavaTaskParser.RulesEOFContext context = mock(JavaTaskParser.RulesEOFContext.class);
         doReturn(context).when(verificationService).createJavaTaskRulesContext(TASK);
         JavaTaskListener listener = mock(JavaTaskListener.class);
-        doReturn(listener).when(verificationService).createJavaTaskListener(INPUT);
+        Task task = mock(Task.class);
+        doReturn(task).when(verificationService).getTask(INPUT);
+        doReturn(listener).when(verificationService).createJavaTaskListener(task);
         doThrow(exception).when(verificationService).verify(context, listener);
 
         // when
@@ -133,13 +145,15 @@ class TaskVerificationServiceImplTest {
         JavaTaskParser.RulesEOFContext context = mock(JavaTaskParser.RulesEOFContext.class);
         doReturn(context).when(verificationService).createJavaTaskRulesContext(TASK);
         JavaTaskListener listener = mock(JavaTaskListener.class);
-        doReturn(listener).when(verificationService).createJavaTaskListener(INPUT);
+        Task task = mock(Task.class);
+        doReturn(task).when(verificationService).getTask(INPUT);
+        doReturn(listener).when(verificationService).createJavaTaskListener(task);
         doNothing().when(verificationService).verify(context, listener);
 
         // when
         VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
         // then
-        assertThat(resultDto).isEqualTo(VerificationResultDto.valid());
+        assertThat(resultDto).isEqualTo(VerificationResultDto.valid(""));
     }
 }

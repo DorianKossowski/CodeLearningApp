@@ -3,6 +3,7 @@ package com.server.app.service.impl;
 import com.google.common.base.Preconditions;
 import com.server.app.model.dto.VerificationResultDto;
 import com.server.app.service.TaskVerificationService;
+import com.server.app.util.OutputPreparer;
 import com.server.parser.java.JavaParserAdapter;
 import com.server.parser.java.JavaTaskParser;
 import com.server.parser.java.ast.Task;
@@ -22,6 +23,7 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
         Preconditions.checkArgument(task != null, "task cannot be null");
         Preconditions.checkArgument(input != null, "input cannot be null");
         JavaTaskParser.RulesEOFContext rulesEOFContext;
+        Task computedTask;
         JavaTaskListener javaTaskListener;
         try {
             rulesEOFContext = createJavaTaskRulesContext(task);
@@ -29,7 +31,8 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
             return VerificationResultDto.invalidTask();
         }
         try {
-            javaTaskListener = createJavaTaskListener(input);
+            computedTask = getTask(input);
+            javaTaskListener = createJavaTaskListener(computedTask);
         } catch (PrintableParseException e) {
             return VerificationResultDto.invalidInput(e.getMessage(), e.getLineNumber());
         } catch (ResolvingException e) {
@@ -37,10 +40,14 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
         }
         try {
             verify(rulesEOFContext, javaTaskListener);
-            return VerificationResultDto.valid();
+            return VerificationResultDto.valid(OutputPreparer.prepare(computedTask));
         } catch (Exception e) {
             return VerificationResultDto.invalid(e);
         }
+    }
+
+    Task getTask(String input) {
+        return JavaParserAdapter.getTask(input);
     }
 
     void verify(JavaTaskParser.RulesEOFContext rulesEOFContext, JavaTaskListener javaTaskListener) {
@@ -52,8 +59,7 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
         return parser.rulesEOF();
     }
 
-    JavaTaskListener createJavaTaskListener(String input) {
-        Task task = JavaParserAdapter.getTask(input);
+    JavaTaskListener createJavaTaskListener(Task task) {
         return new JavaTaskListener(new TaskVerifier(task));
     }
 }
