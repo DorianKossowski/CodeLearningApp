@@ -48,3 +48,10 @@ public class MyClass {
         }
     }
 }
+
+### OUTPUT ###
+CASE 1
+CASE 1_2
+CASE 2
+DEFAULT v2
+CASE 2v2

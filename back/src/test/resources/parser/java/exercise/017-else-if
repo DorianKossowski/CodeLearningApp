@@ -26,3 +26,6 @@ public class MyClass {
         }
     }
 }
+
+### OUTPUT ###
+a jest równe 0

@@ -13,3 +13,5 @@ public class Hello {
         s = "przypisanie";
     }
 }
+
+### OUTPUT ###

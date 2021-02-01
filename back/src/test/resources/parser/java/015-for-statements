@@ -17,3 +17,7 @@ public class MyClass {
         }
     }
 }
+
+### OUTPUT ###
+0
+2

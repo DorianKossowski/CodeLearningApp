@@ -17,3 +17,5 @@ public class MyFirstClass {
     private boolean b;
     private int i=1;
 }
+
+### OUTPUT ###

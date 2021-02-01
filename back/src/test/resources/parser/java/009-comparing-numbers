@@ -1,13 +1,13 @@
 ### TASK ###
 -> statement
-    with text: "System.out.print(b - b2 < 0.0001)"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(b - b2 < 0.0001)"
+    with resolved: "System.out.println(true)"
 -> statement
-    with text: "System.out.print(a != b)"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(a != b)"
+    with resolved: "System.out.println(true)"
 -> statement
-    with text: "System.out.print(a2 - 'a' == 0)"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(a2 - 'a' == 0)"
+    with resolved: "System.out.println(true)"
 
 ### INPUT ###
 public class MyClass {
@@ -16,10 +16,15 @@ public class MyClass {
         Double b = 2.5;
         Double b2 = b;
 
-        System.out.print(b - b2 < 0.0001);
-        System.out.print(a != b);
+        System.out.println(b - b2 < 0.0001);
+        System.out.println(a != b);
         a = 97;
         Integer a2 = a;
-        System.out.print(a2 - 'a' == 0);
+        System.out.println(a2 - 'a' == 0);
     }
 }
+
+### OUTPUT ###
+true
+true
+true

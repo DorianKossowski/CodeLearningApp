@@ -6,3 +6,5 @@ public class Hello {
         System.out.print(obj);
     }
 }
+
+### OUTPUT ###

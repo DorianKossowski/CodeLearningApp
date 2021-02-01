@@ -16,3 +16,6 @@ public class Hello {
         System.out.println(s);
     }
 }
+
+### OUTPUT ###
+mój "ŁAŃCUCH" znaków

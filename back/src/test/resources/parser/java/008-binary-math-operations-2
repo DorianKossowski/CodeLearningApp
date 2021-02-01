@@ -1,33 +1,41 @@
 ### TASK ###
 -> statement
-    with text: "System.out.print(-(-a)+b)"
-    with resolved: "System.out.print(4.5)"
+    with text: "System.out.println(-(-a)+b)"
+    with resolved: "System.out.println(4.5)"
 -> statement
-    with text: "System.out.print(-(a+b))"
-    with resolved: "System.out.print(-4.5)"
+    with text: "System.out.println(-(a+b))"
+    with resolved: "System.out.println(-4.5)"
 -> statement
-    with text: "System.out.print(a*b)"
-    with resolved: "System.out.print(5.0)"
+    with text: "System.out.println(a*b)"
+    with resolved: "System.out.println(5.0)"
 -> statement
-    with text: "System.out.print(b/a)"
-    with resolved: "System.out.print(1.25)"
+    with text: "System.out.println(b/a)"
+    with resolved: "System.out.println(1.25)"
 -> statement
-    with text: "System.out.print(a + b/b)"
-    with resolved: "System.out.print(3.0)"
+    with text: "System.out.println(a + b/b)"
+    with resolved: "System.out.println(3.0)"
 -> statement
-    with text: "System.out.print((a + b)/a * 2)"
-    with resolved: "System.out.print(4.5)"
+    with text: "System.out.println((a + b)/a * 2)"
+    with resolved: "System.out.println(4.5)"
 
 ### INPUT ###
 public class MyClass {
     public static void main(String[] args){
         int a = 2;
         Double b = 2.5;
-        System.out.print(-(-a)+b);
-        System.out.print(-(a+b));
-        System.out.print(a*b);
-        System.out.print(b/a);
-        System.out.print(a + b/b);
-        System.out.print((a + b)/a * 2);
+        System.out.println(-(-a)+b);
+        System.out.println(-(a+b));
+        System.out.println(a*b);
+        System.out.println(b/a);
+        System.out.println(a + b/b);
+        System.out.println((a + b)/a * 2);
     }
 }
+
+### OUTPUT ###
+4.5
+-4.5
+5.0
+1.25
+3.0
+4.5

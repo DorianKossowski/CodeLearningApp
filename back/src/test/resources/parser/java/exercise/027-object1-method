@@ -19,3 +19,5 @@ public class MyFirstClass {
     void methodB(String s) {
     }
 }
+
+### OUTPUT ###

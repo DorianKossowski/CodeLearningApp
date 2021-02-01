@@ -39,3 +39,5 @@ public class MyClass {
         boolean b3 = a%2 != 0;  // true
     }
 }
+
+### OUTPUT ###

@@ -1,37 +1,46 @@
 ### TASK ###
 -> statement
-    with text: "System.out.print(a)"
-    with resolved: "System.out.print(2)"
+    with text: "System.out.println(a)"
+    with resolved: "System.out.println(2)"
 -> statement
-    with text: "System.out.print(-a)"
-    with resolved: "System.out.print(-2)"
+    with text: "System.out.println(-a)"
+    with resolved: "System.out.println(-2)"
 -> statement
-    with text: "System.out.print((a))"
-    with resolved: "System.out.print(2)"
+    with text: "System.out.println((a))"
+    with resolved: "System.out.println(2)"
 -> statement
-    with text: "System.out.print((-a))"
-    with resolved: "System.out.print(-2)"
+    with text: "System.out.println((-a))"
+    with resolved: "System.out.println(-2)"
 -> statement
-    with text: "System.out.print(-(a))"
-    with resolved: "System.out.print(-2)"
+    with text: "System.out.println(-(a))"
+    with resolved: "System.out.println(-2)"
 -> statement
-    with text: "System.out.print(b)"
-    with resolved: "System.out.print(-2.5)"
+    with text: "System.out.println(b)"
+    with resolved: "System.out.println(-2.5)"
 -> statement
-    with text: "System.out.print(-b)"
-    with resolved: "System.out.print(2.5)"
+    with text: "System.out.println(-b)"
+    with resolved: "System.out.println(2.5)"
 
 ### INPUT ###
 public class MyClass {
     public static void main(String[] args){
         int a = 2;
         Double b = -2.5;
-        System.out.print(a);
-        System.out.print(-a);
-        System.out.print((a));
-        System.out.print((-a));
-        System.out.print(-(a));
-        System.out.print(b);
-        System.out.print(-b);
+        System.out.println(a);
+        System.out.println(-a);
+        System.out.println((a));
+        System.out.println((-a));
+        System.out.println(-(a));
+        System.out.println(b);
+        System.out.println(-b);
     }
 }
+
+### OUTPUT ###
+2
+-2
+2
+-2
+-2
+-2.5
+2.5
