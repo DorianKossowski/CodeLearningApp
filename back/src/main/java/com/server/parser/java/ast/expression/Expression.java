@@ -21,6 +21,8 @@ public abstract class Expression extends AstElement {
 
     public abstract String getResolvedText();
 
+    public abstract String getOutput();
+
     public abstract Value getValue();
 
     //TODO make Literal class method

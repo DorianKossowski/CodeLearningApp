@@ -31,6 +31,11 @@ public class ObjectRef extends Expression {
     }
 
     @Override
+    public String getOutput() {
+        return expression.getOutput();
+    }
+
+    @Override
     public Constant<?> getConstant() {
         return expression.getConstant();
     }

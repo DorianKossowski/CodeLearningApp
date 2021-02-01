@@ -22,6 +22,11 @@ public class UninitializedExpression extends Expression {
     }
 
     @Override
+    public String getOutput() {
+        throw new ResolvingUninitializedException(getText());
+    }
+
+    @Override
     public Value getValue() {
         return new UninitializedValue(this);
     }
