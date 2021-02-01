@@ -1,5 +1,7 @@
-package com.server.parser.java.ast;
+package com.server.app.util;
 
+import com.server.parser.java.ast.ClassAst;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.MethodCall;
 import com.server.parser.java.ast.statement.Statement;
@@ -10,42 +12,45 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-class TaskTest {
+class OutputPreparerTest {
 
     @Test
-    void shouldGetOutput() {
+    void shouldPrepareOutput() {
         // given
         MethodCall call1 = mock(MethodCall.class);
+        doCallRealMethod().when(call1).getExpressionStatements();
         when(call1.getName()).thenReturn("System.out.println");
-        Expression text1 = mockExpressionWithResolvedText("TEXT");
+        Expression text1 = mockExpressionWithOutput("TEXT");
         when(call1.getArgs()).thenReturn(Collections.singletonList(text1));
 
         MethodCall call2 = mock(MethodCall.class);
+        doCallRealMethod().when(call2).getExpressionStatements();
         when(call2.getName()).thenReturn("System.out.print");
-        Expression text2 = mockExpressionWithResolvedText("SOME ");
+        Expression text2 = mockExpressionWithOutput("SOME ");
         when(call2.getArgs()).thenReturn(Collections.singletonList(text2));
 
         MethodCall call3 = mock(MethodCall.class);
+        doCallRealMethod().when(call3).getExpressionStatements();
         when(call3.getName()).thenReturn("someMethod");
 
         MethodCall call4 = mock(MethodCall.class);
+        doCallRealMethod().when(call4).getExpressionStatements();
         when(call4.getName()).thenReturn("System.out.println");
-        Expression text4 = mockExpressionWithResolvedText("TEXT2");
+        Expression text4 = mockExpressionWithOutput("TEXT2");
         when(call4.getArgs()).thenReturn(Collections.singletonList(text4));
 
         List<Statement> stmts = Arrays.asList(call1, call2, call3, call4);
         Task task = new Task(mock(ClassAst.class), stmts);
 
         // then
-        assertThat(task.getOutput()).isEqualTo("TEXT\nSOME TEXT2\n");
+        assertThat(OutputPreparer.prepare(task)).isEqualTo("TEXT\nSOME TEXT2\n");
     }
 
-    private Expression mockExpressionWithResolvedText(String text) {
+    private Expression mockExpressionWithOutput(String text) {
         Expression expression = mock(Expression.class);
-        when(expression.getResolvedText()).thenReturn(text);
+        when(expression.getOutput()).thenReturn(text);
         return expression;
     }
 }
