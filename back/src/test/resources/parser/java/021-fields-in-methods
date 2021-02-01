@@ -34,6 +34,7 @@ public class MyClass {
         System.out.println(i+1);
         int i = 100;
         System.out.println(i-1);
+        System.out.println("should be new line\n");
         System.out.println(s);
     }
 }
@@ -44,4 +45,6 @@ public class MyClass {
 0
 11
 99
+should be new line
+
 null

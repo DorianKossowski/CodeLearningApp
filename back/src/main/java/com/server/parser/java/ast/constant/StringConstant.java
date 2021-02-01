@@ -18,7 +18,7 @@ public class StringConstant extends Constant<String> {
 
     @Override
     public String getRawValue() {
-        return c.replaceAll("\\\\\"", "\"");
+        return c.replaceAll("\\\\\"", "\"").replaceAll("\\\\n", System.lineSeparator());
     }
 
     @Override

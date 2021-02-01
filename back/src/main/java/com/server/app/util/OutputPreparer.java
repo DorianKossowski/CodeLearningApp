@@ -22,7 +22,7 @@ public class OutputPreparer {
         for (MethodCall call : methodCalls) {
             sb.append(prepareText(call));
             if (call.getName().equals("System.out.println")) {
-                sb.append("\n");
+                sb.append(System.lineSeparator());
             }
         }
         return sb.toString();

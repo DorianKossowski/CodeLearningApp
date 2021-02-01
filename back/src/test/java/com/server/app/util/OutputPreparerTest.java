@@ -45,7 +45,8 @@ class OutputPreparerTest {
         Task task = new Task(mock(ClassAst.class), stmts);
 
         // then
-        assertThat(OutputPreparer.prepare(task)).isEqualTo("TEXT\nSOME TEXT2\n");
+        assertThat(OutputPreparer.prepare(task)).isEqualTo(String.format("TEXT%sSOME TEXT2%s", System.lineSeparator(),
+                System.lineSeparator()));
     }
 
     private Expression mockExpressionWithOutput(String text) {
