@@ -41,8 +41,8 @@ class MethodVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldHasSameMethodArgs() {
-        List<VariableDef> actualArgs = Arrays.asList(new VariableDef("", "int", "name1", NullExpression.INSTANCE),
-                new VariableDef("", "String", "name2", NullExpression.INSTANCE));
+        List<VariableDef> actualArgs = Arrays.asList(new VariableDef("", "int", "name1", NullExpression.INSTANCE,
+                false), new VariableDef("", "String", "name2", NullExpression.INSTANCE, false));
         List<MethodArgs> expectedArgs = Arrays.asList(new MethodArgs(null, "name1"), new MethodArgs("String", "name2"));
 
         assertThat(MethodVerifier.hasSameMethodArgs(actualArgs, expectedArgs)).isTrue();

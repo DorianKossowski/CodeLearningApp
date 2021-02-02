@@ -39,4 +39,9 @@ public class NullValue extends Value {
     public boolean or(Value v2) {
         throw new ResolvingNullPointerException();
     }
+
+    @Override
+    public String toString() {
+        return "null";
+    }
 }

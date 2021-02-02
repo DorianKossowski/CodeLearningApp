@@ -11,13 +11,15 @@ public class VariableDef extends ExpressionStatement {
     private final String name;
     private final Expression expression;
     private final Value value;
+    private final boolean explicitInitialization;
 
-    public VariableDef(String text, String type, String name, Expression expression) {
+    public VariableDef(String text, String type, String name, Expression expression, boolean explicitInitialization) {
         super(text);
         this.type = Objects.requireNonNull(type, "type cannot be null");
         this.name = Objects.requireNonNull(name, "name cannot be null");
         this.expression = Objects.requireNonNull(expression, "expression cannot be null");
         this.value = ValuePreparer.prepare(type, expression);
+        this.explicitInitialization = explicitInitialization;
     }
 
     public String getType() {
@@ -38,6 +40,10 @@ public class VariableDef extends ExpressionStatement {
 
     @Override
     public String getResolved() {
-        return String.format("%s %s = %s", type, name, value);
+        StringBuilder text = new StringBuilder().append(String.format("%s %s", type, name));
+        if (explicitInitialization) {
+            text.append(" = ").append(value);
+        }
+        return text.toString();
     }
 }

@@ -28,4 +28,9 @@ public class UninitializedValue extends Value {
     public boolean or(Value v2) {
         throw new ResolvingUninitializedException(expression.getText());
     }
+
+    @Override
+    public String toString() {
+        throw new ResolvingUninitializedException(expression.getText());
+    }
 }
