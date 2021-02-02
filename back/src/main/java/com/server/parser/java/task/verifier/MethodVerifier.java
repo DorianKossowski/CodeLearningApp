@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MethodVerifier {
+public class MethodVerifier extends CommonVerifier {
     private final List<Method> methods;
     private List<Method> availableMethods;
 
@@ -50,13 +50,6 @@ public class MethodVerifier {
         availableMethods = availableMethods.stream()
                 .filter(method -> hasSameModifiers(method.getHeader().getModifiers(), modifiers))
                 .collect(Collectors.toList());
-    }
-
-    private boolean hasSameModifiers(List<String> actualModifiers, List<String> modifiers) {
-        if (modifiers.size() == 0) {
-            return actualModifiers.isEmpty();
-        }
-        return actualModifiers.containsAll(modifiers);
     }
 
     private void verifyMethodName(String name) {

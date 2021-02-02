@@ -8,7 +8,7 @@ import com.server.parser.java.task.model.ClassModel;
 import java.util.List;
 import java.util.Objects;
 
-public class ClassVerifier {
+public class ClassVerifier extends CommonVerifier {
     private final ClassHeader classHeader;
 
     public ClassVerifier(Task task) {
@@ -20,17 +20,9 @@ public class ClassVerifier {
         classModel.getName().ifPresent(this::verifyMethodName);
     }
 
-    // TODO make verifying modifiers common for all verifiers classes
     private void verifyClassModifiers(List<String> modifiers) {
         List<String> actualModifiers = classHeader.getModifiers();
         Verify.verify(hasSameModifiers(actualModifiers, modifiers), "Oczekiwana klasa nie istnieje");
-    }
-
-    private boolean hasSameModifiers(List<String> actualModifiers, List<String> modifiers) {
-        if (modifiers.size() == 0) {
-            return actualModifiers.isEmpty();
-        }
-        return actualModifiers.containsAll(modifiers);
     }
 
     private void verifyMethodName(String expectedName) {
