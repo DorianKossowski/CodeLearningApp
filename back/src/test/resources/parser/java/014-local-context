@@ -1,5 +1,11 @@
 ### TASK ###
 -> statement
+    with text: "Integer i0 = null"
+    with resolved: "Integer i0 = null"
+-> statement
+    with text: "int i"
+    with resolved: "int i"
+-> statement
     with text: "System.out.println(i)"
     with resolved: "System.out.println(2)"
 -> statement
@@ -12,10 +18,12 @@
 ### INPUT ###
 public class MyClass {
     public int main(){
+        Integer i0 = null;
         {
             int i = 0;
         }
-        int i = 0;
+        int i;
+        i = 0;
         {
             i = 1;
             {

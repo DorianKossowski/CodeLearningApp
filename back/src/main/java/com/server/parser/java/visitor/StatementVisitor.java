@@ -125,7 +125,8 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         public Statement visitSingleMethodArg(JavaParser.SingleMethodArgContext ctx) {
             String type = textVisitor.visit(ctx.type());
             String id = textVisitor.visit(ctx.identifier());
-            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id, EmptyExpressionPreparer.prepare(type));
+            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id,
+                    EmptyExpressionPreparer.prepare(type), false);
         }
 
         @Override
@@ -140,7 +141,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
                         ? EmptyExpressionPreparer.prepare(type)
                         : EmptyExpressionPreparer.prepareUninitialized(id);
             }
-            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id, expression);
+            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id, expression, ctx.expression() != null);
         }
 
         //*** ASSIGNMENT ***//
