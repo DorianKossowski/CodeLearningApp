@@ -10,34 +10,26 @@ const HomeConditionals = (props) => {
     return (
     <div className='category'>
         <div className='categoryTitleArea'>
-            <p className='categoryTitle' onClick={() => setOpen(!open)}>Instrukcje warunkowe</p>
+            <p className='categoryTitle' onClick={() => setOpen(!open)}>Pętle</p>
             <DynamiCaretTag className='titleCaret' onClick={() => setOpen(!open)} aria-controls='elements' aria-expanded={open} />
         </div>
         <div className='categoryTitleUnderline'/>
         <Collapse in={open}>
             <div id='elements'>
                 <div className='categoryElement' >
-                    <LinkContainer to={'task/cond/1'}><a className='categoryElementText'>1. Instrukcje warunkowe - wprowadzenie</a></LinkContainer>
+                    <LinkContainer to={'task/loop/1'}><a className='categoryElementText'>1. Pętle - wprowadzenie</a></LinkContainer>
                     <div className='categoryElementUnderline'/>
                 </div>
                 <div className='categoryElement' >
-                    <LinkContainer to={'task/cond/2'}><a className='categoryElementText'>2. Instrukcja if</a></LinkContainer>
+                    <LinkContainer to={'task/loop/2'}><a className='categoryElementText'>2. Pętla for</a></LinkContainer>
                     <div className='categoryElementUnderline'/>
                 </div>
                 <div className='categoryElement' >
-                    <LinkContainer to={'task/cond/3'}><a className='categoryElementText'>3. Instrukcja if - else</a></LinkContainer>
+                    <LinkContainer to={'task/loop/3'}><a className='categoryElementText'>3. Pętla while</a></LinkContainer>
                     <div className='categoryElementUnderline'/>
                 </div>
                 <div className='categoryElement' >
-                    <LinkContainer to={'task/cond/4'}><a className='categoryElementText'>4. Instrukcja if - else if</a></LinkContainer>
-                    <div className='categoryElementUnderline'/>
-                </div>
-                <div className='categoryElement' >
-                    <LinkContainer to={'task/cond/5'}><a className='categoryElementText'>5. Instrukcja switch</a></LinkContainer>
-                    <div className='categoryElementUnderline'/>
-                </div>
-                <div className='categoryElement' >
-                    <LinkContainer to={'task/cond/6'}><a className='categoryElementText'>6. Instrukcja switch - default</a></LinkContainer>
+                    <LinkContainer to={'task/loop/4'}><a className='categoryElementText'>4. Pętla do while</a></LinkContainer>
                     <div className='categoryElementUnderline'/>
                 </div>
             </div>

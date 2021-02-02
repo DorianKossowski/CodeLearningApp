@@ -4,13 +4,11 @@ import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.statement.*;
-import com.server.parser.java.ast.value.NullValue;
-import com.server.parser.java.ast.value.PrimitiveValue;
-import com.server.parser.java.ast.value.UninitializedValue;
-import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.ast.value.*;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.BreakStatementException;
@@ -311,5 +309,39 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThat(forStatement.getExpressionStatements()).extracting(ExpressionStatement::getResolved,
                 statement -> statement.getProperty(StatementProperties.FOR_ITERATION))
                 .containsExactly(tuple("System.out.print(1)", "0"), tuple("System.out.print(2)", "1"));
+    }
+
+    //*** WHILE ***//
+    @Test
+    void shouldVisitWhile() {
+        String input = "while(i<2) { System.out.print(i+1); i = i+1; }";
+        JavaParser.WhileStatementContext c = HELPER.shouldParseToEof(input, JavaParser::whileStatement);
+
+        MethodContext realMethodContext = createRealMethodContext();
+        realMethodContext.addVariable(new Variable("int", "i", new PrimitiveComputableValue(new Literal(new IntConstant(0)))));
+        WhileStatement whileStatement = (WhileStatement) visitor.visit(c, realMethodContext);
+
+        assertThat(whileStatement.getText()).isEqualTo("WHILE Statement");
+        assertThat(whileStatement.getExpressionStatements()).extracting(ExpressionStatement::getResolved,
+                statement -> statement.getProperty(StatementProperties.WHILE_ITERATION))
+                .containsExactly(tuple("System.out.print(1)", "0"), tuple("i=1", "0"),
+                        tuple("System.out.print(2)", "1"), tuple("i=2", "1"));
+    }
+
+    //*** DO WHILE ***//
+    @Test
+    void shouldVisitDoWhile() {
+        String input = "do { System.out.print(i+1); i = i+1; } while(i<2);";
+        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof(input, JavaParser::doWhileStatement);
+
+        MethodContext realMethodContext = createRealMethodContext();
+        realMethodContext.addVariable(new Variable("int", "i", new PrimitiveComputableValue(new Literal(new IntConstant(0)))));
+        DoWhileStatement doWhileStatement = (DoWhileStatement) visitor.visit(c, realMethodContext);
+
+        assertThat(doWhileStatement.getText()).isEqualTo("DO WHILE Statement");
+        assertThat(doWhileStatement.getExpressionStatements()).extracting(ExpressionStatement::getResolved,
+                statement -> statement.getProperty(StatementProperties.DO_WHILE_ITERATION))
+                .containsExactly(tuple("System.out.print(1)", "0"), tuple("i=1", "0"),
+                        tuple("System.out.print(2)", "1"), tuple("i=2", "1"));
     }
 }

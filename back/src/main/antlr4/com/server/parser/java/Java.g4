@@ -71,7 +71,17 @@ statement
     | ifElseStatement
     | switchStatement
     | forStatement
+    | whileStatement
+    | doWhileStatement
     | emptyStatement
+    ;
+
+doWhileStatement
+    : DO statement WHILE '(' expression ')' SEMICOLON
+    ;
+
+whileStatement
+    : WHILE '(' expression ')' statement
     ;
 
 forStatement
@@ -244,6 +254,7 @@ identifier
 BREAK       : 'break' ;
 CASE        : 'case' ;
 DEFAULT     : 'default' ;
+DO          : 'do' ;
 ELSE        : 'else' ;
 FOR         : 'for' ;
 IF          : 'if' ;
@@ -252,6 +263,7 @@ NULL        : 'null' ;
 RPAREN      : ')' ;
 SEMICOLON   : ';' ;
 SWITCH      : 'switch' ;
+WHILE       : 'while' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
 CHAR_LITERAL : '\'' . '\'' ;
@@ -263,7 +275,7 @@ TRUE: 'true';
 
 IDENTIFIER : (AZ | '_' | '$')  (AZ | DIGIT | '_' | '$')* ;
 
-WHITESPACE : (NEW_LINE | ' ' | '\t') -> channel(HIDDEN) ;
+WHITESPACE : (NEW_LINE | ' ' | '\t' | '\u200B' | 'u000C') -> channel(HIDDEN) ;
 COMMENT : '/*' .*? '*/' -> channel(HIDDEN) ;
 LINE_COMMENT : '//' ~[\r\n]* -> channel(HIDDEN) ;
 

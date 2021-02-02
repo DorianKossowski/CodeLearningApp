@@ -5,64 +5,58 @@ import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.ast.statement.MethodCall;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.context.ClassContext;
-import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
 
-class ForStmtResolverTest {
+class DoWhileStmtResolverTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private JavaContext javaContext;
+    @Test
+    void shouldMakeAtLeastOneIteration() {
+        MethodContext methodContext = createMethodContext();
+        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { fun(); } while(false);",
+                JavaParser::doWhileStatement);
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
+        List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
+        Statement statement = Iterables.getOnlyElement(statements);
+        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isExactlyInstanceOf(MethodCall.class);
     }
 
-    @Test
-    void shouldIterateWhenLackOfCondition() {
-        JavaParser.ForStatementContext forContext = mock(JavaParser.ForStatementContext.class);
-
-        assertThat(ForStmtResolver.shouldIterate(javaContext, forContext)).isTrue();
+    private MethodContext createMethodContext() {
+        ClassContext context = new ClassContext();
+        MethodContext methodContext = context.createEmptyMethodContext();
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        return methodContext;
     }
 
     @Test
     void shouldBreakIn() {
-        ClassContext context = new ClassContext();
-        MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
-        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) { break; fun(); }",
-                JavaParser::forStatement);
+        MethodContext methodContext = createMethodContext();
+        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { break; fun(); } while(true);",
+                JavaParser::doWhileStatement);
 
-        List<Statement> statements = ForStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
+        List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
         Statement statement = Iterables.getOnlyElement(statements);
         assertThat(statement.getExpressionStatements()).isEmpty();
     }
 
     @Test
     void shouldThrowWhenInfinityLoop() {
-        ClassContext context = new ClassContext();
-        MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
-        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(int i=0; i<1001; i=i+1);",
-                JavaParser::forStatement);
+        MethodContext methodContext = createMethodContext();
+        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do {} while(true);",
+                JavaParser::doWhileStatement);
 
-        assertThatThrownBy(() -> ForStmtResolver.resolve(methodContext, c))
+        assertThatThrownBy(() -> DoWhileStmtResolver.resolve(methodContext, c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Ogranicz liczbę iteracji! Maksymalna dostępna liczba " +
                         "iteracji w pętli to 1000");

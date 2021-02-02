@@ -4,13 +4,13 @@ import {LinkContainer} from 'react-router-bootstrap';
 import {FaCaretDown, FaCaretUp} from 'react-icons/fa';
 
 const HomeVarsAndTypes = (props) => {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const DynamiCaretTag = open ? FaCaretUp : FaCaretDown;
     return (
     <div className='category'>
         <div className='categoryTitleArea'>
-            <p className='categoryTitle'>Zmienne oraz ich typy</p>
+            <p className='categoryTitle' onClick={() => setOpen(!open)}>Zmienne oraz ich typy</p>
             <DynamiCaretTag className='titleCaret' onClick={() => setOpen(!open)} aria-controls='elements' aria-expanded={open} />
         </div>
         <div className='categoryTitleUnderline'/>

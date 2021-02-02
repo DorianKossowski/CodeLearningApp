@@ -79,7 +79,11 @@ class JavaTaskListenerTest {
                 Arguments.of("Statement with switch label", "statement with switch label: \"t\"",
                         StatementModel.builder().withSwitchLabel("t").build()),
                 Arguments.of("Statement with for iteration", "statement with for iteration: \"1\"",
-                        StatementModel.builder().withForIteration(1).build())
+                        StatementModel.builder().withForIteration(1).build()),
+                Arguments.of("Statement with while iteration", "statement with while iteration: \"1\"",
+                        StatementModel.builder().withWhileIteration(1).build()),
+                Arguments.of("Statement with do while iteration", "statement with do while iteration: \"1\"",
+                        StatementModel.builder().withDoWhileIteration(1).build())
         );
     }
 

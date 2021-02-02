@@ -4,13 +4,13 @@ import {LinkContainer} from 'react-router-bootstrap';
 import {FaCaretDown, FaCaretUp} from 'react-icons/fa';
 
 const HomeCompAndLogic = (props) => {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const DynamiCaretTag = open ? FaCaretUp : FaCaretDown;
     return (
     <div className='category'>
         <div className='categoryTitleArea'>
-            <p className='categoryTitle'>Porównania i operatory logiczne</p>
+            <p className='categoryTitle' onClick={() => setOpen(!open)}>Porównania i operatory logiczne</p>
             <DynamiCaretTag className='titleCaret' onClick={() => setOpen(!open)} aria-controls='elements' aria-expanded={open} />
         </div>
         <div className='categoryTitleUnderline'/>

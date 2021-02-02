@@ -17,7 +17,7 @@ import org.apache.commons.lang.SerializationUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SwitchStmtResolver {
+public class SwitchStmtResolver extends StatementResolver {
     private static final String EXCEPTION_PREFIX = "W instrukcji switch: ";
     private static final String EXCEPTION_SUFFIX = " nie jest jednego z typów: char, byte, short, int, Character, " +
             "Byte, Short, Integer, String";

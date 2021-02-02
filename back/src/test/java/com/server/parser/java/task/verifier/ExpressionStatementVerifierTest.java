@@ -134,4 +134,24 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
 
         verifier.verify(StatementModel.builder().withForIteration(1).build());
     }
+
+    @Test
+    void shouldVerifyWhileIteration() {
+        ExpressionStatement statement = mock(ExpressionStatement.class);
+        when(statement.getProperty(StatementProperties.WHILE_ITERATION)).thenReturn("1");
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+
+        verifier.verify(StatementModel.builder().withWhileIteration(1).build());
+    }
+
+    @Test
+    void shouldVerifyDoWhileIteration() {
+        ExpressionStatement statement = mock(ExpressionStatement.class);
+        when(statement.getProperty(StatementProperties.DO_WHILE_ITERATION)).thenReturn("1");
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+
+        verifier.verify(StatementModel.builder().withDoWhileIteration(1).build());
+    }
 }

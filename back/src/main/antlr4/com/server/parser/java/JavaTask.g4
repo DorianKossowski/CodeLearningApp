@@ -27,9 +27,18 @@ statementRule
 
 statementRuleSpec
     : statementMethodRuleSpec
-    | WITH ( textRuleSpec | statementResolvedRuleSpec | ifSpec | elseIfSpec | switchExpr | switchLabel | forIteration )
+    | WITH ( textRuleSpec | statementResolvedRuleSpec | ifSpec | elseIfSpec | switchExpr | switchLabel | forIteration
+       | whileIteration | doWhileIteration)
     | elseSpec
     | logInfo
+    ;
+
+doWhileIteration
+    : 'do' 'while' 'iteration' ':' STRING_LITERAL
+    ;
+
+whileIteration
+    : 'while' 'iteration' ':' STRING_LITERAL
     ;
 
 forIteration
