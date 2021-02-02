@@ -38,14 +38,10 @@ public abstract class ParserAcceptanceTestBase<P extends Parser> {
         AcceptanceTestCaseModel testCaseModel = AcceptanceTestCaseFetcher.fetchModel(testCase);
         VerificationResultDto resultDto = VERIFICATION_SERVICE.verify(testCaseModel.getTask(), testCaseModel.getInput());
         if (resultDto.getException() != null) {
-            System.out.println(resultDto.getErrorMessage());
             resultDto.getException().printStackTrace();
             assert false;
         }
-        if (resultDto.getErrorMessage() != null) {
-            System.out.println(resultDto.getErrorMessage());
-            assert false;
-        }
+        assert resultDto.getErrorMessage() == null;
         if (!equalsIgnoreNewlineStyle(resultDto.getOutput(), testCaseModel.getOutput())) {
             System.out.printf("Different output!\nExpected:\n%s\nActual:\n%s%n", testCaseModel.getOutput(), resultDto.getOutput());
             assert false;

@@ -13,10 +13,13 @@ import com.server.parser.java.task.verifier.TaskVerifier;
 import com.server.parser.util.exception.PrintableParseException;
 import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TaskVerificationServiceImpl implements TaskVerificationService {
+    private static final Logger logger = LoggerFactory.getLogger(TaskVerificationServiceImpl.class);
 
     @Override
     public VerificationResultDto verify(String task, String input) {
@@ -28,20 +31,25 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
         try {
             rulesEOFContext = createJavaTaskRulesContext(task);
         } catch (PrintableParseException e) {
+            logger.error("Invalid task:\n" + e.getMessage());
             return VerificationResultDto.invalidTask();
         }
         try {
             computedTask = getTask(input);
             javaTaskListener = createJavaTaskListener(computedTask);
         } catch (PrintableParseException e) {
+            logger.error("Invalid input:\n" + e.getMessage());
             return VerificationResultDto.invalidInput(e.getMessage(), e.getLineNumber());
         } catch (ResolvingException e) {
+            logger.error("Resolving error during verification:\n" + e.getMessage());
             return VerificationResultDto.invalid(e);
         }
         try {
             verify(rulesEOFContext, javaTaskListener);
+            logger.info("Verification completed successfully");
             return VerificationResultDto.valid(OutputPreparer.prepare(computedTask));
         } catch (Exception e) {
+            logger.error("Error during verification:\n" + e.getMessage());
             return VerificationResultDto.invalid(e);
         }
     }
