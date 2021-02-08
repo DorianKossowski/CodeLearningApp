@@ -97,11 +97,15 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             String methodName = textVisitor.visit(ctx.callName());
             List<Expression> arguments;
             arguments = ctx.callArguments() == null ? Collections.emptyList() : visit(ctx.callArguments());
-            if (methodName.startsWith("System.out.print") && arguments.size() != 1) {
-                throw new ResolvingException(String.format("Metoda %s musi przyjmować tylko jeden argument (wywołano z %d)",
-                        methodName, arguments.size()));
-            }
+            checkSpecialCallPrintMethod(methodName, arguments.size());
             return new Call(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(), methodName, arguments);
+        }
+
+        private void checkSpecialCallPrintMethod(String methodName, int argumentsSize) {
+            if (methodName.startsWith("System.out.print") && argumentsSize != 1) {
+                throw new ResolvingException(String.format("Metoda %s musi przyjmować tylko jeden argument (wywołano z %d)",
+                        methodName, argumentsSize));
+            }
         }
 
         private List<Expression> visit(JavaParser.CallArgumentsContext ctx) {
