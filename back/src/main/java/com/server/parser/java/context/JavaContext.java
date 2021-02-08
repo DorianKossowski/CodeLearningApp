@@ -4,7 +4,7 @@ import com.server.parser.java.JavaVisitorsRegistry;
 import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.call.CallExecutor;
+import com.server.parser.java.call.CallHandler;
 import com.server.parser.java.visitor.JavaVisitor;
 
 import java.io.Serializable;
@@ -40,5 +40,5 @@ public interface JavaContext extends Serializable {
         throw new UnsupportedOperationException();
     }
 
-    CallExecutor getCallExecutor();
+    CallHandler getCallHandler();
 }

@@ -5,7 +5,7 @@ import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.value.Value;
-import com.server.parser.java.call.CallExecutor;
+import com.server.parser.java.call.CallHandler;
 import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -27,13 +27,13 @@ public class MethodContext implements JavaContext {
 
     @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(classContext.getCallExecutor(), nameToField, nameToVariable, getMethodName(),
+        return new LocalContext(classContext.getCallHandler(), nameToField, nameToVariable, getMethodName(),
                 methodHeader.isStatic());
     }
 
     public void save(MethodHeader methodHeader) {
         this.methodHeader = Objects.requireNonNull(methodHeader, "methodHeader cannot be null");
-        classContext.getCallExecutor().getCallableKeeper().keepCallable(this, methodHeader);
+        classContext.getCallHandler().getCallableKeeper().keepCallable(this, methodHeader);
     }
 
     public String getClassName() {
@@ -81,7 +81,7 @@ public class MethodContext implements JavaContext {
     }
 
     @Override
-    public CallExecutor getCallExecutor() {
-        return classContext.getCallExecutor();
+    public CallHandler getCallHandler() {
+        return classContext.getCallHandler();
     }
 }

@@ -1,14 +1,14 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.Variable;
-import com.server.parser.java.call.CallExecutor;
+import com.server.parser.java.call.CallHandler;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ClassContext implements JavaContext {
-    private final CallExecutor callExecutor = new CallExecutor();
+    private final CallHandler callHandler = new CallHandler();
     private final Map<String, Variable> nameToField = new HashMap<>();
     private String name;
 
@@ -38,7 +38,7 @@ public class ClassContext implements JavaContext {
     }
 
     @Override
-    public CallExecutor getCallExecutor() {
-        return callExecutor;
+    public CallHandler getCallHandler() {
+        return callHandler;
     }
 }

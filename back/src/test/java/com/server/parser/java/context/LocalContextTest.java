@@ -2,7 +2,7 @@ package com.server.parser.java.context;
 
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.value.Value;
-import com.server.parser.java.call.CallExecutor;
+import com.server.parser.java.call.CallHandler;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ class LocalContextTest {
     private final Map<String, Variable> nameToVariable = new HashMap<>();
 
     @Mock
-    private CallExecutor callExecutor;
+    private CallHandler callHandler;
     @Mock
     private Value value;
 
@@ -32,7 +32,7 @@ class LocalContextTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         variable = new Variable("type", NAME, value);
-        localContext = new LocalContext(callExecutor, nameToField, nameToVariable, "", false);
+        localContext = new LocalContext(callHandler, nameToField, nameToVariable, "", false);
     }
 
     @Test
@@ -75,7 +75,7 @@ class LocalContextTest {
     @Test
     void shouldThrowWhenGettingNonStaticFieldFromStatic() {
         nameToField.put(NAME, variable);
-        localContext = new LocalContext(callExecutor, nameToField, nameToVariable, "", true);
+        localContext = new LocalContext(callHandler, nameToField, nameToVariable, "", true);
 
         assertThatThrownBy(() -> localContext.getVariable(NAME))
                 .isExactlyInstanceOf(ResolvingException.class)
