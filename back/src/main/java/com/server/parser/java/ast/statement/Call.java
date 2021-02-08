@@ -7,12 +7,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 // TODO: make more generic Call class
-public class MethodCall extends ExpressionStatement implements MethodPrintable {
+public class Call extends ExpressionStatement implements MethodPrintable {
     private final String contextMethodName;
     private final String name;
     private final List<Expression> args;
 
-    public MethodCall(String text, String contextMethodName, String name, List<Expression> args) {
+    public Call(String text, String contextMethodName, String name, List<Expression> args) {
         super(text);
         this.contextMethodName = Objects.requireNonNull(contextMethodName, "contextMethodName cannot be null");
         this.name = Objects.requireNonNull(name, "name cannot be null");

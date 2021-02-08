@@ -5,7 +5,7 @@ import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.statement.MethodCall;
+import com.server.parser.java.ast.statement.Call;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
@@ -29,7 +29,7 @@ class DoWhileStmtResolverTest {
 
         List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
         Statement statement = Iterables.getOnlyElement(statements);
-        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isExactlyInstanceOf(MethodCall.class);
+        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isExactlyInstanceOf(Call.class);
     }
 
     private MethodContext createMethodContext() {

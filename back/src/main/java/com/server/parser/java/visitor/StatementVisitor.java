@@ -91,9 +91,9 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             return visit(ctx.getChild(0));
         }
 
-        //*** METHOD CALL ***//
+        //*** CALL ***//
         @Override
-        public MethodCall visitCall(JavaParser.CallContext ctx) {
+        public Call visitCall(JavaParser.CallContext ctx) {
             String methodName = textVisitor.visit(ctx.callName());
             List<Expression> arguments;
             arguments = ctx.callArguments() == null ? Collections.emptyList() : visit(ctx.callArguments());
@@ -101,7 +101,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
                 throw new ResolvingException(String.format("Metoda %s musi przyjmować tylko jeden argument (wywołano z %d)",
                         methodName, arguments.size()));
             }
-            return new MethodCall(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(), methodName, arguments);
+            return new Call(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(), methodName, arguments);
         }
 
         private List<Expression> visit(JavaParser.CallArgumentsContext ctx) {

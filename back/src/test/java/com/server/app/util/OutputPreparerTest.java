@@ -3,7 +3,7 @@ package com.server.app.util;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.MethodCall;
+import com.server.parser.java.ast.statement.Call;
 import com.server.parser.java.ast.statement.Statement;
 import org.junit.jupiter.api.Test;
 
@@ -19,23 +19,23 @@ class OutputPreparerTest {
     @Test
     void shouldPrepareOutput() {
         // given
-        MethodCall call1 = mock(MethodCall.class);
+        Call call1 = mock(Call.class);
         doCallRealMethod().when(call1).getExpressionStatements();
         when(call1.getName()).thenReturn("System.out.println");
         Expression text1 = mockExpressionWithOutput("TEXT");
         when(call1.getArgs()).thenReturn(Collections.singletonList(text1));
 
-        MethodCall call2 = mock(MethodCall.class);
+        Call call2 = mock(Call.class);
         doCallRealMethod().when(call2).getExpressionStatements();
         when(call2.getName()).thenReturn("System.out.print");
         Expression text2 = mockExpressionWithOutput("SOME ");
         when(call2.getArgs()).thenReturn(Collections.singletonList(text2));
 
-        MethodCall call3 = mock(MethodCall.class);
+        Call call3 = mock(Call.class);
         doCallRealMethod().when(call3).getExpressionStatements();
         when(call3.getName()).thenReturn("someMethod");
 
-        MethodCall call4 = mock(MethodCall.class);
+        Call call4 = mock(Call.class);
         doCallRealMethod().when(call4).getExpressionStatements();
         when(call4.getName()).thenReturn("System.out.println");
         Expression text4 = mockExpressionWithOutput("TEXT2");

@@ -64,12 +64,12 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "System.out.print(\"Hello World\")";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
-        MethodCall methodCall = (MethodCall) visitor.visit(c, methodContext);
+        Call call = (Call) visitor.visit(c, methodContext);
 
-        assertThat(methodCall.getText()).isEqualTo(input);
-        assertThat(methodCall.printMethodName()).isEqualTo(METHOD_NAME);
-        assertThat(methodCall.getName()).isEqualTo("System.out.print");
-        assertThat(Iterables.getOnlyElement(methodCall.getArgs()).getText()).isEqualTo("\"Hello World\"");
+        assertThat(call.getText()).isEqualTo(input);
+        assertThat(call.printMethodName()).isEqualTo(METHOD_NAME);
+        assertThat(call.getName()).isEqualTo("System.out.print");
+        assertThat(Iterables.getOnlyElement(call.getArgs()).getText()).isEqualTo("\"Hello World\"");
     }
 
     @Test
@@ -77,12 +77,12 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "someMethod()";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
-        MethodCall methodCall = (MethodCall) visitor.visit(c, methodContext);
+        Call call = (Call) visitor.visit(c, methodContext);
 
-        assertThat(methodCall.getText()).isEqualTo(input);
-        assertThat(methodCall.printMethodName()).isEqualTo(METHOD_NAME);
-        assertThat(methodCall.getName()).isEqualTo("someMethod");
-        assertThat(methodCall.getArgs()).isEmpty();
+        assertThat(call.getText()).isEqualTo(input);
+        assertThat(call.printMethodName()).isEqualTo(METHOD_NAME);
+        assertThat(call.getName()).isEqualTo("someMethod");
+        assertThat(call.getArgs()).isEmpty();
     }
 
     @Test
@@ -91,9 +91,9 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "someMethod(\"literal\", var)";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
-        MethodCall methodCall = (MethodCall) visitor.visit(c, methodContext);
+        Call call = (Call) visitor.visit(c, methodContext);
 
-        assertThat(methodCall.getResolved()).isEqualTo("someMethod(\"literal\", \"value\")");
+        assertThat(call.getResolved()).isEqualTo("someMethod(\"literal\", \"value\")");
     }
 
     private Variable createStringVariable(String name) {
