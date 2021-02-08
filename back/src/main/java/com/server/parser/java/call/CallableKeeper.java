@@ -11,7 +11,6 @@ import java.util.Map;
 public class CallableKeeper implements Serializable {
     private final Map<MethodHeader, MethodContext> callableWithContext = new HashMap<>();
 
-
     public void keepCallable(MethodContext methodContext, MethodHeader methodHeader) {
         if (callableWithContext.containsKey(methodHeader)) {
             throw new ResolvingException(String.format("Metoda %s już istnieje", methodHeader));

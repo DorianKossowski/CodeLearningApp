@@ -5,6 +5,7 @@ import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.call.CallExecutor;
 import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-// TODO refactor contexts
+// TODO refactor contexts (maybe inheritance)
 public class MethodContext implements JavaContext {
     private final ClassContext classContext;
     private MethodHeader methodHeader;
@@ -26,12 +27,13 @@ public class MethodContext implements JavaContext {
 
     @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(nameToField, nameToVariable, getMethodName(), methodHeader.isStatic());
+        return new LocalContext(classContext.getCallExecutor(), nameToField, nameToVariable, getMethodName(),
+                methodHeader.isStatic());
     }
 
     public void save(MethodHeader methodHeader) {
         this.methodHeader = Objects.requireNonNull(methodHeader, "methodHeader cannot be null");
-        classContext.saveCurrentMethodContext(this, methodHeader);
+        classContext.getCallExecutor().getCallableKeeper().keepCallable(this, methodHeader);
     }
 
     public String getClassName() {
@@ -76,5 +78,10 @@ public class MethodContext implements JavaContext {
             return variable;
         }
         throw new ResolvingException("Obiekt " + var + " nie istnieje");
+    }
+
+    @Override
+    public CallExecutor getCallExecutor() {
+        return classContext.getCallExecutor();
     }
 }

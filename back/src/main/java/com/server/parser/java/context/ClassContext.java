@@ -1,26 +1,16 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.call.CallExecutor;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class ClassContext implements JavaContext {
-    private final CallExecutor callExecutor;
+    private final CallExecutor callExecutor = new CallExecutor();
     private final Map<String, Variable> nameToField = new HashMap<>();
     private String name;
-
-    public ClassContext() {
-        this(new CallExecutor());
-    }
-
-    public ClassContext(CallExecutor callExecutor) {
-        this.callExecutor = Objects.requireNonNull(callExecutor, "callExecutor cannot be null");
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -34,10 +24,6 @@ public class ClassContext implements JavaContext {
         return new MethodContext(this);
     }
 
-    void saveCurrentMethodContext(MethodContext methodContext, MethodHeader methodHeader) {
-        callExecutor.getCallableKeeper().keepCallable(methodContext, methodHeader);
-    }
-
     @Override
     public void addField(Variable var) {
         String varName = var.getName();
@@ -49,5 +35,10 @@ public class ClassContext implements JavaContext {
 
     Map<String, Variable> getFields() {
         return nameToField;
+    }
+
+    @Override
+    public CallExecutor getCallExecutor() {
+        return callExecutor;
     }
 }

@@ -52,6 +52,8 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitBlockStatementWithBreak() {
         String input = "for(int i=0; i<1; i=i+1){  { break; }  boolean b = false; }";
         JavaParser.ForStatementContext c = HELPER.shouldParseToEof(input, JavaParser::forStatement);
+        MethodContext methodContext = new ClassContext().createEmptyMethodContext();
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
 
         ForStatement statement = (ForStatement) visitor.visit(c, methodContext);
 

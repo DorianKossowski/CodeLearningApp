@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.call.CallExecutor;
 import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -14,14 +15,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LocalContext implements JavaContext {
+    private final CallExecutor callExecutor;
     private final Map<String, Variable> nameToField;
     private final Map<String, Variable> nameToVariable;
     private final String methodName;
     private final boolean isStaticContext;
     private final Map<String, Variable> localNameToVariable = new HashMap<>();
 
-    LocalContext(Map<String, Variable> nameToField, Map<String, Variable> nameToVariable, String methodName,
+    LocalContext(CallExecutor callExecutor, Map<String, Variable> nameToField, Map<String, Variable> nameToVariable, String methodName,
                  boolean isStaticContext) {
+        this.callExecutor = Objects.requireNonNull(callExecutor, "callExecutor cannot be null");
         this.nameToField = Objects.requireNonNull(nameToField, "nameToField cannot be null");
         this.nameToVariable = Objects.requireNonNull(nameToVariable, "nameToVariable cannot be null");
         this.methodName = Objects.requireNonNull(methodName, "methodName cannot be null");
@@ -39,7 +42,7 @@ public class LocalContext implements JavaContext {
 
     @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(nameToField, getConcatenatedNameToVariables(), methodName, isStaticContext);
+        return new LocalContext(callExecutor, nameToField, getConcatenatedNameToVariables(), methodName, isStaticContext);
     }
 
     private Map<String, Variable> getConcatenatedNameToVariables() {
@@ -84,5 +87,10 @@ public class LocalContext implements JavaContext {
             return variable;
         }
         throw new ResolvingException("Obiekt " + var + " nie istnieje");
+    }
+
+    @Override
+    public CallExecutor getCallExecutor() {
+        return callExecutor;
     }
 }
