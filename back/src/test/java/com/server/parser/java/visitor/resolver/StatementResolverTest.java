@@ -65,7 +65,7 @@ class StatementResolverTest {
     void shouldThrowWhenSingleVariableDefAsContent() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(mock(MethodHeader.class, RETURNS_DEEP_STUBS));
+        methodContext.save(mock(MethodHeader.class, RETURNS_DEEP_STUBS), mock(JavaParser.MethodBodyContext.class));
         JavaParser.StatementContext c = HELPER.shouldParseToEof("String str = \"true\";", JavaParser::statement);
 
         assertThatThrownBy(() -> ForStmtResolver.validateLoopContent(methodContext, c))

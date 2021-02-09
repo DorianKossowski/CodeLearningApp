@@ -45,7 +45,8 @@ class ForStmtResolverTest {
     void shouldBreakIn() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
         JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) { break; fun(); }",
                 JavaParser::forStatement);
 
@@ -58,7 +59,8 @@ class ForStmtResolverTest {
     void shouldThrowWhenInfinityLoop() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
         JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(int i=0; i<1001; i=i+1);",
                 JavaParser::forStatement);
 

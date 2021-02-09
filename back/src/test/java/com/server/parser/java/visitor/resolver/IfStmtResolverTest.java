@@ -53,7 +53,7 @@ class IfStmtResolverTest {
     void shouldThrowWhenSingleVariableDefAsContent() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(mock(MethodHeader.class, RETURNS_DEEP_STUBS));
+        methodContext.save(mock(MethodHeader.class, RETURNS_DEEP_STUBS), mock(JavaParser.MethodBodyContext.class));
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) String str = \"true\";",
                 JavaParser::ifElseStatement);
 

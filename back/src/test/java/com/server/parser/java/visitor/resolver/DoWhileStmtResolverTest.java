@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 class DoWhileStmtResolverTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
@@ -35,7 +36,8 @@ class DoWhileStmtResolverTest {
     private MethodContext createMethodContext() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
         return methodContext;
     }
 

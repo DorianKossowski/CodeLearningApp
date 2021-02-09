@@ -1,6 +1,8 @@
 package com.server.parser.java.context;
 
 import com.google.common.collect.ImmutableMap;
+import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
@@ -31,9 +33,11 @@ public class MethodContext implements JavaContext {
                 methodHeader.isStatic());
     }
 
-    public void save(MethodHeader methodHeader) {
+    public Method save(MethodHeader methodHeader, JavaParser.MethodBodyContext methodBody) {
         this.methodHeader = Objects.requireNonNull(methodHeader, "methodHeader cannot be null");
+        Method method = new Method(this, methodHeader, Objects.requireNonNull(methodBody, "methodBody cannot be null"));
         classContext.getCallHandler().getCallableKeeper().keepCallable(this, methodHeader);
+        return method;
     }
 
     public String getClassName() {

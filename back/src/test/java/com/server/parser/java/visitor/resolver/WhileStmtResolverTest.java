@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 class WhileStmtResolverTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
@@ -24,7 +25,8 @@ class WhileStmtResolverTest {
     void shouldBreakIn() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
         JavaParser.WhileStatementContext c = HELPER.shouldParseToEof("while(true) { break; fun(); }",
                 JavaParser::whileStatement);
 
@@ -37,7 +39,8 @@ class WhileStmtResolverTest {
     void shouldThrowWhenInfinityLoop() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
         JavaParser.WhileStatementContext c = HELPER.shouldParseToEof("while(true);",
                 JavaParser::whileStatement);
 

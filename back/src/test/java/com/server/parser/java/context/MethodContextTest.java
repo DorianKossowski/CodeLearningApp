@@ -1,5 +1,6 @@
 package com.server.parser.java.context;
 
+import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.util.exception.ResolvingException;
@@ -43,7 +44,8 @@ class MethodContextTest {
         when(var.isStatic()).thenReturn(false);
         classContext.addField(var);
         MethodContext methodContext = new MethodContext(classContext);
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
 
         assertThat(methodContext.getVariable("var")).isSameAs(var);
     }
@@ -56,7 +58,8 @@ class MethodContextTest {
         when(var.isStatic()).thenReturn(false);
         classContext.addField(var);
         MethodContext methodContext = new MethodContext(classContext);
-        methodContext.save(new MethodHeader(Collections.singletonList("static"), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.singletonList("static"), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
 
         assertThatThrownBy(() -> methodContext.getVariable("var"))
                 .isExactlyInstanceOf(ResolvingException.class)

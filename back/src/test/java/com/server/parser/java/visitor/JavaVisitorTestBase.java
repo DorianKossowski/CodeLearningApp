@@ -28,7 +28,7 @@ public class JavaVisitorTestBase {
         MethodHeader methodHeader = mock(MethodHeader.class);
         when(methodHeader.getName()).thenReturn(methodName);
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(methodHeader);
+        methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));
         return methodContext;
     }
 

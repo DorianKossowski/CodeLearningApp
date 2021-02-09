@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class StatementVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
@@ -53,7 +54,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "for(int i=0; i<1; i=i+1){  { break; }  boolean b = false; }";
         JavaParser.ForStatementContext c = HELPER.shouldParseToEof(input, JavaParser::forStatement);
         MethodContext methodContext = new ClassContext().createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()), mock(JavaParser.MethodBodyContext.class));
 
         ForStatement statement = (ForStatement) visitor.visit(c, methodContext);
 
@@ -281,7 +282,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
         MethodHeader methodHeader = new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList());
-        methodContext.save(methodHeader);
+        methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));
         return methodContext;
     }
 

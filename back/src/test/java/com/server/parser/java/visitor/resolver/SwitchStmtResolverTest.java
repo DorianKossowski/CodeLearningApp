@@ -166,7 +166,7 @@ class SwitchStmtResolverTest {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
         MethodHeader methodHeader = new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList());
-        methodContext.save(methodHeader);
+        methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));
         return methodContext;
     }
 

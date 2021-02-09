@@ -35,8 +35,7 @@ public class MethodVisitor extends JavaVisitor<Method> {
         @Override
         public Method visitMethodDec(JavaParser.MethodDecContext ctx) {
             MethodHeader methodHeader = visit(ctx.methodHeader());
-            context.save(methodHeader);
-            return new Method(context, methodHeader, ctx.methodBody());
+            return context.save(methodHeader, ctx.methodBody());
         }
 
         MethodHeader visit(JavaParser.MethodHeaderContext ctx) {
@@ -59,8 +58,7 @@ public class MethodVisitor extends JavaVisitor<Method> {
         @Override
         public Method visitConstructorDec(JavaParser.ConstructorDecContext ctx) {
             MethodHeader constructorHeader = visit(ctx.constructorHeader());
-            context.save(constructorHeader);
-            return new Method(context, constructorHeader, ctx.methodBody());
+            return context.save(constructorHeader, ctx.methodBody());
         }
 
         MethodHeader visit(JavaParser.ConstructorHeaderContext ctx) {
