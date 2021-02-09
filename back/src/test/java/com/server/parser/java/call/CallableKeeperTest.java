@@ -19,6 +19,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CallableKeeperTest {
+    private static final String NAME = "FUN";
+
     @Mock
     private Method method;
     @Mock
@@ -36,17 +38,17 @@ class CallableKeeperTest {
     void shouldKeepMethodWithContext() {
         keeper.keepCallable(method);
 
-        assertThat(keeper.getCallablesWithContext()).containsExactly(entry(methodHeader, method));
+        assertThat(keeper.getCallables()).containsExactly(method);
     }
 
     @Test
     void shouldThrowWhenMethodAlreadyExists() {
-        when(methodHeader.toString()).thenReturn("NAZWA");
+        when(methodHeader.toString()).thenReturn(NAME);
         keeper.keepCallable(method);
 
         assertThatThrownBy(() -> keeper.keepCallable(method))
                 .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Metoda NAZWA już istnieje");
+                .hasMessage("Problem podczas rozwiązywania: Metoda FUN już istnieje");
     }
 
     static Stream<Arguments> methodHeaderProvider() {
@@ -78,5 +80,25 @@ class CallableKeeperTest {
             assertThatCode(() -> keeper.keepCallable(method))
                     .doesNotThrowAnyException();
         }
+    }
+
+    @Test
+    void shouldReturnNoArgCallable() {
+        when(methodHeader.getName()).thenReturn(NAME);
+        keeper.keepCallable(method);
+        CallInvocation invocation = new CallInvocation("", "", NAME, Collections.emptyList());
+
+        Method callable = keeper.getCallable(invocation);
+
+        assertThat(callable).isSameAs(method);
+    }
+
+    @Test
+    void shouldThrowWhenNotMatchingCallable() {
+        CallInvocation invocation = new CallInvocation(NAME + "()", "", NAME, Collections.emptyList());
+
+        assertThatThrownBy(() -> keeper.getCallable(invocation))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Brak pasującej metody dla wywołania: FUN()");
     }
 }

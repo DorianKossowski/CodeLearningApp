@@ -151,13 +151,13 @@ class SwitchStmtResolverTest {
 
     @Test
     void shouldResolveStatements() {
-        JavaParser.SwitchStatementContext switchCtx = HELPER.shouldParseToEof("switch(1) { case 1: case 2: fun1(); break; " +
-                "default: funD(); }", JavaParser::switchStatement);
+        JavaParser.SwitchStatementContext switchCtx = HELPER.shouldParseToEof("switch(1) { case 1: case 2: System.out.print(\"1\"); break; " +
+                "default: System.out.print(\"D\"); }", JavaParser::switchStatement);
 
         SwitchStatement statement = SwitchStmtResolver.resolve(createRealMethodContext(), switchCtx);
 
         ExpressionStatement expressionStatement = Iterables.getOnlyElement(statement.getExpressionStatements());
-        assertThat(expressionStatement.getText()).isEqualTo("fun1()");
+        assertThat(expressionStatement.getText()).isEqualTo("System.out.print(\"1\")");
         assertThat(expressionStatement.getProperty(StatementProperties.SWITCH_EXPRESSION)).isEqualTo("1");
         assertThat(expressionStatement.getProperty(StatementProperties.SWITCH_LABELS)).isEqualTo("1,2");
     }

@@ -25,7 +25,7 @@ class DoWhileStmtResolverTest {
     @Test
     void shouldMakeAtLeastOneIteration() {
         MethodContext methodContext = createMethodContext();
-        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { fun(); } while(false);",
+        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { System.out.print(\"\"); } while(false);",
                 JavaParser::doWhileStatement);
 
         List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));

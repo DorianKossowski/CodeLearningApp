@@ -27,6 +27,7 @@ public class TaskVisitor extends JavaBaseVisitor<Task> {
     public Task visitTask(JavaParser.TaskContext ctx) {
         ClassAst classAst = context.getVisitor(ClassAst.class).visit(ctx.classDec(), context);
 
+        //TODO place main call in CallExecutor
         StatementListVisitor statementListVisitor = new StatementListVisitor();
         Optional<List<Statement>> calledStmts = getMainMethod(classAst)
                 .map(mainMethod -> statementListVisitor.visit(mainMethod.getBodyContext(), mainMethod.getMethodContext()));

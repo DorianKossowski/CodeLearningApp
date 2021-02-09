@@ -1,6 +1,7 @@
 package com.server.parser.java.ast.statement;
 
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.call.CallInvocation;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +18,10 @@ public class Call extends ExpressionStatement implements MethodPrintable {
         this.contextMethodName = Objects.requireNonNull(contextMethodName, "contextMethodName cannot be null");
         this.name = Objects.requireNonNull(name, "name cannot be null");
         this.args = Objects.requireNonNull(args, "args cannot be null");
+    }
+
+    public Call(CallInvocation invocation) {
+        this(invocation.getText(), invocation.getContextMethodName(), invocation.getName(), invocation.getArgs());
     }
 
     public String getName() {

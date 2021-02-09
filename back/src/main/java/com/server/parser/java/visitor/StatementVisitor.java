@@ -6,11 +6,11 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.*;
+import com.server.parser.java.call.CallInvocation;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.*;
 import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.exception.BreakStatementException;
-import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
@@ -97,15 +97,9 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             String methodName = textVisitor.visit(ctx.callName());
             List<Expression> arguments;
             arguments = ctx.callArguments() == null ? Collections.emptyList() : visit(ctx.callArguments());
-            checkSpecialCallPrintMethod(methodName, arguments.size());
-            return new Call(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(), methodName, arguments);
-        }
-
-        private void checkSpecialCallPrintMethod(String methodName, int argumentsSize) {
-            if (methodName.startsWith("System.out.print") && argumentsSize != 1) {
-                throw new ResolvingException(String.format("Metoda %s musi przyjmować tylko jeden argument (wywołano z %d)",
-                        methodName, argumentsSize));
-            }
+            CallInvocation invocation = new CallInvocation(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(),
+                    methodName, arguments);
+            return context.getCallHandler().call(invocation);
         }
 
         private List<Expression> visit(JavaParser.CallArgumentsContext ctx) {
