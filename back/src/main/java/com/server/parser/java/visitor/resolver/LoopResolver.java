@@ -1,12 +1,12 @@
 package com.server.parser.java.visitor.resolver;
 
+import com.rits.cloning.Cloner;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.util.exception.ResolvingException;
-import org.apache.commons.lang.SerializationUtils;
 
 public class LoopResolver extends StatementResolver {
     static final int MAX_ITER_NUMBER = 1000;
@@ -18,7 +18,7 @@ public class LoopResolver extends StatementResolver {
     }
 
     static void validateLoopContent(JavaContext context, JavaParser.StatementContext statementContext) {
-        JavaContext validationContext = (JavaContext) SerializationUtils.clone(context);
+        JavaContext validationContext = new Cloner().deepClone(context);
         JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class);
         Statement statement = visitor.visit(statementContext, validationContext);
         if (statement instanceof VariableDef) {
