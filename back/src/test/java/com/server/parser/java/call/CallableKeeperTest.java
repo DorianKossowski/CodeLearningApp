@@ -1,8 +1,8 @@
 package com.server.parser.java.call;
 
+import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.VariableDef;
-import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 class CallableKeeperTest {
     @Mock
-    private MethodContext methodContext;
+    private Method method;
     @Mock
     private MethodHeader methodHeader;
 
@@ -29,21 +29,22 @@ class CallableKeeperTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
+        when(method.getHeader()).thenReturn(methodHeader);
     }
 
     @Test
     void shouldKeepMethodWithContext() {
-        keeper.keepCallable(methodContext, methodHeader);
+        keeper.keepCallable(method);
 
-        assertThat(keeper.getCallablesWithContext()).containsExactly(entry(methodHeader, methodContext));
+        assertThat(keeper.getCallablesWithContext()).containsExactly(entry(methodHeader, method));
     }
 
     @Test
     void shouldThrowWhenMethodAlreadyExists() {
         when(methodHeader.toString()).thenReturn("NAZWA");
-        keeper.keepCallable(methodContext, methodHeader);
+        keeper.keepCallable(method);
 
-        assertThatThrownBy(() -> keeper.keepCallable(methodContext, methodHeader))
+        assertThatThrownBy(() -> keeper.keepCallable(method))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Metoda NAZWA już istnieje");
     }
@@ -67,12 +68,14 @@ class CallableKeeperTest {
     @ParameterizedTest
     @MethodSource("methodHeaderProvider")
     void shouldTrySavingCurrentMethodContext(MethodHeader methodHeader1, MethodHeader methodHeader2, boolean shouldThrow) {
-        keeper.keepCallable(methodContext, methodHeader1);
+        when(method.getHeader()).thenReturn(methodHeader1);
+        keeper.keepCallable(method);
+        when(method.getHeader()).thenReturn(methodHeader2);
         if (shouldThrow) {
-            assertThatThrownBy(() -> keeper.keepCallable(methodContext, methodHeader2))
+            assertThatThrownBy(() -> keeper.keepCallable(method))
                     .isExactlyInstanceOf(ResolvingException.class);
         } else {
-            assertThatCode(() -> keeper.keepCallable(methodContext, methodHeader2))
+            assertThatCode(() -> keeper.keepCallable(method))
                     .doesNotThrowAnyException();
         }
     }

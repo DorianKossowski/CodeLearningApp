@@ -36,7 +36,7 @@ public class MethodContext implements JavaContext {
     public Method save(MethodHeader methodHeader, JavaParser.MethodBodyContext methodBody) {
         this.methodHeader = Objects.requireNonNull(methodHeader, "methodHeader cannot be null");
         Method method = new Method(this, methodHeader, Objects.requireNonNull(methodBody, "methodBody cannot be null"));
-        classContext.getCallHandler().getCallableKeeper().keepCallable(this, methodHeader);
+        classContext.getCallHandler().getCallableKeeper().keepCallable(method);
         return method;
     }
 
