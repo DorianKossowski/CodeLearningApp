@@ -1,0 +1,24 @@
+### TASK ###
+-> statement
+    with text: "System.out.println(counter)"
+    in method: "fun"
+    log info: "Wywołanie println z fun"
+
+### INPUT ###
+public class MyClass {
+    private static int counter = 0;
+
+    public static void main(String[] args){
+        fun();
+        fun();
+    }
+
+    static void fun() {
+        counter = counter + 1;
+        System.out.println(counter);
+    }
+}
+
+### OUTPUT ###
+1
+2

@@ -63,7 +63,7 @@ class CallExecutorTest {
 
     @Test
     void shouldExecuteNoArgCall() {
-        Method method = mock(Method.class);
+        Method method = mock(Method.class, RETURNS_DEEP_STUBS);
         JavaParser.MethodBodyContext bodyContext = mock(JavaParser.MethodBodyContext.class);
         when(method.getBodyContext()).thenReturn(bodyContext);
         ExpressionStatement expressionStatement = mock(ExpressionStatement.class);

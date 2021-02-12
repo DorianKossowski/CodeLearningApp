@@ -8,6 +8,7 @@ import com.server.parser.java.call.CallHandler;
 import com.server.parser.java.visitor.JavaVisitor;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public interface JavaContext extends Serializable {
 
@@ -41,4 +42,8 @@ public interface JavaContext extends Serializable {
     }
 
     CallHandler getCallHandler();
+
+    Map<String, Variable> getStaticFields();
+
+    void setStaticFields(Map<String, Variable> nameToField);
 }

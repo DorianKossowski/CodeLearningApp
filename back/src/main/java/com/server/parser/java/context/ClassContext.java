@@ -6,6 +6,7 @@ import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ClassContext implements JavaContext {
     private final CallHandler callHandler = new CallHandler();
@@ -40,5 +41,17 @@ public class ClassContext implements JavaContext {
     @Override
     public CallHandler getCallHandler() {
         return callHandler;
+    }
+
+    @Override
+    public Map<String, Variable> getStaticFields() {
+        return nameToField.entrySet().stream()
+                .filter(entry -> entry.getValue().isStatic())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Override
+    public void setStaticFields(Map<String, Variable> nameToField) {
+        this.nameToField.putAll(nameToField);
     }
 }

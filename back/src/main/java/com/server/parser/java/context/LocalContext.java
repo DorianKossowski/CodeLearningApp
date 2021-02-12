@@ -93,4 +93,16 @@ public class LocalContext implements JavaContext {
     public CallHandler getCallHandler() {
         return callHandler;
     }
+
+    @Override
+    public Map<String, Variable> getStaticFields() {
+        return nameToField.entrySet().stream()
+                .filter(entry -> entry.getValue().isStatic())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Override
+    public void setStaticFields(Map<String, Variable> nameToField) {
+        this.nameToField.putAll(nameToField);
+    }
 }

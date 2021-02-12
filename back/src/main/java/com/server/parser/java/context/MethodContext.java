@@ -14,6 +14,7 @@ import com.server.parser.util.exception.ResolvingException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 // TODO refactor contexts (maybe inheritance)
 public class MethodContext implements JavaContext {
@@ -87,5 +88,17 @@ public class MethodContext implements JavaContext {
     @Override
     public CallHandler getCallHandler() {
         return classContext.getCallHandler();
+    }
+
+    @Override
+    public Map<String, Variable> getStaticFields() {
+        return nameToField.entrySet().stream()
+                .filter(entry -> entry.getValue().isStatic())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Override
+    public void setStaticFields(Map<String, Variable> nameToField) {
+        this.nameToField.putAll(nameToField);
     }
 }

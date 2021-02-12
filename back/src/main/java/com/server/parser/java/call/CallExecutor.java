@@ -1,11 +1,11 @@
 package com.server.parser.java.call;
 
-import com.rits.cloning.Cloner;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.statement.CallInvocation;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.context.MethodContext;
+import com.server.parser.java.context.ContextCopyFactory;
+import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -26,7 +26,7 @@ public class CallExecutor implements Serializable {
     }
 
     public CallStatement execute(Method method, CallInvocation invocation) {
-        MethodContext executionContext = new Cloner().deepClone(method.getMethodContext());
+        JavaContext executionContext = ContextCopyFactory.createExecutionContext(method.getMethodContext());
         List<Statement> statements = visitor.visit(method.getBodyContext(), executionContext);
         return new CallStatement(invocation, statements);
     }
