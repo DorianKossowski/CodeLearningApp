@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class CallExecutor implements Serializable {
+    static final int MAX_EXECUTION_LEVEL = 10;
+    private int executionLevel = 0;
     private final StatementListVisitor visitor;
 
     CallExecutor() {
@@ -26,9 +28,18 @@ public class CallExecutor implements Serializable {
     }
 
     public CallStatement execute(Method method, CallInvocation invocation) {
+        prepareForNextExecution();
         JavaContext executionContext = ContextCopyFactory.createExecutionContext(method.getMethodContext());
         List<Statement> statements = visitor.visit(method.getBodyContext(), executionContext);
+        --executionLevel;
         return new CallStatement(invocation, statements);
+    }
+
+    void prepareForNextExecution() {
+        if (executionLevel > MAX_EXECUTION_LEVEL) {
+            throw new ResolvingException("Przekroczono ilość dopuszczalnych zagnieżdżonych wywołań równą: " + MAX_EXECUTION_LEVEL);
+        }
+        ++executionLevel;
     }
 
     public CallStatement callPrintMethod(CallInvocation invocation) {

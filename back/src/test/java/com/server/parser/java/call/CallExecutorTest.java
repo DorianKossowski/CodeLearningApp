@@ -18,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Collections;
 import java.util.List;
 
+import static com.server.parser.java.call.CallExecutor.MAX_EXECUTION_LEVEL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -75,5 +76,16 @@ class CallExecutorTest {
 
         assertThat(callStatement.getCallInvocation()).isSameAs(invocation);
         assertThat(callStatement.getExpressionStatements()).containsExactly(invocation, expressionStatement);
+    }
+
+    @Test
+    void shouldThrowWhenTooManyExecutions() {
+        for (int i = 0; i <= MAX_EXECUTION_LEVEL; ++i) {
+            executor.prepareForNextExecution();
+        }
+
+        assertThatThrownBy(() -> executor.prepareForNextExecution())
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Przekroczono ilość dopuszczalnych zagnieżdżonych wywołań równą: 10");
     }
 }
