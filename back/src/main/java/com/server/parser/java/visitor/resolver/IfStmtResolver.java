@@ -1,10 +1,10 @@
 package com.server.parser.java.visitor.resolver;
 
-import com.rits.cloning.Cloner;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.IfElseStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.java.visitor.StatementVisitor;
@@ -26,7 +26,7 @@ public class IfStmtResolver extends StatementResolver {
     }
 
     static void validateBranchesContent(JavaContext context, JavaParser.IfElseStatementContext ifCtx) {
-        JavaContext validationContext = new Cloner().deepClone(context);
+        JavaContext validationContext = ContextCopyFactory.createValidationContext(context);
         JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class);
 
         Statement ifContentStmt = visitor.visit(ifCtx.statement(0), validationContext);

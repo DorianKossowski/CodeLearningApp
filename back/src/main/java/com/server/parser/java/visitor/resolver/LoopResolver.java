@@ -1,9 +1,9 @@
 package com.server.parser.java.visitor.resolver;
 
-import com.rits.cloning.Cloner;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.util.exception.ResolvingException;
@@ -18,7 +18,7 @@ public class LoopResolver extends StatementResolver {
     }
 
     static void validateLoopContent(JavaContext context, JavaParser.StatementContext statementContext) {
-        JavaContext validationContext = new Cloner().deepClone(context);
+        JavaContext validationContext = ContextCopyFactory.createValidationContext(context);
         JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class);
         Statement statement = visitor.visit(statementContext, validationContext);
         if (statement instanceof VariableDef) {

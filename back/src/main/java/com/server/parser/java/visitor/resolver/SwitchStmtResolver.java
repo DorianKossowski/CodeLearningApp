@@ -1,6 +1,5 @@
 package com.server.parser.java.visitor.resolver;
 
-import com.rits.cloning.Cloner;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ConstantProvider;
 import com.server.parser.java.ast.expression.Expression;
@@ -10,6 +9,7 @@ import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.ast.statement.SwitchStatement;
 import com.server.parser.java.ast.value.PrimitiveValue;
 import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
@@ -157,7 +157,7 @@ public class SwitchStmtResolver extends StatementResolver {
     }
 
     static void validateStatementLists(JavaContext context, List<JavaParser.StatementListContext> statementListContexts) {
-        JavaContext validationContext = new Cloner().deepClone(context);
+        JavaContext validationContext = ContextCopyFactory.createValidationContext(context);
         statementListContexts.forEach(statementListContext -> statementListVisitor.visit(statementListContext, validationContext));
     }
 
