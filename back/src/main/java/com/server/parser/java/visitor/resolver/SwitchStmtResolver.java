@@ -41,9 +41,14 @@ public class SwitchStmtResolver extends StatementResolver {
         validateLabels(switchLabels);
         List<Statement> contentStatements = resolveStatements(context, value, switchElements);
         contentStatements.forEach(statement ->
-                statement.addProperty(StatementProperties.SWITCH_EXPRESSION, expressionContext.getText())
+                addProperty(statement, StatementProperties.SWITCH_EXPRESSION, expressionContext.getText())
         );
         return new SwitchStatement(contentStatements);
+    }
+
+    private static void addProperty(Statement statement, String propertyName, String value) {
+        statement.getExpressionStatements()
+                .forEach(exprStatement -> exprStatement.addProperty(propertyName, value));
     }
 
     private static List<Statement> resolveStatements(JavaContext context, Value value, List<SwitchElement> switchElements) {
@@ -71,7 +76,7 @@ public class SwitchStmtResolver extends StatementResolver {
                 if (visitedStmt instanceof BreakStatement) {
                     return statements;
                 }
-                visitedStmt.addProperty(StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
+                addProperty(visitedStmt, StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
                 statements.add(visitedStmt);
             }
         }
