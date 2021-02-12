@@ -6,7 +6,6 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.*;
-import com.server.parser.java.call.CallInvocation;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.*;
 import com.server.parser.util.EmptyExpressionPreparer;
@@ -93,7 +92,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
         //*** CALL ***//
         @Override
-        public Call visitCall(JavaParser.CallContext ctx) {
+        public CallStatement visitCall(JavaParser.CallContext ctx) {
             String methodName = textVisitor.visit(ctx.callName());
             List<Expression> arguments;
             arguments = ctx.callArguments() == null ? Collections.emptyList() : visit(ctx.callArguments());

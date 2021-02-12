@@ -12,10 +12,10 @@ public class CallExecutor implements Serializable {
         throw new NotImplementedException();
     }
 
-    public Call callPrintMethod(CallInvocation invocation) {
+    public CallStatement callPrintMethod(CallInvocation invocation) {
         int argumentsSize = invocation.getArgs().size();
         checkPrintMethodArguments(invocation.getName(), argumentsSize);
-        return new Call(invocation);
+        return new CallStatement(invocation, Collections.emptyList());
     }
 
     private void checkPrintMethodArguments(String methodName, int argumentsSize) {

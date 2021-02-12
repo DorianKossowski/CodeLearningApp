@@ -69,12 +69,13 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "System.out.print(\"Hello World\")";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
-        Call call = (Call) visitor.visit(c, methodContext);
+        CallStatement callStatement = (CallStatement) visitor.visit(c, methodContext);
 
-        assertThat(call.getText()).isEqualTo(input);
-        assertThat(call.printMethodName()).isEqualTo(METHOD_NAME);
-        assertThat(call.getName()).isEqualTo("System.out.print");
-        assertThat(Iterables.getOnlyElement(call.getArgs()).getText()).isEqualTo("\"Hello World\"");
+        CallInvocation invocation = callStatement.getCallInvocation();
+        assertThat(invocation.getText()).isEqualTo(input);
+        assertThat(invocation.printMethodName()).isEqualTo(METHOD_NAME);
+        assertThat(invocation.getName()).isEqualTo("System.out.print");
+        assertThat(Iterables.getOnlyElement(invocation.getArgs()).getText()).isEqualTo("\"Hello World\"");
     }
 
     @Disabled
@@ -85,12 +86,12 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "someMethod()";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
-        Call call = (Call) visitor.visit(c, methodContext);
+        CallInvocation invocation = (CallInvocation) visitor.visit(c, methodContext);
 
-        assertThat(call.getText()).isEqualTo(input);
-        assertThat(call.printMethodName()).isEqualTo(METHOD_NAME);
-        assertThat(call.getName()).isEqualTo("someMethod");
-        assertThat(call.getArgs()).isEmpty();
+        assertThat(invocation.getText()).isEqualTo(input);
+        assertThat(invocation.printMethodName()).isEqualTo(METHOD_NAME);
+        assertThat(invocation.getName()).isEqualTo("someMethod");
+        assertThat(invocation.getArgs()).isEmpty();
     }
 
     @Disabled
@@ -102,7 +103,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "someMethod(\"literal\", var)";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
-        Call call = (Call) visitor.visit(c, methodContext);
+        CallStatement call = (CallStatement) visitor.visit(c, methodContext);
 
         assertThat(call.getResolved()).isEqualTo("someMethod(\"literal\", \"value\")");
     }

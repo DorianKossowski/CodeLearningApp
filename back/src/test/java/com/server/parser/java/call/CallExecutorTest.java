@@ -1,7 +1,9 @@
 package com.server.parser.java.call;
 
+import com.google.common.collect.Iterables;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.Call;
+import com.server.parser.java.ast.statement.CallInvocation;
+import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
@@ -25,13 +27,13 @@ class CallExecutorTest {
         List<Expression> args = Collections.singletonList(mock(Expression.class));
         CallInvocation invocation = new CallInvocation(text, method, name, args);
 
-        Call call = executor.callPrintMethod(invocation);
+        CallStatement call = executor.callPrintMethod(invocation);
 
-        assertThat(call)
+        assertThat(((CallInvocation) Iterables.getOnlyElement(call.getExpressionStatements())))
                 .returns(text, Statement::getText)
-                .returns(method, Call::printMethodName)
-                .returns(name, Call::getName)
-                .returns(args, Call::getArgs);
+                .returns(method, CallInvocation::printMethodName)
+                .returns(name, CallInvocation::getName)
+                .returns(args, CallInvocation::getArgs);
     }
 
     @Test

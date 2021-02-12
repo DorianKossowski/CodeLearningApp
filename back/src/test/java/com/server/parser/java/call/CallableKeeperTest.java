@@ -2,6 +2,7 @@ package com.server.parser.java.call;
 
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.ast.statement.CallInvocation;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;

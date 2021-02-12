@@ -1,7 +1,8 @@
 package com.server.parser.java.call;
 
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.statement.Call;
+import com.server.parser.java.ast.statement.CallInvocation;
+import com.server.parser.java.ast.statement.CallStatement;
 
 import java.io.Serializable;
 
@@ -13,7 +14,7 @@ public class CallHandler implements Serializable {
         return callableKeeper;
     }
 
-    public Call call(CallInvocation invocation) {
+    public CallStatement execute(CallInvocation invocation) {
         if (isSpecialPrintMethod(invocation.getName())) {
             return callExecutor.callPrintMethod(invocation);
         }
