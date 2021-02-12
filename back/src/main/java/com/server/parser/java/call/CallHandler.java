@@ -19,7 +19,7 @@ public class CallHandler implements Serializable {
             return callExecutor.callPrintMethod(invocation);
         }
         Method method = callableKeeper.getCallable(invocation);
-        return callExecutor.call();
+        return callExecutor.execute(method, invocation);
     }
 
     private boolean isSpecialPrintMethod(String name) {

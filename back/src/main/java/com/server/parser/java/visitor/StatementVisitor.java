@@ -98,7 +98,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             arguments = ctx.callArguments() == null ? Collections.emptyList() : visit(ctx.callArguments());
             CallInvocation invocation = new CallInvocation(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(),
                     methodName, arguments);
-            return context.getCallHandler().call(invocation);
+            return context.getCallHandler().execute(invocation);
         }
 
         private List<Expression> visit(JavaParser.CallArgumentsContext ctx) {

@@ -1,0 +1,26 @@
+### TASK ###
+-> statement
+    with text: "System.out.println(\"main println\")"
+    in method: "main"
+    log info: "Wywołanie println z main"
+-> statement
+    with text: "System.out.println(\"fun println\")"
+    in method: "fun"
+    log info: "Wywołanie println z fun"
+
+### INPUT ###
+public class MyClass {
+
+    public static void main(String[] args){
+        System.out.println("main println");
+        fun();
+    }
+
+    static void fun() {
+        System.out.println("fun println");
+    }
+}
+
+### OUTPUT ###
+main println
+fun println

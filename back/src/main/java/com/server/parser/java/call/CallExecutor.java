@@ -1,15 +1,34 @@
 package com.server.parser.java.call;
 
-import com.server.parser.java.ast.statement.Call;
+import com.rits.cloning.Cloner;
+import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.statement.CallInvocation;
+import com.server.parser.java.ast.statement.CallStatement;
+import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.context.MethodContext;
+import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class CallExecutor implements Serializable {
+    private final StatementListVisitor visitor;
 
-    public Call call() {
-        throw new NotImplementedException();
+    CallExecutor() {
+        this(new StatementListVisitor());
+    }
+
+    CallExecutor(StatementListVisitor visitor) {
+        this.visitor = Objects.requireNonNull(visitor, "visitor cannot be null");
+    }
+
+    public CallStatement execute(Method method, CallInvocation invocation) {
+        MethodContext executionContext = new Cloner().deepClone(method.getMethodContext());
+        List<Statement> statements = visitor.visit(method.getBodyContext(), executionContext);
+        return new CallStatement(invocation, statements);
     }
 
     public CallStatement callPrintMethod(CallInvocation invocation) {
