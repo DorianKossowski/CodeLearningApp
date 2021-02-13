@@ -18,80 +18,82 @@ public class ValuePreparer {
             if (expression instanceof UninitializedExpression) {
                 return new UninitializedValue((UninitializedExpression) expression);
             }
-            return prepareFromLiteral(type, expression.getLiteral());
+            ValueType valueType = ValueType.findByOriginalType(type);
+            return prepareFromLiteral(valueType, expression.getLiteral());
         } catch (IllegalArgumentException e) {
             throw new ResolvingException(String.format("Wyrażenie %s nie jest typu %s", expression.getText(), type));
         }
     }
 
-    private static Value prepareFromLiteral(String type, Literal literal) {
+    private static Value prepareFromLiteral(ValueType type, Literal literal) {
         Object constant = literal.getConstant().c;
-        if (Character.isUpperCase(type.charAt(0))) {
+        if (Character.isUpperCase(type.getType().charAt(0))) {
             return prepareFromObjectLiteral(type, literal, constant);
         }
         return prepareFromPrimitiveLiteral(type, literal, constant);
     }
 
-    private static PrimitiveValue prepareFromPrimitiveLiteral(String type, Literal literal, Object constant) {
+    private static PrimitiveValue prepareFromPrimitiveLiteral(ValueType type, Literal literal, Object constant) {
         switch (type) {
-            case "char":
+            case CHAR:
                 Preconditions.checkArgument(constant instanceof Character);
                 return new PrimitiveComputableValue(literal);
-            case "int":
-            case "byte":
-            case "short":
-            case "long":
+            case INT:
+            case BYTE:
+            case SHORT:
+            case LONG:
                 Preconditions.checkArgument(constant instanceof Integer);
                 return new PrimitiveComputableValue(literal);
-            case "float":
-            case "double":
+            case FLOAT:
+            case DOUBLE:
                 if (constant instanceof Double) {
                     return new PrimitiveComputableValue(literal);
                 }
                 Preconditions.checkArgument(constant instanceof Integer);
                 literal.castFromInt(Double.class);
                 return new PrimitiveComputableValue(literal);
-            case "boolean":
+            case BOOLEAN:
                 Preconditions.checkArgument(constant instanceof Boolean);
                 break;
             default:
-                throw new RuntimeException(String.format("Format %s not supported", type));
+                throw new RuntimeException(String.format("Format %s not supported", type.getType()));
         }
         return new PrimitiveValue(literal);
     }
 
-    private static ObjectValue prepareFromObjectLiteral(String type, Literal literal, Object constant) {
+    private static ObjectValue prepareFromObjectLiteral(ValueType type, Literal literal, Object constant) {
         switch (type) {
-            case "String":
+            case STRING:
                 Preconditions.checkArgument(constant instanceof String);
                 return new ObjectWrapperValue(literal);
-            case "Character":
+            case CHARACTER:
                 Preconditions.checkArgument(constant instanceof Character);
                 return new ObjectComputableValue(literal);
-            case "Integer":
-            case "Byte":
-            case "Short":
-            case "Long":
+            case INTEGER:
+            case BYTE_OBJ:
+            case SHORT_OBJ:
+            case LONG_OBJ:
                 Preconditions.checkArgument(constant instanceof Integer);
                 return new ObjectComputableValue(literal);
-            case "Float":
-            case "Double":
+            case FLOAT_OBJ:
+            case DOUBLE_OBJ:
                 if (constant instanceof Double) {
                     return new ObjectComputableValue(literal);
                 }
                 Preconditions.checkArgument(constant instanceof Integer);
                 literal.castFromInt(Double.class);
                 return new ObjectComputableValue(literal);
-            case "Boolean":
+            case BOOLEAN_OBJ:
                 Preconditions.checkArgument(constant instanceof Boolean);
                 return new ObjectWrapperValue(literal);
             default:
-                throw new RuntimeException(String.format("Format %s not supported", type));
+                throw new RuntimeException(String.format("Format %s not supported", type.getType()));
         }
     }
 
     public static PrimitiveValue preparePrimitive(String type, Literal literal) {
-        ObjectValue value = prepareFromObjectLiteral(type, literal, literal.getConstant().c);
+        ValueType valueType = ValueType.findByOriginalType(type);
+        ObjectValue value = prepareFromObjectLiteral(valueType, literal, literal.getConstant().c);
         if (value instanceof ObjectComputableValue) {
             return new PrimitiveComputableValue(value.getExpression().getLiteral());
         }
