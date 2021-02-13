@@ -132,7 +132,6 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             return variableDef;
         }
 
-        // TODO save method args in context
         @Override
         public Statement visitSingleMethodArg(JavaParser.SingleMethodArgContext ctx) {
             String type = textVisitor.visit(ctx.type());

@@ -8,6 +8,7 @@ import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.ast.value.*;
 import com.server.parser.java.context.ClassContext;
@@ -15,7 +16,6 @@ import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -78,34 +78,37 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThat(Iterables.getOnlyElement(invocation.getArgs()).getText()).isEqualTo("\"Hello World\"");
     }
 
-    @Disabled
     @Test
     void shouldVisitMethodCallWithoutArgs() {
         MethodHeader header = new MethodHeader(Collections.emptyList(), "", "someMethod", Collections.emptyList());
-        context.getCallHandler().getCallableKeeper().keepCallable(new Method(methodContext, header, mock(JavaParser.MethodBodyContext.class)));
+        context.getCallHandler().getCallableKeeper().keepCallable(new Method(methodContext, header, HELPER.shouldParseToEof("", JavaParser::methodBody)));
         String input = "someMethod()";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
-        CallInvocation invocation = (CallInvocation) visitor.visit(c, methodContext);
+        CallStatement call = (CallStatement) visitor.visit(c, methodContext);
 
+        CallInvocation invocation = call.getCallInvocation();
         assertThat(invocation.getText()).isEqualTo(input);
         assertThat(invocation.printMethodName()).isEqualTo(METHOD_NAME);
         assertThat(invocation.getName()).isEqualTo("someMethod");
         assertThat(invocation.getArgs()).isEmpty();
     }
 
-    @Disabled
     @Test
     void shouldGetCorrectMethodCallValue() {
-        MethodHeader header = new MethodHeader(Collections.emptyList(), "", "someMethod", Collections.emptyList());
-        context.getCallHandler().getCallableKeeper().keepCallable(new Method(methodContext, header, mock(JavaParser.MethodBodyContext.class)));
+        VariableDef arg1 = new VariableDef("", "String", "a1", NullExpression.INSTANCE, false);
+        VariableDef arg2 = new VariableDef("", "String", "a2", NullExpression.INSTANCE, false);
+        MethodHeader header = new MethodHeader(Collections.emptyList(), "", "someMethod", Arrays.asList(arg1, arg2));
+        context.getCallHandler().getCallableKeeper().keepCallable(new Method(methodContext, header, HELPER.shouldParseToEof("", JavaParser::methodBody)));
+        methodContext.addVariable(createStringVariable("a1"));
+        methodContext.addVariable(createStringVariable("a2"));
         methodContext.addVariable(createStringVariable("var"));
         String input = "someMethod(\"literal\", var)";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 
         CallStatement call = (CallStatement) visitor.visit(c, methodContext);
 
-        assertThat(call.getResolved()).isEqualTo("someMethod(\"literal\", \"value\")");
+        assertThat(call.getCallInvocation().getResolved()).isEqualTo("someMethod(\"literal\", \"value\")");
     }
 
     private Variable createStringVariable(String name) {
