@@ -5,9 +5,8 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.CallInvocation;
-import com.server.parser.java.ast.statement.CallStatement;
-import com.server.parser.java.ast.statement.ExpressionStatement;
-import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.*;
+import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +27,8 @@ import static org.mockito.Mockito.*;
 class CallExecutorTest {
     @Mock
     private StatementListVisitor visitor;
+    @Mock
+    private JavaContext context;
 
     private CallExecutor executor;
 
@@ -67,6 +68,7 @@ class CallExecutorTest {
         Method method = mock(Method.class, RETURNS_DEEP_STUBS);
         JavaParser.MethodBodyContext bodyContext = mock(JavaParser.MethodBodyContext.class);
         when(method.getBodyContext()).thenReturn(bodyContext);
+        when(method.getHeader().getArguments()).thenReturn(Collections.emptyList());
         ExpressionStatement expressionStatement = mock(ExpressionStatement.class);
         doCallRealMethod().when(expressionStatement).getExpressionStatements();
         when(visitor.visit(eq(bodyContext), any())).thenReturn(Collections.singletonList(expressionStatement));
@@ -87,5 +89,19 @@ class CallExecutorTest {
         assertThatThrownBy(() -> executor.prepareForNextExecution())
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Przekroczono ilość dopuszczalnych zagnieżdżonych wywołań równą: 10");
+    }
+
+    @Test
+    void shouldAssignParameters() {
+        String name = "name";
+        VariableDef variableDef = mock(VariableDef.class);
+        when(variableDef.getName()).thenReturn(name);
+        List<VariableDef> arguments = Collections.singletonList(variableDef);
+        Expression expression = mock(Expression.class);
+        List<Expression> invocationParameters = Collections.singletonList(expression);
+
+        executor.assignInvocationParameters(arguments, invocationParameters, context);
+
+        verify(context).updateVariable(name, expression);
     }
 }

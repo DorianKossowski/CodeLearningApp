@@ -1,0 +1,27 @@
+### TASK ###
+-> statement
+    with resolved: "fun(\"ONE \", 1)"
+    in method: "main"
+-> statement
+    with resolved: "fun(\"TWO \", 2)"
+    in method: "main"
+
+### INPUT ###
+public class MyClass {
+    private static int counter = 0;
+
+    public static void main(String[] args){
+        Integer val = 2;
+        fun("ONE ", 1);
+        fun("TWO ", val);
+    }
+
+    static void fun(String s, int i) {
+        System.out.print(s);
+        System.out.println(i);
+    }
+}
+
+### OUTPUT ###
+ONE 1
+TWO 2
