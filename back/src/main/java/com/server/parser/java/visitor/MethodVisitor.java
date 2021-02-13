@@ -5,6 +5,7 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ConstructorHeader;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
@@ -50,9 +51,15 @@ public class MethodVisitor extends JavaVisitor<Method> {
 
         List<VariableDef> visit(JavaParser.MethodArgsContext ctx) {
             JavaVisitor<VariableDef> visitor = context.getVisitor(VariableDef.class);
-            return ctx.singleMethodArg().stream()
+            List<VariableDef> arguments = ctx.singleMethodArg().stream()
                     .map(singleMethodArgContext -> visitor.visit(singleMethodArgContext, context))
                     .collect(Collectors.toList());
+            putArgumentsIntoMethodContext(arguments);
+            return arguments;
+        }
+
+        private void putArgumentsIntoMethodContext(List<VariableDef> args) {
+            args.forEach(variableDef -> context.addVariable(new Variable(variableDef)));
         }
 
         @Override
