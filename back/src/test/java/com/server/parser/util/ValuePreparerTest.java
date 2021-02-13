@@ -110,6 +110,13 @@ class ValuePreparerTest {
     }
 
     @Test
+    void shouldThrowWhenNullIntoPrimitive() {
+        assertThatThrownBy(() -> ValuePreparer.prepare("int", NullExpression.INSTANCE))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można przypisać null do typu int");
+    }
+
+    @Test
     void shouldPrepareWhenUninitialized() {
         UninitializedExpression expression = new UninitializedExpression("str");
 

@@ -12,17 +12,24 @@ public class ValuePreparer {
 
     public static Value prepare(String type, Expression expression) {
         try {
+            ValueType valueType = ValueType.findByOriginalType(type);
             if (expression instanceof NullExpression) {
-                return NullValue.INSTANCE;
+                return prepareNullValue(valueType);
             }
             if (expression instanceof UninitializedExpression) {
                 return new UninitializedValue((UninitializedExpression) expression);
             }
-            ValueType valueType = ValueType.findByOriginalType(type);
             return prepareFromLiteral(valueType, expression.getLiteral());
         } catch (IllegalArgumentException e) {
             throw new ResolvingException(String.format("Wyrażenie %s nie jest typu %s", expression.getText(), type));
         }
+    }
+
+    private static NullValue prepareNullValue(ValueType valueType) {
+        if (valueType.isObjectType()) {
+            return NullValue.INSTANCE;
+        }
+        throw new ResolvingException(String.format("Nie można przypisać null do typu %s", valueType.getType()));
     }
 
     private static Value prepareFromLiteral(ValueType type, Literal literal) {
