@@ -113,7 +113,7 @@ class ValuePreparerTest {
     void shouldThrowWhenNullIntoPrimitive() {
         assertThatThrownBy(() -> ValuePreparer.prepare("int", NullExpression.INSTANCE))
                 .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Nie można przypisać null do typu int");
+                .hasMessage("Problem podczas rozwiązywania: Wyrażenie null nie jest typu int");
     }
 
     @Test
