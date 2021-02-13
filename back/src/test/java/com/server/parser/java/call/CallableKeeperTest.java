@@ -2,6 +2,7 @@ package com.server.parser.java.call;
 
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.CallInvocation;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.util.exception.ResolvingException;
@@ -14,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
@@ -26,12 +29,15 @@ class CallableKeeperTest {
     private Method method;
     @Mock
     private MethodHeader methodHeader;
+    @Mock
+    private MatchingCallableFinder matchingCallableFinder;
 
-    private final CallableKeeper keeper = new CallableKeeper();
+    private CallableKeeper keeper;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
+        keeper = new CallableKeeper(matchingCallableFinder);
         when(method.getHeader()).thenReturn(methodHeader);
     }
 
@@ -84,22 +90,24 @@ class CallableKeeperTest {
     }
 
     @Test
-    void shouldReturnNoArgCallable() {
-        when(methodHeader.getName()).thenReturn(NAME);
-        keeper.keepCallable(method);
-        CallInvocation invocation = new CallInvocation("", "", NAME, Collections.emptyList());
+    void shouldGetCallable() {
+        String name = "NAME";
+        List<Expression> args = Collections.emptyList();
+        when(matchingCallableFinder.find(name, args)).thenReturn(Optional.of(method));
 
-        Method callable = keeper.getCallable(invocation);
+        Method callable = keeper.getCallable(new CallInvocation("", "", name, args));
 
         assertThat(callable).isSameAs(method);
     }
 
     @Test
-    void shouldThrowWhenNotMatchingCallable() {
-        CallInvocation invocation = new CallInvocation(NAME + "()", "", NAME, Collections.emptyList());
+    void shouldThrowWhenNoMatchingCallable() {
+        when(matchingCallableFinder.find(any(), any())).thenReturn(Optional.empty());
+        CallInvocation invocation = mock(CallInvocation.class);
+        when(invocation.getText()).thenReturn("TEXT");
 
         assertThatThrownBy(() -> keeper.getCallable(invocation))
                 .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Brak pasującej metody dla wywołania: FUN()");
+                .hasMessage("Problem podczas rozwiązywania: Brak pasującej metody dla wywołania: TEXT");
     }
 }
