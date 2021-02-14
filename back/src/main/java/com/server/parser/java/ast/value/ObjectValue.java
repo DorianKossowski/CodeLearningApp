@@ -4,6 +4,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingNullPointerException;
 import com.server.parser.util.exception.ResolvingUninitializedException;
+import com.server.parser.util.exception.ResolvingVoidException;
 
 public class ObjectValue extends Value {
     // fields, methods ... ???
@@ -24,6 +25,9 @@ public class ObjectValue extends Value {
         }
         if (v2 instanceof UninitializedValue) {
             throw new ResolvingUninitializedException(v2.expression.getText());
+        }
+        if (v2 instanceof VoidValue) {
+            throw new ResolvingVoidException();
         }
         return expression == v2.expression;
     }

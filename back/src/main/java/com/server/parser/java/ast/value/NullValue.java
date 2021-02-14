@@ -3,6 +3,7 @@ package com.server.parser.java.ast.value;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.util.exception.ResolvingNullPointerException;
 import com.server.parser.util.exception.ResolvingUninitializedException;
+import com.server.parser.util.exception.ResolvingVoidException;
 
 public class NullValue extends Value {
     public static final NullValue INSTANCE = new NullValue();
@@ -21,6 +22,9 @@ public class NullValue extends Value {
         }
         if (v2 instanceof UninitializedValue) {
             throw new ResolvingUninitializedException(v2.expression.getText());
+        }
+        if (v2 instanceof VoidValue) {
+            throw new ResolvingVoidException();
         }
         throw new ResolvingNullPointerException();
     }
