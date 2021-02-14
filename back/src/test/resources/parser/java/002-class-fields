@@ -1,4 +1,15 @@
 ### TASK ###
+-> class
+    with field
+        with modifiers: { "private", "final" }
+        with type: "int"
+        with name: "i"
+-> class
+    with field
+        with modifiers: { "public", "static" }
+        with type: "String"
+        with name: "s"
+        with value: "\"str\""
 
 ### INPUT ###
 public class MyClass {

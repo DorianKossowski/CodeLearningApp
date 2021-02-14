@@ -23,7 +23,7 @@
 
 ### INPUT ###
 public class MyClass {
-    public int main(){
+    public static void main(String[] args){
         int aPrimitive = 128;
         Integer aObj = 128;
         Integer bObj = 128;

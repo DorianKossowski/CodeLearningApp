@@ -3,6 +3,7 @@ package com.server.parser.java.visitor.resolver;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
@@ -19,6 +20,8 @@ import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
 
 class IfStmtResolverTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
@@ -50,6 +53,7 @@ class IfStmtResolverTest {
     void shouldThrowWhenSingleVariableDefAsContent() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
+        methodContext.save(mock(MethodHeader.class, RETURNS_DEEP_STUBS));
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) String str = \"true\";",
                 JavaParser::ifElseStatement);
 

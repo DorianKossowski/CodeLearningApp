@@ -2,13 +2,13 @@ package com.server.parser.java.context;
 
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
-import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ClassContext implements JavaContext {
+    private final Map<String, Variable> nameToField = new HashMap<>();
     private final Map<MethodHeader, MethodContext> methodWithContext = new HashMap<>();
     private String name;
 
@@ -36,27 +36,15 @@ public class ClassContext implements JavaContext {
     }
 
     @Override
-    public Variable getVariable(String name) {
-        throw new UnsupportedOperationException();
+    public void addField(Variable var) {
+        String varName = var.getName();
+        nameToField.computeIfPresent(varName, (key, $) -> {
+            throw new ResolvingException("Pole " + key + " już istnieje");
+        });
+        nameToField.put(varName, var);
     }
 
-    @Override
-    public void addVariable(Variable variable) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void updateVariable(String name, Expression expression) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String getMethodName() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public JavaContext createLocalContext() {
-        throw new UnsupportedOperationException();
+    Map<String, Variable> getFields() {
+        return nameToField;
     }
 }

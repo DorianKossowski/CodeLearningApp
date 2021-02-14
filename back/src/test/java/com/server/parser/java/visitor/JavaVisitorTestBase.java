@@ -8,6 +8,9 @@ import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,6 +33,11 @@ public class JavaVisitorTestBase {
     }
 
     protected void assertVariableDec(VariableDef variableDef, String type, String name) {
+        assertVariableDec(variableDef, Collections.emptyList(), type, name);
+    }
+
+    protected void assertVariableDec(VariableDef variableDef, List<String> modifiers, String type, String name) {
+        assertThat(variableDef.getModifiers()).isEqualTo(modifiers);
         assertThat(variableDef).extracting(VariableDef::getType, VariableDef::getName)
                 .containsExactly(type, name);
     }

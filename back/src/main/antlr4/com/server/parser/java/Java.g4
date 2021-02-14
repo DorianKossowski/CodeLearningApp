@@ -18,10 +18,25 @@ classHeader
 
 classBody
     : ( fieldDec SEMICOLON
+    | constructorDec
     | methodDec
     | SEMICOLON
     )*
     ;
+
+constructorDec
+    : constructorHeader '{' methodBody '}'
+    ;
+
+constructorHeader
+    : constructorModifier? identifier methodArgs
+    ;
+
+constructorModifier
+	: 'public'
+	| 'protected'
+	| 'private'
+	;
 
 fieldDec
     : fieldModifier* varDec

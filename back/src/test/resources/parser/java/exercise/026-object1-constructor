@@ -1,0 +1,23 @@
+### TASK ###
+-> class
+    with name: "MyFirstClass"
+-> class
+    with constructor
+        with name: "MyFirstClass"
+        with args:
+-> class
+    with constructor
+        with name: "MyFirstClass"
+        with args: { "String", - }
+
+### INPUT ###
+public class MyFirstClass {
+
+    MyFirstClass() {
+
+    }
+
+    private MyFirstClass(String s) {
+
+    }
+}

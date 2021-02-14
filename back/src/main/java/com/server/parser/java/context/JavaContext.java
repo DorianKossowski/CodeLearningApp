@@ -14,14 +14,28 @@ public interface JavaContext extends Serializable {
         return JavaVisitorsRegistry.get(elementClass);
     }
 
-    Variable getVariable(String name);
+    default void addField(Variable variable) {
+        throw new UnsupportedOperationException();
+    }
 
-    void addVariable(Variable variable);
+    default Variable getVariable(String name) {
+        throw new UnsupportedOperationException();
+    }
 
-    void updateVariable(String name, Expression expression);
+    default void addVariable(Variable variable) {
+        throw new UnsupportedOperationException();
+    }
+
+    default void updateVariable(String name, Expression expression) {
+        throw new UnsupportedOperationException();
+    }
 
     // TODO make only for MethodContext
-    String getMethodName();
+    default String getMethodName() {
+        throw new UnsupportedOperationException();
+    }
 
-    JavaContext createLocalContext();
+    default JavaContext createLocalContext() {
+        throw new UnsupportedOperationException();
+    }
 }

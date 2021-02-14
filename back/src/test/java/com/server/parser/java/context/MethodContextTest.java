@@ -1,9 +1,13 @@
 package com.server.parser.java.context;
 
+import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -29,5 +33,48 @@ class MethodContextTest {
         assertThatThrownBy(() -> methodContext.getVariable("var"))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Obiekt var nie istnieje");
+    }
+
+    @Test
+    void shouldGetField() {
+        ClassContext classContext = new ClassContext();
+        Variable var = mock(Variable.class);
+        when(var.getName()).thenReturn("var");
+        when(var.isStatic()).thenReturn(false);
+        classContext.addField(var);
+        MethodContext methodContext = new MethodContext(classContext);
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+
+        assertThat(methodContext.getVariable("var")).isSameAs(var);
+    }
+
+    @Test
+    void shouldThrowWhenGettingNonStaticFieldFromStatic() {
+        ClassContext classContext = new ClassContext();
+        Variable var = mock(Variable.class);
+        when(var.getName()).thenReturn("var");
+        when(var.isStatic()).thenReturn(false);
+        classContext.addField(var);
+        MethodContext methodContext = new MethodContext(classContext);
+        methodContext.save(new MethodHeader(Collections.singletonList("static"), "", "", Collections.emptyList()));
+
+        assertThatThrownBy(() -> methodContext.getVariable("var"))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można użyć var ze statycznego kontekstu");
+    }
+
+    @Test
+    void shouldGetVar() {
+        ClassContext classContext = new ClassContext();
+        Variable varField = mock(Variable.class);
+        when(varField.getName()).thenReturn("var");
+        classContext.addField(varField);
+
+        MethodContext methodContext = new MethodContext(classContext);
+        Variable var = mock(Variable.class);
+        when(var.getName()).thenReturn("var");
+        methodContext.addVariable(var);
+
+        assertThat(methodContext.getVariable("var")).isSameAs(var);
     }
 }

@@ -1,0 +1,32 @@
+### TASK ###
+-> class
+    with constructor
+        with name: "MyClass"
+        with args:
+-> method
+    with result: "void"
+    with name: "MyClass"
+    with args:
+-> method
+    with result: "void"
+    with name: "m"
+    with args:
+-> method
+    with result: "void"
+    with name: "m"
+    with args: { "int", - }
+-> method
+    with result: "void"
+    with name: "m"
+    with args: { "Integer", - }
+
+### INPUT ###
+public class MyClass {
+
+    MyClass() {}
+    void MyClass() {}
+
+    void m() {}
+    void m(int i) {}
+    void m(Integer i) {}
+}

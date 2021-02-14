@@ -23,16 +23,15 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     void shouldVerifyMethodName() {
         MethodCall statement = mock(MethodCall.class);
         when(statement.printMethodName()).thenReturn(METHOD_NAME);
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME,
-                Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().withMethod(METHOD_NAME).build());
     }
 
     @Test
     void shouldThrowDuringVerifyingMethodName() {
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.emptyList()));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
         ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
 
         assertThatThrownBy(() -> verifier.verify(StatementModel.builder().withMethod(METHOD_NAME).build()))
@@ -44,8 +43,8 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     void shouldVerifyText() {
         ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getText()).thenReturn(STATEMENT);
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().withText(STATEMENT).build());
     }
@@ -54,8 +53,8 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     void shouldVerifyResolved() {
         ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getResolved()).thenReturn(STATEMENT);
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().withResolved(STATEMENT).build());
     }
@@ -64,8 +63,8 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     void shouldVerifyIfCond() {
         ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getProperty(StatementProperties.IF_CONDITION)).thenReturn("cond");
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().withIf("cond").build());
     }
@@ -75,8 +74,8 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
         ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getProperty(StatementProperties.IF_CONDITION)).thenReturn("cond");
         when(statement.getProperty(StatementProperties.IN_ELSE)).thenReturn("true");
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().withElseIf("cond").build());
     }
@@ -85,8 +84,8 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     void shouldVerifyIsInElse() {
         ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getProperty(StatementProperties.IN_ELSE)).thenReturn("true");
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().isInElse(true).build());
     }
@@ -95,8 +94,8 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     void shouldVerifySwitchExpr() {
         ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getProperty(StatementProperties.SWITCH_EXPRESSION)).thenReturn("expr");
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().withSwitchExpr("expr").build());
     }
@@ -105,15 +104,15 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     void shouldVerifySwitchLabel() {
         ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getProperty(StatementProperties.SWITCH_LABELS)).thenReturn("label");
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().withSwitchLabel("label").build());
     }
 
     @Test
     void shouldThrowCorrectErrorMessage() {
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.emptyList()));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
         ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
         StatementModel model = StatementModel.builder()
                 .withMethod(METHOD_NAME)
@@ -129,8 +128,8 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     void shouldVerifyForIteration() {
         ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getProperty(StatementProperties.FOR_ITERATION)).thenReturn("1");
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().withForIteration(1).build());
     }
@@ -139,8 +138,8 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     void shouldVerifyWhileIteration() {
         ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getProperty(StatementProperties.WHILE_ITERATION)).thenReturn("1");
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().withWhileIteration(1).build());
     }
@@ -149,8 +148,8 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
     void shouldVerifyDoWhileIteration() {
         ExpressionStatement statement = mock(ExpressionStatement.class);
         when(statement.getProperty(StatementProperties.DO_WHILE_ITERATION)).thenReturn("1");
-        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME, Collections.singletonList(statement)));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods));
+        List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
 
         verifier.verify(StatementModel.builder().withDoWhileIteration(1).build());
     }

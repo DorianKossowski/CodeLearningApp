@@ -1,0 +1,21 @@
+### TASK ###
+-> method
+    with modifiers: { "public" }
+    with result: "void"
+    with name: "methodA"
+    with args:
+-> method
+    with modifiers:
+    with result: "void"
+    with name: "methodB"
+    with args: { "String", - }
+
+### INPUT ###
+public class MyFirstClass {
+
+    public void methodA() {
+    }
+
+    void methodB(String s) {
+    }
+}

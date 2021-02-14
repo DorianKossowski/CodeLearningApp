@@ -3,6 +3,7 @@ package com.server.parser.java.visitor.resolver;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
@@ -20,8 +21,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class StatementResolverTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
@@ -65,6 +65,7 @@ class StatementResolverTest {
     void shouldThrowWhenSingleVariableDefAsContent() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
+        methodContext.save(mock(MethodHeader.class, RETURNS_DEEP_STUBS));
         JavaParser.StatementContext c = HELPER.shouldParseToEof("String str = \"true\";", JavaParser::statement);
 
         assertThatThrownBy(() -> ForStmtResolver.validateLoopContent(methodContext, c))

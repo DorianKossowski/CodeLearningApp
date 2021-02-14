@@ -12,9 +12,24 @@ public class JavaTaskParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
+            "class with modifiers: { \"x\", \"y\" }",
+            "class with name: \"x\"",
+            "class with constructor with name: \"t\" with args: { \"int\", - }",
+            "class with field with modifiers: {\"public\", \"static\"} with type: \"int\" with name: \"t\" " +
+                    "with value: \"1\" log info: \"t\"",
+            "class log info: \"t\"",
+    })
+    void shouldParseClassRule(String input) {
+        HELPER.shouldParseToEof(input, JavaTaskParser::classRule);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
             "method with name: \"x\"",
+            "method with args: ",
             "method with args: {\"x\", -}",
             "method with args: {-, \"x\"}, {\"x\", \"x\"}",
+            "method with modifiers: ",
             "method with modifiers: {\"x\"}",
             "method with modifiers: {\"x\", \"x\"}",
             "method with result: \"x\""

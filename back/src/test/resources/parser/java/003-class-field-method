@@ -1,4 +1,15 @@
 ### TASK ###
+-> class
+    with field
+        with modifiers: { "static" }
+        with type: "String"
+        with name: "s"
+        with value: "\"str\""
+-> method
+    with modifiers: { "public" }
+    with result: "int"
+    with name: "main"
+    with args:
 
 ### INPUT ###
 public class MyClass {

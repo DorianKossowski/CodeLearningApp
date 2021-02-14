@@ -9,7 +9,52 @@ rules
     ;
 
 singleRule
-    : ARROW ( methodRule | statementRule | variableRule )
+    : ARROW ( classRule | methodRule | statementRule | variableRule )
+    ;
+
+classRule
+    : 'class' classRuleSpec+
+    ;
+
+classRuleSpec
+    : WITH ( modifiersRuleSpec | classNameSpec | classConstructorSpec | classFieldSpec )
+    | logInfo
+    ;
+
+classFieldSpec
+    : 'field' fieldRuleSpec+
+    ;
+
+fieldRuleSpec
+    : WITH ( modifiersRuleSpec | typeRuleSpec | fieldNameRuleSpec | valueRuleSpec | logInfo )
+    ;
+
+valueRuleSpec
+    : 'value' ':' STRING_LITERAL
+    ;
+
+fieldNameRuleSpec
+    : 'name' ':' STRING_LITERAL
+    ;
+
+typeRuleSpec
+    : 'type' ':' STRING_LITERAL
+    ;
+
+classConstructorSpec
+    : 'constructor' constructorRuleSpec+
+    ;
+
+constructorRuleSpec
+    : WITH ( constructorNameRuleSpec | methodArgsRuleSpec )
+    ;
+
+constructorNameRuleSpec
+    : 'name' ':' STRING_LITERAL
+    ;
+
+classNameSpec
+    : 'name' ':' STRING_LITERAL
     ;
 
 variableRule
@@ -86,23 +131,27 @@ methodRule
     ;
 
 methodRuleSpec
-    : WITH ( methodNameRuleSpec | methodArgsRuleSpec | methodModifiersRuleSpec | methodResultRuleSpec )
+    : WITH ( methodNameRuleSpec | methodArgsRuleSpec | modifiersRuleSpec | methodResultRuleSpec )
     ;
 
 methodResultRuleSpec
     : 'result' ':' STRING_LITERAL
     ;
 
-methodModifiersRuleSpec
-    : 'modifiers' ':' '{' STRING_LITERAL ( ',' STRING_LITERAL )* '}'
+modifiersRuleSpec
+    : 'modifiers' ':' ( '{' STRING_LITERAL ( ',' STRING_LITERAL )* '}' )?
     ;
 
 methodArgsRuleSpec
-    : 'args' ':' argsElement ( ',' argsElement )*
+    : 'args' ':' argsElements
     ;
 
 methodNameRuleSpec
     : 'name' ':' valueOrEmpty
+    ;
+
+argsElements
+    : ( argsElement ( ',' argsElement )* )?
     ;
 
 argsElement

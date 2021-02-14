@@ -2,7 +2,7 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.Verify;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.statement.VariableDef;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
@@ -17,25 +17,24 @@ public class MethodVerifier {
     private final List<Method> methods;
     private List<Method> availableMethods;
 
-    public MethodVerifier(TaskAst taskAst) {
-        this.methods = Objects.requireNonNull(taskAst, "taskAst cannot be null").getClassAst().getBody().getMethods();
+    public MethodVerifier(Task task) {
+        this.methods = Objects.requireNonNull(task, "task cannot be null").getClassAst().getBody().getMethods();
+    }
+
+    protected MethodVerifier(List<Method> methods) {
+        this.methods = Objects.requireNonNull(methods, "methods cannot be null");
     }
 
     public void verify(MethodModel methodModel) {
         availableMethods = new ArrayList<>(methods);
-        if (!methodModel.getModifiers().isEmpty()) {
-            verifyMethodModifiers(methodModel.getModifiers());
-        }
+        methodModel.getModifiers().ifPresent(this::verifyMethodModifiers);
         methodModel.getResult().ifPresent(this::verifyMethodResult);
         methodModel.getName().ifPresent(this::verifyMethodName);
-        if (!methodModel.getArgs().isEmpty()) {
-            verifyMethodArgs(methodModel.getArgs());
-        }
-
+        methodModel.getArgs().ifPresent(this::verifyMethodArgs);
         Verify.verify(!availableMethods.isEmpty(), getErrorMessage(methodModel));
     }
 
-    private String getErrorMessage(MethodModel methodModel) {
+    protected String getErrorMessage(MethodModel methodModel) {
         StringBuilder builder = new StringBuilder();
         methodModel.getName().ifPresent(name -> builder.append(" \"").append(name).append('"'));
         return String.format("Oczekiwana metoda%s nie istnieje", builder);
@@ -49,8 +48,15 @@ public class MethodVerifier {
 
     private void verifyMethodModifiers(List<String> modifiers) {
         availableMethods = availableMethods.stream()
-                .filter(method -> method.getHeader().getModifiers().containsAll(modifiers))
+                .filter(method -> hasSameModifiers(method.getHeader().getModifiers(), modifiers))
                 .collect(Collectors.toList());
+    }
+
+    private boolean hasSameModifiers(List<String> actualModifiers, List<String> modifiers) {
+        if (modifiers.size() == 0) {
+            return actualModifiers.isEmpty();
+        }
+        return actualModifiers.containsAll(modifiers);
     }
 
     private void verifyMethodName(String name) {

@@ -8,7 +8,7 @@
 
 ### INPUT ###
 public class MyClass {
-    public int main(){
+    public static void main(String[] args){
         int i = 0;
         while(i < 2) {
             System.out.println(i*2);

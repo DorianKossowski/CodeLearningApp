@@ -32,17 +32,20 @@ class ClassVisitorTest extends JavaVisitorTestBase {
 
         ClassHeader header = visitorInternal.visit(c);
 
+        assertThat(Iterables.getOnlyElement(header.getModifiers())).isEqualTo("public");
         assertThat(header.getName()).isEqualTo("c");
     }
 
     @Test
     void shouldVisitClassBody() {
         context.setName("MyClass");
-        String input = "int i; void m(){} void m2(){} private String s;";
+        String input = "int i; void m(){} MyClass(){} void m2(){} private String s;";
         JavaParser.ClassBodyContext c = HELPER.shouldParseToEof(input, JavaParser::classBody);
 
         ClassBody body = visitorInternal.visit(c);
 
+        assertThat(body.getConstructors()).extracting(constructor -> constructor.getHeader().getName())
+                .containsExactly("MyClass");
         assertThat(body.getMethods()).extracting(method -> method.getHeader().getName())
                 .containsExactly("m", "m2");
         assertThat(body.getFields()).extracting(VariableDef::getName)

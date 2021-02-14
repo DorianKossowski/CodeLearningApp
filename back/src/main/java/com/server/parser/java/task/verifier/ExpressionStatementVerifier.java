@@ -2,7 +2,7 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.Verify;
 import com.server.parser.java.JavaParserAdapter;
-import com.server.parser.java.ast.TaskAst;
+import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.statement.ExpressionStatement;
 import com.server.parser.java.ast.statement.MethodPrintable;
 import com.server.parser.java.ast.statement.StatementProperties;
@@ -16,9 +16,8 @@ public class ExpressionStatementVerifier {
     private final List<ExpressionStatement> statements;
     private List<ExpressionStatement> availableStatements;
 
-    public ExpressionStatementVerifier(TaskAst taskAst) {
-        this.statements = taskAst.getClassAst().getBody().getMethods().stream()
-                .flatMap(method -> method.getBody().getStatements().stream())
+    public ExpressionStatementVerifier(Task task) {
+        this.statements = task.getCalledStatements().stream()
                 .flatMap(statement -> statement.getExpressionStatements().stream())
                 .collect(Collectors.toList());
     }

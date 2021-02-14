@@ -2,16 +2,17 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.ConstructorHeader;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.statement.MethodCall;
-import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MethodVisitorTest extends JavaVisitorTestBase {
     private final MethodVisitor visitor = new MethodVisitor();
@@ -64,12 +65,39 @@ class MethodVisitorTest extends JavaVisitorTestBase {
 
         assertThat(method.getClassName()).isEqualTo("MyClass");
         MethodHeader header = method.getHeader();
-        Statement statement = Iterables.getOnlyElement(method.getBody().getStatements());
         assertThat(header).extracting(MethodHeader::getResult, MethodHeader::getName)
                 .containsExactly("void", "m");
         assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
-        assertThat(((MethodCall) statement)).extracting(MethodCall::getName,
-                call -> Iterables.getOnlyElement(call.getArgs()).getText())
-                .containsExactly("println", "\"HELLO\"");
+        assertThat(Iterables.getOnlyElement(method.getBodyContext().statementList().statement()).getText())
+                .isEqualTo("println(\"HELLO\");");
+    }
+
+    @Test
+    void shouldVisitConstructorDec() {
+        context.setName("MyClass");
+        String input = "MyClass(String[] a) { println(\"HELLO\"); }";
+        JavaParser.ConstructorDecContext c = HELPER.shouldParseToEof(input, JavaParser::constructorDec);
+
+        Method method = visitor.visit(c, createMethodContext());
+
+        assertThat(method.getClassName()).isEqualTo("MyClass");
+        MethodHeader header = method.getHeader();
+        assertThat(header).isExactlyInstanceOf(ConstructorHeader.class);
+        assertThat(header).extracting(MethodHeader::getResult, MethodHeader::getName)
+                .containsExactly(null, "MyClass");
+        assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
+        assertThat(Iterables.getOnlyElement(method.getBodyContext().statementList().statement()).getText())
+                .isEqualTo("println(\"HELLO\");");
+    }
+
+    @Test
+    void shouldThrowWhenWrongConstructorName() {
+        context.setName("MyClass");
+        String input = "X() {}";
+        JavaParser.ConstructorDecContext c = HELPER.shouldParseToEof(input, JavaParser::constructorDec);
+
+        assertThatThrownBy(() -> visitor.visit(c, createMethodContext()))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Konstruktor X różny od nazwy klasy MyClass");
     }
 }

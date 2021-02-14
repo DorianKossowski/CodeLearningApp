@@ -1,0 +1,9 @@
+### TASK ###
+-> class
+    with modifiers: { "public" }
+    with name: "MyFirstClass"
+
+### INPUT ###
+public class MyFirstClass {
+
+}

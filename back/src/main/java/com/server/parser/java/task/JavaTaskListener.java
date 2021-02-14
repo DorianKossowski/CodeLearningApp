@@ -2,10 +2,7 @@ package com.server.parser.java.task;
 
 import com.server.parser.java.JavaTaskBaseListener;
 import com.server.parser.java.JavaTaskParser;
-import com.server.parser.java.task.model.MethodArgs;
-import com.server.parser.java.task.model.MethodModel;
-import com.server.parser.java.task.model.StatementModel;
-import com.server.parser.java.task.model.VariableModel;
+import com.server.parser.java.task.model.*;
 import com.server.parser.java.task.verifier.TaskVerifier;
 
 import java.util.ArrayList;
@@ -17,7 +14,10 @@ import java.util.stream.Collectors;
 public class JavaTaskListener extends JavaTaskBaseListener {
     private final TaskVerifier taskVerifier;
 
+    private ClassModel.Builder classBuilder;
+    private FieldModel.Builder fieldBuilder;
     private MethodModel.Builder methodBuilder;
+    private MethodModel.Builder constructorBuilder;
     private StatementModel.Builder statementBuilder;
     private VariableModel.Builder variableBuilder;
 
@@ -43,20 +43,35 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     @Override
     public void enterMethodArgsRuleSpec(JavaTaskParser.MethodArgsRuleSpecContext ctx) {
         List<MethodArgs> args = new ArrayList<>();
-        for (JavaTaskParser.ArgsElementContext argsContext : ctx.argsElement()) {
-            Optional<String> typeOptional = JavaTaskGrammarHelper.extractValue(argsContext.valueOrEmpty().get(0));
-            Optional<String> nameOptional = JavaTaskGrammarHelper.extractValue(argsContext.valueOrEmpty().get(1));
-            args.add(new MethodArgs(typeOptional.orElse(null), nameOptional.orElse(null)));
+        if (ctx.argsElements() != null) {
+            for (JavaTaskParser.ArgsElementContext argsContext : ctx.argsElements().argsElement()) {
+                Optional<String> typeOptional = JavaTaskGrammarHelper.extractValue(argsContext.valueOrEmpty().get(0));
+                Optional<String> nameOptional = JavaTaskGrammarHelper.extractValue(argsContext.valueOrEmpty().get(1));
+                args.add(new MethodArgs(typeOptional.orElse(null), nameOptional.orElse(null)));
+            }
         }
-        methodBuilder.withArgs(args);
+        if (ctx.getParent() instanceof JavaTaskParser.ConstructorRuleSpecContext) {
+            constructorBuilder.withArgs(args);
+        } else if (ctx.getParent() instanceof JavaTaskParser.MethodRuleSpecContext) {
+            methodBuilder.withArgs(args);
+        }
     }
 
     @Override
-    public void enterMethodModifiersRuleSpec(JavaTaskParser.MethodModifiersRuleSpecContext ctx) {
-        List<String> modifiers = ctx.STRING_LITERAL().stream()
-                .map(node -> JavaTaskGrammarHelper.getFromStringLiteral(node.getText()))
-                .collect(Collectors.toList());
-        methodBuilder.withModifiers(modifiers);
+    public void enterModifiersRuleSpec(JavaTaskParser.ModifiersRuleSpecContext ctx) {
+        List<String> modifiers = new ArrayList<>();
+        if (ctx.STRING_LITERAL() != null) {
+            modifiers = ctx.STRING_LITERAL().stream()
+                    .map(node -> JavaTaskGrammarHelper.getFromStringLiteral(node.getText()))
+                    .collect(Collectors.toList());
+        }
+        if (ctx.getParent() instanceof JavaTaskParser.MethodRuleSpecContext) {
+            methodBuilder.withModifiers(modifiers);
+        } else if (ctx.getParent() instanceof JavaTaskParser.FieldRuleSpecContext) {
+            fieldBuilder.withModifiers(modifiers);
+        } else if (ctx.getParent() instanceof JavaTaskParser.ClassRuleSpecContext) {
+            classBuilder.withModifiers(modifiers);
+        }
     }
 
     @Override
@@ -95,10 +110,15 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterLogInfo(JavaTaskParser.LogInfoContext ctx) {
+        String log = JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
         if (ctx.parent instanceof JavaTaskParser.StatementRuleSpecContext) {
-            statementBuilder.withLogInfo(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+            statementBuilder.withLogInfo(log);
         } else if (ctx.parent instanceof JavaTaskParser.VariableRuleSpecContext) {
-            variableBuilder.withLogInfo(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+            variableBuilder.withLogInfo(log);
+        } else if (ctx.parent instanceof JavaTaskParser.ClassRuleSpecContext) {
+            classBuilder.withLogInfo(log);
+        } else if (ctx.parent instanceof JavaTaskParser.FieldRuleSpecContext) {
+            fieldBuilder.withLogInfo(log);
         }
     }
 
@@ -153,5 +173,60 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     public void enterDoWhileIteration(JavaTaskParser.DoWhileIterationContext ctx) {
         String stringLiteral = JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
         statementBuilder.withDoWhileIteration(Integer.parseInt(stringLiteral));
+    }
+
+    @Override
+    public void enterClassRule(JavaTaskParser.ClassRuleContext ctx) {
+        classBuilder = ClassModel.builder();
+    }
+
+    @Override
+    public void exitClassRule(JavaTaskParser.ClassRuleContext ctx) {
+        taskVerifier.verifyClass(classBuilder.build());
+    }
+
+    @Override
+    public void enterClassNameSpec(JavaTaskParser.ClassNameSpecContext ctx) {
+        classBuilder.withName(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    }
+
+    @Override
+    public void enterClassConstructorSpec(JavaTaskParser.ClassConstructorSpecContext ctx) {
+        constructorBuilder = MethodModel.builder();
+    }
+
+    @Override
+    public void exitClassConstructorSpec(JavaTaskParser.ClassConstructorSpecContext ctx) {
+        taskVerifier.verifyConstructor(constructorBuilder.build());
+    }
+
+    @Override
+    public void enterConstructorNameRuleSpec(JavaTaskParser.ConstructorNameRuleSpecContext ctx) {
+        constructorBuilder.withName(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    }
+
+    @Override
+    public void enterClassFieldSpec(JavaTaskParser.ClassFieldSpecContext ctx) {
+        fieldBuilder = FieldModel.builder();
+    }
+
+    @Override
+    public void exitClassFieldSpec(JavaTaskParser.ClassFieldSpecContext ctx) {
+        taskVerifier.verifyField(fieldBuilder.build());
+    }
+
+    @Override
+    public void enterTypeRuleSpec(JavaTaskParser.TypeRuleSpecContext ctx) {
+        fieldBuilder.withType(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    }
+
+    @Override
+    public void enterFieldNameRuleSpec(JavaTaskParser.FieldNameRuleSpecContext ctx) {
+        fieldBuilder.withName(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    }
+
+    @Override
+    public void enterValueRuleSpec(JavaTaskParser.ValueRuleSpecContext ctx) {
+        fieldBuilder.withValue(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
 }

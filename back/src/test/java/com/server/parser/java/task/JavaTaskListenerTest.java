@@ -3,10 +3,7 @@ package com.server.parser.java.task;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaTaskLexer;
 import com.server.parser.java.JavaTaskParser;
-import com.server.parser.java.task.model.MethodArgs;
-import com.server.parser.java.task.model.MethodModel;
-import com.server.parser.java.task.model.StatementModel;
-import com.server.parser.java.task.model.VariableModel;
+import com.server.parser.java.task.model.*;
 import com.server.parser.java.task.verifier.TaskVerifier;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +12,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
@@ -34,6 +32,54 @@ class JavaTaskListenerTest {
         listener = new JavaTaskListener(verifier);
     }
 
+    static Stream<Arguments> classSource() {
+        return Stream.of(
+                Arguments.of("Class with modifiers", "class with modifiers: { \"x\" }",
+                        ClassModel.builder().withModifiers(Collections.singletonList("x")).build()),
+                Arguments.of("Class without modifiers", "class with modifiers: ",
+                        ClassModel.builder().withModifiers(Collections.emptyList()).build()),
+                Arguments.of("Class with name", "class with name: \"x\"", ClassModel.builder().withName("x").build()),
+                Arguments.of("Class with log info", "class log info: \"t\"", ClassModel.builder().withLogInfo("t").build())
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("classSource")
+    void shouldVerifyClass(@SuppressWarnings("unused") String name, String input, ClassModel model) {
+        JavaTaskParser.ClassRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::classRule);
+
+        WALKER.walk(listener, c);
+
+        verify(verifier).verifyClass(model);
+    }
+
+    static Stream<Arguments> fieldSource() {
+        return Stream.of(
+                Arguments.of("Field with modifiers", "class with field with modifiers: {\"x\", \"y\"}",
+                        FieldModel.builder().withModifiers(Arrays.asList("x", "y")).build()),
+                Arguments.of("Field without modifiers", "class with field with modifiers:",
+                        FieldModel.builder().withModifiers(Collections.emptyList()).build()),
+                Arguments.of("Field with type", "class with field with type: \"x\"",
+                        FieldModel.builder().withType("x").build()),
+                Arguments.of("Field with name", "class with field with name: \"x\"",
+                        FieldModel.builder().withName("x").build()),
+                Arguments.of("Field with value", "class with field with value: \"x\"",
+                        FieldModel.builder().withValue("x").build()),
+                Arguments.of("Field with log info", "class with field with log info: \"t\"",
+                        FieldModel.builder().withLogInfo("t").build())
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("fieldSource")
+    void shouldVerifyField(@SuppressWarnings("unused") String name, String input, FieldModel model) {
+        JavaTaskParser.ClassRuleContext c = HELPER.shouldParseToEof(input, JavaTaskParser::classRule);
+
+        WALKER.walk(listener, c);
+
+        verify(verifier).verifyField(model);
+    }
+
     static Stream<Arguments> methodSource() {
         return Stream.of(
                 Arguments.of("Method with name", "method with name: \"x\"",
@@ -43,6 +89,8 @@ class JavaTaskListenerTest {
                                 new MethodArgs("String[]", "x"))).build()),
                 Arguments.of("Method with modifiers", "method with modifiers: {\"x\", \"y\"}",
                         MethodModel.builder().withModifiers(Arrays.asList("x", "y")).build()),
+                Arguments.of("Method without modifiers", "method with modifiers: ",
+                        MethodModel.builder().withModifiers(Collections.emptyList()).build()),
                 Arguments.of("Method with result", "method with result: \"x\"",
                         MethodModel.builder().withResult("x").build())
         );

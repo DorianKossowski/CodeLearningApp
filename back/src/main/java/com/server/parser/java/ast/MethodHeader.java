@@ -4,6 +4,7 @@ import com.server.parser.java.ast.statement.VariableDef;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MethodHeader extends AstElement {
     private final List<String> modifiers;
@@ -13,7 +14,7 @@ public class MethodHeader extends AstElement {
 
     public MethodHeader(List<String> modifiers, String result, String name, List<VariableDef> arguments) {
         this.modifiers = Objects.requireNonNull(modifiers, "modifiers cannot be null");
-        this.result = Objects.requireNonNull(result, "result cannot be null");
+        this.result = result;
         this.name = Objects.requireNonNull(name, "name cannot be null");
         this.arguments = Objects.requireNonNull(arguments, "arguments cannot be null");
     }
@@ -34,6 +35,14 @@ public class MethodHeader extends AstElement {
         return arguments;
     }
 
+    public boolean isConstructor() {
+        return result == null;
+    }
+
+    public boolean isStatic() {
+        return modifiers.contains("static");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -43,12 +52,20 @@ public class MethodHeader extends AstElement {
             return false;
         }
         MethodHeader that = (MethodHeader) o;
-        return Objects.equals(name, that.name);
+        return Objects.equals(name, that.name) &&
+                Objects.equals(getVariablesType(arguments), getVariablesType(that.arguments)) &&
+                Objects.equals(isConstructor(), that.isConstructor());
+    }
+
+    private static List<String> getVariablesType(List<VariableDef> variables) {
+        return variables.stream()
+                .map(VariableDef::getType)
+                .collect(Collectors.toList());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, getVariablesType(arguments), isConstructor());
     }
 
     @Override
