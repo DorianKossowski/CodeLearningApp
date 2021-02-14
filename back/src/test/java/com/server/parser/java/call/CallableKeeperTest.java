@@ -95,7 +95,7 @@ class CallableKeeperTest {
         List<Expression> args = Collections.emptyList();
         when(matchingCallableFinder.find(name, args)).thenReturn(Optional.of(method));
 
-        Method callable = keeper.getCallable(new CallInvocation("", "", name, args));
+        Method callable = keeper.getCallable(new CallInvocation("", "", new CallReference(name), args));
 
         assertThat(callable).isSameAs(method);
     }
