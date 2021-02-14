@@ -17,6 +17,7 @@ import java.util.Optional;
 
 public class TaskVisitor extends JavaBaseVisitor<Task> {
     private final JavaContext context = new ClassContext();
+    private final MainRunner mainRunner = new MainRunner();
 
     @Override
     public Task visitTaskEOF(JavaParser.TaskEOFContext ctx) {
@@ -27,36 +28,42 @@ public class TaskVisitor extends JavaBaseVisitor<Task> {
     public Task visitTask(JavaParser.TaskContext ctx) {
         ClassAst classAst = context.getVisitor(ClassAst.class).visit(ctx.classDec(), context);
 
-        StatementListVisitor statementListVisitor = new StatementListVisitor();
-        Optional<List<Statement>> calledStmts = getMainMethod(classAst)
-                .map(mainMethod -> statementListVisitor.visit(mainMethod.getBodyContext(), mainMethod.getMethodContext()));
-
-        return new Task(classAst, calledStmts.orElse(Collections.emptyList()));
+        List<Statement> calledStatements = mainRunner.run(classAst.getBody().getMethods()).orElse(Collections.emptyList());
+        return new Task(classAst, calledStatements);
     }
 
-    Optional<Method> getMainMethod(ClassAst classAst) {
-        return classAst.getBody().getMethods().stream()
-                .filter(TaskVisitor::hasMainModifiers)
-                .filter(TaskVisitor::hasMainName)
-                .filter(TaskVisitor::hasMainResult)
-                .filter(TaskVisitor::hasMainArgs)
-                .findFirst();
-    }
+    static class MainRunner {
+        private final StatementListVisitor statementListVisitor = new StatementListVisitor();
 
-    private static boolean hasMainModifiers(Method method) {
-        return method.getHeader().getModifiers().containsAll(Arrays.asList("public", "static"));
-    }
+        public Optional<List<Statement>> run(List<Method> methods) {
+            return getMainMethod(methods)
+                    .map(mainMethod -> statementListVisitor.visit(mainMethod.getBodyContext(), mainMethod.getMethodContext()));
+        }
 
-    private static boolean hasMainName(Method method) {
-        return method.getHeader().getName().equals("main");
-    }
+        Optional<Method> getMainMethod(List<Method> methods) {
+            return methods.stream()
+                    .filter(MainRunner::hasMainModifiers)
+                    .filter(MainRunner::hasMainName)
+                    .filter(MainRunner::hasMainResult)
+                    .filter(MainRunner::hasMainArgs)
+                    .findFirst();
+        }
 
-    private static boolean hasMainResult(Method method) {
-        return method.getHeader().getResult().equals("void");
-    }
+        private static boolean hasMainModifiers(Method method) {
+            return method.getHeader().getModifiers().containsAll(Arrays.asList("public", "static"));
+        }
 
-    private static boolean hasMainArgs(Method method) {
-        List<VariableDef> arguments = method.getHeader().getArguments();
-        return arguments.size() == 1 && arguments.get(0).getType().equals("String[]");
+        private static boolean hasMainName(Method method) {
+            return method.getHeader().getName().equals("main");
+        }
+
+        private static boolean hasMainResult(Method method) {
+            return method.getHeader().getResult().equals("void");
+        }
+
+        private static boolean hasMainArgs(Method method) {
+            List<VariableDef> arguments = method.getHeader().getArguments();
+            return arguments.size() == 1 && arguments.get(0).getType().equals("String[]");
+        }
     }
 }

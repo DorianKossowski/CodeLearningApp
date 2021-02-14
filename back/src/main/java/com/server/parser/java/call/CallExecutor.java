@@ -35,6 +35,7 @@ public class CallExecutor implements Serializable {
         this.visitor = Objects.requireNonNull(visitor, "visitor cannot be null");
     }
 
+    //TODO inline prepareForNextExecution
     public CallStatement execute(Method method, CallInvocation invocation) {
         prepareForNextExecution();
         JavaContext executionContext = ContextCopyFactory.createExecutionContext(method.getMethodContext());
