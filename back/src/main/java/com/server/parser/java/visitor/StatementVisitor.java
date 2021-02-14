@@ -14,7 +14,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -93,19 +92,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         //*** CALL ***//
         @Override
         public CallStatement visitCall(JavaParser.CallContext ctx) {
-            String methodName = textVisitor.visit(ctx.callName());
-            List<Expression> arguments;
-            arguments = ctx.callArguments() == null ? Collections.emptyList() : visit(ctx.callArguments());
-            CallInvocation invocation = new CallInvocation(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(),
-                    methodName, arguments);
-            return context.getCallHandler().execute(invocation);
-        }
-
-        private List<Expression> visit(JavaParser.CallArgumentsContext ctx) {
-            JavaVisitor<Expression> expressionVisitor = context.getVisitor(Expression.class);
-            return ctx.expression().stream()
-                    .map(expressionContext -> expressionVisitor.visit(expressionContext, context))
-                    .collect(Collectors.toList());
+            return context.getVisitor(CallStatement.class).visit(ctx, context);
         }
 
         //*** VARIABLE ***//
