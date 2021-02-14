@@ -19,6 +19,10 @@ public class CallInvocation extends ExpressionStatement implements MethodPrintab
         this.args = Objects.requireNonNull(args, "args cannot be null");
     }
 
+    public CallReference getCallReference() {
+        return callReference;
+    }
+
     public String getName() {
         return callReference.getCallName();
     }

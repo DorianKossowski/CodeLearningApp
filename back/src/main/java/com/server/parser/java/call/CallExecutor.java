@@ -1,8 +1,12 @@
 package com.server.parser.java.call;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Streams;
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.statement.CallInvocation;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
@@ -65,5 +69,15 @@ public class CallExecutor implements Serializable {
             throw new ResolvingException(String.format("Metoda %s musi przyjmować tylko jeden argument (wywołano z %d)",
                     methodName, argumentsSize));
         }
+    }
+
+    public CallStatement executeSpecialEqualsMethod(CallInvocation invocation) {
+        Variable variable = invocation.getCallReference().getVariable()
+                .orElseThrow(() -> new IllegalArgumentException("Should provide variable"));
+        Expression argument = Iterables.getOnlyElement(invocation.getArgs());
+
+        boolean areEqual = variable.getValue().equalsMethod(argument.getValue());
+        Literal result = new Literal(new BooleanConstant(areEqual));
+        return new CallStatement(invocation, Collections.emptyList(), result);
     }
 }

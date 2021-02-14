@@ -1,6 +1,5 @@
 package com.server.parser.java.visitor;
 
-import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
@@ -11,6 +10,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.ObjectRef;
+import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -128,25 +128,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         //*** CALL ***//
         @Override
         public Expression visitCall(JavaParser.CallContext ctx) {
-            if (isSpecificEqualsMethod(ctx)) {
-                return visitEqualsMethod(ctx);
-            }
-            throw new UnsupportedOperationException();
-        }
-
-        private boolean isSpecificEqualsMethod(JavaParser.CallContext ctx) {
-            JavaParser.CallNameContext callNameContext = ctx.callName();
-            JavaParser.CallArgumentsContext callArgumentsContext = ctx.callArguments();
-            return callNameContext.secSeg != null && callNameContext.secSeg.getText().equals("equals") &&
-                    callArgumentsContext != null && callArgumentsContext.expression().size() == 1;
-        }
-
-        private Expression visitEqualsMethod(JavaParser.CallContext ctx) {
-            JavaParser.CallArgumentsContext callArgumentsContext = ctx.callArguments();
-            Value value = context.getVariable(ctx.callName().firstSeg.getText()).getValue();
-            Value valueToCompare = context.getVisitor(Expression.class)
-                    .visit(Iterables.getOnlyElement(callArgumentsContext.expression()), context).getValue();
-            return new Literal(new BooleanConstant(value.equalsMethod(valueToCompare)));
+            return context.getVisitor(CallStatement.class).visit(ctx, context).getResult();
         }
 
         //*** LITERAL **//

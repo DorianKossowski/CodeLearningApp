@@ -3,9 +3,12 @@ package com.server.parser.java.call;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.CallInvocation;
 import com.server.parser.java.ast.statement.*;
+import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
@@ -53,6 +56,7 @@ class CallExecutorTest {
                 .returns(method, CallInvocation::printMethodName)
                 .returns(name, CallInvocation::getName)
                 .returns(args, CallInvocation::getArgs);
+        assertThat(call.getResult()).isSameAs(VoidExpression.INSTANCE);
     }
 
     @Test
@@ -103,5 +107,22 @@ class CallExecutorTest {
         executor.assignInvocationParameters(arguments, invocationParameters, context);
 
         verify(context).updateVariable(name, expression);
+    }
+
+    @Test
+    void shouldExecuteSpecialEqualsMethod() {
+        Expression expression = mock(Expression.class);
+        Value expressionValue = mock(Value.class);
+        when(expression.getValue()).thenReturn(expressionValue);
+        Variable variable = mock(Variable.class, RETURNS_DEEP_STUBS);
+        when(variable.getValue().equalsMethod(expressionValue)).thenReturn(true);
+        CallReference callReference = new CallReference(variable, "equals");
+        CallInvocation invocation = new CallInvocation("", "", callReference, Collections.singletonList(expression));
+
+        CallStatement statement = executor.executeSpecialEqualsMethod(invocation);
+
+        assertThat(statement.getCallInvocation()).isSameAs(invocation);
+        assertThat(statement.getExpressionStatements()).hasSize(1);
+        assertThat(statement.getResult().getResolvedText()).isEqualTo("true");
     }
 }

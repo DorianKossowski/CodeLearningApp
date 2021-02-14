@@ -18,11 +18,21 @@ public class CallHandler implements Serializable {
         if (isSpecialPrintMethod(invocation.getName())) {
             return callExecutor.callPrintMethod(invocation);
         }
+        if (isSpecificEqualsMethod(invocation)) {
+            return callExecutor.executeSpecialEqualsMethod(invocation);
+        }
         Method method = callableKeeper.getCallable(invocation);
         return callExecutor.execute(method, invocation);
     }
 
     private boolean isSpecialPrintMethod(String name) {
         return name.startsWith("System.out.print");
+    }
+
+    boolean isSpecificEqualsMethod(CallInvocation callInvocation) {
+        CallReference callReference = callInvocation.getCallReference();
+        return callReference.getVariable().isPresent() &&
+                callReference.getCallName().equals("equals") &&
+                callInvocation.getArgs().size() == 1;
     }
 }
