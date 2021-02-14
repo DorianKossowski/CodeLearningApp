@@ -49,7 +49,7 @@ class CallExecutorTest {
         List<Expression> args = Collections.singletonList(mock(Expression.class));
         CallInvocation invocation = new CallInvocation(text, method, new CallReference(name), args);
 
-        CallStatement call = executor.callPrintMethod(invocation);
+        CallStatement call = executor.executePrintMethod(invocation);
 
         assertThat(((CallInvocation) Iterables.getOnlyElement(call.getExpressionStatements())))
                 .returns(text, Statement::getText)
@@ -61,7 +61,7 @@ class CallExecutorTest {
 
     @Test
     void shouldThrowWhenInvalidArgsForPrint() {
-        assertThatThrownBy(() -> executor.callPrintMethod(new CallInvocation("", "",
+        assertThatThrownBy(() -> executor.executePrintMethod(new CallInvocation("", "",
                 new CallReference("System.out.print"), Collections.emptyList())))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Metoda System.out.print musi przyjmować tylko jeden argument (wywołano z 0)");

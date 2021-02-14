@@ -16,7 +16,7 @@ public class CallHandler implements Serializable {
 
     public CallStatement execute(CallInvocation invocation) {
         if (isSpecialPrintMethod(invocation.getName())) {
-            return callExecutor.callPrintMethod(invocation);
+            return callExecutor.executePrintMethod(invocation);
         }
         if (isSpecificEqualsMethod(invocation)) {
             return callExecutor.executeSpecialEqualsMethod(invocation);

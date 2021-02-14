@@ -58,7 +58,7 @@ public class CallExecutor implements Serializable {
         ++executionLevel;
     }
 
-    public CallStatement callPrintMethod(CallInvocation invocation) {
+    public CallStatement executePrintMethod(CallInvocation invocation) {
         int argumentsSize = invocation.getArgs().size();
         checkPrintMethodArguments(invocation.getName(), argumentsSize);
         return new CallStatement(invocation, Collections.emptyList());
