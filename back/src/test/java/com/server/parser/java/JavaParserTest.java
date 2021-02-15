@@ -232,4 +232,12 @@ public class JavaParserTest {
     void shouldParseDoWhileStmt() {
         HELPER.shouldParseToEof("do { fun(); } while (true);", JavaParser::doWhileStatement);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "return", "return x"
+    })
+    void shouldParseReturn(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::returnStatement);
+    }
 }

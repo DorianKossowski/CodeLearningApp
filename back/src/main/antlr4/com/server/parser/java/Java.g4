@@ -139,7 +139,12 @@ expressionStatement
     | methodVarDec
     | assignment
     | breakStatement
+    | returnStatement
     ;
+
+returnStatement
+	: RETURN expression?
+	;
 
 breakStatement
     : BREAK
@@ -275,6 +280,7 @@ FOR         : 'for' ;
 IF          : 'if' ;
 LPAREN      : '(' ;
 NULL        : 'null' ;
+RETURN      : 'return' ;
 RPAREN      : ')' ;
 SEMICOLON   : ';' ;
 SWITCH      : 'switch' ;
