@@ -87,10 +87,10 @@ class CallExecutorTest {
     @Test
     void shouldThrowWhenTooManyExecutions() {
         for (int i = 0; i <= MAX_EXECUTION_LEVEL; ++i) {
-            executor.prepareForNextExecution();
+            executor.preExecution();
         }
 
-        assertThatThrownBy(() -> executor.prepareForNextExecution())
+        assertThatThrownBy(() -> executor.preExecution())
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Przekroczono ilość dopuszczalnych zagnieżdżonych wywołań równą: 10");
     }

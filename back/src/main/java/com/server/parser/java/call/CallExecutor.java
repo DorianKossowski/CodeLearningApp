@@ -35,14 +35,12 @@ public class CallExecutor implements Serializable {
         this.visitor = Objects.requireNonNull(visitor, "visitor cannot be null");
     }
 
-    //TODO inline prepareForNextExecution
     public CallStatement execute(Method method, CallInvocation invocation) {
-        prepareForNextExecution();
+        preExecution();
         JavaContext executionContext = ContextCopyFactory.createExecutionContext(method.getMethodContext());
         assignInvocationParameters(method.getHeader().getArguments(), invocation.getArgs(), executionContext);
         List<Statement> statements = visitor.visit(method.getBodyContext(), executionContext);
-        --executionLevel;
-        return new CallStatement(invocation, statements);
+        return postExecution(invocation, statements);
     }
 
     void assignInvocationParameters(List<VariableDef> arguments, List<Expression> invocationParameters, JavaContext executionContext) {
@@ -52,11 +50,16 @@ public class CallExecutor implements Serializable {
         Streams.forEachPair(argumentsNames.stream(), invocationParameters.stream(), executionContext::updateVariable);
     }
 
-    void prepareForNextExecution() {
+    void preExecution() {
         if (executionLevel > MAX_EXECUTION_LEVEL) {
             throw new ResolvingException("Przekroczono ilość dopuszczalnych zagnieżdżonych wywołań równą: " + MAX_EXECUTION_LEVEL);
         }
         ++executionLevel;
+    }
+
+    private CallStatement postExecution(CallInvocation invocation, List<Statement> statements) {
+        --executionLevel;
+        return new CallStatement(invocation, statements);
     }
 
     public CallStatement executePrintMethod(CallInvocation invocation) {
