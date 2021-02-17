@@ -38,6 +38,7 @@ public class TypeCorrectnessChecker {
         if (expression instanceof UninitializedExpression) {
             return true;
         }
+        // TODO handle unknown type: SomeType a = 1;
         return typeToConstantChecker.get(valueType).test(expression.getLiteral().getConstant().c);
     }
 }
