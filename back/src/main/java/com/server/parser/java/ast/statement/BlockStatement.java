@@ -12,17 +12,14 @@ public class BlockStatement extends Statement {
         this.statements = Objects.requireNonNull(statements, "statements cannot be null");
     }
 
+    public List<Statement> getStatements() {
+        return statements;
+    }
+
     @Override
     public List<ExpressionStatement> getExpressionStatements() {
         List<ExpressionStatement> expressionStatements = new ArrayList<>();
         statements.forEach(statement -> expressionStatements.addAll(statement.getExpressionStatements()));
         return expressionStatements;
-    }
-
-    @Override
-    public boolean hasBreak() {
-        return statements.stream()
-                .flatMap(statement -> statement.getExpressionStatements().stream())
-                .anyMatch(Statement::hasBreak);
     }
 }

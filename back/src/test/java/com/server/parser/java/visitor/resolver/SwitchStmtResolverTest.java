@@ -33,8 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -151,15 +150,19 @@ class SwitchStmtResolverTest {
 
     @Test
     void shouldResolveStatements() {
-        JavaParser.SwitchStatementContext switchCtx = HELPER.shouldParseToEof("switch(1) { case 1: case 2: System.out.print(\"1\"); break; " +
-                "default: System.out.print(\"D\"); }", JavaParser::switchStatement);
+        String input = "switch(1) { " +
+                "case 1: case 2: System.out.print(\"1\"); break; System.out.print(\"2\");" +
+                "default: System.out.print(\"D\"); " +
+                "}";
+        JavaParser.SwitchStatementContext switchCtx = HELPER.shouldParseToEof(input, JavaParser::switchStatement);
 
         SwitchStatement statement = SwitchStmtResolver.resolve(createRealMethodContext(), switchCtx);
 
-        ExpressionStatement expressionStatement = Iterables.getOnlyElement(statement.getExpressionStatements());
-        assertThat(expressionStatement.getText()).isEqualTo("System.out.print(\"1\")");
-        assertThat(expressionStatement.getProperty(StatementProperties.SWITCH_EXPRESSION)).isEqualTo("1");
-        assertThat(expressionStatement.getProperty(StatementProperties.SWITCH_LABELS)).isEqualTo("1,2");
+        List<ExpressionStatement> expressionStatements = statement.getExpressionStatements();
+        assertThat(expressionStatements).extracting(ExpressionStatement::getText,
+                stmt -> stmt.getProperty(StatementProperties.SWITCH_EXPRESSION),
+                stmt -> stmt.getProperty(StatementProperties.SWITCH_LABELS)
+        ).containsExactly(tuple("System.out.print(\"1\")", "1", "1,2"), tuple("break", "1", "1,2"));
     }
 
     private MethodContext createRealMethodContext() {

@@ -3,7 +3,6 @@ package com.server.parser.java.visitor.resolver;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ConstantProvider;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.BreakStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.ast.statement.SwitchStatement;
@@ -12,6 +11,7 @@ import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
+import com.server.parser.java.visitor.resolver.util.BreakHandler;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.*;
@@ -73,11 +73,11 @@ public class SwitchStmtResolver extends StatementResolver {
             SwitchElement switchElement = switchElements.get(i);
             List<Statement> visitedStmts = statementListVisitor.visit(switchElement.getStatementListContext(), context);
             for (Statement visitedStmt : visitedStmts) {
-                if (visitedStmt instanceof BreakStatement) {
-                    return statements;
-                }
                 addProperty(visitedStmt, StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
                 statements.add(visitedStmt);
+                if (BreakHandler.shouldBreak(visitedStmt)) {
+                    return statements;
+                }
             }
         }
         return statements;

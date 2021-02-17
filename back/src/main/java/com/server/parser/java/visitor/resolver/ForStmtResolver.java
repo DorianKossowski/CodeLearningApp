@@ -6,6 +6,7 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.JavaVisitor;
+import com.server.parser.java.visitor.resolver.util.BreakHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class ForStmtResolver extends LoopResolver {
             Statement statement = statementJavaVisitor.visit(forCtx.statement(), context);
             addIterationProperty(statement, StatementProperties.FOR_ITERATION, iteration);
             contentStatements.add(statement);
-            if (statement.hasBreak()) {
+            if (BreakHandler.shouldBreak(statement)) {
                 return contentStatements;
             }
             if (forCtx.updateExpr != null) {

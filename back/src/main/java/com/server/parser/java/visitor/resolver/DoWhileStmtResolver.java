@@ -6,6 +6,7 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.JavaVisitor;
+import com.server.parser.java.visitor.resolver.util.BreakHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class DoWhileStmtResolver extends LoopResolver {
             Statement statement = statementJavaVisitor.visit(doWhileCtx.statement(), context);
             addIterationProperty(statement, StatementProperties.DO_WHILE_ITERATION, iteration);
             contentStatements.add(statement);
-            if (statement.hasBreak()) {
+            if (BreakHandler.shouldBreak(statement)) {
                 return contentStatements;
             }
             iteration++;

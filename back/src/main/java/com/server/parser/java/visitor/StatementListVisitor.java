@@ -4,6 +4,7 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.visitor.resolver.util.BreakHandler;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -35,7 +36,7 @@ public class StatementListVisitor extends JavaVisitor<List<Statement>> {
                 if (child instanceof ParserRuleContext) {
                     Statement statement = statementVisitor.visit((ParserRuleContext) child, context);
                     statements.add(statement);
-                    if (statement.hasBreak()) {
+                    if (BreakHandler.shouldBreak(statement)) {
                         return statements;
                     }
                 }

@@ -8,11 +8,6 @@ public class BreakStatement extends ExpressionStatement {
     }
 
     @Override
-    public boolean hasBreak() {
-        return true;
-    }
-
-    @Override
     public String getResolved() {
         return "break";
     }
