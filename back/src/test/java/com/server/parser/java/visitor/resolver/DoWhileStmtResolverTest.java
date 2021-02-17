@@ -5,6 +5,7 @@ import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.ast.statement.BreakStatement;
 import com.server.parser.java.ast.statement.CallInvocation;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.context.ClassContext;
@@ -49,7 +50,7 @@ class DoWhileStmtResolverTest {
 
         List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
         Statement statement = Iterables.getOnlyElement(statements);
-        assertThat(statement.getExpressionStatements()).isEmpty();
+        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakStatement.INSTANCE);
     }
 
     @Test

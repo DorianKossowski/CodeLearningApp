@@ -22,6 +22,7 @@ public class BlockStatement extends Statement {
     @Override
     public boolean hasBreak() {
         return statements.stream()
+                .flatMap(statement -> statement.getExpressionStatements().stream())
                 .anyMatch(Statement::hasBreak);
     }
 }

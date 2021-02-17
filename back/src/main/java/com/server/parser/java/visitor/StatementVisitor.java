@@ -13,7 +13,6 @@ import com.server.parser.util.exception.BreakStatementException;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -22,28 +21,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
     @Override
     public Statement visit(ParserRuleContext ctx, JavaContext context) {
-        try {
-            return new StatementVisitorInternal(context).visit(ctx);
-        } catch (BreakStatementException e) {
-            if (isValidBreak(ctx)) {
-                return BreakStatement.INSTANCE;
-            }
-            throw e;
-        }
-    }
-
-    private static boolean isValidBreak(ParserRuleContext ctx) {
-        ParserRuleContext parentContext = ctx.getParent();
-        while (parentContext != null) {
-            if (parentContext instanceof JavaParser.SwitchElementContext
-                    || parentContext instanceof JavaParser.ForStatementContext
-                    || parentContext instanceof JavaParser.WhileStatementContext
-                    || parentContext instanceof JavaParser.DoWhileStatementContext) {
-                return true;
-            }
-            parentContext = parentContext.getParent();
-        }
-        return false;
+        return new StatementVisitorInternal(context).visit(ctx);
     }
 
     public static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
@@ -55,28 +33,9 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
         @Override
         public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
-            return new BlockStatement(visitBlockContentStatements(ctx));
-        }
-
-        private List<Statement> visitBlockContentStatements(JavaParser.BlockStatementContext ctx) {
-            StatementVisitorInternal localVisitor = new StatementVisitorInternal(context.createLocalContext());
-            List<Statement> statements = new ArrayList<>();
-            for (JavaParser.StatementContext statementContext : ctx.statementList().statement()) {
-                try {
-                    Statement statement = localVisitor.visit(statementContext);
-                    statements.add(statement);
-                    if (statement.hasBreak()) {
-                        return statements;
-                    }
-                } catch (BreakStatementException e) {
-                    if (isValidBreak(ctx)) {
-                        statements.add(BreakStatement.INSTANCE);
-                        return statements;
-                    }
-                    throw e;
-                }
-            }
-            return statements;
+            StatementListVisitor statementListVisitor = new StatementListVisitor();
+            List<Statement> statements = statementListVisitor.visit(ctx.statementList(), context.createLocalContext());
+            return new BlockStatement(statements);
         }
 
         @Override
@@ -166,7 +125,24 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         //*** BREAK ***//
         @Override
         public Statement visitBreakStatement(JavaParser.BreakStatementContext ctx) {
+            if (isValidBreak(ctx)) {
+                return BreakStatement.INSTANCE;
+            }
             throw new BreakStatementException();
+        }
+
+        private static boolean isValidBreak(ParserRuleContext ctx) {
+            ParserRuleContext parentContext = ctx.getParent();
+            while (parentContext != null) {
+                if (parentContext instanceof JavaParser.SwitchElementContext
+                        || parentContext instanceof JavaParser.ForStatementContext
+                        || parentContext instanceof JavaParser.WhileStatementContext
+                        || parentContext instanceof JavaParser.DoWhileStatementContext) {
+                    return true;
+                }
+                parentContext = parentContext.getParent();
+            }
+            return false;
         }
 
         //*** FOR ***//

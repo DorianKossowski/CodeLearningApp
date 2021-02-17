@@ -1,9 +1,6 @@
 package com.server.parser.java.ast.statement;
 
-import java.util.Collections;
-import java.util.List;
-
-public class BreakStatement extends Statement {
+public class BreakStatement extends ExpressionStatement {
     public static final BreakStatement INSTANCE = new BreakStatement();
 
     private BreakStatement() {
@@ -11,12 +8,12 @@ public class BreakStatement extends Statement {
     }
 
     @Override
-    public List<ExpressionStatement> getExpressionStatements() {
-        return Collections.emptyList();
+    public boolean hasBreak() {
+        return true;
     }
 
     @Override
-    public boolean hasBreak() {
-        return true;
+    public String getResolved() {
+        return "break";
     }
 }

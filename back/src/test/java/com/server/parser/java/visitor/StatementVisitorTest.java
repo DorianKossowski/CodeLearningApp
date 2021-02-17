@@ -58,7 +58,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         ForStatement statement = (ForStatement) visitor.visit(c, methodContext);
 
-        assertThat(statement.getExpressionStatements()).isEmpty();
+        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakStatement.INSTANCE);
     }
 
     //*** VARIABLE ***//

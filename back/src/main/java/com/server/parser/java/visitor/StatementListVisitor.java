@@ -33,7 +33,11 @@ public class StatementListVisitor extends JavaVisitor<List<Statement>> {
             for (int i = 0; i < ctx.getChildCount(); ++i) {
                 ParseTree child = ctx.getChild(i);
                 if (child instanceof ParserRuleContext) {
-                    statements.add(statementVisitor.visit((ParserRuleContext) child, context));
+                    Statement statement = statementVisitor.visit((ParserRuleContext) child, context);
+                    statements.add(statement);
+                    if (statement.hasBreak()) {
+                        return statements;
+                    }
                 }
             }
             return statements;
