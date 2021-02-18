@@ -13,4 +13,6 @@ public abstract class ExpressionStatement extends Statement {
     public List<ExpressionStatement> getExpressionStatements() {
         return Collections.singletonList(this);
     }
+
+    public abstract String getResolved();
 }

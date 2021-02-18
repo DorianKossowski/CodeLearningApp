@@ -7,6 +7,7 @@ import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.ast.value.*;
 import com.server.parser.java.context.ClassContext;
@@ -314,5 +315,26 @@ class StatementVisitorTest extends JavaVisitorTestBase {
                 statement -> statement.getProperty(StatementProperties.DO_WHILE_ITERATION))
                 .containsExactly(tuple("System.out.print(1)", "0"), tuple("i=1", "0"),
                         tuple("System.out.print(2)", "1"), tuple("i=2", "1"));
+    }
+
+    //*** RETURN ***//
+    @Test
+    void shouldVisitVoidReturn() {
+        JavaParser.ReturnStatementContext c = HELPER.shouldParseToEof("return", JavaParser::returnStatement);
+
+        ReturnStatement statement = (ReturnStatement) visitor.visit(c, context);
+
+        assertThat(statement.getExpression()).isSameAs(VoidExpression.INSTANCE);
+        assertThat(statement.getResolved()).isEqualTo("return");
+    }
+
+    @Test
+    void shouldVisitReturn() {
+        JavaParser.ReturnStatementContext c = HELPER.shouldParseToEof("return 1+1", JavaParser::returnStatement);
+
+        ReturnStatement statement = (ReturnStatement) visitor.visit(c, context);
+
+        assertThat(statement.getExpression()).isExactlyInstanceOf(Literal.class);
+        assertThat(statement.getResolved()).isEqualTo("return 2");
     }
 }

@@ -19,7 +19,7 @@ public class VoidExpression extends Expression {
 
     @Override
     public String getResolvedText() {
-        throw new ResolvingVoidException();
+        return "";
     }
 
     @Override

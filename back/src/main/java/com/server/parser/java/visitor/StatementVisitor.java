@@ -5,6 +5,7 @@ import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.*;
@@ -170,6 +171,16 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitEmptyStatement(JavaParser.EmptyStatementContext ctx) {
             return EmptyStatement.INSTANCE;
+        }
+
+        //*** RETURN ***//
+        @Override
+        public Statement visitReturnStatement(JavaParser.ReturnStatementContext ctx) {
+            Expression expression = VoidExpression.INSTANCE;
+            if (ctx.expression() != null) {
+                expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
+            }
+            return new ReturnStatement(JavaGrammarHelper.getOriginalText(ctx), expression);
         }
     }
 }

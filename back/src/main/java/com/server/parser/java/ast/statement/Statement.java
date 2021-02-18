@@ -19,10 +19,6 @@ public abstract class Statement extends AstElement {
         return text;
     }
 
-    public String getResolved() {
-        throw new UnsupportedOperationException("Resolving not supported for type " + getClass());
-    }
-
     //TODO move properties stuff to separate class
     public void addProperty(String key, String value) {
         properties.put(key, value);

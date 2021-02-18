@@ -32,6 +32,6 @@ public class VoidValue extends Value {
 
     @Override
     public String toString() {
-        throw new ResolvingVoidException();
+        return "";
     }
 }
