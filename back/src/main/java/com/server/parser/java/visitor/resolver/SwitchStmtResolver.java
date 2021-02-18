@@ -12,6 +12,7 @@ import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.java.visitor.resolver.util.BreakHandler;
+import com.server.parser.java.visitor.resolver.util.ReturnHandler;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.*;
@@ -75,7 +76,7 @@ public class SwitchStmtResolver extends StatementResolver {
             for (Statement visitedStmt : visitedStmts) {
                 addProperty(visitedStmt, StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
                 statements.add(visitedStmt);
-                if (BreakHandler.shouldBreak(visitedStmt)) {
+                if (ReturnHandler.shouldReturn(visitedStmt) || BreakHandler.shouldBreak(visitedStmt)) {
                     return statements;
                 }
             }

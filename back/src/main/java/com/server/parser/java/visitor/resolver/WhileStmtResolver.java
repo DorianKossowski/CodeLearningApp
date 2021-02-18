@@ -7,6 +7,7 @@ import com.server.parser.java.ast.statement.WhileStatement;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.java.visitor.resolver.util.BreakHandler;
+import com.server.parser.java.visitor.resolver.util.ReturnHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class WhileStmtResolver extends LoopResolver {
             Statement statement = statementJavaVisitor.visit(whileCtx.statement(), context);
             addIterationProperty(statement, StatementProperties.WHILE_ITERATION, iteration);
             contentStatements.add(statement);
-            if (BreakHandler.shouldBreak(statement)) {
+            if (ReturnHandler.shouldReturn(statement) || BreakHandler.shouldBreak(statement)) {
                 return contentStatements;
             }
             iteration++;
