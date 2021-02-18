@@ -57,6 +57,9 @@ public class CallExecutor implements Serializable {
     }
 
     void validateReturnedExpression(String resultTypeName, Expression returnedExpression) {
+        if (!resultTypeName.equals("void") && returnedExpression instanceof VoidExpression) {
+            throw new ResolvingException("Brak odpowiedniej instrukcji zwracającej");
+        }
         if (!TypeCorrectnessChecker.isCorrect(resultTypeName, returnedExpression)) {
             throw new ResolvingException(String.format("Zwracany element %s nie jest typu %s",
                     returnedExpression.getResolvedText(), resultTypeName));

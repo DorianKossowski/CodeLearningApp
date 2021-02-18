@@ -148,6 +148,13 @@ class CallExecutorTest {
     }
 
     @Test
+    void shouldThrowWhenInvalidReturnedVoidExpression() {
+        assertThatThrownBy(() -> executor.validateReturnedExpression("String", VoidExpression.INSTANCE))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Brak odpowiedniej instrukcji zwracającej");
+    }
+
+    @Test
     void shouldThrowWhenInvalidReturnedExpression() {
         assertThatThrownBy(() -> executor.validateReturnedExpression("String", new Literal(new IntConstant(10))))
                 .isExactlyInstanceOf(ResolvingException.class)
