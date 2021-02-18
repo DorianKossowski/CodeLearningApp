@@ -7,10 +7,9 @@ import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.CallInvocation;
-import com.server.parser.java.ast.statement.CallStatement;
-import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
@@ -20,6 +19,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CallExecutor implements Serializable {
@@ -59,7 +59,16 @@ public class CallExecutor implements Serializable {
 
     private CallStatement postExecution(CallInvocation invocation, List<Statement> statements) {
         --executionLevel;
-        return new CallStatement(invocation, statements);
+        return new CallStatement(invocation, statements, getReturnedExpression(statements));
+    }
+
+    Expression getReturnedExpression(List<Statement> statements) {
+        Optional<ReturnStatement> optionalReturnStatement = statements.stream()
+                .filter(statement -> statement instanceof ReturnStatement)
+                .map(statement -> (ReturnStatement) statement)
+                .findFirst();
+        return optionalReturnStatement.map(ReturnStatement::getExpression)
+                .orElse(VoidExpression.INSTANCE);
     }
 
     public CallStatement executePrintMethod(CallInvocation invocation) {

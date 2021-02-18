@@ -1,0 +1,22 @@
+### TASK ###
+-> statement
+    with resolved: "System.out.println(5)"
+
+### INPUT ###
+public class MyClass {
+    private static int counter = 0;
+
+    public static void main(String[] args){
+        Integer val;
+        val = fun(0);
+        val = 1 + fun(val);
+        System.out.println(val);
+    }
+
+    static int fun(int i) {
+        return i + 2;
+    }
+}
+
+### OUTPUT ###
+5

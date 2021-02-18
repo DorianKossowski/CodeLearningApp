@@ -14,11 +14,15 @@ import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.server.parser.java.call.CallExecutor.MAX_EXECUTION_LEVEL;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -124,5 +128,19 @@ class CallExecutorTest {
         assertThat(statement.getCallInvocation()).isSameAs(invocation);
         assertThat(statement.getExpressionStatements()).hasSize(1);
         assertThat(statement.getResult().getResolvedText()).isEqualTo("true");
+    }
+
+    static Stream<Arguments> statementsForReturnProvider() {
+        Expression expression = mock(Expression.class);
+        return Stream.of(
+                Arguments.of(Collections.singletonList(new ReturnStatement("", expression)), expression),
+                Arguments.of(Collections.emptyList(), VoidExpression.INSTANCE)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("statementsForReturnProvider")
+    void shouldGetReturnedExpression(List<Statement> statements, Expression returnedExpression) {
+        assertThat(executor.getReturnedExpression(statements)).isSameAs(returnedExpression);
     }
 }
