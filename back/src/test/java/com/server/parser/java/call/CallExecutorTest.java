@@ -4,7 +4,9 @@ import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.CallInvocation;
 import com.server.parser.java.ast.statement.*;
@@ -142,5 +144,12 @@ class CallExecutorTest {
     @MethodSource("statementsForReturnProvider")
     void shouldGetReturnedExpression(List<Statement> statements, Expression returnedExpression) {
         assertThat(executor.getReturnedExpression(statements)).isSameAs(returnedExpression);
+    }
+
+    @Test
+    void shouldThrowWhenInvalidReturnedExpression() {
+        assertThatThrownBy(() -> executor.validateReturnedExpression("String", new Literal(new IntConstant(10))))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Zwracany element 10 nie jest typu String");
     }
 }

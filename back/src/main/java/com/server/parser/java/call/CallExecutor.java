@@ -13,6 +13,7 @@ import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
+import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.io.Serializable;
@@ -40,7 +41,26 @@ public class CallExecutor implements Serializable {
         JavaContext executionContext = ContextCopyFactory.createExecutionContext(method.getMethodContext());
         assignInvocationParameters(method.getHeader().getArguments(), invocation.getArgs(), executionContext);
         List<Statement> statements = visitor.visit(method.getBodyContext(), executionContext);
-        return postExecution(invocation, statements);
+        Expression returnedExpression = getReturnedExpression(statements);
+        validateReturnedExpression(method.getHeader().getResult(), returnedExpression);
+        return postExecution(invocation, statements, returnedExpression);
+    }
+
+    Expression getReturnedExpression(List<Statement> statements) {
+        Optional<ReturnStatement> optionalReturnStatement = statements.stream()
+                .flatMap(statement -> statement.getExpressionStatements().stream())
+                .filter(statement -> statement instanceof ReturnStatement)
+                .map(statement -> (ReturnStatement) statement)
+                .findFirst();
+        return optionalReturnStatement.map(ReturnStatement::getExpression)
+                .orElse(VoidExpression.INSTANCE);
+    }
+
+    void validateReturnedExpression(String resultTypeName, Expression returnedExpression) {
+        if (!TypeCorrectnessChecker.isCorrect(resultTypeName, returnedExpression)) {
+            throw new ResolvingException(String.format("Zwracany element %s nie jest typu %s",
+                    returnedExpression.getResolvedText(), resultTypeName));
+        }
     }
 
     void assignInvocationParameters(List<VariableDef> arguments, List<Expression> invocationParameters, JavaContext executionContext) {
@@ -57,18 +77,9 @@ public class CallExecutor implements Serializable {
         ++executionLevel;
     }
 
-    private CallStatement postExecution(CallInvocation invocation, List<Statement> statements) {
+    private CallStatement postExecution(CallInvocation invocation, List<Statement> statements, Expression returnedExpression) {
         --executionLevel;
-        return new CallStatement(invocation, statements, getReturnedExpression(statements));
-    }
-
-    Expression getReturnedExpression(List<Statement> statements) {
-        Optional<ReturnStatement> optionalReturnStatement = statements.stream()
-                .filter(statement -> statement instanceof ReturnStatement)
-                .map(statement -> (ReturnStatement) statement)
-                .findFirst();
-        return optionalReturnStatement.map(ReturnStatement::getExpression)
-                .orElse(VoidExpression.INSTANCE);
+        return new CallStatement(invocation, statements, returnedExpression);
     }
 
     public CallStatement executePrintMethod(CallInvocation invocation) {
