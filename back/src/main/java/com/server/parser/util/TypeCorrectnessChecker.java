@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.UninitializedExpression;
+import com.server.parser.java.ast.expression.VoidExpression;
 
 import java.util.Map;
 import java.util.function.Predicate;
@@ -37,6 +38,9 @@ public class TypeCorrectnessChecker {
         }
         if (expression instanceof UninitializedExpression) {
             return true;
+        }
+        if (expression instanceof VoidExpression) {
+            return valueType == ValueType.VOID;
         }
         // TODO handle unknown type: SomeType a = 1;
         return typeToConstantChecker.get(valueType).test(expression.getLiteral().getConstant().c);

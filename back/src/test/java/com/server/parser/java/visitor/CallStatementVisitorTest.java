@@ -48,7 +48,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitMethodCallWithoutArgs() {
-        MethodHeader header = new MethodHeader(Collections.emptyList(), "", "someMethod", Collections.emptyList());
+        MethodHeader header = new MethodHeader(Collections.emptyList(), "void", "someMethod", Collections.emptyList());
         context.getCallHandler().getCallableKeeper().keepCallable(new Method(methodContext, header, HELPER.shouldParseToEof("", JavaParser::methodBody)));
         String input = "someMethod()";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
@@ -66,7 +66,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
     void shouldGetCorrectMethodCallValue() {
         VariableDef arg1 = new VariableDef("", "String", "a1", NullExpression.INSTANCE, false);
         VariableDef arg2 = new VariableDef("", "String", "a2", NullExpression.INSTANCE, false);
-        MethodHeader header = new MethodHeader(Collections.emptyList(), "", "someMethod", Arrays.asList(arg1, arg2));
+        MethodHeader header = new MethodHeader(Collections.emptyList(), "void", "someMethod", Arrays.asList(arg1, arg2));
         context.getCallHandler().getCallableKeeper().keepCallable(new Method(methodContext, header, HELPER.shouldParseToEof("", JavaParser::methodBody)));
         methodContext.addVariable(createStringVariable("a1"));
         methodContext.addVariable(createStringVariable("a2"));

@@ -3,6 +3,7 @@ package com.server.parser.util;
 import java.util.Arrays;
 
 public enum ValueType {
+    VOID("void", false),
     CHAR("char", false),
     INT("int", false),
     BYTE("byte", false),

@@ -79,6 +79,7 @@ class CallExecutorTest {
         JavaParser.MethodBodyContext bodyContext = mock(JavaParser.MethodBodyContext.class);
         when(method.getBodyContext()).thenReturn(bodyContext);
         when(method.getHeader().getArguments()).thenReturn(Collections.emptyList());
+        when(method.getHeader().getResult()).thenReturn("void");
         ExpressionStatement expressionStatement = mock(ExpressionStatement.class);
         doCallRealMethod().when(expressionStatement).getExpressionStatements();
         when(visitor.visit(eq(bodyContext), any())).thenReturn(Collections.singletonList(expressionStatement));
