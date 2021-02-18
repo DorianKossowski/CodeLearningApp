@@ -13,14 +13,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BreakHandlerTest {
 
     @Test
-    void shouldFindBreak() {
+    void shouldBreak() {
         IfElseStatement ifElseStatement = IfElseStatement.createIf("", BreakStatement.INSTANCE);
 
         assertThat(BreakHandler.shouldBreak(ifElseStatement)).isTrue();
     }
 
     @Test
-    void shouldFindBreakInBlock() {
+    void shouldBreakInBlock() {
         IfElseStatement ifElseStatement = IfElseStatement.createIf("", BreakStatement.INSTANCE);
         BlockStatement blockStatement = new BlockStatement(Collections.singletonList(ifElseStatement));
 
@@ -28,7 +28,7 @@ class BreakHandlerTest {
     }
 
     @Test
-    void shouldNotFindBreak() {
+    void shouldNotBreak() {
         ForStatement ifElseStatement = new ForStatement(Collections.singletonList(BreakStatement.INSTANCE));
 
         assertThat(BreakHandler.shouldBreak(ifElseStatement)).isFalse();
