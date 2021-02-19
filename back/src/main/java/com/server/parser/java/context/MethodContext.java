@@ -31,7 +31,7 @@ public class MethodContext implements JavaContext {
     @Override
     public JavaContext createLocalContext() {
         return new LocalContext(classContext.getCallHandler(), nameToField, nameToVariable, getMethodName(),
-                methodHeader.isStatic());
+                getMethodResultType(), methodHeader.isStatic());
     }
 
     public Method save(MethodHeader methodHeader, JavaParser.MethodBodyContext methodBody) {
@@ -52,6 +52,11 @@ public class MethodContext implements JavaContext {
     @Override
     public String getMethodName() {
         return methodHeader.getName();
+    }
+
+    @Override
+    public String getMethodResultType() {
+        return methodHeader.getResult();
     }
 
     @Override

@@ -54,4 +54,9 @@ public class ClassContext implements JavaContext {
     public void setStaticFields(Map<String, Variable> nameToField) {
         this.nameToField.putAll(nameToField);
     }
+
+    @Override
+    public String getMethodName() {
+        return "";
+    }
 }

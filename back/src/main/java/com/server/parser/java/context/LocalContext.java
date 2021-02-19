@@ -19,15 +19,17 @@ public class LocalContext implements JavaContext {
     private final Map<String, Variable> nameToField;
     private final Map<String, Variable> nameToVariable;
     private final String methodName;
+    private final String methodResultType;
     private final boolean isStaticContext;
     private final Map<String, Variable> localNameToVariable = new HashMap<>();
 
     LocalContext(CallHandler callHandler, Map<String, Variable> nameToField, Map<String, Variable> nameToVariable, String methodName,
-                 boolean isStaticContext) {
+                 String methodResultType, boolean isStaticContext) {
         this.callHandler = Objects.requireNonNull(callHandler, "callHandler cannot be null");
         this.nameToField = Objects.requireNonNull(nameToField, "nameToField cannot be null");
         this.nameToVariable = Objects.requireNonNull(nameToVariable, "nameToVariable cannot be null");
         this.methodName = Objects.requireNonNull(methodName, "methodName cannot be null");
+        this.methodResultType = Objects.requireNonNull(methodResultType, "methodResultType cannot be null");
         this.isStaticContext = isStaticContext;
     }
 
@@ -41,8 +43,14 @@ public class LocalContext implements JavaContext {
     }
 
     @Override
+    public String getMethodResultType() {
+        return methodResultType;
+    }
+
+    @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(callHandler, nameToField, getConcatenatedNameToVariables(), methodName, isStaticContext);
+        return new LocalContext(callHandler, nameToField, getConcatenatedNameToVariables(), methodName, methodResultType,
+                isStaticContext);
     }
 
     private Map<String, Variable> getConcatenatedNameToVariables() {

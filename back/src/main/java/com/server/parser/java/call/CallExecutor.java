@@ -14,6 +14,7 @@ import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.TypeCorrectnessChecker;
+import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.io.Serializable;
@@ -61,8 +62,7 @@ public class CallExecutor implements Serializable {
             throw new ResolvingException("Brak odpowiedniej instrukcji zwracającej");
         }
         if (!TypeCorrectnessChecker.isCorrect(resultTypeName, returnedExpression)) {
-            throw new ResolvingException(String.format("Zwracany element %s nie jest typu %s",
-                    returnedExpression.getResolvedText(), resultTypeName));
+            throw new InvalidReturnedExpressionException(returnedExpression.getResolvedText(), resultTypeName);
         }
     }
 

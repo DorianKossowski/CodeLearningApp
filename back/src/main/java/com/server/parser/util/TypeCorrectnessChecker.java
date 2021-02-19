@@ -39,8 +39,8 @@ public class TypeCorrectnessChecker {
         if (expression instanceof UninitializedExpression) {
             return true;
         }
-        if (expression instanceof VoidExpression) {
-            return valueType == ValueType.VOID;
+        if (valueType == ValueType.VOID) {
+            return expression instanceof VoidExpression;
         }
         // TODO handle unknown type: SomeType a = 1;
         return typeToConstantChecker.get(valueType).test(expression.getLiteral().getConstant().c);

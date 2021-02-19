@@ -29,7 +29,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
 
     @BeforeEach
     void setUp() {
-        methodContext = createMethodContext(METHOD_NAME);
+        methodContext = createMethodContext(METHOD_NAME, "void");
     }
 
     @Test

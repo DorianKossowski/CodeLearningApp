@@ -13,6 +13,7 @@ import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
+import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -157,7 +158,7 @@ class CallExecutorTest {
     @Test
     void shouldThrowWhenInvalidReturnedExpression() {
         assertThatThrownBy(() -> executor.validateReturnedExpression("String", new Literal(new IntConstant(10))))
-                .isExactlyInstanceOf(ResolvingException.class)
+                .isExactlyInstanceOf(InvalidReturnedExpressionException.class)
                 .hasMessage("Problem podczas rozwiązywania: Zwracany element 10 nie jest typu String");
     }
 }

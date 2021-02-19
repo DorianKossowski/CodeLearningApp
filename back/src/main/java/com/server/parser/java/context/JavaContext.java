@@ -7,10 +7,9 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.call.CallHandler;
 import com.server.parser.java.visitor.JavaVisitor;
 
-import java.io.Serializable;
 import java.util.Map;
 
-public interface JavaContext extends Serializable {
+public interface JavaContext extends MethodVerifiable {
 
     default <T extends AstElement> JavaVisitor<T> getVisitor(Class<T> elementClass) {
         return JavaVisitorsRegistry.get(elementClass);
@@ -29,11 +28,6 @@ public interface JavaContext extends Serializable {
     }
 
     default void updateVariable(String name, Expression expression) {
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO make only for MethodContext
-    default String getMethodName() {
         throw new UnsupportedOperationException();
     }
 

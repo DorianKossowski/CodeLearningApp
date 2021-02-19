@@ -10,7 +10,9 @@ import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.*;
 import com.server.parser.util.EmptyExpressionPreparer;
+import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.BreakStatementException;
+import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
@@ -180,7 +182,10 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             if (ctx.expression() != null) {
                 expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
             }
-            return new ReturnStatement(JavaGrammarHelper.getOriginalText(ctx), expression);
+            if (TypeCorrectnessChecker.isCorrect(context.getMethodResultType(), expression)) {
+                return new ReturnStatement(JavaGrammarHelper.getOriginalText(ctx), expression);
+            }
+            throw new InvalidReturnedExpressionException(expression.getResolvedText(), context.getMethodResultType());
         }
     }
 }

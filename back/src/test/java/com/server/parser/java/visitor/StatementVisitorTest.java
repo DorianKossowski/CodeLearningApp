@@ -13,6 +13,7 @@ import com.server.parser.java.ast.value.*;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.BreakStatementException;
+import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     @BeforeEach
     void setUp() {
-        methodContext = createMethodContext(METHOD_NAME);
+        methodContext = createMethodContext(METHOD_NAME, "void");
     }
 
     @Test
@@ -322,7 +323,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitVoidReturn() {
         JavaParser.ReturnStatementContext c = HELPER.shouldParseToEof("return", JavaParser::returnStatement);
 
-        ReturnStatement statement = (ReturnStatement) visitor.visit(c, context);
+        ReturnStatement statement = (ReturnStatement) visitor.visit(c, methodContext);
 
         assertThat(statement.getExpression()).isSameAs(VoidExpression.INSTANCE);
         assertThat(statement.getResolved()).isEqualTo("return");
@@ -332,9 +333,18 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitReturn() {
         JavaParser.ReturnStatementContext c = HELPER.shouldParseToEof("return 1+1", JavaParser::returnStatement);
 
-        ReturnStatement statement = (ReturnStatement) visitor.visit(c, context);
+        ReturnStatement statement = (ReturnStatement) visitor.visit(c, createMethodContext(METHOD_NAME, "int"));
 
         assertThat(statement.getExpression()).isExactlyInstanceOf(Literal.class);
         assertThat(statement.getResolved()).isEqualTo("return 2");
+    }
+
+    @Test
+    void shouldThrowWhenInvalidReturnedExpression() {
+        JavaParser.ReturnStatementContext c = HELPER.shouldParseToEof("return 1", JavaParser::returnStatement);
+
+        assertThatThrownBy(() -> visitor.visit(c, methodContext))
+                .isExactlyInstanceOf(InvalidReturnedExpressionException.class)
+                .hasMessage("Problem podczas rozwiązywania: Zwracany element 1 nie jest typu void");
     }
 }

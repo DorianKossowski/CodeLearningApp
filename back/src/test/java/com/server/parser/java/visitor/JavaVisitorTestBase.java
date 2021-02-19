@@ -21,12 +21,13 @@ public class JavaVisitorTestBase {
     protected ClassContext context = new ClassContext();
 
     protected MethodContext createMethodContext() {
-        return createMethodContext("");
+        return createMethodContext("", "void");
     }
 
-    protected MethodContext createMethodContext(String methodName) {
+    protected MethodContext createMethodContext(String methodName, String resultTypeName) {
         MethodHeader methodHeader = mock(MethodHeader.class);
         when(methodHeader.getName()).thenReturn(methodName);
+        when(methodHeader.getResult()).thenReturn(resultTypeName);
         MethodContext methodContext = context.createEmptyMethodContext();
         methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));
         return methodContext;

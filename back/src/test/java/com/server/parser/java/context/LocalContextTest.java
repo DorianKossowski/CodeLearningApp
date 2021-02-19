@@ -32,7 +32,7 @@ class LocalContextTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         variable = new Variable("type", NAME, value);
-        localContext = new LocalContext(callHandler, nameToField, nameToVariable, "", false);
+        localContext = new LocalContext(callHandler, nameToField, nameToVariable, "", "", false);
     }
 
     @Test
@@ -75,7 +75,7 @@ class LocalContextTest {
     @Test
     void shouldThrowWhenGettingNonStaticFieldFromStatic() {
         nameToField.put(NAME, variable);
-        localContext = new LocalContext(callHandler, nameToField, nameToVariable, "", true);
+        localContext = new LocalContext(callHandler, nameToField, nameToVariable, "", "", true);
 
         assertThatThrownBy(() -> localContext.getVariable(NAME))
                 .isExactlyInstanceOf(ResolvingException.class)
