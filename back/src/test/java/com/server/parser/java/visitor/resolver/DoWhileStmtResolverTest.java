@@ -45,7 +45,7 @@ class DoWhileStmtResolverTest {
     @Test
     void shouldBreakIn() {
         MethodContext methodContext = createMethodContext();
-        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { break; fun(); } while(true);",
+        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { break; int sth; } while(true);",
                 JavaParser::doWhileStatement);
 
         List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));

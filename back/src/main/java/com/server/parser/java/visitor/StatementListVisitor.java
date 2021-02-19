@@ -3,6 +3,7 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.util.BreakHandler;
 import com.server.parser.java.visitor.resolver.util.ReturnHandler;
@@ -29,18 +30,27 @@ public class StatementListVisitor extends JavaVisitor<List<Statement>> {
 
         @Override
         public List<Statement> visitStatementList(JavaParser.StatementListContext ctx) {
-            JavaVisitor<Statement> statementVisitor = context.getVisitor(Statement.class);
+            return visitStartingFromChild(ctx, context, 0);
+        }
 
+        private List<Statement> visitStartingFromChild(JavaParser.StatementListContext ctx, JavaContext context, int startingChild) {
+            JavaVisitor<Statement> statementVisitor = context.getVisitor(Statement.class);
             List<Statement> statements = new ArrayList<>();
-            for (int i = 0; i < ctx.getChildCount(); ++i) {
+            for (int i = startingChild; i < ctx.getChildCount(); ++i) {
                 ParseTree child = ctx.getChild(i);
                 Statement statement = statementVisitor.visit((ParserRuleContext) child, context);
                 statements.add(statement);
                 if (ReturnHandler.shouldReturn(statement) || BreakHandler.shouldBreak(statement)) {
+                    validateRemainingStatements(ctx, context, i + 1);
                     return statements;
                 }
             }
             return statements;
+        }
+
+        private void validateRemainingStatements(JavaParser.StatementListContext ctx, JavaContext context, int startingChild) {
+            JavaContext validationContext = ContextCopyFactory.createValidationContext(context);
+            visitStartingFromChild(ctx, validationContext, startingChild);
         }
     }
 }

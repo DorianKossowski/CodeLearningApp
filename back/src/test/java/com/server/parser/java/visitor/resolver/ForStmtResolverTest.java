@@ -48,7 +48,7 @@ class ForStmtResolverTest {
         MethodContext methodContext = context.createEmptyMethodContext();
         methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
                 mock(JavaParser.MethodBodyContext.class));
-        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) { break; fun(); }",
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) { break; int sth; }",
                 JavaParser::forStatement);
 
         List<Statement> statements = ForStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));

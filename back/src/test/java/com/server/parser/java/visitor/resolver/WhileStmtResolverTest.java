@@ -28,7 +28,7 @@ class WhileStmtResolverTest {
         MethodContext methodContext = context.createEmptyMethodContext();
         methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
                 mock(JavaParser.MethodBodyContext.class));
-        JavaParser.WhileStatementContext c = HELPER.shouldParseToEof("while(true) { break; fun(); }",
+        JavaParser.WhileStatementContext c = HELPER.shouldParseToEof("while(true) { break; int sth; }",
                 JavaParser::whileStatement);
 
         List<Statement> statements = WhileStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
