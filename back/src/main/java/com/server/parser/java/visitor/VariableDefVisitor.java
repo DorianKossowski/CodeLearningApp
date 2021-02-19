@@ -5,6 +5,8 @@ import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
+import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.EmptyExpressionPreparer;
@@ -31,7 +33,7 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
 
         @Override
         public VariableDef visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
-            VariableDef variableDef = visit(ctx.varDec());
+            MethodVarDef variableDef = (MethodVarDef) visit(ctx.varDec());
             List<String> modifiers = ctx.varModifier().stream()
                     .map(RuleContext::getText)
                     .collect(Collectors.toList());
@@ -43,7 +45,7 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
 
         @Override
         public VariableDef visitFieldDec(JavaParser.FieldDecContext ctx) {
-            VariableDef variableDef = visit(ctx.varDec());
+            FieldVarDef variableDef = (FieldVarDef) visit(ctx.varDec());
             List<String> modifiers = ctx.fieldModifier().stream()
                     .map(RuleContext::getText)
                     .collect(Collectors.toList());
@@ -56,7 +58,8 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
         public VariableDef visitSingleMethodArg(JavaParser.SingleMethodArgContext ctx) {
             String type = textVisitor.visit(ctx.type());
             String id = textVisitor.visit(ctx.identifier());
-            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id,
+            // TODO ArgumentVarDef?
+            return new MethodVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id,
                     EmptyExpressionPreparer.prepare(type), false);
         }
 
@@ -64,15 +67,29 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
         public VariableDef visitVarDec(JavaParser.VarDecContext ctx) {
             String id = textVisitor.visit(ctx.identifier());
             String type = textVisitor.visit(ctx.type());
-            Expression expression;
-            if (ctx.expression() != null) {
-                expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
-            } else {
-                expression = ctx.parent instanceof JavaParser.FieldDecContext
-                        ? EmptyExpressionPreparer.prepare(type)
-                        : EmptyExpressionPreparer.prepareUninitialized(id);
+            if (ctx.parent instanceof JavaParser.FieldDecContext) {
+                return createFieldVarDef(id, type, ctx);
+            } else if (ctx.parent instanceof JavaParser.MethodVarDecContext) {
+                return createMethodVarDef(id, type, ctx);
             }
-            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id, expression, ctx.expression() != null);
+            throw new UnsupportedOperationException(String.format("Variable creation from %s not supported",
+                    ctx.parent.getClass().getSimpleName()));
+        }
+
+        private MethodVarDef createMethodVarDef(String id, String type, JavaParser.VarDecContext ctx) {
+            Expression expression = ctx.expression() != null ?
+                    context.getVisitor(Expression.class).visit(ctx.expression(), context) :
+                    EmptyExpressionPreparer.prepareUninitialized(id);
+            return new MethodVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id, expression,
+                    ctx.expression() != null);
+        }
+
+        private FieldVarDef createFieldVarDef(String id, String type, JavaParser.VarDecContext ctx) {
+            Expression expression = ctx.expression() != null ?
+                    context.getVisitor(Expression.class).visit(ctx.expression(), context) :
+                    EmptyExpressionPreparer.prepare(type);
+            return new FieldVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id, expression,
+                    ctx.expression() != null);
         }
     }
 }

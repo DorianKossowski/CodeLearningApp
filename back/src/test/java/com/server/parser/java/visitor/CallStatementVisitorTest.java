@@ -10,6 +10,7 @@ import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.ast.value.PrimitiveValue;
 import com.server.parser.java.context.MethodContext;
@@ -64,8 +65,8 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldGetCorrectMethodCallValue() {
-        VariableDef arg1 = new VariableDef("", "String", "a1", NullExpression.INSTANCE, false);
-        VariableDef arg2 = new VariableDef("", "String", "a2", NullExpression.INSTANCE, false);
+        VariableDef arg1 = new MethodVarDef("", "String", "a1", NullExpression.INSTANCE, false);
+        VariableDef arg2 = new MethodVarDef("", "String", "a2", NullExpression.INSTANCE, false);
         MethodHeader header = new MethodHeader(Collections.emptyList(), "void", "someMethod", Arrays.asList(arg1, arg2));
         context.getCallHandler().getCallableKeeper().keepCallable(new Method(methodContext, header, HELPER.shouldParseToEof("", JavaParser::methodBody)));
         methodContext.addVariable(createStringVariable("a1"));

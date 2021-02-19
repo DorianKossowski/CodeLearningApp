@@ -3,6 +3,7 @@ package com.server.parser.java.visitor;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.ast.value.NullValue;
 import com.server.parser.java.ast.value.PrimitiveValue;
@@ -51,9 +52,9 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
     @ParameterizedTest
     @MethodSource("decWithLiteralsProvider")
     void shouldVisitVarDecWithLiteral(String input, String type, String name, String value) {
-        JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
+        JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
-        VariableDef variableDef = visitor.visit(c, context);
+        VariableDef variableDef = visitor.visit(c, createMethodContext());
 
         assertThat(variableDef.getType()).isEqualTo(type);
         assertThat(variableDef.getName()).isEqualTo(name);
@@ -88,9 +89,9 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldVisitUninitializedVarDec() {
         String input = "int a";
-        JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
+        JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
-        VariableDef variableDef = visitor.visit(c, context);
+        VariableDef variableDef = visitor.visit(c, createMethodContext());
 
         assertThat(variableDef.getType()).isEqualTo("int");
         assertThat(variableDef.getName()).isEqualTo("a");
@@ -100,7 +101,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldThrowWhenInvalidDeclarationFromLiteral() {
         String input = "String a = 's'";
-        JavaParser.VarDecContext c = HELPER.shouldParseToEof(input, JavaParser::varDec);
+        JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
         assertThatThrownBy(() -> visitor.visit(c, context))
                 .isExactlyInstanceOf(ResolvingException.class)
@@ -119,11 +120,11 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
     }
 
     @Test
-    void shouldVisitLocalVarDec() {
+    void shouldVisitMethodVarDec() {
         String input = "final String a = \"str\"";
         JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
-        VariableDef variableDef = visitor.visit(c, methodContext);
+        MethodVarDef variableDef = (MethodVarDef) visitor.visit(c, methodContext);
 
         assertThat(variableDef.getText()).isEqualTo("String a = \"str\"");
         assertThat(variableDef.getResolved()).isEqualTo(input);
