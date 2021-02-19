@@ -3,7 +3,7 @@ package com.server.parser.java.call;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.CallInvocation;
+import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.io.Serializable;

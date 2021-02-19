@@ -8,7 +8,7 @@ import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.java.visitor.*;
 

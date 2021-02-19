@@ -1,4 +1,4 @@
-package com.server.parser.java.ast.statement;
+package com.server.parser.java.ast.statement.expression_statement;
 
 public class BreakStatement extends ExpressionStatement {
     public static final BreakStatement INSTANCE = new BreakStatement();

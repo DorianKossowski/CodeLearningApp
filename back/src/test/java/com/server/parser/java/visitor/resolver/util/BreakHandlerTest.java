@@ -1,9 +1,9 @@
 package com.server.parser.java.visitor.resolver.util;
 
 import com.server.parser.java.ast.statement.BlockStatement;
-import com.server.parser.java.ast.statement.BreakStatement;
 import com.server.parser.java.ast.statement.ForStatement;
 import com.server.parser.java.ast.statement.IfElseStatement;
+import com.server.parser.java.ast.statement.expression_statement.BreakStatement;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;

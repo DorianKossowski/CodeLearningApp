@@ -1,10 +1,10 @@
 package com.server.parser.java.visitor.resolver.util;
 
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.CallInvocation;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.IfElseStatement;
-import com.server.parser.java.ast.statement.ReturnStatement;
+import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.ast.statement.expression_statement.ReturnStatement;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;

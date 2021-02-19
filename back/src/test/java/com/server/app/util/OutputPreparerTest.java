@@ -3,9 +3,9 @@ package com.server.app.util;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.CallInvocation;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

@@ -1,6 +1,6 @@
 package com.server.parser.java.ast;
 
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.ast.value.Value;
 
 import java.io.Serializable;

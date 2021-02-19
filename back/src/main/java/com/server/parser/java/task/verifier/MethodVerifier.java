@@ -3,7 +3,7 @@ package com.server.parser.java.task.verifier;
 import com.google.common.base.Verify;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.Task;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
 

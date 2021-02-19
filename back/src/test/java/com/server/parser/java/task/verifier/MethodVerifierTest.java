@@ -4,7 +4,7 @@ import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.expression.NullExpression;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
 import org.junit.jupiter.api.Test;

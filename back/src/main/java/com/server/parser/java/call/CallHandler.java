@@ -1,8 +1,8 @@
 package com.server.parser.java.call;
 
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.statement.CallInvocation;
 import com.server.parser.java.ast.statement.CallStatement;
+import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 
 import java.io.Serializable;
 

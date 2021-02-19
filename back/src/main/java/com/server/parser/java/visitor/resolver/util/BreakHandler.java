@@ -2,6 +2,7 @@ package com.server.parser.java.visitor.resolver.util;
 
 import com.google.common.collect.ImmutableSet;
 import com.server.parser.java.ast.statement.*;
+import com.server.parser.java.ast.statement.expression_statement.BreakStatement;
 
 import java.util.Collections;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.server.parser.java.call;
 
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.CallInvocation;
+import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;

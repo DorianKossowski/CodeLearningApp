@@ -1,4 +1,4 @@
-package com.server.parser.java.ast.statement;
+package com.server.parser.java.ast.statement.expression_statement;
 
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.value.Value;

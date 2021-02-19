@@ -3,7 +3,7 @@ package com.server.app.util;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.CallInvocation;
+import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 
 import java.util.List;
 import java.util.stream.Collectors;
