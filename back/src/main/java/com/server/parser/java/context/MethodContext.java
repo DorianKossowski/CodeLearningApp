@@ -2,6 +2,7 @@ package com.server.parser.java.context;
 
 import com.google.common.collect.ImmutableMap;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 public class MethodContext implements JavaContext {
     private final ClassContext classContext;
     private MethodHeader methodHeader;
-    private final Map<String, Variable> nameToField;
+    private final Map<String, FieldVar> nameToField;
     private final Map<String, Variable> nameToVariable = new HashMap<>();
 
     MethodContext(ClassContext classContext) {
@@ -81,7 +82,7 @@ public class MethodContext implements JavaContext {
             return nameToVariable.get(var);
         }
         if (nameToField.containsKey(var)) {
-            Variable variable = nameToField.get(var);
+            FieldVar variable = nameToField.get(var);
             if (methodHeader.isStatic() && !variable.isStatic()) {
                 throw new ResolvingException("Nie można użyć " + var + " ze statycznego kontekstu");
             }
@@ -96,14 +97,14 @@ public class MethodContext implements JavaContext {
     }
 
     @Override
-    public Map<String, Variable> getStaticFields() {
+    public Map<String, FieldVar> getStaticFields() {
         return nameToField.entrySet().stream()
                 .filter(entry -> entry.getValue().isStatic())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override
-    public void setStaticFields(Map<String, Variable> nameToField) {
+    public void setStaticFields(Map<String, FieldVar> nameToField) {
         this.nameToField.putAll(nameToField);
     }
 }

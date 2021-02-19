@@ -1,6 +1,6 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.call.CallHandler;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class ClassContext implements JavaContext {
     private final CallHandler callHandler = new CallHandler();
-    private final Map<String, Variable> nameToField = new HashMap<>();
+    private final Map<String, FieldVar> nameToField = new HashMap<>();
     private String name;
 
     public void setName(String name) {
@@ -26,15 +26,15 @@ public class ClassContext implements JavaContext {
     }
 
     @Override
-    public void addField(Variable var) {
-        String varName = var.getName();
+    public void addField(FieldVar fieldVar) {
+        String varName = fieldVar.getName();
         nameToField.computeIfPresent(varName, (key, $) -> {
             throw new ResolvingException("Pole " + key + " już istnieje");
         });
-        nameToField.put(varName, var);
+        nameToField.put(varName, fieldVar);
     }
 
-    Map<String, Variable> getFields() {
+    Map<String, FieldVar> getFields() {
         return nameToField;
     }
 
@@ -44,14 +44,14 @@ public class ClassContext implements JavaContext {
     }
 
     @Override
-    public Map<String, Variable> getStaticFields() {
+    public Map<String, FieldVar> getStaticFields() {
         return nameToField.entrySet().stream()
                 .filter(entry -> entry.getValue().isStatic())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override
-    public void setStaticFields(Map<String, Variable> nameToField) {
+    public void setStaticFields(Map<String, FieldVar> nameToField) {
         this.nameToField.putAll(nameToField);
     }
 

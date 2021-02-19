@@ -1,6 +1,8 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.FieldVar;
+import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +25,8 @@ class ClassContextTest {
     }
 
     @Test
-    void shouldAddLocalVariable() {
-        Variable variable = new Variable("", NAME, mock(Value.class));
+    void shouldAddFieldVariable() {
+        FieldVar variable = new FieldVar("", NAME, new FieldVarInitExpressionSupplier(() -> mock(Expression.class)), mock(Value.class));
         context.addField(variable);
 
         assertThat(context.getFields().get(NAME)).isSameAs(variable);
@@ -32,7 +34,7 @@ class ClassContextTest {
 
     @Test
     void shouldThrowWhenAddFieldAgain() {
-        Variable variable = new Variable("", NAME, mock(Value.class));
+        FieldVar variable = new FieldVar("", NAME, new FieldVarInitExpressionSupplier(() -> mock(Expression.class)), mock(Value.class));
         context.addField(variable);
 
         assertThatThrownBy(() -> context.addField(variable))

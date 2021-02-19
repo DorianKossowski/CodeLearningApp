@@ -1,6 +1,7 @@
 package com.server.parser.java.context;
 
 import com.google.common.collect.ImmutableMap;
+import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.value.Value;
@@ -16,15 +17,15 @@ import java.util.stream.Stream;
 
 public class LocalContext implements JavaContext {
     private final CallHandler callHandler;
-    private final Map<String, Variable> nameToField;
+    private final Map<String, FieldVar> nameToField;
     private final Map<String, Variable> nameToVariable;
     private final String methodName;
     private final String methodResultType;
     private final boolean isStaticContext;
     private final Map<String, Variable> localNameToVariable = new HashMap<>();
 
-    LocalContext(CallHandler callHandler, Map<String, Variable> nameToField, Map<String, Variable> nameToVariable, String methodName,
-                 String methodResultType, boolean isStaticContext) {
+    LocalContext(CallHandler callHandler, Map<String, FieldVar> nameToField, Map<String, Variable> nameToVariable,
+                 String methodName, String methodResultType, boolean isStaticContext) {
         this.callHandler = Objects.requireNonNull(callHandler, "callHandler cannot be null");
         this.nameToField = Objects.requireNonNull(nameToField, "nameToField cannot be null");
         this.nameToVariable = Objects.requireNonNull(nameToVariable, "nameToVariable cannot be null");
@@ -88,7 +89,7 @@ public class LocalContext implements JavaContext {
             return nameToVariable.get(var);
         }
         if (nameToField.containsKey(var)) {
-            Variable variable = nameToField.get(var);
+            FieldVar variable = nameToField.get(var);
             if (isStaticContext && !variable.isStatic()) {
                 throw new ResolvingException("Nie można użyć " + var + " ze statycznego kontekstu");
             }
@@ -103,14 +104,14 @@ public class LocalContext implements JavaContext {
     }
 
     @Override
-    public Map<String, Variable> getStaticFields() {
+    public Map<String, FieldVar> getStaticFields() {
         return nameToField.entrySet().stream()
                 .filter(entry -> entry.getValue().isStatic())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override
-    public void setStaticFields(Map<String, Variable> nameToField) {
+    public void setStaticFields(Map<String, FieldVar> nameToField) {
         this.nameToField.putAll(nameToField);
     }
 }

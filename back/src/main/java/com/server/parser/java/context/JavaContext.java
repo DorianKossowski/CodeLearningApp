@@ -2,6 +2,7 @@ package com.server.parser.java.context;
 
 import com.server.parser.java.JavaVisitorsRegistry;
 import com.server.parser.java.ast.AstElement;
+import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.call.CallHandler;
@@ -15,7 +16,7 @@ public interface JavaContext extends MethodVerifiable {
         return JavaVisitorsRegistry.get(elementClass);
     }
 
-    default void addField(Variable variable) {
+    default void addField(FieldVar fieldVar) {
         throw new UnsupportedOperationException();
     }
 
@@ -37,7 +38,7 @@ public interface JavaContext extends MethodVerifiable {
 
     CallHandler getCallHandler();
 
-    Map<String, Variable> getStaticFields();
+    Map<String, FieldVar> getStaticFields();
 
-    void setStaticFields(Map<String, Variable> nameToField);
+    void setStaticFields(Map<String, FieldVar> nameToField);
 }
