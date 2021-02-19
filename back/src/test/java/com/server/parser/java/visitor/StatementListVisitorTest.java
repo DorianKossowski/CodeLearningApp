@@ -1,7 +1,7 @@
 package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.expression.UninitializedExpression;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.value.UninitializedValue;
@@ -44,7 +44,7 @@ class StatementListVisitorTest extends JavaVisitorTestBase {
     void shouldValidateRemainingStatementsInSeparateContext() {
         String input = "return; a = 1;";
         MethodContext methodContext = createMethodContext();
-        methodContext.addVariable(new Variable("int", "a", new UninitializedValue(new UninitializedExpression(""))));
+        methodContext.addVariable(new MethodVar("int", "a", new UninitializedValue(new UninitializedExpression(""))));
         JavaParser.StatementListContext c = HELPER.shouldParseToEof(input, JavaParser::statementList);
 
         visitor.visit(c, methodContext);

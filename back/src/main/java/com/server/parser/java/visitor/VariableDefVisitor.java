@@ -3,7 +3,9 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.FieldVar;
+import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
+import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
@@ -39,7 +41,7 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
                     .collect(Collectors.toList());
             variableDef.setModifiers(modifiers);
             variableDef.setContextMethodName(context.getMethodName());
-            context.addVariable(new Variable(variableDef));
+            context.addVariable(new MethodVar(variableDef));
             return variableDef;
         }
 
@@ -50,7 +52,7 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
                     .map(RuleContext::getText)
                     .collect(Collectors.toList());
             variableDef.setModifiers(modifiers);
-            context.addField(new Variable(variableDef));
+            context.addField(new FieldVar(variableDef));
             return variableDef;
         }
 
@@ -85,11 +87,10 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
         }
 
         private FieldVarDef createFieldVarDef(String id, String type, JavaParser.VarDecContext ctx) {
-            Expression expression = ctx.expression() != null ?
-                    context.getVisitor(Expression.class).visit(ctx.expression(), context) :
-                    EmptyExpressionPreparer.prepare(type);
-            return new FieldVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id, expression,
-                    ctx.expression() != null);
+            FieldVarInitExpressionSupplier supplier = ctx.expression() != null ?
+                    new FieldVarInitExpressionSupplier(() -> context.getVisitor(Expression.class).visit(ctx.expression(), context)) :
+                    new FieldVarInitExpressionSupplier(() -> EmptyExpressionPreparer.prepare(type));
+            return new FieldVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id, supplier, ctx.expression() != null);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
@@ -78,7 +79,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
     private Variable createVariable(String name) {
         StringConstant stringConstant = new StringConstant("value");
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(stringConstant));
-        return new Variable("String", name, value);
+        return new MethodVar("String", name, value);
     }
 
     @Test

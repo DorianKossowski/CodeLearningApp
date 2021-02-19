@@ -5,7 +5,7 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ConstructorHeader;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
@@ -59,7 +59,7 @@ public class MethodVisitor extends JavaVisitor<Method> {
         }
 
         private void putArgumentsIntoMethodContext(List<VariableDef> args) {
-            args.forEach(variableDef -> context.addVariable(new Variable(variableDef)));
+            args.forEach(variableDef -> context.addVariable(new MethodVar(variableDef)));
         }
 
         @Override

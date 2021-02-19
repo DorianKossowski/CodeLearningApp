@@ -4,7 +4,7 @@ import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
@@ -39,7 +39,7 @@ class IfStmtResolverTest {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
-        methodContext.addVariable(new Variable("String", "str", value));
+        methodContext.addVariable(new MethodVar("String", "str", value));
 
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) str = \"true\"; else str = \"false\";",
                 JavaParser::ifElseStatement);

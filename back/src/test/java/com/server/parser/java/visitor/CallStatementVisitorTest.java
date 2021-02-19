@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
@@ -83,6 +84,6 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
     private Variable createStringVariable(String name) {
         StringConstant stringConstant = new StringConstant("value");
         PrimitiveValue value = new PrimitiveValue(new Literal(stringConstant));
-        return new Variable("String", name, value);
+        return new MethodVar("String", name, value);
     }
 }

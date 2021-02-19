@@ -3,6 +3,7 @@ package com.server.parser.java.visitor;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
+import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.constant.StringConstant;
@@ -74,7 +75,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     private Variable createStringVariable(String name) {
         StringConstant stringConstant = new StringConstant("value");
         PrimitiveValue value = new PrimitiveValue(new Literal(stringConstant));
-        return new Variable("String", name, value);
+        return new MethodVar("String", name, value);
     }
 
     @Test
@@ -160,7 +161,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         JavaParser.WhileStatementContext c = HELPER.shouldParseToEof(input, JavaParser::whileStatement);
 
         MethodContext realMethodContext = createRealMethodContext();
-        realMethodContext.addVariable(new Variable("int", "i", new PrimitiveComputableValue(new Literal(new IntConstant(0)))));
+        realMethodContext.addVariable(new MethodVar("int", "i", new PrimitiveComputableValue(new Literal(new IntConstant(0)))));
         WhileStatement whileStatement = (WhileStatement) visitor.visit(c, realMethodContext);
 
         assertThat(whileStatement.getText()).isEqualTo("WHILE Statement");
@@ -177,7 +178,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof(input, JavaParser::doWhileStatement);
 
         MethodContext realMethodContext = createRealMethodContext();
-        realMethodContext.addVariable(new Variable("int", "i", new PrimitiveComputableValue(new Literal(new IntConstant(0)))));
+        realMethodContext.addVariable(new MethodVar("int", "i", new PrimitiveComputableValue(new Literal(new IntConstant(0)))));
         DoWhileStatement doWhileStatement = (DoWhileStatement) visitor.visit(c, realMethodContext);
 
         assertThat(doWhileStatement.getText()).isEqualTo("DO WHILE Statement");
