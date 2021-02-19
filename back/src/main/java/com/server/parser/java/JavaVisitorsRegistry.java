@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 public class JavaVisitorsRegistry {
     private static final Map<Class<? extends AstElement>, Supplier<JavaVisitor<?>>> visitors =
             ImmutableMap.<Class<? extends AstElement>, Supplier<JavaVisitor<?>>>builder()
-                    .put(VariableDef.class, Suppliers.memoize(StatementVisitor::new))
+                    .put(VariableDef.class, Suppliers.memoize(VariableDefVisitor::new))
                     .put(Expression.class, Suppliers.memoize(ExpressionVisitor::new))
                     .put(Method.class, Suppliers.memoize(MethodVisitor::new))
                     .put(ClassAst.class, Suppliers.memoize(ClassVisitor::new))

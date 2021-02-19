@@ -3,7 +3,6 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.BlockStatement;
@@ -16,16 +15,13 @@ import com.server.parser.java.ast.statement.expression_statement.ReturnExprState
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.*;
-import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RuleContext;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class StatementVisitor extends JavaVisitor<Statement> {
 
@@ -67,48 +63,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         //*** VARIABLE ***//
         @Override
         public Statement visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
-            VariableDef variableDef = (VariableDef) visit(ctx.varDec());
-            List<String> modifiers = ctx.varModifier().stream()
-                    .map(RuleContext::getText)
-                    .collect(Collectors.toList());
-            variableDef.setModifiers(modifiers);
-            variableDef.setContextMethodName(context.getMethodName());
-            context.addVariable(new Variable(variableDef));
-            return variableDef;
-        }
-
-        @Override
-        public Statement visitFieldDec(JavaParser.FieldDecContext ctx) {
-            VariableDef variableDef = (VariableDef) visit(ctx.varDec());
-            List<String> modifiers = ctx.fieldModifier().stream()
-                    .map(RuleContext::getText)
-                    .collect(Collectors.toList());
-            variableDef.setModifiers(modifiers);
-            context.addField(new Variable(variableDef));
-            return variableDef;
-        }
-
-        @Override
-        public Statement visitSingleMethodArg(JavaParser.SingleMethodArgContext ctx) {
-            String type = textVisitor.visit(ctx.type());
-            String id = textVisitor.visit(ctx.identifier());
-            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id,
-                    EmptyExpressionPreparer.prepare(type), false);
-        }
-
-        @Override
-        public Statement visitVarDec(JavaParser.VarDecContext ctx) {
-            String id = textVisitor.visit(ctx.identifier());
-            String type = textVisitor.visit(ctx.type());
-            Expression expression;
-            if (ctx.expression() != null) {
-                expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
-            } else {
-                expression = ctx.parent instanceof JavaParser.FieldDecContext
-                        ? EmptyExpressionPreparer.prepare(type)
-                        : EmptyExpressionPreparer.prepareUninitialized(id);
-            }
-            return new VariableDef(JavaGrammarHelper.getOriginalText(ctx), type, id, expression, ctx.expression() != null);
+            return context.getVisitor(VariableDef.class).visit(ctx, context);
         }
 
         //*** ASSIGNMENT ***//
