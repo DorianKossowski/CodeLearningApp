@@ -12,7 +12,7 @@ import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
-import com.server.parser.java.ast.statement.expression_statement.ReturnStatement;
+import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
@@ -141,7 +141,7 @@ class CallExecutorTest {
     static Stream<Arguments> statementsForReturnProvider() {
         Expression expression = mock(Expression.class);
         return Stream.of(
-                Arguments.of(Collections.singletonList(new ReturnStatement("", expression)), expression),
+                Arguments.of(Collections.singletonList(new ReturnExprStatement("", expression)), expression),
                 Arguments.of(Collections.emptyList(), VoidExpression.INSTANCE)
         );
     }

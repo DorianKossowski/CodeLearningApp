@@ -1,9 +1,9 @@
 package com.server.parser.java.ast.statement.expression_statement;
 
-public class BreakStatement extends ExpressionStatement {
-    public static final BreakStatement INSTANCE = new BreakStatement();
+public class BreakExprStatement extends ExpressionStatement {
+    public static final BreakExprStatement INSTANCE = new BreakExprStatement();
 
-    private BreakStatement() {
+    private BreakExprStatement() {
         super("break");
     }
 

@@ -2,7 +2,7 @@ package com.server.parser.java.visitor.resolver.util;
 
 import com.google.common.collect.ImmutableSet;
 import com.server.parser.java.ast.statement.*;
-import com.server.parser.java.ast.statement.expression_statement.BreakStatement;
+import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +16,7 @@ public class BreakHandler {
     public static boolean shouldBreak(Statement currentStatement) {
         return getStatementsToFind(currentStatement).stream()
                 .flatMap(innerStatement -> innerStatement.getExpressionStatements().stream())
-                .anyMatch(expressionStatement -> expressionStatement instanceof BreakStatement);
+                .anyMatch(expressionStatement -> expressionStatement instanceof BreakExprStatement);
     }
 
     private static List<Statement> getStatementsToFind(Statement statement) {

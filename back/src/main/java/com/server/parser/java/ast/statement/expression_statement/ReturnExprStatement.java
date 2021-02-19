@@ -4,10 +4,10 @@ import com.server.parser.java.ast.expression.Expression;
 
 import java.util.Objects;
 
-public class ReturnStatement extends ExpressionStatement {
+public class ReturnExprStatement extends ExpressionStatement {
     private final Expression expression;
 
-    public ReturnStatement(String text, Expression expression) {
+    public ReturnExprStatement(String text, Expression expression) {
         super(text);
         this.expression = Objects.requireNonNull(expression, "expression cannot be null");
     }

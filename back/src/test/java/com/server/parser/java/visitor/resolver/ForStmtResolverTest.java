@@ -6,7 +6,7 @@ import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.ast.statement.expression_statement.BreakStatement;
+import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
@@ -53,7 +53,7 @@ class ForStmtResolverTest {
 
         List<Statement> statements = ForStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
         Statement statement = Iterables.getOnlyElement(statements);
-        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakStatement.INSTANCE);
+        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
     }
 
     @Test

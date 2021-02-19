@@ -11,7 +11,7 @@ import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
-import com.server.parser.java.ast.statement.expression_statement.ReturnStatement;
+import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
@@ -51,12 +51,12 @@ public class CallExecutor implements Serializable {
     }
 
     Expression getReturnedExpression(List<Statement> statements) {
-        Optional<ReturnStatement> optionalReturnStatement = statements.stream()
+        Optional<ReturnExprStatement> optionalReturnStatement = statements.stream()
                 .flatMap(statement -> statement.getExpressionStatements().stream())
-                .filter(statement -> statement instanceof ReturnStatement)
-                .map(statement -> (ReturnStatement) statement)
+                .filter(statement -> statement instanceof ReturnExprStatement)
+                .map(statement -> (ReturnExprStatement) statement)
                 .findFirst();
-        return optionalReturnStatement.map(ReturnStatement::getExpression)
+        return optionalReturnStatement.map(ReturnExprStatement::getExpression)
                 .orElse(VoidExpression.INSTANCE);
     }
 

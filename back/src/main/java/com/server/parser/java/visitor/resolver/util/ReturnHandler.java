@@ -2,7 +2,7 @@ package com.server.parser.java.visitor.resolver.util;
 
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.ast.statement.expression_statement.ReturnStatement;
+import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
 
 public class ReturnHandler {
 
@@ -11,6 +11,6 @@ public class ReturnHandler {
             return false;
         }
         return currentStatement.getExpressionStatements().stream()
-                .anyMatch(expressionStatement -> expressionStatement instanceof ReturnStatement);
+                .anyMatch(expressionStatement -> expressionStatement instanceof ReturnExprStatement);
     }
 }

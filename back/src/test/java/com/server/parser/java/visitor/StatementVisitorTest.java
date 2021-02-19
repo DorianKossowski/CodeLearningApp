@@ -61,7 +61,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         ForStatement statement = (ForStatement) visitor.visit(c, methodContext);
 
-        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakStatement.INSTANCE);
+        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
     }
 
     //*** VARIABLE ***//
@@ -324,7 +324,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitVoidReturn() {
         JavaParser.ReturnStatementContext c = HELPER.shouldParseToEof("return", JavaParser::returnStatement);
 
-        ReturnStatement statement = (ReturnStatement) visitor.visit(c, methodContext);
+        ReturnExprStatement statement = (ReturnExprStatement) visitor.visit(c, methodContext);
 
         assertThat(statement.getExpression()).isSameAs(VoidExpression.INSTANCE);
         assertThat(statement.getResolved()).isEqualTo("return");
@@ -334,7 +334,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitReturn() {
         JavaParser.ReturnStatementContext c = HELPER.shouldParseToEof("return 1+1", JavaParser::returnStatement);
 
-        ReturnStatement statement = (ReturnStatement) visitor.visit(c, createMethodContext(METHOD_NAME, "int"));
+        ReturnExprStatement statement = (ReturnExprStatement) visitor.visit(c, createMethodContext(METHOD_NAME, "int"));
 
         assertThat(statement.getExpression()).isExactlyInstanceOf(Literal.class);
         assertThat(statement.getResolved()).isEqualTo("return 2");

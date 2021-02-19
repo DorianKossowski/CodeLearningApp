@@ -11,8 +11,8 @@ import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.EmptyStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.Assignment;
-import com.server.parser.java.ast.statement.expression_statement.BreakStatement;
-import com.server.parser.java.ast.statement.expression_statement.ReturnStatement;
+import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
+import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.*;
@@ -136,7 +136,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         @Override
         public Statement visitBreakStatement(JavaParser.BreakStatementContext ctx) {
             if (isValidBreak(ctx)) {
-                return BreakStatement.INSTANCE;
+                return BreakExprStatement.INSTANCE;
             }
             throw new BreakStatementException();
         }
@@ -190,7 +190,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
                 expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
             }
             if (TypeCorrectnessChecker.isCorrect(context.getMethodResultType(), expression)) {
-                return new ReturnStatement(JavaGrammarHelper.getOriginalText(ctx), expression);
+                return new ReturnExprStatement(JavaGrammarHelper.getOriginalText(ctx), expression);
             }
             throw new InvalidReturnedExpressionException(expression.getResolvedText(), context.getMethodResultType());
         }
