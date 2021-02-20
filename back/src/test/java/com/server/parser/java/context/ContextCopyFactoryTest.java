@@ -1,6 +1,7 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.FieldVar;
+import com.server.parser.java.call.CallHandler;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -24,5 +25,15 @@ class ContextCopyFactoryTest {
         JavaContext executionContext = ContextCopyFactory.createExecutionContext(new MethodContext(classContext));
 
         assertThat(executionContext.getStaticFields().get(FIELD_NAME)).isSameAs(variable);
+    }
+
+    @Test
+    void shouldHaveSameCallHandler() {
+        ClassContext classContext = new ClassContext();
+        CallHandler callHandler = classContext.getCallHandler();
+
+        JavaContext executionContext = ContextCopyFactory.createExecutionContext(classContext);
+
+        assertThat(executionContext.getCallHandler()).isSameAs(callHandler);
     }
 }

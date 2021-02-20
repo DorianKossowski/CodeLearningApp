@@ -2,21 +2,24 @@ package com.server.parser.java.context;
 
 import com.rits.cloning.Cloner;
 import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
+import com.server.parser.java.call.CallHandler;
 
 public class ContextCopyFactory {
+    private static final Class<?>[] EXCLUDED_VALIDATION_CLONING = {FieldVarInitExpressionSupplier.class};
+    private static final Class<?>[] EXCLUDED_EXECUTION_CLONING = {FieldVarInitExpressionSupplier.class, CallHandler.class};
 
     public static JavaContext createValidationContext(JavaContext baseContext) {
-        return createCloner().deepClone(baseContext);
+        return createCloner(EXCLUDED_VALIDATION_CLONING).deepClone(baseContext);
     }
 
-    private static Cloner createCloner() {
+    private static Cloner createCloner(Class<?>... cloningExcludedClasses) {
         Cloner cloner = new Cloner();
-        cloner.dontClone(FieldVarInitExpressionSupplier.class);
+        cloner.dontClone(cloningExcludedClasses);
         return cloner;
     }
 
     public static JavaContext createExecutionContext(JavaContext baseContext) {
-        JavaContext executionContext = createCloner().deepClone(baseContext);
+        JavaContext executionContext = createCloner(EXCLUDED_EXECUTION_CLONING).deepClone(baseContext);
         executionContext.setStaticFields(baseContext.getStaticFields());
         return executionContext;
     }
