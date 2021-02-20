@@ -1,0 +1,17 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    private static int i = fun();
+
+    public static void main(String[] args){
+    }
+
+    static int fun() {
+		System.out.println("fun");
+        return 1;
+    }
+}
+
+### OUTPUT ###
+fun

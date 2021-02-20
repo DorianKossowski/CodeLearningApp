@@ -23,10 +23,17 @@ public class FieldVar extends Variable {
         this.initSupplier = fieldVarDef.getInitSupplier();
     }
 
+    public void initialize() {
+        if (value != null) {
+            throw new UnsupportedOperationException(String.format("Field %s already initialized", getName()));
+        }
+        value = ValuePreparer.prepare(getType(), initSupplier.get());
+    }
+
     @Override
     public Value getValue() {
         if (value == null) {
-            value = ValuePreparer.prepare(getType(), initSupplier.get());
+            throw new UnsupportedOperationException(String.format("Field %s not yest initialized", getName()));
         }
         return value;
     }
