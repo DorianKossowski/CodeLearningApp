@@ -19,6 +19,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.*;
 
 class LocalContextTest {
+    private static final String TYPE = "int";
     private static final String NAME = "name";
     private static final String NAME_2 = "name2";
     private final Map<String, FieldVar> nameToField = new HashMap<>();
@@ -38,8 +39,8 @@ class LocalContextTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        methodVar = new MethodVar("type", NAME, value);
-        fieldVar = new FieldVar("type", NAME, new FieldVarInitExpressionSupplier(() -> expression), value);
+        methodVar = new MethodVar(TYPE, NAME, value);
+        fieldVar = new FieldVar(TYPE, NAME, new FieldVarInitExpressionSupplier(() -> expression), value);
         localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", false);
     }
 
@@ -93,7 +94,7 @@ class LocalContextTest {
     @Test
     void shouldCreateLocalContext() {
         nameToVariable.put(NAME, methodVar);
-        Variable variable2 = new MethodVar("type", NAME_2, value);
+        Variable variable2 = new MethodVar(TYPE, NAME_2, value);
         localContext.addVariable(variable2);
 
         LocalContext newLocalContext = (LocalContext) localContext.createLocalContext();

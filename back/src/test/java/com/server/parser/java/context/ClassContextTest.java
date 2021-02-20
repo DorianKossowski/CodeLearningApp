@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 class ClassContextTest {
+    private static final String TYPE = "int";
     private static final String NAME = "name";
 
     private ClassContext context;
@@ -26,7 +27,7 @@ class ClassContextTest {
 
     @Test
     void shouldAddFieldVariable() {
-        FieldVar variable = new FieldVar("", NAME, new FieldVarInitExpressionSupplier(() -> mock(Expression.class)), mock(Value.class));
+        FieldVar variable = new FieldVar(TYPE, NAME, new FieldVarInitExpressionSupplier(() -> mock(Expression.class)), mock(Value.class));
         context.addField(variable);
 
         assertThat(context.getFields().get(NAME)).isSameAs(variable);
@@ -34,7 +35,7 @@ class ClassContextTest {
 
     @Test
     void shouldThrowWhenAddFieldAgain() {
-        FieldVar variable = new FieldVar("", NAME, new FieldVarInitExpressionSupplier(() -> mock(Expression.class)), mock(Value.class));
+        FieldVar variable = new FieldVar(TYPE, NAME, new FieldVarInitExpressionSupplier(() -> mock(Expression.class)), mock(Value.class));
         context.addField(variable);
 
         assertThatThrownBy(() -> context.addField(variable))

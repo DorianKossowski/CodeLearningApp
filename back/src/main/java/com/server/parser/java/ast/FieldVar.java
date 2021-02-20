@@ -2,13 +2,14 @@ package com.server.parser.java.ast;
 
 import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.ast.value.Value;
+import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.ValuePreparer;
 
 import java.util.Objects;
 
 public class FieldVar extends Variable {
     private final FieldVarInitExpressionSupplier initSupplier;
-    // TODO init empty value
+    private final Value emptyValue = EmptyExpressionPreparer.prepare(getType()).getValue();
     private Value value;
 
     // only for test purpose
@@ -33,7 +34,7 @@ public class FieldVar extends Variable {
     @Override
     public Value getValue() {
         if (value == null) {
-            throw new UnsupportedOperationException(String.format("Field %s not yest initialized", getName()));
+            return emptyValue;
         }
         return value;
     }
