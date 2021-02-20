@@ -9,6 +9,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.CallStatement;
+import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
@@ -89,11 +90,10 @@ public class CallExecutor implements Serializable {
         return new CallStatement(invocation, statements, returnedExpression);
     }
 
-    public CallStatement executePrintMethod(CallInvocation invocation) {
+    public PrintCallStatement executePrintMethod(CallInvocation invocation) {
         int argumentsSize = invocation.getArgs().size();
         checkPrintMethodArguments(invocation.getName(), argumentsSize);
-        // TODO use CallPrintStatement
-        return new CallStatement(invocation, Collections.emptyList());
+        return new PrintCallStatement(invocation);
     }
 
     private void checkPrintMethodArguments(String methodName, int argumentsSize) {

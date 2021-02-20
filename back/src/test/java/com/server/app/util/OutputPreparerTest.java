@@ -3,7 +3,7 @@ package com.server.app.util;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.CallStatement;
+import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import org.junit.jupiter.api.Test;
 
@@ -21,23 +21,23 @@ class OutputPreparerTest {
     void shouldPrepareOutput() {
         // given
         CallInvocation invocation1 = mockCallInvocation("System.out.println", "TEXT");
-        CallStatement call1 = new CallStatement(invocation1, Collections.emptyList());
+        PrintCallStatement call1 = new PrintCallStatement(invocation1);
 
         CallInvocation invocation2 = mockCallInvocation("System.out.print", "SOME ");
-        CallStatement call2 = new CallStatement(invocation2, Collections.emptyList());
+        PrintCallStatement call2 = new PrintCallStatement(invocation2);
 
         CallInvocation invocation3 = mockCallInvocation("someMethod", "");
-        CallStatement call3 = new CallStatement(invocation3, Collections.emptyList());
+        PrintCallStatement call3 = new PrintCallStatement(invocation3);
 
         CallInvocation invocation4 = mockCallInvocation("System.out.println", "TEXT2");
-        CallStatement call4 = new CallStatement(invocation4, Collections.emptyList());
+        PrintCallStatement call4 = new PrintCallStatement(invocation4);
 
-        List<CallStatement> stmts = Arrays.asList(call1, call2, call3, call4);
+        List<PrintCallStatement> stmts = Arrays.asList(call1, call2, call3, call4);
         Task task = new Task(mock(ClassAst.class), Collections.emptyList(), stmts);
 
         // then
-        assertThat(OutputPreparer.prepare(task)).isEqualTo(String.format("TEXT%sSOME TEXT2%s", System.lineSeparator(),
-                System.lineSeparator()));
+        assertThat(OutputPreparer.prepare(task.getPrintCalls()))
+                .isEqualTo(String.format("TEXT%sSOME TEXT2%s", System.lineSeparator(), System.lineSeparator()));
     }
 
     private CallInvocation mockCallInvocation(String name, String exprOutput) {

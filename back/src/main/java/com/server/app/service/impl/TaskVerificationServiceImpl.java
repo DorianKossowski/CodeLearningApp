@@ -47,7 +47,7 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
         try {
             verify(rulesEOFContext, javaTaskListener);
             logger.info("Verification completed successfully");
-            return VerificationResultDto.valid(OutputPreparer.prepare(computedTask));
+            return VerificationResultDto.valid(OutputPreparer.prepare(computedTask.getPrintCalls()));
         } catch (Exception e) {
             logger.error("Error during verification:\n" + e.getMessage());
             return VerificationResultDto.invalid(e);

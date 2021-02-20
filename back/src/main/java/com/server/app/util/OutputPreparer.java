@@ -1,8 +1,8 @@
 package com.server.app.util;
 
 import com.google.common.collect.Iterables;
-import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 
 import java.util.List;
@@ -10,10 +10,9 @@ import java.util.stream.Collectors;
 
 public class OutputPreparer {
 
-    public static String prepare(Task task) {
-        List<CallInvocation> invocations = task.getPrintCalls().stream()
+    public static String prepare(List<PrintCallStatement> printCalls) {
+        List<CallInvocation> invocations = printCalls.stream()
                 .flatMap(statement -> statement.getExpressionStatements().stream())
-                .filter(statement -> statement instanceof CallInvocation)
                 .map(statement -> (CallInvocation) statement)
                 .collect(Collectors.toList());
 

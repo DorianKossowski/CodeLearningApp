@@ -3,7 +3,7 @@ package com.server.parser.java.call;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.CallStatement;
+import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ class CallResolverTest {
     @Test
     void shouldKeepPrintCalls() {
         CallInvocation invocation = createSimplePrintCall();
-        when(callExecutor.executePrintMethod(invocation)).thenReturn(new CallStatement(invocation, Collections.emptyList()));
+        when(callExecutor.executePrintMethod(invocation)).thenReturn(new PrintCallStatement(invocation));
         resolver.resolve(invocation);
 
         assertThat(Iterables.getOnlyElement(resolver.getResolvedPrintCalls()).getCallInvocation()).isSameAs(invocation);
