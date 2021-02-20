@@ -52,6 +52,7 @@ public class CallExecutor implements Serializable {
 
     Expression getReturnedExpression(List<Statement> statements) {
         Optional<ReturnExprStatement> optionalReturnStatement = statements.stream()
+                .filter(statement -> !(statement instanceof CallStatement))
                 .flatMap(statement -> statement.getExpressionStatements().stream())
                 .filter(statement -> statement instanceof ReturnExprStatement)
                 .map(statement -> (ReturnExprStatement) statement)
@@ -91,6 +92,7 @@ public class CallExecutor implements Serializable {
     public CallStatement executePrintMethod(CallInvocation invocation) {
         int argumentsSize = invocation.getArgs().size();
         checkPrintMethodArguments(invocation.getName(), argumentsSize);
+        // TODO use CallPrintStatement
         return new CallStatement(invocation, Collections.emptyList());
     }
 

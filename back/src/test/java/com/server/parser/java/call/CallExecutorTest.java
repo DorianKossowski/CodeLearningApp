@@ -140,9 +140,12 @@ class CallExecutorTest {
 
     static Stream<Arguments> statementsForReturnProvider() {
         Expression expression = mock(Expression.class);
+        CallStatement callStatement = new CallStatement(mock(CallInvocation.class),
+                Collections.singletonList(new ReturnExprStatement("", expression)), expression);
         return Stream.of(
                 Arguments.of(Collections.singletonList(new ReturnExprStatement("", expression)), expression),
-                Arguments.of(Collections.emptyList(), VoidExpression.INSTANCE)
+                Arguments.of(Collections.emptyList(), VoidExpression.INSTANCE),
+                Arguments.of(Collections.singletonList(callStatement), VoidExpression.INSTANCE)
         );
     }
 
