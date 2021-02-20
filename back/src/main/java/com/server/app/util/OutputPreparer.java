@@ -11,11 +11,10 @@ import java.util.stream.Collectors;
 public class OutputPreparer {
 
     public static String prepare(Task task) {
-        List<CallInvocation> invocations = task.getCalledStatements().stream()
+        List<CallInvocation> invocations = task.getPrintCalls().stream()
                 .flatMap(statement -> statement.getExpressionStatements().stream())
                 .filter(statement -> statement instanceof CallInvocation)
                 .map(statement -> (CallInvocation) statement)
-                .filter(invocation -> invocation.getName().startsWith("System.out.print"))
                 .collect(Collectors.toList());
 
         StringBuilder sb = new StringBuilder();

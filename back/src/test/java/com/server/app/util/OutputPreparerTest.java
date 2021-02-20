@@ -4,7 +4,6 @@ import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.CallStatement;
-import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import org.junit.jupiter.api.Test;
 
@@ -33,8 +32,8 @@ class OutputPreparerTest {
         CallInvocation invocation4 = mockCallInvocation("System.out.println", "TEXT2");
         CallStatement call4 = new CallStatement(invocation4, Collections.emptyList());
 
-        List<Statement> stmts = Arrays.asList(call1, call2, call3, call4);
-        Task task = new Task(mock(ClassAst.class), stmts);
+        List<CallStatement> stmts = Arrays.asList(call1, call2, call3, call4);
+        Task task = new Task(mock(ClassAst.class), Collections.emptyList(), stmts);
 
         // then
         assertThat(OutputPreparer.prepare(task)).isEqualTo(String.format("TEXT%sSOME TEXT2%s", System.lineSeparator(),
