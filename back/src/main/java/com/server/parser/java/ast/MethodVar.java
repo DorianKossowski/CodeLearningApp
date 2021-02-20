@@ -2,6 +2,7 @@ package com.server.parser.java.ast;
 
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.ast.value.Value;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Objects;
 
@@ -27,5 +28,10 @@ public class MethodVar extends Variable {
     @Override
     public void setValue(Value value) {
         this.value = value;
+    }
+
+    @Override
+    public void initialize() {
+        throw new NotImplementedException();
     }
 }

@@ -41,4 +41,6 @@ public abstract class Variable implements Serializable {
     public abstract Value getValue();
 
     public abstract void setValue(Value value);
+
+    public abstract void initialize();
 }

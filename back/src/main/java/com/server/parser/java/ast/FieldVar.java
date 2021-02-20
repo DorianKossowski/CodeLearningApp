@@ -24,6 +24,7 @@ public class FieldVar extends Variable {
         this.initSupplier = fieldVarDef.getInitSupplier();
     }
 
+    @Override
     public void initialize() {
         if (value != null) {
             throw new UnsupportedOperationException(String.format("Field %s already initialized", getName()));
