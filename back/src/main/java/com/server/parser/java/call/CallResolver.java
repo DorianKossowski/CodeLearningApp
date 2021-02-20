@@ -9,29 +9,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CallHandler implements Serializable {
+public class CallResolver implements Serializable {
     private final CallableKeeper callableKeeper;
     private final CallExecutor callExecutor;
-    private final List<CallStatement> printCalls = new ArrayList<>();
+    private final List<CallStatement> resolvedPrintCalls = new ArrayList<>();
 
-    public CallHandler() {
+    public CallResolver() {
         this(new CallableKeeper(), new CallExecutor());
     }
 
-    public CallHandler(CallableKeeper callableKeeper, CallExecutor callExecutor) {
+    public CallResolver(CallableKeeper callableKeeper, CallExecutor callExecutor) {
         this.callableKeeper = Objects.requireNonNull(callableKeeper, "callableKeeper cannot be null");
         this.callExecutor = Objects.requireNonNull(callExecutor, "callExecutor cannot be null");
     }
-
 
     public CallableKeeper getCallableKeeper() {
         return callableKeeper;
     }
 
-    public CallStatement execute(CallInvocation invocation) {
+    public CallStatement resolve(CallInvocation invocation) {
         if (isSpecialPrintMethod(invocation.getName())) {
             CallStatement callStatement = callExecutor.executePrintMethod(invocation);
-            printCalls.add(callStatement);
+            resolvedPrintCalls.add(callStatement);
             return callStatement;
         }
         if (isSpecificEqualsMethod(invocation)) {
@@ -52,7 +51,7 @@ public class CallHandler implements Serializable {
                 callInvocation.getArgs().size() == 1;
     }
 
-    public List<CallStatement> getPrintCalls() {
-        return printCalls;
+    public List<CallStatement> getResolvedPrintCalls() {
+        return resolvedPrintCalls;
     }
 }

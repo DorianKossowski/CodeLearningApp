@@ -8,7 +8,7 @@ import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.value.Value;
-import com.server.parser.java.call.CallHandler;
+import com.server.parser.java.call.CallResolver;
 import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -31,14 +31,14 @@ public class MethodContext implements JavaContext {
 
     @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(classContext.getCallHandler(), nameToField, nameToVariable, getMethodName(),
+        return new LocalContext(classContext.getCallResolver(), nameToField, nameToVariable, getMethodName(),
                 getMethodResultType(), methodHeader.isStatic());
     }
 
     public Method save(MethodHeader methodHeader, JavaParser.MethodBodyContext methodBody) {
         this.methodHeader = Objects.requireNonNull(methodHeader, "methodHeader cannot be null");
         Method method = new Method(this, methodHeader, Objects.requireNonNull(methodBody, "methodBody cannot be null"));
-        classContext.getCallHandler().getCallableKeeper().keepCallable(method);
+        classContext.getCallResolver().getCallableKeeper().keepCallable(method);
         return method;
     }
 
@@ -92,8 +92,8 @@ public class MethodContext implements JavaContext {
     }
 
     @Override
-    public CallHandler getCallHandler() {
-        return classContext.getCallHandler();
+    public CallResolver getCallResolver() {
+        return classContext.getCallResolver();
     }
 
     @Override

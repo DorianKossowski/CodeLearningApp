@@ -5,7 +5,7 @@ import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.value.Value;
-import com.server.parser.java.call.CallHandler;
+import com.server.parser.java.call.CallResolver;
 import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LocalContext implements JavaContext {
-    private final CallHandler callHandler;
+    private final CallResolver callResolver;
     private final Map<String, FieldVar> nameToField;
     private final Map<String, Variable> nameToVariable;
     private final String methodName;
@@ -24,9 +24,9 @@ public class LocalContext implements JavaContext {
     private final boolean isStaticContext;
     private final Map<String, Variable> localNameToVariable = new HashMap<>();
 
-    LocalContext(CallHandler callHandler, Map<String, FieldVar> nameToField, Map<String, Variable> nameToVariable,
+    LocalContext(CallResolver callResolver, Map<String, FieldVar> nameToField, Map<String, Variable> nameToVariable,
                  String methodName, String methodResultType, boolean isStaticContext) {
-        this.callHandler = Objects.requireNonNull(callHandler, "callHandler cannot be null");
+        this.callResolver = Objects.requireNonNull(callResolver, "callResolver cannot be null");
         this.nameToField = Objects.requireNonNull(nameToField, "nameToField cannot be null");
         this.nameToVariable = Objects.requireNonNull(nameToVariable, "nameToVariable cannot be null");
         this.methodName = Objects.requireNonNull(methodName, "methodName cannot be null");
@@ -50,7 +50,7 @@ public class LocalContext implements JavaContext {
 
     @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(callHandler, nameToField, getConcatenatedNameToVariables(), methodName, methodResultType,
+        return new LocalContext(callResolver, nameToField, getConcatenatedNameToVariables(), methodName, methodResultType,
                 isStaticContext);
     }
 
@@ -99,8 +99,8 @@ public class LocalContext implements JavaContext {
     }
 
     @Override
-    public CallHandler getCallHandler() {
-        return callHandler;
+    public CallResolver getCallResolver() {
+        return callResolver;
     }
 
     @Override

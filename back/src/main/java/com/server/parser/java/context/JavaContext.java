@@ -5,7 +5,7 @@ import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.call.CallHandler;
+import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.visitor.JavaVisitor;
 
 import java.util.Map;
@@ -36,7 +36,7 @@ public interface JavaContext extends MethodVerifiable {
         throw new UnsupportedOperationException();
     }
 
-    CallHandler getCallHandler();
+    CallResolver getCallResolver();
 
     Map<String, FieldVar> getStaticFields();
 

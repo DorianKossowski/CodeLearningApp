@@ -17,18 +17,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class CallHandlerTest {
+class CallResolverTest {
     @Mock
     private CallableKeeper callableKeeper;
     @Mock
     private CallExecutor callExecutor;
 
-    private CallHandler handler;
+    private CallResolver resolver;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        handler = new CallHandler(callableKeeper, callExecutor);
+        resolver = new CallResolver(callableKeeper, callExecutor);
     }
 
     @Test
@@ -36,7 +36,7 @@ class CallHandlerTest {
         CallReference callReference = new CallReference(mock(Variable.class), "equals");
         List<Expression> args = Collections.singletonList(mock(Expression.class));
 
-        boolean result = handler.isSpecificEqualsMethod(new CallInvocation("", "", callReference, args));
+        boolean result = resolver.isSpecificEqualsMethod(new CallInvocation("", "", callReference, args));
 
         assertThat(result).isTrue();
     }
@@ -45,9 +45,9 @@ class CallHandlerTest {
     void shouldKeepPrintCalls() {
         CallInvocation invocation = createSimplePrintCall();
         when(callExecutor.executePrintMethod(invocation)).thenReturn(new CallStatement(invocation, Collections.emptyList()));
-        handler.execute(invocation);
+        resolver.resolve(invocation);
 
-        assertThat(Iterables.getOnlyElement(handler.getPrintCalls()).getCallInvocation()).isSameAs(invocation);
+        assertThat(Iterables.getOnlyElement(resolver.getResolvedPrintCalls()).getCallInvocation()).isSameAs(invocation);
     }
 
     private CallInvocation createSimplePrintCall() {

@@ -1,7 +1,7 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.call.CallHandler;
+import com.server.parser.java.call.CallResolver;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ClassContext implements JavaContext {
-    private final CallHandler callHandler = new CallHandler();
+    private final CallResolver callResolver = new CallResolver();
     private final Map<String, FieldVar> nameToField = new HashMap<>();
     private String name;
 
@@ -39,8 +39,8 @@ public class ClassContext implements JavaContext {
     }
 
     @Override
-    public CallHandler getCallHandler() {
-        return callHandler;
+    public CallResolver getCallResolver() {
+        return callResolver;
     }
 
     @Override
