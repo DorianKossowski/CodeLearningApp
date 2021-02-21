@@ -24,6 +24,10 @@ const HomeFunctions = (props) => {
                     <LinkContainer to={'task/functions/2'}><a className='categoryElementText'>2. Parametry metod</a></LinkContainer>
                     <div className='categoryElementUnderline'/>
                 </div>
+                <div className='categoryElement' >
+                    <LinkContainer to={'task/functions/3'}><a className='categoryElementText'>3. Zwracanie wartości z funkcji</a></LinkContainer>
+                    <div className='categoryElementUnderline'/>
+                </div>
             </div>
         </Collapse>
     </div>
