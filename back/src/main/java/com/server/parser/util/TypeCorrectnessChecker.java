@@ -17,7 +17,7 @@ public class TypeCorrectnessChecker {
                     .put(ValueType.BYTE, constant -> constant instanceof Integer)
                     .put(ValueType.SHORT, constant -> constant instanceof Integer)
                     .put(ValueType.LONG, constant -> constant instanceof Integer)
-                    .put(ValueType.FLOAT, constant -> constant instanceof Double)
+                    .put(ValueType.FLOAT, constant -> constant instanceof Double || constant instanceof Integer)
                     .put(ValueType.DOUBLE, constant -> constant instanceof Double || constant instanceof Integer)
                     .put(ValueType.BOOLEAN, constant -> constant instanceof Boolean)
                     .put(ValueType.STRING, constant -> constant instanceof String)
@@ -26,7 +26,7 @@ public class TypeCorrectnessChecker {
                     .put(ValueType.BYTE_OBJ, constant -> constant instanceof Integer)
                     .put(ValueType.SHORT_OBJ, constant -> constant instanceof Integer)
                     .put(ValueType.LONG_OBJ, constant -> constant instanceof Integer)
-                    .put(ValueType.FLOAT_OBJ, constant -> constant instanceof Double)
+                    .put(ValueType.FLOAT_OBJ, constant -> constant instanceof Double || constant instanceof Integer)
                     .put(ValueType.DOUBLE_OBJ, constant -> constant instanceof Double || constant instanceof Integer)
                     .put(ValueType.BOOLEAN_OBJ, constant -> constant instanceof Boolean)
                     .build();
