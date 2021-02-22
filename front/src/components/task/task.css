@@ -23,8 +23,13 @@
     display: flex;
 }
 
-.editorBottomAreaBlock {
-    display: block;
+.editorBottomAreaContent {
+    width: 100%;
+    display: grid;
+}
+
+.editorBottomAreaButtons {
+    width: min-content;
 }
 
 .instructionTitle {
