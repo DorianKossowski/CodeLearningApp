@@ -20,7 +20,7 @@ class EditorVerifyButtonContainer extends Component {
         })
         .then(data => {
             if(!data.errorMessage) {
-                this.props.valid(VALID_MESSAGE);
+                this.props.valid(data.output, VALID_MESSAGE);
             } else {
                 this.props.invalid(data.errorMessage, data.lineNumber);
             }
@@ -41,7 +41,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    valid: (message) => dispatch(taskActions.valid(message)),
+    valid: (consoleOutput, message) => dispatch(taskActions.valid(consoleOutput, message)),
     invalid: (message, lineNumber=null) => dispatch(taskActions.invalid(message, lineNumber)),
     resetAlert: () => dispatch(alertActions.resetAlert())
 });
