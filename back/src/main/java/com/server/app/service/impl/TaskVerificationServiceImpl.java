@@ -33,17 +33,22 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
             return VerificationResultDto.invalid(e);
         }
 
+        String output = getOutput(resolvedTask);
         try {
             verify(task, resolvedTask);
             logger.info("Verification completed successfully");
-            return VerificationResultDto.valid(OutputPreparer.prepare(resolvedTask.getPrintCalls()));
+            return VerificationResultDto.valid(output);
         } catch (PrintableParseException e) {
             logger.error("Invalid task:\n" + e.getMessage());
-            return VerificationResultDto.invalidTask();
+            return VerificationResultDto.invalidTask(output);
         } catch (Exception e) {
             logger.error("Error during verification:\n" + e.getMessage());
-            return VerificationResultDto.invalid(e);
+            return VerificationResultDto.invalid(e, output);
         }
+    }
+
+    String getOutput(Task resolvedTask) {
+        return OutputPreparer.prepare(resolvedTask.getPrintCalls());
     }
 
     Task getResolvedUserInputTask(String input) {

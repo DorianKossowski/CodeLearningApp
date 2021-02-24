@@ -8,39 +8,44 @@ public class VerificationResultDto {
     private String output;
     private String errorMessage;
     private int lineNumber;
+
+    // test usage only
     @JsonIgnore
     private Exception exception;
 
-    public VerificationResultDto() {
-    }
-
-    public VerificationResultDto(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    public VerificationResultDto(String errorMessage, int lineNumber) {
-        this.errorMessage = errorMessage;
-        this.lineNumber = lineNumber;
-    }
-
-    public static VerificationResultDto invalidTask() {
-        return new VerificationResultDto("Problem z danymi wejściowymi - skontaktuj się z administratorem");
-    }
-
-    public static VerificationResultDto invalidInput(String message, int lineNumber) {
-        return new VerificationResultDto(message, lineNumber);
+    private VerificationResultDto() {
     }
 
     public static VerificationResultDto valid(String output) {
-        VerificationResultDto verificationResultDto = new VerificationResultDto();
-        verificationResultDto.output = output;
-        return verificationResultDto;
+        return new Builder()
+                .withOutput(output)
+                .build();
+    }
+
+    public static VerificationResultDto invalidTask(String output) {
+        return new Builder()
+                .withErrorMessage("Problem z danymi wejściowymi - skontaktuj się z administratorem")
+                .withOutput(output)
+                .build();
+    }
+
+    public static VerificationResultDto invalidInput(String message, int lineNumber) {
+        return new Builder()
+                .withErrorMessage(message)
+                .withLineNumber(lineNumber)
+                .build();
     }
 
     public static VerificationResultDto invalid(Exception exception) {
-        VerificationResultDto resultDto = new VerificationResultDto(exception.getMessage());
-        resultDto.exception = exception;
-        return resultDto;
+        return invalid(exception, null);
+    }
+
+    public static VerificationResultDto invalid(Exception exception, String output) {
+        return new Builder()
+                .withErrorMessage(exception.getMessage())
+                .withException(exception)
+                .withOutput(output)
+                .build();
     }
 
     public String getOutput() {
@@ -51,16 +56,8 @@ public class VerificationResultDto {
         return errorMessage;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
     public int getLineNumber() {
         return lineNumber;
-    }
-
-    public void setLineNumber(int lineNumber) {
-        this.lineNumber = lineNumber;
     }
 
     public Exception getException() {
@@ -84,5 +81,41 @@ public class VerificationResultDto {
     @Override
     public int hashCode() {
         return Objects.hash(output, errorMessage, lineNumber);
+    }
+
+    private static class Builder {
+        private String output;
+        private String errorMessage;
+        private int lineNumber;
+        private Exception exception;
+
+        private Builder withOutput(String output) {
+            this.output = output;
+            return this;
+        }
+
+        private Builder withErrorMessage(String errorMessage) {
+            this.errorMessage = errorMessage;
+            return this;
+        }
+
+        private Builder withLineNumber(int lineNumber) {
+            this.lineNumber = lineNumber;
+            return this;
+        }
+
+        private Builder withException(Exception exception) {
+            this.exception = exception;
+            return this;
+        }
+
+        private VerificationResultDto build() {
+            VerificationResultDto resultDto = new VerificationResultDto();
+            resultDto.output = output;
+            resultDto.errorMessage = errorMessage;
+            resultDto.lineNumber = lineNumber;
+            resultDto.exception = exception;
+            return resultDto;
+        }
     }
 }

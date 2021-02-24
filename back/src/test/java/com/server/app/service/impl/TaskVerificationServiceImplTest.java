@@ -15,6 +15,7 @@ import static org.mockito.Mockito.*;
 class TaskVerificationServiceImplTest {
     private static final String TASK = "task";
     private static final String INPUT = "input";
+    private static final String OUTPUT = "output";
 
     @Mock
     private Task resolvedTask;
@@ -25,6 +26,7 @@ class TaskVerificationServiceImplTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         doReturn(resolvedTask).when(verificationService).getResolvedUserInputTask(INPUT);
+        doReturn(OUTPUT).when(verificationService).getOutput(resolvedTask);
     }
 
     @Test
@@ -56,7 +58,7 @@ class TaskVerificationServiceImplTest {
 
         VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
-        assertThat(resultDto).isEqualTo(VerificationResultDto.invalidTask());
+        assertThat(resultDto).isEqualTo(VerificationResultDto.invalidTask(OUTPUT));
     }
 
     @Test
@@ -66,7 +68,7 @@ class TaskVerificationServiceImplTest {
 
         VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
-        assertThat(resultDto).isEqualTo(VerificationResultDto.invalid(exception));
+        assertThat(resultDto).isEqualTo(VerificationResultDto.invalid(exception, OUTPUT));
     }
 
     @Test
@@ -75,6 +77,6 @@ class TaskVerificationServiceImplTest {
 
         VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
-        assertThat(resultDto).isEqualTo(VerificationResultDto.valid(""));
+        assertThat(resultDto).isEqualTo(VerificationResultDto.valid(OUTPUT));
     }
 }

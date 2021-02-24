@@ -43,7 +43,7 @@ class TestParseIntegrationTest extends IntegrationTestBase {
     void shouldReturnInvalidVerificationResultWhenNotSatisfy() throws Exception {
         TestInputDto inputDto = createTestInputDto("app/integration/not-satisfy-parse-input");
         Exception exception = new Exception("Oczekiwana instrukcja \"Wywołanie metody z literału\" nie istnieje");
-        VerificationResultDto resultDto = VerificationResultDto.invalid(exception);
+        VerificationResultDto resultDto = VerificationResultDto.invalid(exception, "Bye World");
 
         performParse(inputDto, resultDto);
     }
@@ -51,7 +51,7 @@ class TestParseIntegrationTest extends IntegrationTestBase {
     @Test
     void shouldReturnInvalidVerificationResultWhenWrongTask() throws Exception {
         TestInputDto inputDto = createTestInputDto("app/integration/wrong-task-parse-input");
-        VerificationResultDto resultDto = VerificationResultDto.invalidTask();
+        VerificationResultDto resultDto = VerificationResultDto.invalidTask("Hello World");
 
         performParse(inputDto, resultDto);
     }
