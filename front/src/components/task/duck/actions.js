@@ -6,7 +6,7 @@ const setDescription = (description) => ({type: types.SET_DESCRIPTION, value: de
 const setInstruction = (instruction) => ({type: types.SET_INSTRUCTION, value: instruction});
 const setHasNext = (hasNext) => ({type: types.SET_HAS_NEXT, value: hasNext});
 const valid = (consoleOutput, validMessage) => ({type: types.VALID_TASK, output: consoleOutput, message: validMessage});
-const invalid = (invalidMessage, lineNumber) => ({type: types.INVALID_TASK, message: invalidMessage, number: lineNumber});
+const invalid = (consoleOutput, invalidMessage, lineNumber) => ({type: types.INVALID_TASK, output: consoleOutput, message: invalidMessage, number: lineNumber});
 const resetValidation = () => ({type: types.RESET_VALIDATION_RESULT});
 
 export default {
