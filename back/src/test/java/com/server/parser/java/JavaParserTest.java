@@ -240,4 +240,9 @@ public class JavaParserTest {
     void shouldParseReturn(String input) {
         HELPER.shouldParseToEof(input, JavaParser::returnStatement);
     }
+
+    @Test
+    void shouldParseConstructorCall() {
+        HELPER.shouldParseToEof("new MyClass(10)", JavaParser::call);
+    }
 }

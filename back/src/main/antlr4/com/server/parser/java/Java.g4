@@ -168,7 +168,12 @@ call
 
 callName
     : firstSeg=identifier ( '.' secSeg=identifier )?
+    | constructorCallName
     | specialCallName
+    ;
+
+constructorCallName
+    : NEW classSeg=identifier
     ;
 
 specialCallName
@@ -279,6 +284,7 @@ ELSE        : 'else' ;
 FOR         : 'for' ;
 IF          : 'if' ;
 LPAREN      : '(' ;
+NEW         : 'new' ;
 NULL        : 'null' ;
 RETURN      : 'return' ;
 RPAREN      : ')' ;
