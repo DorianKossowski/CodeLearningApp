@@ -44,6 +44,9 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
             if (ctx.specialPrintCallName() != null) {
                 return new PrintCallReference(ctx.specialPrintCallName().getText());
             }
+            if (ctx.constructorCallName() != null) {
+                return new ConstructorCallReference(ctx.constructorCallName().classSeg.getText());
+            }
             String firstSegment = ctx.firstSeg.getText();
             if (ctx.secSeg != null) {
                 return new CallReference(context.getVariable(firstSegment), ctx.secSeg.getText());
