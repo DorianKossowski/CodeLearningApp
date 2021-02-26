@@ -1,7 +1,7 @@
 package com.server.parser.java.ast.statement.expression_statement;
 
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.call.CallReference;
+import com.server.parser.java.call.reference.CallReference;
 
 import java.util.List;
 import java.util.Objects;

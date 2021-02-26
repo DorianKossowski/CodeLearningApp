@@ -1,4 +1,4 @@
-package com.server.parser.java.call;
+package com.server.parser.java.call.reference;
 
 import com.server.parser.java.ast.Variable;
 

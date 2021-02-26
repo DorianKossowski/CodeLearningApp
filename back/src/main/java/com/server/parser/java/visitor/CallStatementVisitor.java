@@ -6,9 +6,9 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
-import com.server.parser.java.call.CallReference;
-import com.server.parser.java.call.ConstructorCallReference;
-import com.server.parser.java.call.PrintCallReference;
+import com.server.parser.java.call.reference.CallReference;
+import com.server.parser.java.call.reference.ConstructorCallReference;
+import com.server.parser.java.call.reference.PrintCallReference;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 

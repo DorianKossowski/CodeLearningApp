@@ -5,6 +5,8 @@ import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import com.server.parser.java.call.reference.CallReference;
+import com.server.parser.java.call.reference.ConstructorCallReference;
 import com.server.parser.util.TypeCorrectnessChecker;
 
 import java.util.*;

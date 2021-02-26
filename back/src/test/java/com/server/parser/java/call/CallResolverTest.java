@@ -5,6 +5,8 @@ import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.call.reference.CallReference;
+import com.server.parser.java.call.reference.PrintCallReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

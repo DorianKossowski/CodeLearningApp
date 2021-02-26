@@ -4,6 +4,8 @@ import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.call.reference.CallReference;
+import com.server.parser.java.call.reference.PrintCallReference;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -5,6 +5,7 @@ import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

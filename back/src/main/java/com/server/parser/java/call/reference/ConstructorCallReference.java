@@ -1,4 +1,4 @@
-package com.server.parser.java.call;
+package com.server.parser.java.call.reference;
 
 public class ConstructorCallReference extends CallReference {
 
