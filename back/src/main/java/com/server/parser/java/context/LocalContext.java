@@ -111,7 +111,7 @@ public class LocalContext implements JavaContext {
     }
 
     @Override
-    public void setStaticFields(Map<String, FieldVar> nameToField) {
+    public void setFields(Map<String, FieldVar> nameToField) {
         this.nameToField.putAll(nameToField);
     }
 }

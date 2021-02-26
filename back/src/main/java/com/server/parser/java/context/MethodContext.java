@@ -103,8 +103,12 @@ public class MethodContext implements JavaContext {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
+    public Map<String, FieldVar> getFields() {
+        return ImmutableMap.copyOf(nameToField);
+    }
+
     @Override
-    public void setStaticFields(Map<String, FieldVar> nameToField) {
+    public void setFields(Map<String, FieldVar> nameToField) {
         this.nameToField.putAll(nameToField);
     }
 }

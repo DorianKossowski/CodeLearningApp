@@ -35,7 +35,7 @@ public class ClassContext implements JavaContext {
     }
 
     Map<String, FieldVar> getFields() {
-        return nameToField;
+        return new HashMap<>(nameToField);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ClassContext implements JavaContext {
     }
 
     @Override
-    public void setStaticFields(Map<String, FieldVar> nameToField) {
+    public void setFields(Map<String, FieldVar> nameToField) {
         this.nameToField.putAll(nameToField);
     }
 

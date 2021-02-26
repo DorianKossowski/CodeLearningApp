@@ -40,5 +40,5 @@ public interface JavaContext extends MethodVerifiable {
 
     Map<String, FieldVar> getStaticFields();
 
-    void setStaticFields(Map<String, FieldVar> nameToField);
+    void setFields(Map<String, FieldVar> nameToField);
 }
