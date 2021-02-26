@@ -5,6 +5,8 @@ import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.call.executor.MethodCallExecutor;
+import com.server.parser.java.call.executor.StaticCallExecutor;
 import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.call.reference.PrintCallReference;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,14 +25,16 @@ class CallResolverTest {
     @Mock
     private CallableKeeper callableKeeper;
     @Mock
-    private CallExecutor callExecutor;
+    private MethodCallExecutor methodCallExecutor;
+    @Mock
+    private StaticCallExecutor staticCallExecutor;
 
     private CallResolver resolver;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        resolver = new CallResolver(callableKeeper, callExecutor);
+        resolver = new CallResolver(callableKeeper, methodCallExecutor, staticCallExecutor);
     }
 
     @Test
@@ -46,7 +50,8 @@ class CallResolverTest {
     @Test
     void shouldKeepPrintCalls() {
         CallInvocation invocation = createSimplePrintCall();
-        when(callExecutor.executePrintMethod(invocation)).thenReturn(new PrintCallStatement(invocation));
+        when(staticCallExecutor.executePrintMethod(invocation)).thenReturn(new PrintCallStatement(invocation));
+
         resolver.resolve(invocation);
 
         assertThat(Iterables.getOnlyElement(resolver.getResolvedPrintCalls()).getCallInvocation()).isSameAs(invocation);
