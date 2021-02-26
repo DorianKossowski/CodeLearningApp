@@ -1,30 +1,46 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.FieldVar;
+import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.call.CallResolver;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ContextFactoryTest {
+    private static final String STATIC_FIELD_NAME = "STATIC_FIELD";
     private static final String FIELD_NAME = "FIELD";
 
+    @Mock
+    private FieldVar staticFieldVar;
+    @Mock
+    private FieldVar fieldVar;
+    @Mock
+    private FieldVar instanceFieldVar;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
+        when(staticFieldVar.isStatic()).thenReturn(true);
+        when(fieldVar.isStatic()).thenReturn(false);
+    }
+
     @Test
-    void shouldCreateExecutionContext() {
-        FieldVar variable = mock(FieldVar.class);
-        when(variable.isStatic()).thenReturn(true);
+    void shouldCreateStaticExecutionContext() {
         ClassContext classContext = mock(ClassContext.class);
         when(classContext.getFields()).thenReturn(new HashMap<String, FieldVar>() {{
-            put(FIELD_NAME, variable);
+            put(STATIC_FIELD_NAME, staticFieldVar);
         }});
 
         JavaContext executionContext = ContextFactory.createStaticExecutionContext(new MethodContext(classContext));
 
-        assertThat(executionContext.getStaticFields().get(FIELD_NAME)).isSameAs(variable);
+        assertThat(executionContext.getStaticFields().get(STATIC_FIELD_NAME)).isSameAs(staticFieldVar);
     }
 
     @Test
@@ -35,5 +51,25 @@ class ContextFactoryTest {
         JavaContext executionContext = ContextFactory.createStaticExecutionContext(classContext);
 
         assertThat(executionContext.getCallResolver()).isSameAs(callResolver);
+    }
+
+    @Test
+    void shouldCreateExecutionContext() {
+        ClassContext classContext = mock(ClassContext.class);
+        when(classContext.getFields()).thenReturn(new HashMap<String, FieldVar>() {{
+            put(STATIC_FIELD_NAME, staticFieldVar);
+            put(FIELD_NAME, fieldVar);
+        }});
+        Instance instance = mock(Instance.class, RETURNS_DEEP_STUBS);
+        when(instance.getFields()).thenReturn(new HashMap<String, FieldVar>() {{
+            put(STATIC_FIELD_NAME, staticFieldVar);
+            put(FIELD_NAME, instanceFieldVar);
+        }});
+
+        MethodContext executionContext = ((MethodContext) ContextFactory.createExecutionContext(instance,
+                new MethodContext(classContext)));
+
+        assertThat(executionContext.getFields().get(STATIC_FIELD_NAME)).isSameAs(staticFieldVar);
+        assertThat(executionContext.getFields().get(FIELD_NAME)).isSameAs(instanceFieldVar);
     }
 }

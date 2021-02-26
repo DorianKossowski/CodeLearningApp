@@ -2,6 +2,7 @@ package com.server.parser.java.context;
 
 import com.rits.cloning.Cloner;
 import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
+import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.call.CallResolver;
 
 public class ContextFactory {
@@ -20,7 +21,13 @@ public class ContextFactory {
 
     public static JavaContext createStaticExecutionContext(JavaContext baseContext) {
         JavaContext executionContext = createCloner(EXCLUDED_EXECUTION_CLONING).deepClone(baseContext);
-        executionContext.setStaticFields(baseContext.getStaticFields());
+        executionContext.setFields(baseContext.getStaticFields());
+        return executionContext;
+    }
+
+    public static JavaContext createExecutionContext(Instance instance, JavaContext baseContext) {
+        JavaContext executionContext = createCloner(EXCLUDED_EXECUTION_CLONING).deepClone(baseContext);
+        executionContext.setFields(instance.getFields());
         return executionContext;
     }
 }
