@@ -4,7 +4,7 @@ import com.rits.cloning.Cloner;
 import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
 import com.server.parser.java.call.CallResolver;
 
-public class ContextCopyFactory {
+public class ContextFactory {
     private static final Class<?>[] EXCLUDED_VALIDATION_CLONING = {FieldVarInitExpressionSupplier.class};
     private static final Class<?>[] EXCLUDED_EXECUTION_CLONING = {FieldVarInitExpressionSupplier.class, CallResolver.class};
 
@@ -18,7 +18,7 @@ public class ContextCopyFactory {
         return cloner;
     }
 
-    public static JavaContext createExecutionContext(JavaContext baseContext) {
+    public static JavaContext createStaticExecutionContext(JavaContext baseContext) {
         JavaContext executionContext = createCloner(EXCLUDED_EXECUTION_CLONING).deepClone(baseContext);
         executionContext.setStaticFields(baseContext.getStaticFields());
         return executionContext;

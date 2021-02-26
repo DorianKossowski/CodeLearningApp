@@ -14,7 +14,7 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
-import com.server.parser.java.context.ContextCopyFactory;
+import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.TypeCorrectnessChecker;
@@ -43,7 +43,7 @@ public class CallExecutor implements Serializable {
 
     public CallStatement execute(Method method, CallInvocation invocation) {
         preExecution();
-        JavaContext executionContext = ContextCopyFactory.createExecutionContext(method.getMethodContext());
+        JavaContext executionContext = ContextFactory.createStaticExecutionContext(method.getMethodContext());
         assignInvocationParameters(method.getHeader().getArguments(), invocation.getArgs(), executionContext);
         List<Statement> statements = visitor.visit(method.getBodyContext(), executionContext);
         Expression returnedExpression = getReturnedExpression(statements);

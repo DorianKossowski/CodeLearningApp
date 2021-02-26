@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ContextCopyFactoryTest {
+class ContextFactoryTest {
     private static final String FIELD_NAME = "FIELD";
 
     @Test
@@ -22,7 +22,7 @@ class ContextCopyFactoryTest {
             put(FIELD_NAME, variable);
         }});
 
-        JavaContext executionContext = ContextCopyFactory.createExecutionContext(new MethodContext(classContext));
+        JavaContext executionContext = ContextFactory.createStaticExecutionContext(new MethodContext(classContext));
 
         assertThat(executionContext.getStaticFields().get(FIELD_NAME)).isSameAs(variable);
     }
@@ -32,7 +32,7 @@ class ContextCopyFactoryTest {
         ClassContext classContext = new ClassContext();
         CallResolver callResolver = classContext.getCallResolver();
 
-        JavaContext executionContext = ContextCopyFactory.createExecutionContext(classContext);
+        JavaContext executionContext = ContextFactory.createStaticExecutionContext(classContext);
 
         assertThat(executionContext.getCallResolver()).isSameAs(callResolver);
     }
