@@ -1,0 +1,18 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    private int i;
+
+	public static void main(String[] args) {
+		new MyClass(5);
+	}
+
+	MyClass(int val) {
+	    i = val;
+	    System.out.println(i);
+	}
+}
+
+### OUTPUT ###
+5
