@@ -29,7 +29,7 @@ public class CallResolver implements Serializable {
     }
 
     public CallStatement resolve(CallInvocation invocation) {
-        if (isSpecialPrintMethod(invocation.getName())) {
+        if (invocation.getCallReference() instanceof PrintCallReference) {
             PrintCallStatement callStatement = callExecutor.executePrintMethod(invocation);
             resolvedPrintCalls.add(callStatement);
             return callStatement;
@@ -39,10 +39,6 @@ public class CallResolver implements Serializable {
         }
         Method method = callableKeeper.getCallable(invocation);
         return callExecutor.execute(method, invocation);
-    }
-
-    private boolean isSpecialPrintMethod(String name) {
-        return name.startsWith("System.out.print");
     }
 
     boolean isSpecificEqualsMethod(CallInvocation callInvocation) {

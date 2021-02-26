@@ -7,6 +7,8 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.call.CallReference;
+import com.server.parser.java.call.ConstructorCallReference;
+import com.server.parser.java.call.PrintCallReference;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -39,8 +41,8 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
         }
 
         CallReference visitCallReference(JavaParser.CallNameContext ctx) {
-            if (ctx.specialCallName() != null) {
-                return new CallReference(ctx.specialCallName().getText());
+            if (ctx.specialPrintCallName() != null) {
+                return new PrintCallReference(ctx.specialPrintCallName().getText());
             }
             String firstSegment = ctx.firstSeg.getText();
             if (ctx.secSeg != null) {

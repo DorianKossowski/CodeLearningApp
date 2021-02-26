@@ -51,6 +51,6 @@ class CallResolverTest {
     }
 
     private CallInvocation createSimplePrintCall() {
-        return new CallInvocation("", "", new CallReference("System.out.print"), Collections.emptyList());
+        return new CallInvocation("", "", new PrintCallReference("System.out.print"), Collections.emptyList());
     }
 }

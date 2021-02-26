@@ -169,14 +169,14 @@ call
 callName
     : firstSeg=identifier ( '.' secSeg=identifier )?
     | constructorCallName
-    | specialCallName
+    | specialPrintCallName
     ;
 
 constructorCallName
     : NEW classSeg=identifier
     ;
 
-specialCallName
+specialPrintCallName
     : 'System.out.print'
     | 'System.out.println'
     ;
