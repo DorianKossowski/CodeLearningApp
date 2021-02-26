@@ -91,11 +91,11 @@ class CallableKeeperTest {
 
     @Test
     void shouldGetCallable() {
-        String name = "NAME";
         List<Expression> args = Collections.emptyList();
-        when(matchingCallableFinder.find(name, args)).thenReturn(Optional.of(method));
+        CallReference callReference = new CallReference("NAME");
+        when(matchingCallableFinder.find(callReference, args)).thenReturn(Optional.of(method));
 
-        Method callable = keeper.getCallable(new CallInvocation("", "", new CallReference(name), args));
+        Method callable = keeper.getCallable(new CallInvocation("", "", callReference, args));
 
         assertThat(callable).isSameAs(method);
     }

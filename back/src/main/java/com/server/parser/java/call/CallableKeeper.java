@@ -35,9 +35,8 @@ public class CallableKeeper implements Serializable {
 
     Method getCallable(CallInvocation invocation) {
         // TODO handle static calls
-        String name = invocation.getName();
         List<Expression> invocationArgs = invocation.getArgs();
-        return matchingCallableFinder.find(name, invocationArgs)
+        return matchingCallableFinder.find(invocation.getCallReference(), invocationArgs)
                 .orElseThrow(() -> new ResolvingException("Brak pasującej metody dla wywołania: " + invocation.getText()));
     }
 }
