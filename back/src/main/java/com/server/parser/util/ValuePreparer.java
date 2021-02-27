@@ -1,10 +1,7 @@
 package com.server.parser.util;
 
 import com.google.common.base.Preconditions;
-import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.expression.Literal;
-import com.server.parser.java.ast.expression.NullExpression;
-import com.server.parser.java.ast.expression.UninitializedExpression;
+import com.server.parser.java.ast.expression.*;
 import com.server.parser.java.ast.value.*;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -18,6 +15,9 @@ public class ValuePreparer {
             }
             if (expression instanceof UninitializedExpression) {
                 return new UninitializedValue((UninitializedExpression) expression);
+            }
+            if (expression instanceof Instance) {
+                return new ObjectValue(expression);
             }
             ValueType valueType = ValueType.findByOriginalType(type);
             return prepareFromLiteral(valueType, expression.getLiteral());

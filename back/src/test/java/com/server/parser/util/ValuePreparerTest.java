@@ -1,20 +1,15 @@
 package com.server.parser.util;
 
 import com.server.parser.java.ast.constant.*;
-import com.server.parser.java.ast.expression.Literal;
-import com.server.parser.java.ast.expression.NullExpression;
-import com.server.parser.java.ast.expression.ObjectRef;
-import com.server.parser.java.ast.expression.UninitializedExpression;
-import com.server.parser.java.ast.value.NullValue;
-import com.server.parser.java.ast.value.PrimitiveValue;
-import com.server.parser.java.ast.value.UninitializedValue;
-import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.ast.expression.*;
+import com.server.parser.java.ast.value.*;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -124,5 +119,15 @@ class ValuePreparerTest {
 
         assertThat(value).isExactlyInstanceOf(UninitializedValue.class);
         assertThat(value.getExpression()).isSameAs(expression);
+    }
+
+    @Test
+    void shouldPrepareWhenInstance() {
+        Instance instance = new Instance("MyClass", Collections.emptyMap());
+
+        Value value = ValuePreparer.prepare("MyClass", instance);
+
+        assertThat(value).isExactlyInstanceOf(ObjectValue.class);
+        assertThat(value.getExpression()).isSameAs(instance);
     }
 }
