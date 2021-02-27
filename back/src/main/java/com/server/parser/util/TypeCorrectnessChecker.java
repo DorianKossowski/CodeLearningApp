@@ -5,6 +5,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.UninitializedExpression;
 import com.server.parser.java.ast.expression.VoidExpression;
+import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Map;
 import java.util.function.Predicate;
@@ -42,7 +43,9 @@ public class TypeCorrectnessChecker {
         if (valueType == ValueType.VOID) {
             return expression instanceof VoidExpression;
         }
-        // TODO handle unknown type: SomeType a = 1;
+        if (valueType == ValueType.ARRAY) {
+            throw new ResolvingException(String.format("Operacje na tablicach (%s) nie są wspierane", type));
+        }
         return typeToConstantChecker.get(valueType).test(expression.getLiteral().getConstant().c);
     }
 }

@@ -21,6 +21,7 @@ public enum ValueType {
     FLOAT_OBJ("Float", true),
     DOUBLE_OBJ("Double", true),
     BOOLEAN_OBJ("Boolean", true),
+    ARRAY("ArrayType", true),
     GENERIC("GenericType", true);
 
     private final String type;
@@ -40,6 +41,9 @@ public enum ValueType {
     }
 
     public static ValueType findByOriginalType(String type) {
+        if (type.endsWith("[]")) {
+            return ARRAY;
+        }
         return Arrays.stream(ValueType.values())
                 .filter(valueType -> valueType.getType().equals(type))
                 .findFirst()
