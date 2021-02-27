@@ -1,14 +1,17 @@
 package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.FieldVar;
+import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
 import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.constant.StringConstant;
-import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.expression.Literal;
-import com.server.parser.java.ast.expression.NullExpression;
-import com.server.parser.java.ast.expression.ObjectRef;
+import com.server.parser.java.ast.expression.*;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
+import com.server.parser.java.ast.value.PrimitiveValue;
+import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
@@ -16,10 +19,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 class ExpressionVisitorTest extends JavaVisitorTestBase {
     private final ExpressionVisitor visitor = new ExpressionVisitor();
@@ -153,5 +158,25 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
 
         assertThat(expression).isExactlyInstanceOf(NullExpression.class);
         assertThat(expression.getText()).isEqualTo("null");
+    }
+
+    @Test
+    void shouldVisitObjectRefWithAttributeExpression() {
+        MethodContext methodContext = createMethodContext();
+        PrimitiveValue attributeValue = new PrimitiveValue(new Literal(new IntConstant()));
+        methodContext.addVariable(createObjectWithIntAttribute("a", "b", attributeValue));
+        String input = "a.b";
+        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
+
+        Expression expression = visitor.visit(c, methodContext);
+
+        assertThat(expression).isExactlyInstanceOf(ObjectRef.class);
+        assertThat(expression.getValue()).isSameAs(attributeValue);
+    }
+
+    private Variable createObjectWithIntAttribute(String objectName, String attributeName, Value attributeValue) {
+        FieldVar fieldVar = new FieldVar("int", attributeName, mock(FieldVarInitExpressionSupplier.class), attributeValue);
+        Instance instance = new Instance("MyClass", Collections.singletonMap(attributeName, fieldVar));
+        return new MethodVar("String", objectName, new ObjectValue(instance));
     }
 }

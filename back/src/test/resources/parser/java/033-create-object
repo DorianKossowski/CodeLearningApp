@@ -3,16 +3,23 @@
 ### INPUT ###
 public class MyClass {
     private int i;
+    private int j = init();
 
 	public static void main(String[] args) {
 		MyClass myClass = new MyClass(5);
+		System.out.println(myClass.i);
+		System.out.println(myClass.j);
 	}
 
 	MyClass(int val) {
 	    i = val;
-	    System.out.println(i);
+	}
+
+	int init() {
+	    return 10;
 	}
 }
 
 ### OUTPUT ###
 5
+10

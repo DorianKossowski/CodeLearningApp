@@ -4,7 +4,6 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Computable;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
@@ -160,9 +159,17 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         //*** OBJECT REF ***//
         @Override
         public Expression visitObjectRefName(JavaParser.ObjectRefNameContext ctx) {
-            String text = textVisitor.visit(ctx);
-            Variable variable = context.getVariable(text);
-            return new ObjectRef(text, variable.getValue());
+            Value currentValue = resolveFirstSegment(ctx);
+            for (JavaParser.IdentifierContext nextSegmentCtx : ctx.identifier()) {
+                String nextSegmentName = textVisitor.visit(nextSegmentCtx);
+                currentValue = currentValue.getAttribute(nextSegmentName);
+            }
+            return new ObjectRef(textVisitor.visit(ctx), currentValue);
+        }
+
+        private Value resolveFirstSegment(JavaParser.ObjectRefNameContext ctx) {
+            String firstSegmentName = textVisitor.visit(ctx.objectRefNameFirstSegment());
+            return context.getVariable(firstSegmentName).getValue();
         }
 
         //*** NULL ***//
