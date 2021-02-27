@@ -8,7 +8,7 @@ import java.util.Objects;
 public class IntConstant extends Constant<Integer> {
 
     public IntConstant() {
-        this(0);
+        this(new Integer(0));
     }
 
     public IntConstant(Integer value) {
