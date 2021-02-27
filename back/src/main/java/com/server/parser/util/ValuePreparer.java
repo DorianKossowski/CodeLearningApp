@@ -17,7 +17,7 @@ public class ValuePreparer {
                 return new UninitializedValue((UninitializedExpression) expression);
             }
             if (expression instanceof Instance) {
-                return new ObjectValue(expression);
+                return new ObjectValue((Instance) expression);
             }
             ValueType valueType = ValueType.findByOriginalType(type);
             return prepareFromLiteral(valueType, expression.getLiteral());

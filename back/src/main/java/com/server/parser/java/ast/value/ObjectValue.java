@@ -1,15 +1,35 @@
 package com.server.parser.java.ast.value;
 
-import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.FieldVar;
+import com.server.parser.java.ast.expression.Instance;
+import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingUninitializedException;
 import com.server.parser.util.exception.ResolvingVoidException;
 
-public class ObjectValue extends Value {
-    // fields, methods ... ???
+import java.util.Collections;
+import java.util.Map;
 
-    public ObjectValue(Expression expression) {
-        super(expression);
+public class ObjectValue extends Value {
+    private final Map<String, FieldVar> fields;
+
+    public ObjectValue(Instance instance) {
+        super(instance);
+        this.fields = instance.getFields();
+    }
+
+    ObjectValue(Literal literal) {
+        super(literal);
+        this.fields = Collections.emptyMap();
+    }
+
+    @Override
+    public Value getAttribute(String name) {
+        FieldVar fieldVar = fields.get(name);
+        if (fieldVar == null) {
+            throw new ResolvingException("Nie można znaleźć pola " + name);
+        }
+        return fieldVar.getValue();
     }
 
     @Override

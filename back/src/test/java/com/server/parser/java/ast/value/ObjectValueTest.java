@@ -4,10 +4,14 @@ import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.UninitializedExpression;
+import com.server.parser.util.exception.ResolvingException;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 
+import java.util.Collections;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 class ObjectValueTest extends ValueTestBase {
@@ -52,5 +56,12 @@ class ObjectValueTest extends ValueTestBase {
                 Arguments.of(thisValue, new UninitializedValue(new UninitializedExpression("NAME")), "Niezainicjalizowana zmienna NAME"),
                 Arguments.of(thisValue, VoidValue.INSTANCE, "Niedozowolone wyrażenie typu void")
         );
+    }
+
+    @Test
+    void shouldThrowWhenGetUnknownAttribute() {
+        assertThatThrownBy(() -> new ObjectValue(new Instance("", Collections.emptyMap())).getAttribute("NAME"))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można znaleźć pola NAME");
     }
 }

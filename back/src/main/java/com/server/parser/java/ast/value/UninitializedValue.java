@@ -30,6 +30,11 @@ public class UninitializedValue extends Value {
     }
 
     @Override
+    public Value getAttribute(String name) {
+        throw new ResolvingUninitializedException(expression.getText());
+    }
+
+    @Override
     public String toString() {
         throw new ResolvingUninitializedException(expression.getText());
     }

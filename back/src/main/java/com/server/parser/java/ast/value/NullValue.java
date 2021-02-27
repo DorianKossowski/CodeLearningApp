@@ -49,6 +49,11 @@ public class NullValue extends Value {
     }
 
     @Override
+    public Value getAttribute(String name) {
+        throw new ResolvingNullPointerException();
+    }
+
+    @Override
     public String toString() {
         return "null";
     }

@@ -31,6 +31,11 @@ public class VoidValue extends Value {
     }
 
     @Override
+    public Value getAttribute(String name) {
+        throw new ResolvingVoidException();
+    }
+
+    @Override
     public String toString() {
         return "";
     }

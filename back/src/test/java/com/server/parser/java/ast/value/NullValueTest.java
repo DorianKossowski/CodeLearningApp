@@ -4,10 +4,13 @@ import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.UninitializedExpression;
+import com.server.parser.util.exception.ResolvingNullPointerException;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 class NullValueTest extends ValueTestBase {
@@ -40,5 +43,11 @@ class NullValueTest extends ValueTestBase {
         return Stream.of(
                 Arguments.of(thisValue, mock(Value.class), "NullPointerException")
         );
+    }
+
+    @Test
+    void shouldThrowWhenGetAttribute() {
+        assertThatThrownBy(() -> NullValue.INSTANCE.getAttribute("NAME"))
+                .isExactlyInstanceOf(ResolvingNullPointerException.class);
     }
 }

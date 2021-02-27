@@ -4,11 +4,14 @@ import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.UninitializedExpression;
+import com.server.parser.util.exception.ResolvingException;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.Collections;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 class PrimitiveValueTest extends ValueTestBase {
@@ -48,5 +51,12 @@ class PrimitiveValueTest extends ValueTestBase {
         return Stream.of(
                 Arguments.of(thisValue, mock(Value.class), "Nie można wywołać metody equals na prymitywie")
         );
+    }
+
+    @Test
+    void shouldThrowWhenGetAttribute() {
+        assertThatThrownBy(() -> new PrimitiveValue(mock(Literal.class)).getAttribute("NAME"))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można uzyskiwać wartości z prymitywa");
     }
 }
