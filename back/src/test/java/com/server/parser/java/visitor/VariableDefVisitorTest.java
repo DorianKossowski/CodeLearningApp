@@ -152,4 +152,28 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         assertThat(variableDef.getValue()).extracting(Value::toString)
                 .isEqualTo("\"str\"");
     }
+
+    @Test
+    void shouldCreateClassTypeVar() {
+        context.setName("MyClass");
+        String input = "MyClass m";
+        JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
+
+        VariableDef variableDef = visitor.visit(c, context);
+
+        assertThat(variableDef.getText()).isEqualTo(input);
+        assertThat(variableDef.getResolved()).isEqualTo(input);
+        assertVariableDec(variableDef, Collections.emptyList(), "MyClass", "m");
+        assertThat(variableDef.getValue()).extracting(Value::toString).isEqualTo("null");
+    }
+
+    @Test
+    void shouldThrowWhenInvalidTypeVar() {
+        String input = "string s";
+        JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
+
+        assertThatThrownBy(() -> visitor.visit(c, context))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Użyto nieznanego typu: string");
+    }
 }

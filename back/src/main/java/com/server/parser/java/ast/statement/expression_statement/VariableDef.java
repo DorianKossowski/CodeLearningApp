@@ -39,11 +39,11 @@ public abstract class VariableDef extends ExpressionStatement {
 
     @Override
     public String getResolved() {
-        StringBuilder text = new StringBuilder().append(String.format("%s %s %s", String.join(" ", getModifiers()),
-                getType(), getName()));
+        StringBuilder text = new StringBuilder()
+                .append(String.format("%s %s %s", String.join(" ", getModifiers()), getType(), getName()));
         if (explicitInitialization) {
             text.append(" = ").append(getValue());
         }
-        return text.toString();
+        return text.toString().trim();
     }
 }
