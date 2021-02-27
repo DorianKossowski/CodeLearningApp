@@ -245,4 +245,12 @@ public class JavaParserTest {
     void shouldParseConstructorCall() {
         HELPER.shouldParseToEof("new MyClass(10)", JavaParser::call);
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "a", "a.b", "a.b.c"
+    })
+    void shouldParseObjectRefName(String input) {
+        HELPER.shouldParseToEof(input, JavaParser::objectRefName);
+    }
 }

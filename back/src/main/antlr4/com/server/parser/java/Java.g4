@@ -208,8 +208,11 @@ nullExpr
     ;
 
 objectRefName
+    : objectRefNameFirstSegment ( '.' identifier )*
+    ;
+
+objectRefNameFirstSegment
     : identifier
-    | objectRefName '.' identifier
     ;
 
 literal
