@@ -6,13 +6,22 @@ import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.ClassBody;
 import com.server.parser.java.ast.ClassHeader;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ClassVisitorTest extends JavaVisitorTestBase {
     private final ClassVisitor visitor = new ClassVisitor();
-    private final ClassVisitor.ClassVisitorInternal visitorInternal = new ClassVisitor.ClassVisitorInternal(context);
+    
+    private ClassVisitor.ClassVisitorInternal visitorInternal;
+
+    @Override
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        visitorInternal = new ClassVisitor.ClassVisitorInternal(context);
+    }
 
     @Test
     void shouldCreateFromClassDec() {

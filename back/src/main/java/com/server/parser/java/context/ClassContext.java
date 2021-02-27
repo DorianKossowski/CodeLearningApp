@@ -17,7 +17,8 @@ public class ClassContext implements JavaContext {
         this.name = name;
     }
 
-    public String getName() {
+    @Override
+    public String getClassName() {
         return name;
     }
 

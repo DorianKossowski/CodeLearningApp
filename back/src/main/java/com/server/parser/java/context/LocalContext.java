@@ -19,16 +19,18 @@ public class LocalContext implements JavaContext {
     private final CallResolver callResolver;
     private final Map<String, FieldVar> nameToField;
     private final Map<String, Variable> nameToVariable;
+    private final String className;
     private final String methodName;
     private final String methodResultType;
     private final boolean isStaticContext;
     private final Map<String, Variable> localNameToVariable = new HashMap<>();
 
     LocalContext(CallResolver callResolver, Map<String, FieldVar> nameToField, Map<String, Variable> nameToVariable,
-                 String methodName, String methodResultType, boolean isStaticContext) {
+                 String className, String methodName, String methodResultType, boolean isStaticContext) {
         this.callResolver = Objects.requireNonNull(callResolver, "callResolver cannot be null");
         this.nameToField = Objects.requireNonNull(nameToField, "nameToField cannot be null");
         this.nameToVariable = Objects.requireNonNull(nameToVariable, "nameToVariable cannot be null");
+        this.className = Objects.requireNonNull(className, "className cannot be null");
         this.methodName = Objects.requireNonNull(methodName, "methodName cannot be null");
         this.methodResultType = Objects.requireNonNull(methodResultType, "methodResultType cannot be null");
         this.isStaticContext = isStaticContext;
@@ -36,6 +38,11 @@ public class LocalContext implements JavaContext {
 
     Map<String, Variable> getNameToVariable() {
         return ImmutableMap.copyOf(getConcatenatedNameToVariables());
+    }
+
+    @Override
+    public String getClassName() {
+        return className;
     }
 
     @Override
@@ -50,8 +57,8 @@ public class LocalContext implements JavaContext {
 
     @Override
     public JavaContext createLocalContext() {
-        return new LocalContext(callResolver, nameToField, getConcatenatedNameToVariables(), methodName, methodResultType,
-                isStaticContext);
+        return new LocalContext(callResolver, nameToField, getConcatenatedNameToVariables(), className, methodName,
+                methodResultType, isStaticContext);
     }
 
     private Map<String, Variable> getConcatenatedNameToVariables() {

@@ -41,7 +41,7 @@ class LocalContextTest {
         MockitoAnnotations.initMocks(this);
         methodVar = new MethodVar(TYPE, NAME, value);
         fieldVar = new FieldVar(TYPE, NAME, new FieldVarInitExpressionSupplier(() -> expression), value);
-        localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", false);
+        localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", "", false);
     }
 
     @Test
@@ -84,7 +84,7 @@ class LocalContextTest {
     @Test
     void shouldThrowWhenGettingNonStaticFieldFromStatic() {
         nameToField.put(NAME, fieldVar);
-        localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", true);
+        localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", "", true);
 
         assertThatThrownBy(() -> localContext.getVariable(NAME))
                 .isExactlyInstanceOf(ResolvingException.class)

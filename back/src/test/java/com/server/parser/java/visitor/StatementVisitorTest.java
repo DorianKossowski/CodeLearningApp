@@ -21,6 +21,7 @@ import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import com.server.parser.util.exception.ResolvingException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -30,9 +31,16 @@ import static org.mockito.Mockito.mock;
 
 class StatementVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
-    private final MethodContext methodContext = createMethodContext(METHOD_NAME, "void");
+    private MethodContext methodContext;
 
     private final StatementVisitor visitor = new StatementVisitor();
+
+    @Override
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        methodContext = createMethodContext(METHOD_NAME, "void");
+    }
 
     @Test
     void shouldVisitBlockStatement() {
@@ -50,8 +58,9 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitBlockStatementWithBreak() {
         String input = "for(int i=0; i<1; i=i+1){  { break; }  boolean b = false; }";
         JavaParser.ForStatementContext c = HELPER.shouldParseToEof(input, JavaParser::forStatement);
-        MethodContext methodContext = new ClassContext().createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()), mock(JavaParser.MethodBodyContext.class));
+        MethodContext methodContext = createRealMethodContext();
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "methodName", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
 
         ForStatement statement = (ForStatement) visitor.visit(c, methodContext);
 
@@ -104,6 +113,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     private MethodContext createRealMethodContext() {
         ClassContext context = new ClassContext();
+        context.setName("");
         MethodContext methodContext = context.createEmptyMethodContext();
         MethodHeader methodHeader = new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList());
         methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));

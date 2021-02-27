@@ -7,6 +7,7 @@ import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,12 @@ public class JavaVisitorTestBase {
     static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
 
     protected ClassContext context = new ClassContext();
+
+    @BeforeEach
+    void setUp() {
+        context = new ClassContext();
+        context.setName("");
+    }
 
     protected MethodContext createMethodContext() {
         return createMethodContext("", "void");
