@@ -38,7 +38,7 @@ public class PrimitiveValue extends Value implements ConstantProvider {
         if (v2 instanceof VoidValue) {
             throw new ResolvingVoidException();
         }
-        throw new ResolvingException("Nie można wykonać porównania operatorem ==");
+        throw new ResolvingException("Nie można porównać z " + v2.getExpression().getResolvedText());
     }
 
     @Override
