@@ -5,7 +5,6 @@ import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
-import com.server.parser.util.exception.ResolvingNullPointerException;
 import com.server.parser.util.exception.ResolvingUninitializedException;
 import com.server.parser.util.exception.ResolvingVoidException;
 
@@ -46,13 +45,16 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
         if (v2 instanceof VoidValue) {
             throw new ResolvingVoidException();
         }
+        if (v2 instanceof ObjectValue) {
+            throw new ResolvingException("Nie można porównać z " + v2.getExpression().getResolvedText());
+        }
         throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean equalsMethod(Value v2) {
         if (v2 instanceof NullValue) {
-            throw new ResolvingNullPointerException();
+            return false;
         }
         if (v2 instanceof UninitializedValue) {
             throw new ResolvingUninitializedException(v2.expression.getText());
