@@ -1,10 +1,7 @@
 package com.server.parser.util;
 
 import com.google.common.collect.ImmutableMap;
-import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.expression.NullExpression;
-import com.server.parser.java.ast.expression.UninitializedExpression;
-import com.server.parser.java.ast.expression.VoidExpression;
+import com.server.parser.java.ast.expression.*;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Map;
@@ -45,6 +42,9 @@ public class TypeCorrectnessChecker {
         }
         if (valueType == ValueType.ARRAY) {
             throw new ResolvingException(String.format("Operacje na tablicach (%s) nie są wspierane", type));
+        }
+        if (valueType == ValueType.GENERIC) {
+            return expression instanceof Instance;
         }
         return typeToConstantChecker.get(valueType).test(expression.getLiteral().getConstant().c);
     }

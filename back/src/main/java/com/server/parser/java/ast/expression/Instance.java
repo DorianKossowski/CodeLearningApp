@@ -8,11 +8,17 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Instance extends Expression {
+    private final String className;
     private final Map<String, FieldVar> nameToField;
 
     public Instance(String className, Map<String, FieldVar> nameToField) {
-        super("instancja " + className);
+        super("instancja " + Objects.requireNonNull(className, "className cannot be null"));
+        this.className = className;
         this.nameToField = Objects.requireNonNull(nameToField, "nameToField cannot be null");
+    }
+
+    public String getClassName() {
+        return className;
     }
 
     public Map<String, FieldVar> getFields() {
