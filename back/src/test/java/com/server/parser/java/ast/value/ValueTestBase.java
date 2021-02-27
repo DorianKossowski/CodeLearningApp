@@ -11,13 +11,13 @@ public abstract class ValueTestBase {
 
     @ParameterizedTest
     @MethodSource("equalsOperatorProvider")
-    void shouldEqualsOperator(ObjectValue thisValue, Value toCompareValue, boolean result) {
+    void shouldEqualsOperator(Value thisValue, Value toCompareValue, boolean result) {
         assertThat(thisValue.equalsOperator(toCompareValue)).isEqualTo(result);
     }
 
     @ParameterizedTest
     @MethodSource("equalsOperatorThrowingProvider")
-    void shouldThrowWhenEqualsOperator(ObjectValue thisValue, Value toCompareValue, String exceptionMessageContent) {
+    void shouldThrowWhenEqualsOperator(Value thisValue, Value toCompareValue, String exceptionMessageContent) {
         assertThatThrownBy(() -> thisValue.equalsOperator(toCompareValue))
                 .isInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: " + exceptionMessageContent);
@@ -25,13 +25,13 @@ public abstract class ValueTestBase {
 
     @ParameterizedTest
     @MethodSource("equalsMethodProvider")
-    void shouldEqualsMethod(ObjectValue thisValue, Value toCompareValue, boolean result) {
+    void shouldEqualsMethod(Value thisValue, Value toCompareValue, boolean result) {
         assertThat(thisValue.equalsMethod(toCompareValue)).isEqualTo(result);
     }
 
     @ParameterizedTest
     @MethodSource("equalsMethodThrowingProvider")
-    void shouldThrowWhenEqualsMethod(ObjectValue thisValue, Value toCompareValue, String exceptionMessageContent) {
+    void shouldThrowWhenEqualsMethod(Value thisValue, Value toCompareValue, String exceptionMessageContent) {
         assertThatThrownBy(() -> thisValue.equalsMethod(toCompareValue))
                 .isInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: " + exceptionMessageContent);
