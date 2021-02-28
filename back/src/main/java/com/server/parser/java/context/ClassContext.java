@@ -1,6 +1,7 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.FieldVar;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -25,6 +26,11 @@ public class ClassContext implements JavaContext {
     @Override
     public boolean isStaticContext() {
         return true;
+    }
+
+    @Override
+    public ObjectValue getThisValue() {
+        return null;
     }
 
     public MethodContext createEmptyMethodContext() {

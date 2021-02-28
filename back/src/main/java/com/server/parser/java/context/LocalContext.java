@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.util.ValuePreparer;
@@ -24,9 +25,10 @@ public class LocalContext implements JavaContext {
     private final String methodResultType;
     private final boolean isStaticContext;
     private final Map<String, Variable> localNameToVariable = new HashMap<>();
+    private ObjectValue thisValue;
 
     LocalContext(CallResolver callResolver, Map<String, FieldVar> nameToField, Map<String, Variable> nameToVariable,
-                 String className, String methodName, String methodResultType, boolean isStaticContext) {
+                 String className, String methodName, String methodResultType, boolean isStaticContext, ObjectValue thisValue) {
         this.callResolver = Objects.requireNonNull(callResolver, "callResolver cannot be null");
         this.nameToField = Objects.requireNonNull(nameToField, "nameToField cannot be null");
         this.nameToVariable = Objects.requireNonNull(nameToVariable, "nameToVariable cannot be null");
@@ -34,6 +36,7 @@ public class LocalContext implements JavaContext {
         this.methodName = Objects.requireNonNull(methodName, "methodName cannot be null");
         this.methodResultType = Objects.requireNonNull(methodResultType, "methodResultType cannot be null");
         this.isStaticContext = isStaticContext;
+        this.thisValue = thisValue;
     }
 
     Map<String, Variable> getNameToVariable() {
@@ -51,6 +54,15 @@ public class LocalContext implements JavaContext {
     }
 
     @Override
+    public ObjectValue getThisValue() {
+        return thisValue;
+    }
+
+    public void setThisValue(ObjectValue thisValue) {
+        this.thisValue = thisValue;
+    }
+
+    @Override
     public String getMethodName() {
         return methodName;
     }
@@ -63,7 +75,7 @@ public class LocalContext implements JavaContext {
     @Override
     public JavaContext createLocalContext() {
         return new LocalContext(callResolver, nameToField, getConcatenatedNameToVariables(), className, methodName,
-                methodResultType, isStaticContext);
+                methodResultType, isStaticContext, thisValue);
     }
 
     private Map<String, Variable> getConcatenatedNameToVariables() {

@@ -7,6 +7,7 @@ import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.util.ValuePreparer;
@@ -23,6 +24,7 @@ public class MethodContext implements JavaContext {
     private MethodHeader methodHeader;
     private final Map<String, FieldVar> nameToField;
     private final Map<String, Variable> nameToVariable = new HashMap<>();
+    private ObjectValue thisValue;
 
     MethodContext(ClassContext classContext) {
         this.classContext = Objects.requireNonNull(classContext, "classContext cannot be null");
@@ -32,7 +34,7 @@ public class MethodContext implements JavaContext {
     @Override
     public JavaContext createLocalContext() {
         return new LocalContext(classContext.getCallResolver(), nameToField, nameToVariable, getClassName(),
-                getMethodName(), getMethodResultType(), isStaticContext());
+                getMethodName(), getMethodResultType(), isStaticContext(), thisValue);
     }
 
     public Method save(MethodHeader methodHeader, JavaParser.MethodBodyContext methodBody) {
@@ -50,6 +52,15 @@ public class MethodContext implements JavaContext {
     @Override
     public boolean isStaticContext() {
         return methodHeader.isStatic();
+    }
+
+    @Override
+    public ObjectValue getThisValue() {
+        return thisValue;
+    }
+
+    public void setThisValue(ObjectValue thisValue) {
+        this.thisValue = thisValue;
     }
 
     public Map<String, Variable> getNameToVariable() {
