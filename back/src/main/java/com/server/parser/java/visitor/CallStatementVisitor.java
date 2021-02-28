@@ -6,6 +6,8 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.ast.value.ObjectValue;
+import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.call.reference.ConstructorCallReference;
 import com.server.parser.java.call.reference.PrintCallReference;
@@ -49,9 +51,10 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
             }
             String firstSegment = ctx.firstSeg.getText();
             if (ctx.secSeg != null) {
-                return new CallReference(context.getVariable(firstSegment), ctx.secSeg.getText());
+                Value value = context.getVariable(firstSegment).getValue();
+                return new CallReference((ObjectValue) value, ctx.secSeg.getText());
             }
-            return new CallReference(firstSegment);
+            return new CallReference(context.getThisValue(), firstSegment);
         }
 
         private List<Expression> visitArguments(JavaParser.CallArgumentsContext ctx) {

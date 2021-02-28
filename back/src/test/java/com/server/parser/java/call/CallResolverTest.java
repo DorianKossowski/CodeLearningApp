@@ -2,11 +2,11 @@ package com.server.parser.java.call;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.call.executor.ConstructorCallExecutor;
 import com.server.parser.java.call.executor.MethodCallExecutor;
 import com.server.parser.java.call.executor.StaticCallExecutor;
@@ -45,7 +45,7 @@ class CallResolverTest {
 
     @Test
     void shouldBeSpecificEqualsMethod() {
-        CallReference callReference = new CallReference(mock(Variable.class), "equals");
+        CallReference callReference = new CallReference(mock(ObjectValue.class), "equals");
         List<Expression> args = Collections.singletonList(mock(Expression.class));
 
         boolean result = resolver.isSpecificEqualsMethod(new CallInvocation("", "", callReference, args));

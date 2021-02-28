@@ -57,7 +57,7 @@ public class CallResolver implements Serializable {
 
     boolean isSpecificEqualsMethod(CallInvocation callInvocation) {
         CallReference callReference = callInvocation.getCallReference();
-        return callReference.getVariable().isPresent() &&
+        return callReference.getValue().isPresent() &&
                 callReference.getCallName().equals("equals") &&
                 callInvocation.getArgs().size() == 1;
     }
