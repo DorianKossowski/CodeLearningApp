@@ -7,11 +7,15 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
-import com.server.parser.java.ast.value.ObjectValue;
+import com.server.parser.java.ast.value.*;
 import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.call.reference.ConstructorCallReference;
 import com.server.parser.java.call.reference.PrintCallReference;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.util.exception.ResolvingException;
+import com.server.parser.util.exception.ResolvingNullPointerException;
+import com.server.parser.util.exception.ResolvingUninitializedException;
+import com.server.parser.util.exception.ResolvingVoidException;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Collections;
@@ -51,9 +55,30 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
             }
             if (ctx.objectRefName() != null) {
                 ObjectRef objectRef = context.getVisitor(ObjectRef.class).visit(ctx.objectRefName(), context);
-                return new CallReference((ObjectValue) objectRef.getValue(), ctx.methodName.getText());
+                Value value = objectRef.getValue();
+                validateValueToCallOn(objectRef, value);
+                return new CallReference((ObjectValue) value, ctx.methodName.getText());
             }
             return new CallReference(context.getThisValue(), ctx.methodName.getText());
+        }
+
+        private void validateValueToCallOn(ObjectRef objectRef, Value value) {
+            if (value instanceof ObjectValue) {
+                return;
+            }
+            if (value instanceof PrimitiveValue) {
+                throw new ResolvingException("Nie można wywołać metody na prymitywie");
+            }
+            if (value instanceof NullValue) {
+                throw new ResolvingNullPointerException();
+            }
+            if (value instanceof VoidValue) {
+                throw new ResolvingVoidException();
+            }
+            if (value instanceof UninitializedValue) {
+                throw new ResolvingUninitializedException(objectRef.getResolvedText());
+            }
+            throw new UnsupportedOperationException();
         }
 
         private List<Expression> visitArguments(JavaParser.CallArgumentsContext ctx) {

@@ -7,21 +7,30 @@ import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
+import com.server.parser.java.ast.expression.UninitializedExpression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
-import com.server.parser.java.ast.value.PrimitiveValue;
+import com.server.parser.java.ast.value.*;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 class CallStatementVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
@@ -29,6 +38,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
     private final CallStatementVisitor visitor = new CallStatementVisitor();
     private MethodContext methodContext;
 
+    @Override
     @BeforeEach
     void setUp() {
         methodContext = createMethodContext(METHOD_NAME, "void");
@@ -85,5 +95,26 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
         StringConstant stringConstant = new StringConstant("value");
         PrimitiveValue value = new PrimitiveValue(new Literal(stringConstant));
         return new MethodVar("String", name, value);
+    }
+
+    static Stream<Arguments> valueToCallOnProvider() {
+        return Stream.of(
+                Arguments.of(new PrimitiveValue(mock(Expression.class)), "Nie można wywołać metody na prymitywie"),
+                Arguments.of(NullValue.INSTANCE, "NullPointerException"),
+                Arguments.of(VoidValue.INSTANCE, "Niedozowolone wyrażenie typu void"),
+                Arguments.of(new UninitializedValue(mock(UninitializedExpression.class)), "Niezainicjalizowana zmienna null")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("valueToCallOnProvider")
+    void shouldThrowOnValueToCallOn(Value value, String expectedExceptionMessageContent) {
+        methodContext.addVariable(new MethodVar("int", "i", value));
+        String input = "i.fun()";
+        JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
+
+        assertThatThrownBy(() -> visitor.visit(c, methodContext))
+                .isInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: " + expectedExceptionMessageContent);
     }
 }
