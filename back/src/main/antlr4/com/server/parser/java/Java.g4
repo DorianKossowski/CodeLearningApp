@@ -167,7 +167,7 @@ call
     ;
 
 callName
-    : firstSeg=identifier ( '.' secSeg=identifier )?
+    : ( objectRefName '.' )? methodName=identifier
     | constructorCallName
     | specialPrintCallName
     ;

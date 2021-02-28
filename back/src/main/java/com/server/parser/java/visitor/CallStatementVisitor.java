@@ -4,10 +4,10 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.value.ObjectValue;
-import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.call.reference.ConstructorCallReference;
 import com.server.parser.java.call.reference.PrintCallReference;
@@ -49,12 +49,11 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
             if (ctx.constructorCallName() != null) {
                 return new ConstructorCallReference(ctx.constructorCallName().classSeg.getText());
             }
-            String firstSegment = ctx.firstSeg.getText();
-            if (ctx.secSeg != null) {
-                Value value = context.getVariable(firstSegment).getValue();
-                return new CallReference((ObjectValue) value, ctx.secSeg.getText());
+            if (ctx.objectRefName() != null) {
+                ObjectRef objectRef = context.getVisitor(ObjectRef.class).visit(ctx.objectRefName(), context);
+                return new CallReference((ObjectValue) objectRef.getValue(), ctx.methodName.getText());
             }
-            return new CallReference(context.getThisValue(), firstSegment);
+            return new CallReference(context.getThisValue(), ctx.methodName.getText());
         }
 
         private List<Expression> visitArguments(JavaParser.CallArgumentsContext ctx) {
