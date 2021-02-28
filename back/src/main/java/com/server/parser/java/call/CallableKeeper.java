@@ -33,10 +33,17 @@ public class CallableKeeper implements Serializable {
         return callableWithContext.values();
     }
 
-    Method getCallable(CallInvocation invocation) {
-        // TODO handle static calls
+    Method getCallable(boolean staticContext, CallInvocation invocation) {
         List<Expression> invocationArgs = invocation.getArgs();
-        return matchingCallableFinder.find(invocation.getCallReference(), invocationArgs)
+        Method method = matchingCallableFinder.find(invocation.getCallReference(), invocationArgs)
                 .orElseThrow(() -> new ResolvingException("Brak pasującej metody dla wywołania: " + invocation.getText()));
+        validateMethodContext(staticContext, method.getHeader());
+        return method;
+    }
+
+    private void validateMethodContext(boolean staticContext, MethodHeader methodHeader) {
+        if (staticContext && !methodHeader.isConstructor() && !methodHeader.isStatic()) {
+            throw new ResolvingException("Nie można odwołać się do niestatycznej metody ze statycznego kontekstu");
+        }
     }
 }

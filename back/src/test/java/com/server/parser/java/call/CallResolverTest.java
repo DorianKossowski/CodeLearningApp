@@ -59,7 +59,7 @@ class CallResolverTest {
         PrintCallStatement printCallStatement = new PrintCallStatement(invocation);
         when(staticCallExecutor.executePrintMethod(invocation)).thenReturn(printCallStatement);
 
-        CallStatement resolvedStatement = resolver.resolve(invocation);
+        CallStatement resolvedStatement = resolver.resolve(false, invocation);
 
         assertThat(resolvedStatement).isSameAs(printCallStatement);
         assertThat(Iterables.getOnlyElement(resolver.getResolvedPrintCalls())).isSameAs(printCallStatement);
@@ -73,11 +73,11 @@ class CallResolverTest {
     void shouldResolveConstructorCall() {
         CallInvocation invocation = createSimpleCall(new ConstructorCallReference(""));
         Method method = mock(Method.class);
-        when(callableKeeper.getCallable(invocation)).thenReturn(method);
+        when(callableKeeper.getCallable(false, invocation)).thenReturn(method);
         CallStatement statement = mock(CallStatement.class);
         when(constructorCallExecutor.execute(method, invocation)).thenReturn(statement);
 
-        CallStatement resolvedStatement = resolver.resolve(invocation);
+        CallStatement resolvedStatement = resolver.resolve(false, invocation);
 
         assertThat(resolvedStatement).isSameAs(statement);
     }

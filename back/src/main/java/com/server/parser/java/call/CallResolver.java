@@ -39,7 +39,7 @@ public class CallResolver implements Serializable {
         return callableKeeper;
     }
 
-    public CallStatement resolve(CallInvocation invocation) {
+    public CallStatement resolve(boolean isStaticContext, CallInvocation invocation) {
         if (invocation.getCallReference() instanceof PrintCallReference) {
             PrintCallStatement callStatement = staticCallExecutor.executePrintMethod(invocation);
             resolvedPrintCalls.add(callStatement);
@@ -48,7 +48,7 @@ public class CallResolver implements Serializable {
         if (isSpecificEqualsMethod(invocation)) {
             return methodCallExecutor.executeSpecialEqualsMethod(invocation);
         }
-        Method method = callableKeeper.getCallable(invocation);
+        Method method = callableKeeper.getCallable(isStaticContext, invocation);
         if (invocation.getCallReference() instanceof ConstructorCallReference) {
             return constructorCallExecutor.execute(method, invocation);
         }

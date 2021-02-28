@@ -96,7 +96,7 @@ class CallableKeeperTest {
         CallReference callReference = new CallReference("NAME");
         when(matchingCallableFinder.find(callReference, args)).thenReturn(Optional.of(method));
 
-        Method callable = keeper.getCallable(new CallInvocation("", "", callReference, args));
+        Method callable = keeper.getCallable(false, new CallInvocation("", "", callReference, args));
 
         assertThat(callable).isSameAs(method);
     }
@@ -107,8 +107,19 @@ class CallableKeeperTest {
         CallInvocation invocation = mock(CallInvocation.class);
         when(invocation.getText()).thenReturn("TEXT");
 
-        assertThatThrownBy(() -> keeper.getCallable(invocation))
+        assertThatThrownBy(() -> keeper.getCallable(false, invocation))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Brak pasującej metody dla wywołania: TEXT");
+    }
+
+    @Test
+    void shouldThrowWhenCallableFromStaticContext() {
+        when(method.getHeader().isStatic()).thenReturn(false);
+        when(matchingCallableFinder.find(any(), any())).thenReturn(Optional.of(method));
+        CallInvocation invocation = mock(CallInvocation.class);
+
+        assertThatThrownBy(() -> keeper.getCallable(true, invocation))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można odwołać się do niestatycznej metody ze statycznego kontekstu");
     }
 }
