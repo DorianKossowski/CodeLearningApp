@@ -22,6 +22,11 @@ public class ClassContext implements JavaContext {
         return name;
     }
 
+    @Override
+    public boolean isStaticContext() {
+        return true;
+    }
+
     public MethodContext createEmptyMethodContext() {
         return new MethodContext(this);
     }

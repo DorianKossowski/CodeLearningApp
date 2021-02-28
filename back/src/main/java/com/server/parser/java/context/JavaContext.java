@@ -43,4 +43,6 @@ public interface JavaContext extends MethodVerifiable {
     void setFields(Map<String, FieldVar> nameToField);
 
     String getClassName();
+
+    boolean isStaticContext();
 }

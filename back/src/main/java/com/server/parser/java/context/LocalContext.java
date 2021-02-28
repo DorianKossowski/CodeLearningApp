@@ -46,6 +46,11 @@ public class LocalContext implements JavaContext {
     }
 
     @Override
+    public boolean isStaticContext() {
+        return isStaticContext;
+    }
+
+    @Override
     public String getMethodName() {
         return methodName;
     }

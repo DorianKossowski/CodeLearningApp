@@ -32,7 +32,7 @@ public class MethodContext implements JavaContext {
     @Override
     public JavaContext createLocalContext() {
         return new LocalContext(classContext.getCallResolver(), nameToField, nameToVariable, getClassName(),
-                getMethodName(), getMethodResultType(), methodHeader.isStatic());
+                getMethodName(), getMethodResultType(), isStaticContext());
     }
 
     public Method save(MethodHeader methodHeader, JavaParser.MethodBodyContext methodBody) {
@@ -45,6 +45,11 @@ public class MethodContext implements JavaContext {
     @Override
     public String getClassName() {
         return classContext.getClassName();
+    }
+
+    @Override
+    public boolean isStaticContext() {
+        return methodHeader.isStatic();
     }
 
     public Map<String, Variable> getNameToVariable() {
