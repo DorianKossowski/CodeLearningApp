@@ -4,6 +4,7 @@ import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.io.Serializable;
@@ -37,12 +38,14 @@ public class CallableKeeper implements Serializable {
         List<Expression> invocationArgs = invocation.getArgs();
         Method method = matchingCallableFinder.find(invocation.getCallReference(), invocationArgs)
                 .orElseThrow(() -> new ResolvingException("Brak pasującej metody dla wywołania: " + invocation.getText()));
-        validateMethodContext(staticContext, method.getHeader());
+        if (staticContext) {
+            validateCallingFromStatic(invocation.getCallReference(), method.getHeader());
+        }
         return method;
     }
 
-    private void validateMethodContext(boolean staticContext, MethodHeader methodHeader) {
-        if (staticContext && !methodHeader.isConstructor() && !methodHeader.isStatic()) {
+    private void validateCallingFromStatic(CallReference callReference, MethodHeader methodHeader) {
+        if (!callReference.getValue().isPresent() && !methodHeader.isConstructor() && !methodHeader.isStatic()) {
             throw new ResolvingException("Nie można odwołać się do niestatycznej metody ze statycznego kontekstu");
         }
     }

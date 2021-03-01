@@ -116,7 +116,8 @@ class CallableKeeperTest {
     void shouldThrowWhenCallableFromStaticContext() {
         when(method.getHeader().isStatic()).thenReturn(false);
         when(matchingCallableFinder.find(any(), any())).thenReturn(Optional.of(method));
-        CallInvocation invocation = mock(CallInvocation.class);
+        CallInvocation invocation = mock(CallInvocation.class, RETURNS_DEEP_STUBS);
+        when(invocation.getCallReference().getValue()).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> keeper.getCallable(true, invocation))
                 .isExactlyInstanceOf(ResolvingException.class)
