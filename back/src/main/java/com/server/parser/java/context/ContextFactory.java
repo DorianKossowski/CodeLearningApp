@@ -1,6 +1,6 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.expression.Instance;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.util.ClonerFactory;
 
@@ -18,9 +18,9 @@ public class ContextFactory {
         return executionContext;
     }
 
-    public static JavaContext createExecutionContext(Instance instance, JavaContext baseContext) {
+    public static JavaContext createExecutionContext(ObjectValue thisValue, JavaContext baseContext) {
         JavaContext executionContext = ClonerFactory.createCloner(EXCLUDED_EXECUTION_CLONING).deepClone(baseContext);
-        executionContext.setFields(instance.getFields());
+        executionContext.setThisValue(thisValue);
         return executionContext;
     }
 }

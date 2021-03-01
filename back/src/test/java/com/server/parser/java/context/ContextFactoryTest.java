@@ -2,6 +2,7 @@ package com.server.parser.java.context;
 
 import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.expression.Instance;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.call.CallResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,7 +67,7 @@ class ContextFactoryTest {
             put(FIELD_NAME, instanceFieldVar);
         }});
 
-        MethodContext executionContext = ((MethodContext) ContextFactory.createExecutionContext(instance,
+        MethodContext executionContext = ((MethodContext) ContextFactory.createExecutionContext(new ObjectValue(instance),
                 new MethodContext(classContext)));
 
         assertThat(executionContext.getFields().get(STATIC_FIELD_NAME)).isSameAs(staticFieldVar);

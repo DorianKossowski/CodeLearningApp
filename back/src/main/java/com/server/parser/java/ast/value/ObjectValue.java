@@ -23,6 +23,10 @@ public class ObjectValue extends Value {
         this.fields = Collections.emptyMap();
     }
 
+    public Map<String, FieldVar> getFields() {
+        return fields;
+    }
+
     @Override
     public Value getAttribute(String name) {
         FieldVar fieldVar = fields.get(name);

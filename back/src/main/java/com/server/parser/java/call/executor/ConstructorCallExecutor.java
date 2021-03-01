@@ -8,6 +8,7 @@ import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
@@ -33,7 +34,7 @@ public class ConstructorCallExecutor extends CallExecutor {
     @Override
     public CallStatement execute(Method method, CallInvocation invocation) {
         Instance instance = prepareNewInstance(method);
-        JavaContext executionContext = ContextFactory.createExecutionContext(instance, method.getMethodContext());
+        JavaContext executionContext = ContextFactory.createExecutionContext(new ObjectValue(instance), method.getMethodContext());
         List<Statement> statements = executeInContext(method, invocation, executionContext);
         return new CallStatement(invocation, statements, instance);
     }
