@@ -64,6 +64,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
         context.getCallResolver().getCallableKeeper().keepCallable(new Method(methodContext, header, HELPER.shouldParseToEof("", JavaParser::methodBody)));
         String input = "someMethod()";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
+        methodContext.setThisValue(mock(ObjectValue.class));
 
         CallStatement call = visitor.visit(c, methodContext);
 
@@ -83,6 +84,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
         methodContext.addVariable(createStringVariable("a1"));
         methodContext.addVariable(createStringVariable("a2"));
         methodContext.addVariable(createStringVariable("var"));
+        methodContext.setThisValue(mock(ObjectValue.class));
         String input = "someMethod(\"literal\", var)";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
 

@@ -1,0 +1,41 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    private int i;
+    private String s;
+
+	public static void main(String[] args) {
+		MyClass myClass1 = new MyClass(1);
+		MyClass myClass2 = new MyClass(2);
+		System.out.println(myClass1.i);
+		System.out.println(myClass2.i);
+		myClass1.init("VAL");
+		myClass2.setI(4);
+		System.out.println(myClass1.i);
+		System.out.println(myClass1.s);
+		System.out.println(myClass2.i);
+		System.out.println(myClass2.s);
+	}
+
+	MyClass(int val) {
+	    i = val;
+	}
+
+	void init(String val) {
+	    s = val;
+	    setI(3);
+	}
+
+    void setI(int val) {
+        i = val;
+    }
+}
+
+### OUTPUT ###
+1
+2
+3
+VAL
+4
+null

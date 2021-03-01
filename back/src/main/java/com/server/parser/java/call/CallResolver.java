@@ -52,7 +52,10 @@ public class CallResolver implements Serializable {
         if (invocation.getCallReference() instanceof ConstructorCallReference) {
             return constructorCallExecutor.execute(method, invocation);
         }
-        return staticCallExecutor.execute(method, invocation);
+        if (method.getHeader().isStatic()) {
+            return staticCallExecutor.execute(method, invocation);
+        }
+        return methodCallExecutor.execute(method, invocation);
     }
 
     boolean isSpecificEqualsMethod(CallInvocation callInvocation) {
