@@ -48,4 +48,6 @@ public interface JavaContext extends MethodVerifiable {
     boolean isStaticContext();
 
     ObjectValue getThisValue();
+
+    void setThisValue(ObjectValue thisValue);
 }

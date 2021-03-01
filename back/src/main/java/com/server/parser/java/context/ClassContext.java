@@ -33,6 +33,11 @@ public class ClassContext implements JavaContext {
         return null;
     }
 
+    @Override
+    public void setThisValue(ObjectValue thisValue) {
+        throw new UnsupportedOperationException();
+    }
+
     public MethodContext createEmptyMethodContext() {
         return new MethodContext(this);
     }

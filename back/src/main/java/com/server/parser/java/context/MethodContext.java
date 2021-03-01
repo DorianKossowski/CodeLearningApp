@@ -59,8 +59,10 @@ public class MethodContext implements JavaContext {
         return thisValue;
     }
 
+    @Override
     public void setThisValue(ObjectValue thisValue) {
         this.thisValue = thisValue;
+        this.nameToField.putAll(thisValue.getFields());
     }
 
     public Map<String, Variable> getNameToVariable() {

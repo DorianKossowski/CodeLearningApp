@@ -58,6 +58,7 @@ public class LocalContext implements JavaContext {
         return thisValue;
     }
 
+    @Override
     public void setThisValue(ObjectValue thisValue) {
         this.thisValue = thisValue;
     }
