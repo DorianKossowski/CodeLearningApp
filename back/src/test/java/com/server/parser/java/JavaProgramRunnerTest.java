@@ -39,7 +39,7 @@ class JavaProgramRunnerTest {
 
         runner.run(null);
 
-        verify(fieldVar).initialize();
+        verify(fieldVar).initialize(context);
     }
 
     @Test

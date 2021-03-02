@@ -15,8 +15,7 @@ public class MyClass {
 	    i = val;
 	}
 
-    // TODO should accept non-static
-	static int init() {
+	int init() {
 	    return 10;
 	}
 }

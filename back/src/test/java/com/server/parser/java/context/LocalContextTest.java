@@ -1,7 +1,7 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
+import com.server.parser.java.ast.FieldVarInitExpressionFunction;
 import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
@@ -43,7 +43,7 @@ class LocalContextTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         methodVar = new MethodVar(TYPE, NAME, value);
-        fieldVar = new FieldVar(TYPE, NAME, new FieldVarInitExpressionSupplier(() -> expression), value);
+        fieldVar = new FieldVar(TYPE, NAME, new FieldVarInitExpressionFunction("", $ -> expression), value);
         localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", "", false, objectValue);
     }
 
