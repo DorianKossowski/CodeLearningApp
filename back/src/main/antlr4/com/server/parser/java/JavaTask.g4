@@ -26,11 +26,11 @@ classFieldSpec
     ;
 
 fieldRuleSpec
-    : WITH ( modifiersRuleSpec | typeRuleSpec | fieldNameRuleSpec | valueRuleSpec | logInfo )
+    : WITH ( modifiersRuleSpec | typeRuleSpec | fieldNameRuleSpec | initTextRuleSpec | logInfo )
     ;
 
-valueRuleSpec
-    : 'value' ':' STRING_LITERAL
+initTextRuleSpec
+    : 'init' 'text' ':' STRING_LITERAL
     ;
 
 fieldNameRuleSpec
