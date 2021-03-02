@@ -2,7 +2,7 @@ package com.server.parser.java.call.executor;
 
 import com.rits.cloning.Cloner;
 import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
+import com.server.parser.java.ast.FieldVarInitExpressionFunction;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.statement.CallStatement;
@@ -23,7 +23,7 @@ public class ConstructorCallExecutor extends CallExecutor {
     private final Cloner cloner;
 
     public ConstructorCallExecutor() {
-        this(new StatementListVisitor(), ClonerFactory.createCloner(FieldVarInitExpressionSupplier.class));
+        this(new StatementListVisitor(), ClonerFactory.createCloner(FieldVarInitExpressionFunction.class));
     }
 
     ConstructorCallExecutor(StatementListVisitor visitor, Cloner cloner) {
@@ -35,15 +35,14 @@ public class ConstructorCallExecutor extends CallExecutor {
     public CallStatement execute(Method method, CallInvocation invocation) {
         Instance instance = prepareNewInstance(method);
         JavaContext executionContext = ContextFactory.createExecutionContext(new ObjectValue(instance), method.getMethodContext());
+        instance.getFields().values().forEach(fieldVar -> fieldVar.initialize(executionContext));
         List<Statement> statements = executeInContext(method, invocation, executionContext);
         return new CallStatement(invocation, statements, instance);
     }
 
     Instance prepareNewInstance(Method method) {
         Map<String, FieldVar> instanceFields = getInstanceFields(method.getMethodContext().getFields());
-        Instance instance = new Instance(method.getClassName(), instanceFields);
-        instance.getFields().values().forEach(FieldVar::initialize);
-        return instance;
+        return new Instance(method.getClassName(), instanceFields);
     }
 
     Map<String, FieldVar> getInstanceFields(Map<String, FieldVar> nameToField) {

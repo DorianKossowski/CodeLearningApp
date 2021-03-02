@@ -8,6 +8,7 @@ import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
+import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,8 +48,10 @@ class ConstructorCallExecutorTest {
         // given
         ConstructorCallExecutor spyExecutor = spy(executor);
         Instance instance = mock(Instance.class);
+        FieldVar fieldVar = mock(FieldVar.class);
+        when(instance.getFields()).thenReturn(Collections.singletonMap("", fieldVar));
         doReturn(instance).when(spyExecutor).prepareNewInstance(method);
-        
+
         ExpressionStatement expressionStatement = mockExpressionStatement();
         List<Statement> statements = Collections.singletonList(expressionStatement);
 
@@ -62,6 +65,7 @@ class ConstructorCallExecutorTest {
         assertThat(callStatement.getCallInvocation()).isSameAs(invocation);
         assertThat(callStatement.getResult()).isSameAs(instance);
         assertThat(callStatement.getExpressionStatements()).containsExactly(invocation, expressionStatement);
+        verify(fieldVar).initialize(isA(MethodContext.class));
     }
 
     private ExpressionStatement mockExpressionStatement() {
@@ -74,9 +78,8 @@ class ConstructorCallExecutorTest {
     void shouldPrepareNewInstance() {
         // given
         ConstructorCallExecutor spyExecutor = spy(executor);
-        FieldVar fieldVar = mock(FieldVar.class);
         Map<String, FieldVar> fields = mock(Map.class);
-        Map<String, FieldVar> instanceFields = Collections.singletonMap("", fieldVar);
+        Map<String, FieldVar> instanceFields = Collections.singletonMap("", mock(FieldVar.class));
         when(method.getMethodContext().getFields()).thenReturn(fields);
         doReturn(instanceFields).when(spyExecutor).getInstanceFields(fields);
 
@@ -86,7 +89,6 @@ class ConstructorCallExecutorTest {
         // then
         assertThat(instance.getText()).isEqualTo("instancja CLASS");
         assertThat(instance.getFields()).isSameAs(instanceFields);
-        verify(fieldVar).initialize();
     }
 
     @Test
