@@ -22,4 +22,15 @@ public class FieldVarDef extends VariableDef {
     public FieldVarInitExpressionFunction getInitFunction() {
         return initFunction;
     }
+
+    @Override
+    public String getResolved() {
+        StringBuilder text = new StringBuilder()
+                .append(String.format("%s %s %s", String.join(" ", getModifiers()), getType(), getName()));
+        String expressionText = initFunction.getExpressionText();
+        if (!expressionText.isEmpty()) {
+            text.append(" = ").append(expressionText);
+        }
+        return text.toString().trim();
+    }
 }

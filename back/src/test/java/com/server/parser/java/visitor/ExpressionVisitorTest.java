@@ -2,7 +2,7 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
+import com.server.parser.java.ast.FieldVarInitExpressionFunction;
 import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.IntConstant;
@@ -175,7 +175,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
     }
 
     private Variable createObjectWithIntAttribute(String objectName, String attributeName, Value attributeValue) {
-        FieldVar fieldVar = new FieldVar("int", attributeName, mock(FieldVarInitExpressionSupplier.class), attributeValue);
+        FieldVar fieldVar = new FieldVar("int", attributeName, mock(FieldVarInitExpressionFunction.class), attributeValue);
         Instance instance = new Instance("MyClass", Collections.singletonMap(attributeName, fieldVar));
         return new MethodVar("String", objectName, new ObjectValue(instance));
     }

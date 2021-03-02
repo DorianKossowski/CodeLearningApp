@@ -2,7 +2,9 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.ast.value.NullValue;
@@ -68,9 +70,10 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
 
         VariableDef variableDef = visitor.visit(c, context);
 
-        assertThat(variableDef.getType()).isEqualTo("String");
-        assertThat(variableDef.getName()).isEqualTo("a");
-        assertThat(variableDef.getValue()).isExactlyInstanceOf(NullValue.class);
+        FieldVar fieldVar = new FieldVar((FieldVarDef) variableDef);
+        assertThat(fieldVar.getType()).isEqualTo("String");
+        assertThat(fieldVar.getName()).isEqualTo("a");
+        assertThat(fieldVar.getValue()).isExactlyInstanceOf(NullValue.class);
     }
 
     @Test
@@ -80,10 +83,11 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
 
         VariableDef variableDef = visitor.visit(c, context);
 
-        assertThat(variableDef.getType()).isEqualTo("int");
-        assertThat(variableDef.getName()).isEqualTo("a");
-        assertThat(variableDef.getValue()).isInstanceOf(PrimitiveValue.class);
-        assertThat(((PrimitiveValue) variableDef.getValue()).getConstant().c).isEqualTo(0);
+        FieldVar fieldVar = new FieldVar((FieldVarDef) variableDef);
+        assertThat(fieldVar.getType()).isEqualTo("int");
+        assertThat(fieldVar.getName()).isEqualTo("a");
+        assertThat(fieldVar.getValue()).isInstanceOf(PrimitiveValue.class);
+        assertThat(((PrimitiveValue) fieldVar.getValue()).getConstant().c).isEqualTo(0);
     }
 
     @Test
@@ -149,7 +153,9 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         assertThat(variableDef.getText()).isEqualTo("String a = \"str\"");
         assertThat(variableDef.getResolved()).isEqualTo(input);
         assertVariableDec(variableDef, Arrays.asList("private", "static"), "String", "a");
-        assertThat(variableDef.getValue()).extracting(Value::toString)
+        FieldVar fieldVar = new FieldVar((FieldVarDef) variableDef);
+        fieldVar.initialize(context);
+        assertThat(fieldVar.getValue()).extracting(Value::toString)
                 .isEqualTo("\"str\"");
     }
 
@@ -164,7 +170,9 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         assertThat(variableDef.getText()).isEqualTo(input);
         assertThat(variableDef.getResolved()).isEqualTo(input);
         assertVariableDec(variableDef, Collections.emptyList(), "MyClass", "m");
-        assertThat(variableDef.getValue()).extracting(Value::toString).isEqualTo("null");
+        FieldVar fieldVar = new FieldVar((FieldVarDef) variableDef);
+        fieldVar.initialize(context);
+        assertThat(fieldVar.getValue()).extracting(Value::toString).isEqualTo("null");
     }
 
     @Test
