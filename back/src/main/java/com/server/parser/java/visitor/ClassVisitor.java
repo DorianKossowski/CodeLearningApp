@@ -6,6 +6,7 @@ import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.ClassBody;
 import com.server.parser.java.ast.ClassHeader;
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
@@ -49,8 +50,8 @@ public class ClassVisitor extends JavaVisitor<ClassAst> {
 
         ClassBody visit(JavaParser.ClassBodyContext ctx) {
             JavaVisitor<VariableDef> variableVisitor = context.getVisitor(VariableDef.class);
-            List<VariableDef> fields = ctx.fieldDec().stream()
-                    .map(fieldDecContext -> variableVisitor.visit(fieldDecContext, context))
+            List<FieldVarDef> fields = ctx.fieldDec().stream()
+                    .map(fieldDecContext -> (FieldVarDef) variableVisitor.visit(fieldDecContext, context))
                     .collect(Collectors.toList());
             JavaVisitor<Method> methodVisitor = context.getVisitor(Method.class);
             List<Method> constructors = ctx.constructorDec().stream()
