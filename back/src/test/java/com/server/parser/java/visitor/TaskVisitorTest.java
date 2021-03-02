@@ -18,13 +18,4 @@ class TaskVisitorTest extends JavaVisitorTestBase {
 
         assertThat(task.getClassAst().getHeader().getName()).isEqualTo("c");
     }
-
-    @Test
-    void shouldGetMainMethod() {
-        String input = "public class c { public static void main(String[] args){} }";
-        JavaParser.TaskContext c = HELPER.shouldParseToEof(input, JavaParser::task);
-        Task task = visitor.visit(c);
-
-        assertThat(visitor.getMainMethod(task.getClassAst())).isPresent();
-    }
 }

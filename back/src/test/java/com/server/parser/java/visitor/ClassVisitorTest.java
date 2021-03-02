@@ -5,7 +5,7 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.ClassBody;
 import com.server.parser.java.ast.ClassHeader;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

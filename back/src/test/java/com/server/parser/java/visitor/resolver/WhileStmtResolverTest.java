@@ -6,6 +6,7 @@ import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 class WhileStmtResolverTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
@@ -24,20 +26,22 @@ class WhileStmtResolverTest {
     void shouldBreakIn() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
-        JavaParser.WhileStatementContext c = HELPER.shouldParseToEof("while(true) { break; fun(); }",
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
+        JavaParser.WhileStatementContext c = HELPER.shouldParseToEof("while(true) { break; int sth; }",
                 JavaParser::whileStatement);
 
         List<Statement> statements = WhileStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
         Statement statement = Iterables.getOnlyElement(statements);
-        assertThat(statement.getExpressionStatements()).isEmpty();
+        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
     }
 
     @Test
     void shouldThrowWhenInfinityLoop() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
         JavaParser.WhileStatementContext c = HELPER.shouldParseToEof("while(true);",
                 JavaParser::whileStatement);
 

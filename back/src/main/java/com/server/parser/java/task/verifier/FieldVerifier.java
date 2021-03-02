@@ -2,7 +2,7 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.Verify;
 import com.server.parser.java.ast.Task;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.task.model.FieldModel;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class FieldVerifier {
+public class FieldVerifier extends CommonVerifier {
     private final List<VariableDef> fields;
     private List<VariableDef> availableFields;
 
@@ -43,13 +43,6 @@ public class FieldVerifier {
         availableFields = availableFields.stream()
                 .filter(field -> hasSameModifiers(field.getModifiers(), modifiers))
                 .collect(Collectors.toList());
-    }
-
-    private boolean hasSameModifiers(List<String> actualModifiers, List<String> modifiers) {
-        if (modifiers.size() == 0) {
-            return actualModifiers.isEmpty();
-        }
-        return actualModifiers.containsAll(modifiers);
     }
 
     private void verifyFieldName(String name) {

@@ -1,22 +1,22 @@
 ### TASK ###
 -> statement
-    with text: "System.out.print(b && bObj)"
-    with resolved: "System.out.print(false)"
+    with text: "System.out.println(b && bObj)"
+    with resolved: "System.out.println(false)"
 -> statement
-    with text: "System.out.print(b && true)"
-    with resolved: "System.out.print(false)"
+    with text: "System.out.println(b && true)"
+    with resolved: "System.out.println(false)"
 -> statement
-    with text: "System.out.print(bObj && true)"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(bObj && true)"
+    with resolved: "System.out.println(true)"
 -> statement
-    with text: "System.out.print(1+1>1 && bObj)"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(1+1>1 && bObj)"
+    with resolved: "System.out.println(true)"
 -> statement
-    with text: "System.out.print(b || bObj)"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(b || bObj)"
+    with resolved: "System.out.println(true)"
 -> statement
-    with text: "System.out.print(b || false == b)"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(b || false == b)"
+    with resolved: "System.out.println(true)"
 
 ### INPUT ###
 public class MyClass {
@@ -24,12 +24,20 @@ public class MyClass {
         boolean b = false;
         Boolean bObj = true;
 
-        System.out.print(b && bObj);
-        System.out.print(b && true);
-        System.out.print(bObj && true);
-        System.out.print(1+1>1 && bObj);
+        System.out.println(b && bObj);
+        System.out.println(b && true);
+        System.out.println(bObj && true);
+        System.out.println(1+1>1 && bObj);
 
-        System.out.print(b || bObj);
-        System.out.print(b || false == b);
+        System.out.println(b || bObj);
+        System.out.println(b || false == b);
     }
 }
+
+### OUTPUT ###
+false
+false
+true
+true
+true
+true

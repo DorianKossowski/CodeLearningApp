@@ -38,3 +38,5 @@ public class Hello {
         b = false;
     }
 }
+
+### OUTPUT ###

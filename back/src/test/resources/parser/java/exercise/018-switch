@@ -19,3 +19,6 @@ public class MyClass {
         }
     }
 }
+
+### OUTPUT ###
+a == 0

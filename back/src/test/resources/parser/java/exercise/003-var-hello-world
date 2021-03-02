@@ -17,3 +17,6 @@ public class Hello {
         System.out.println(message);
     }
 }
+
+### OUTPUT ###
+Hello World

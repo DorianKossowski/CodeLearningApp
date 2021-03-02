@@ -1,0 +1,69 @@
+### TASK ###
+-> class
+    with field
+        with modifiers: { "static" }
+        with name: "field"
+-> method
+    with modifiers: { "static" }
+    with result: "void"
+    with name: "fun"
+    with args:
+-> method
+    with modifiers: { "static" }
+    with result: "void"
+    with name: "funWithParam"
+    with args: { "int", "value" }
+-> statement
+    with resolved: "fun()"
+    in method: "main"
+    log info: "Wywołanie metody fun w main"
+-> statement
+    with resolved: "funWithParam(5)"
+    in method: "main"
+    log info: "Wywołanie metody funWithParam z odpowiednim parametrem w main"
+-> statement
+    with resolved: "System.out.println(\"My no param method\")"
+    in method: "fun"
+    log info: "Wywołanie metody println w fun"
+-> statement
+    with resolved: "System.out.print(\"My param: \")"
+    in method: "funWithParam"
+    log info: "Wywołanie metody print w funWithParam"
+-> statement
+    with resolved: "System.out.println(5)"
+    in method: "funWithParam"
+    log info: "Wywołanie metody println w funWithParam"
+-> statement
+    with resolved: "System.out.print(\"My field: \")"
+    in method: "funWithParam"
+    log info: "Wywołanie metody print w funWithParam"
+-> statement
+    with resolved: "System.out.println(10)"
+    in method: "funWithParam"
+    log info: "Wywołanie metody println w funWithParam"
+
+### INPUT ###
+public class MyClass {
+    static int field = 10;
+
+    public static void main(String[] args){
+        fun();
+        funWithParam(5);
+    }
+
+    static void fun() {
+        System.out.println("My no param method");
+    }
+
+    static void funWithParam(int value) {
+        System.out.print("My param: ");
+        System.out.println(value);
+        System.out.print("My field: ");
+        System.out.println(field);
+    }
+}
+
+### OUTPUT ###
+My no param method
+My param: 5
+My field: 10

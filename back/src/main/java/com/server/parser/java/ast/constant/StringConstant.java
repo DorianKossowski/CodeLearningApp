@@ -17,6 +17,11 @@ public class StringConstant extends Constant<String> {
     }
 
     @Override
+    public String getRawValue() {
+        return c.replaceAll("\\\\\"", "\"").replaceAll("\\\\n", System.lineSeparator());
+    }
+
+    @Override
     public boolean equalsC(Constant<?> constant2, EqualityOperatorService.EqualityType type) {
         return EqualityOperatorService.check(this, constant2);
     }

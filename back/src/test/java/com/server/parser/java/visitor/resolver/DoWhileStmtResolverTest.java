@@ -5,8 +5,9 @@ import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.statement.MethodCall;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
+import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 class DoWhileStmtResolverTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
@@ -24,30 +26,31 @@ class DoWhileStmtResolverTest {
     @Test
     void shouldMakeAtLeastOneIteration() {
         MethodContext methodContext = createMethodContext();
-        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { fun(); } while(false);",
+        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { System.out.print(\"\"); } while(false);",
                 JavaParser::doWhileStatement);
 
         List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
         Statement statement = Iterables.getOnlyElement(statements);
-        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isExactlyInstanceOf(MethodCall.class);
+        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isExactlyInstanceOf(CallInvocation.class);
     }
 
     private MethodContext createMethodContext() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
         return methodContext;
     }
 
     @Test
     void shouldBreakIn() {
         MethodContext methodContext = createMethodContext();
-        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { break; fun(); } while(true);",
+        JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { break; int sth; } while(true);",
                 JavaParser::doWhileStatement);
 
         List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
         Statement statement = Iterables.getOnlyElement(statements);
-        assertThat(statement.getExpressionStatements()).isEmpty();
+        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
     }
 
     @Test

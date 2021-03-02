@@ -19,3 +19,7 @@ public class MyClass {
         } while(i <= 2);
     }
 }
+
+### OUTPUT ###
+0
+2

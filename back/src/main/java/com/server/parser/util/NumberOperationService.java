@@ -1,46 +1,47 @@
 package com.server.parser.util;
 
+import com.google.common.collect.ImmutableMap;
 import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.constant.DoubleConstant;
 import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.util.exception.ResolvingException;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class NumberOperationService {
-    private final static Map<String, BiFunction<Integer, Integer, Constant<?>>> intOperations = new HashMap<>();
-    private final static Map<String, BiFunction<Double, Double, Constant<?>>> doubleOperations = new HashMap<>();
-
-    static {
-        intOperations.put("+", (v1, v2) -> new IntConstant(v1 + v2));
-        intOperations.put("-", (v1, v2) -> new IntConstant(v1 - v2));
-        intOperations.put("*", (v1, v2) -> new IntConstant(v1 * v2));
-        intOperations.put("/", (v1, v2) -> new IntConstant(v1 / v2));
-        intOperations.put("%", (v1, v2) -> new IntConstant(v1 % v2));
-        intOperations.put("<", (v1, v2) -> new BooleanConstant(v1 < v2));
-        intOperations.put("<=", (v1, v2) -> new BooleanConstant(v1 <= v2));
-        intOperations.put(">", (v1, v2) -> new BooleanConstant(v1 > v2));
-        intOperations.put(">=", (v1, v2) -> new BooleanConstant(v1 >= v2));
-
-        doubleOperations.put("+", (v1, v2) -> new DoubleConstant(v1 + v2));
-        doubleOperations.put("-", (v1, v2) -> new DoubleConstant(v1 - v2));
-        doubleOperations.put("*", (v1, v2) -> new DoubleConstant(v1 * v2));
-        doubleOperations.put("/", (v1, v2) -> new DoubleConstant(v1 / v2));
-        doubleOperations.put("%", (v1, v2) -> new DoubleConstant(v1 % v2));
-        doubleOperations.put("<", (v1, v2) -> new BooleanConstant(v1 < v2));
-        doubleOperations.put("<=", (v1, v2) -> new BooleanConstant(v1 <= v2));
-        doubleOperations.put(">", (v1, v2) -> new BooleanConstant(v1 > v2));
-        doubleOperations.put(">=", (v1, v2) -> new BooleanConstant(v1 >= v2));
-    }
+    private final static Map<String, BiFunction<Integer, Integer, Constant<?>>> intOperations =
+            ImmutableMap.<String, BiFunction<Integer, Integer, Constant<?>>>builder()
+                    .put("+", (v1, v2) -> new IntConstant(v1 + v2))
+                    .put("-", (v1, v2) -> new IntConstant(v1 - v2))
+                    .put("*", (v1, v2) -> new IntConstant(v1 * v2))
+                    .put("/", (v1, v2) -> new IntConstant(v1 / v2))
+                    .put("%", (v1, v2) -> new IntConstant(v1 % v2))
+                    .put("<", (v1, v2) -> new BooleanConstant(v1 < v2))
+                    .put("<=", (v1, v2) -> new BooleanConstant(v1 <= v2))
+                    .put(">", (v1, v2) -> new BooleanConstant(v1 > v2))
+                    .put(">=", (v1, v2) -> new BooleanConstant(v1 >= v2))
+                    .build();
+    private final static Map<String, BiFunction<Double, Double, Constant<?>>> doubleOperations =
+            ImmutableMap.<String, BiFunction<Double, Double, Constant<?>>>builder()
+                    .put("+", (v1, v2) -> new DoubleConstant(v1 + v2))
+                    .put("-", (v1, v2) -> new DoubleConstant(v1 - v2))
+                    .put("*", (v1, v2) -> new DoubleConstant(v1 * v2))
+                    .put("/", (v1, v2) -> new DoubleConstant(v1 / v2))
+                    .put("%", (v1, v2) -> new DoubleConstant(v1 % v2))
+                    .put("<", (v1, v2) -> new BooleanConstant(v1 < v2))
+                    .put("<=", (v1, v2) -> new BooleanConstant(v1 <= v2))
+                    .put(">", (v1, v2) -> new BooleanConstant(v1 > v2))
+                    .put(">=", (v1, v2) -> new BooleanConstant(v1 >= v2))
+                    .build();
 
     public static Constant<?> compute(IntConstant value1, IntConstant value2, String operator) {
         checkDivByZero(value2.c, operator);
-        return intOperations.computeIfAbsent(operator, ($) -> {
-            throw new UnsupportedOperationException(operator + " not supported");
-        }).apply(value1.c, value2.c);
+        return Optional.ofNullable(intOperations.get(operator))
+                .orElseThrow(() -> new UnsupportedOperationException(operator + " not supported"))
+                .apply(value1.c, value2.c);
     }
 
     private static void checkDivByZero(Number value, String operator) {
@@ -54,9 +55,9 @@ public class NumberOperationService {
 
     public static Constant<?> compute(DoubleConstant value1, DoubleConstant value2, String operator) {
         checkDivByZero(value2.c, operator);
-        return doubleOperations.computeIfAbsent(operator, ($) -> {
-            throw new UnsupportedOperationException(operator + " not supported");
-        }).apply(value1.c, value2.c);
+        return Optional.ofNullable(doubleOperations.get(operator))
+                .orElseThrow(() -> new UnsupportedOperationException(operator + " not supported"))
+                .apply(value1.c, value2.c);
     }
 
     public static Constant<?> compute(DoubleConstant value1, IntConstant value2, String operator) {

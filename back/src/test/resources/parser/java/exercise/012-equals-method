@@ -24,3 +24,5 @@ public class MyClass {
         boolean b2 = s1.equals(s2);     // true
     }
 }
+
+### OUTPUT ###

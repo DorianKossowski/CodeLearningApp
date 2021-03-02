@@ -6,7 +6,7 @@ import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.ClassBody;
 import com.server.parser.java.ast.ClassHeader;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;

@@ -20,3 +20,5 @@ public class MyClass {
         boolean b2 = false || a - b != 1;     // false
     }
 }
+
+### OUTPUT ###

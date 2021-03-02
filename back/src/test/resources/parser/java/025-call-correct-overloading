@@ -1,0 +1,32 @@
+### TASK ###
+-> statement
+    with resolved: "fun(2)"
+    in method: "main"
+-> statement
+    with resolved: "fun(2.5)"
+    in method: "main"
+
+### INPUT ###
+public class MyClass {
+    private static int counter = 0;
+
+    public static void main(String[] args){
+        Integer val = 2;
+        fun(val);
+        fun(2.5);
+    }
+
+    static void fun(int i) {
+        System.out.print("int ");
+        System.out.println(i);
+    }
+
+    static void fun(Float f) {
+        System.out.print("Float ");
+        System.out.println(f);
+    }
+}
+
+### OUTPUT ###
+int 2
+Float 2.5

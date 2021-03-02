@@ -3,7 +3,7 @@ package com.server.parser.java.task.verifier;
 import com.google.common.base.Verify;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.Task;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
 
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MethodVerifier {
+public class MethodVerifier extends CommonVerifier {
     private final List<Method> methods;
     private List<Method> availableMethods;
 
@@ -50,13 +50,6 @@ public class MethodVerifier {
         availableMethods = availableMethods.stream()
                 .filter(method -> hasSameModifiers(method.getHeader().getModifiers(), modifiers))
                 .collect(Collectors.toList());
-    }
-
-    private boolean hasSameModifiers(List<String> actualModifiers, List<String> modifiers) {
-        if (modifiers.size() == 0) {
-            return actualModifiers.isEmpty();
-        }
-        return actualModifiers.containsAll(modifiers);
     }
 
     private void verifyMethodName(String name) {

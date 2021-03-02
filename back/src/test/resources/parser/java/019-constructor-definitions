@@ -17,3 +17,5 @@ public class MyClass {
     public MyClass(int x) {
     }
 }
+
+### OUTPUT ###

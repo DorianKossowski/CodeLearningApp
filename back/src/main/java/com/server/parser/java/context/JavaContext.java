@@ -2,19 +2,21 @@ package com.server.parser.java.context;
 
 import com.server.parser.java.JavaVisitorsRegistry;
 import com.server.parser.java.ast.AstElement;
+import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.visitor.JavaVisitor;
 
-import java.io.Serializable;
+import java.util.Map;
 
-public interface JavaContext extends Serializable {
+public interface JavaContext extends MethodVerifiable {
 
     default <T extends AstElement> JavaVisitor<T> getVisitor(Class<T> elementClass) {
         return JavaVisitorsRegistry.get(elementClass);
     }
 
-    default void addField(Variable variable) {
+    default void addField(FieldVar fieldVar) {
         throw new UnsupportedOperationException();
     }
 
@@ -30,12 +32,13 @@ public interface JavaContext extends Serializable {
         throw new UnsupportedOperationException();
     }
 
-    // TODO make only for MethodContext
-    default String getMethodName() {
-        throw new UnsupportedOperationException();
-    }
-
     default JavaContext createLocalContext() {
         throw new UnsupportedOperationException();
     }
+
+    CallResolver getCallResolver();
+
+    Map<String, FieldVar> getStaticFields();
+
+    void setStaticFields(Map<String, FieldVar> nameToField);
 }

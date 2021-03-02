@@ -17,7 +17,7 @@ class ClassVerifierTest extends VerifierTestBase {
         ClassAst classAst = mock(ClassAst.class, RETURNS_DEEP_STUBS);
         when(classAst.getHeader().getModifiers()).thenReturn(Collections.singletonList(modifier));
 
-        Task task = new Task(classAst, Collections.emptyList());
+        Task task = new Task(classAst, Collections.emptyList(), Collections.emptyList());
         ClassVerifier classVerifier = new ClassVerifier(task);
 
         classVerifier.verify(ClassModel.builder().withModifiers(Collections.singletonList(modifier)).build());
@@ -26,7 +26,7 @@ class ClassVerifierTest extends VerifierTestBase {
     @Test
     void shouldVerifyClassName() {
         String name = "NAME";
-        Task task = new Task(mockClass(name), Collections.emptyList());
+        Task task = new Task(mockClass(name), Collections.emptyList(), Collections.emptyList());
         ClassVerifier classVerifier = new ClassVerifier(task);
 
         classVerifier.verify(ClassModel.builder().withName(name).build());

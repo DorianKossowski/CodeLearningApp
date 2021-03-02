@@ -15,3 +15,6 @@ public class Hello {
         System.out.print("Bye World");
     }
 }
+
+### OUTPUT ###
+Bye World

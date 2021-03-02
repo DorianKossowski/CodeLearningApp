@@ -2,9 +2,9 @@ package com.server.parser.java.task.verifier;
 
 import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.Method;
-import com.server.parser.java.ast.statement.ExpressionStatement;
-import com.server.parser.java.ast.statement.MethodCall;
 import com.server.parser.java.ast.statement.StatementProperties;
+import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
 import com.server.parser.java.task.model.StatementModel;
 import org.junit.jupiter.api.Test;
 
@@ -21,10 +21,10 @@ class ExpressionStatementVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldVerifyMethodName() {
-        MethodCall statement = mock(MethodCall.class);
-        when(statement.printMethodName()).thenReturn(METHOD_NAME);
+        CallInvocation callInvocation = mock(CallInvocation.class);
+        when(callInvocation.printMethodName()).thenReturn(METHOD_NAME);
         List<Method> methods = Collections.singletonList(mockMethod(METHOD_NAME));
-        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(statement)));
+        ExpressionStatementVerifier verifier = new ExpressionStatementVerifier(mockTask(methods, Collections.singletonList(callInvocation)));
 
         verifier.verify(StatementModel.builder().withMethod(METHOD_NAME).build());
     }

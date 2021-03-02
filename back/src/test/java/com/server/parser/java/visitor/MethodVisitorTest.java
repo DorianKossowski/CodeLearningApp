@@ -5,7 +5,8 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ConstructorHeader;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 
@@ -60,8 +61,9 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         context.setName("MyClass");
         String input = "void m(String[] a) { println(\"HELLO\"); }";
         JavaParser.MethodDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodDec);
+        MethodContext methodContext = createMethodContext();
 
-        Method method = visitor.visit(c, createMethodContext());
+        Method method = visitor.visit(c, methodContext);
 
         assertThat(method.getClassName()).isEqualTo("MyClass");
         MethodHeader header = method.getHeader();
@@ -70,6 +72,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
         assertThat(Iterables.getOnlyElement(method.getBodyContext().statementList().statement()).getText())
                 .isEqualTo("println(\"HELLO\");");
+        assertThat(methodContext.getVariable("a")).isNotNull();
     }
 
     @Test

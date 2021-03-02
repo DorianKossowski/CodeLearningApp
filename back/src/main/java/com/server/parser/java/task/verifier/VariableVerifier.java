@@ -3,7 +3,7 @@ package com.server.parser.java.task.verifier;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Verify;
 import com.server.parser.java.ast.Task;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.task.model.VariableModel;
 
 import java.util.ArrayList;

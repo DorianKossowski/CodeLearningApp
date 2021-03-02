@@ -1,5 +1,7 @@
 package com.server.parser.java.ast.statement;
 
+import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,16 +14,14 @@ public class BlockStatement extends Statement {
         this.statements = Objects.requireNonNull(statements, "statements cannot be null");
     }
 
+    public List<Statement> getStatements() {
+        return statements;
+    }
+
     @Override
     public List<ExpressionStatement> getExpressionStatements() {
         List<ExpressionStatement> expressionStatements = new ArrayList<>();
         statements.forEach(statement -> expressionStatements.addAll(statement.getExpressionStatements()));
         return expressionStatements;
-    }
-
-    @Override
-    public boolean hasBreak() {
-        return statements.stream()
-                .anyMatch(Statement::hasBreak);
     }
 }

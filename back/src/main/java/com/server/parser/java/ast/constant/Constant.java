@@ -45,6 +45,10 @@ public abstract class Constant<T> implements Serializable {
         return c.toString();
     }
 
+    public String getRawValue() {
+        return c.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

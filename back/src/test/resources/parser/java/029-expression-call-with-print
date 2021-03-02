@@ -1,0 +1,29 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+
+    public static void main(String[] args){
+        int i = fun1() + fun2();
+        System.out.println(i);
+    }
+
+    static int fun1() {
+		System.out.println("fun1_1");
+		fun2();
+		System.out.println("fun1_2");
+        return 1;
+    }
+
+    static int fun2() {
+        System.out.println("fun2");
+        return 2;
+    }
+}
+
+### OUTPUT ###
+fun1_1
+fun2
+fun1_2
+fun2
+3

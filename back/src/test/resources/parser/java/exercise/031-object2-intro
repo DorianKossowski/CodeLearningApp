@@ -1,0 +1,54 @@
+### TASK ###
+-> class
+    with field
+        with modifiers: { "static" }
+        with type: "String"
+        with name: "strField"
+-> method
+    with modifiers: { "static" }
+    with result: "void"
+    with name: "setUp"
+    with args:
+-> method
+    with modifiers: { "static" }
+    with result: "String"
+    with name: "createSomeString"
+    with args:
+-> method
+    with modifiers: { "static" }
+    with result: "int"
+    with name: "doubleValue"
+    with args: { "int", "val" }
+
+### INPUT ###
+public class MyClass {
+    static String strField;
+
+    public static void main(String[] args){
+        setUp();
+        System.out.println(strField);
+        System.out.println(doubleValue(2));
+    }
+
+    static void setUp() {
+        System.out.println("SetUp - START");
+        strField = createSomeString();
+        System.out.println("SetUp - DONE");
+    }
+
+    static String createSomeString() {
+        System.out.println("Creating string");
+        return "MyStaticName";
+    }
+
+    static int doubleValue(int val) {
+        return 2 * val;
+    }
+}
+
+### OUTPUT ###
+SetUp - START
+Creating string
+SetUp - DONE
+MyStaticName
+4

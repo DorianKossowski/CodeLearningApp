@@ -1,29 +1,36 @@
 ### TASK ###
 -> statement
-    with text: "System.out.print(a+b)"
-    with resolved: "System.out.print(5)"
+    with text: "System.out.println(a+b)"
+    with resolved: "System.out.println(5)"
 -> statement
-    with text: "System.out.print(-a+b)"
-    with resolved: "System.out.print(1)"
+    with text: "System.out.println(-a+b)"
+    with resolved: "System.out.println(1)"
 -> statement
-    with text: "System.out.print(a*b)"
-    with resolved: "System.out.print(6)"
+    with text: "System.out.println(a*b)"
+    with resolved: "System.out.println(6)"
 -> statement
-    with text: "System.out.print(a/b)"
-    with resolved: "System.out.print(0)"
+    with text: "System.out.println(a/b)"
+    with resolved: "System.out.println(0)"
 -> statement
-    with text: "System.out.print(b%a)"
-    with resolved: "System.out.print(1)"
+    with text: "System.out.println(b%a)"
+    with resolved: "System.out.println(1)"
 
 ### INPUT ###
 public class MyClass {
     public static void main(String[] args){
         int a = 2;
         int b = 3;
-        System.out.print(a+b);
-        System.out.print(-a+b);
-        System.out.print(a*b);
-        System.out.print(a/b);
-        System.out.print(b%a);
+        System.out.println(a+b);
+        System.out.println(-a+b);
+        System.out.println(a*b);
+        System.out.println(a/b);
+        System.out.println(b%a);
     }
 }
+
+### OUTPUT ###
+5
+1
+6
+0
+1

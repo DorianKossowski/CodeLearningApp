@@ -30,3 +30,5 @@ public class Hello {
         int r3 = -f+(-g)*h; // -11
     }
 }
+
+### OUTPUT ###

@@ -21,3 +21,6 @@ public class MyClass {
         System.out.print(i);
     }
 }
+
+### OUTPUT ###
+123

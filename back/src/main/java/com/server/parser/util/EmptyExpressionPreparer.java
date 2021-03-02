@@ -15,18 +15,19 @@ public class EmptyExpressionPreparer {
         if (Character.isUpperCase(type.charAt(0))) {
             return NullExpression.INSTANCE;
         }
-        switch (type) {
-            case "char":
+        ValueType valueType = ValueType.findByOriginalType(type);
+        switch (valueType) {
+            case CHAR:
                 return new Literal(new CharacterConstant());
-            case "int":
-            case "byte":
-            case "short":
-            case "long":
+            case INT:
+            case BYTE:
+            case SHORT:
+            case LONG:
                 return new Literal(new IntConstant());
-            case "float":
-            case "double":
+            case FLOAT:
+            case DOUBLE:
                 return new Literal(new DoubleConstant());
-            case "boolean":
+            case BOOLEAN:
                 return new Literal(new BooleanConstant());
             default:
                 throw new RuntimeException(String.format("Format %s not supported", type));

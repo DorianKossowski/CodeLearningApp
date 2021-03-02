@@ -1,0 +1,41 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    private static int counter = 0;
+
+    public static void main(String[] args){
+        fun();
+    }
+
+    static void fun() {
+        int i=0;
+        fun2(i);
+        for(; i<3; i = i+1) {
+            System.out.println(i*2);
+            if(i == 1) {
+                return;
+            }
+        }
+        while(i<3) {
+            System.out.println(i+2);
+            i = i+1;
+        }
+    }
+
+    static void fun2(int i) {
+        switch(i) {
+            case 0:
+                System.out.println("CASE 0");
+                return;
+            case 1:
+                System.out.println("CASE 1");
+        }
+        System.out.println("fun2");
+    }
+}
+
+### OUTPUT ###
+CASE 0
+0
+2

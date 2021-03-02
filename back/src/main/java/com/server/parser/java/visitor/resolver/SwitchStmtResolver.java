@@ -3,16 +3,17 @@ package com.server.parser.java.visitor.resolver;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ConstantProvider;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.statement.BreakStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.ast.statement.SwitchStatement;
 import com.server.parser.java.ast.value.PrimitiveValue;
 import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.context.ContextCopyFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.StatementListVisitor;
+import com.server.parser.java.visitor.resolver.util.BreakHandler;
+import com.server.parser.java.visitor.resolver.util.ReturnHandler;
 import com.server.parser.util.exception.ResolvingException;
-import org.apache.commons.lang.SerializationUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,9 +42,14 @@ public class SwitchStmtResolver extends StatementResolver {
         validateLabels(switchLabels);
         List<Statement> contentStatements = resolveStatements(context, value, switchElements);
         contentStatements.forEach(statement ->
-                statement.addProperty(StatementProperties.SWITCH_EXPRESSION, expressionContext.getText())
+                addProperty(statement, StatementProperties.SWITCH_EXPRESSION, expressionContext.getText())
         );
         return new SwitchStatement(contentStatements);
+    }
+
+    private static void addProperty(Statement statement, String propertyName, String value) {
+        statement.getExpressionStatements()
+                .forEach(exprStatement -> exprStatement.addProperty(propertyName, value));
     }
 
     private static List<Statement> resolveStatements(JavaContext context, Value value, List<SwitchElement> switchElements) {
@@ -68,11 +74,11 @@ public class SwitchStmtResolver extends StatementResolver {
             SwitchElement switchElement = switchElements.get(i);
             List<Statement> visitedStmts = statementListVisitor.visit(switchElement.getStatementListContext(), context);
             for (Statement visitedStmt : visitedStmts) {
-                if (visitedStmt instanceof BreakStatement) {
+                addProperty(visitedStmt, StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
+                statements.add(visitedStmt);
+                if (ReturnHandler.shouldReturn(visitedStmt) || BreakHandler.shouldBreak(visitedStmt)) {
                     return statements;
                 }
-                visitedStmt.addProperty(StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
-                statements.add(visitedStmt);
             }
         }
         return statements;
@@ -152,7 +158,7 @@ public class SwitchStmtResolver extends StatementResolver {
     }
 
     static void validateStatementLists(JavaContext context, List<JavaParser.StatementListContext> statementListContexts) {
-        JavaContext validationContext = (JavaContext) SerializationUtils.clone(context);
+        JavaContext validationContext = ContextCopyFactory.createValidationContext(context);
         statementListContexts.forEach(statementListContext -> statementListVisitor.visit(statementListContext, validationContext));
     }
 

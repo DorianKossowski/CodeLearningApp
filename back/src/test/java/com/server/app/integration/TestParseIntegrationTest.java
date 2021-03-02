@@ -18,7 +18,7 @@ class TestParseIntegrationTest extends IntegrationTestBase {
     @Test
     void shouldReturnValidVerificationResult() throws Exception {
         TestInputDto inputDto = createTestInputDto("app/integration/valid-parse-input");
-        VerificationResultDto resultDto = VerificationResultDto.valid();
+        VerificationResultDto resultDto = VerificationResultDto.valid("Hello World");
 
         performParse(inputDto, resultDto);
     }
@@ -35,7 +35,8 @@ class TestParseIntegrationTest extends IntegrationTestBase {
                 .content(asJsonString(inputDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.errorMessage").value(resultDto.getErrorMessage()))
-                .andExpect(jsonPath("$.lineNumber").value(resultDto.getLineNumber()));
+                .andExpect(jsonPath("$.lineNumber").value(resultDto.getLineNumber()))
+                .andExpect(jsonPath("$.output").value(resultDto.getOutput()));
     }
 
     @Test

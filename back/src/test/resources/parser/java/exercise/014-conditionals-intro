@@ -34,3 +34,7 @@ public class MyClass {
         }
     }
 }
+
+### OUTPUT ###
+ELSE a<b
+b != { 0,1 }

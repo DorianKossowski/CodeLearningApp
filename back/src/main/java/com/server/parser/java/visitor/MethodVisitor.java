@@ -5,7 +5,8 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ConstructorHeader;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.MethodVar;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -35,8 +36,7 @@ public class MethodVisitor extends JavaVisitor<Method> {
         @Override
         public Method visitMethodDec(JavaParser.MethodDecContext ctx) {
             MethodHeader methodHeader = visit(ctx.methodHeader());
-            context.save(methodHeader);
-            return new Method(context, methodHeader, ctx.methodBody());
+            return context.save(methodHeader, ctx.methodBody());
         }
 
         MethodHeader visit(JavaParser.MethodHeaderContext ctx) {
@@ -51,16 +51,21 @@ public class MethodVisitor extends JavaVisitor<Method> {
 
         List<VariableDef> visit(JavaParser.MethodArgsContext ctx) {
             JavaVisitor<VariableDef> visitor = context.getVisitor(VariableDef.class);
-            return ctx.singleMethodArg().stream()
+            List<VariableDef> arguments = ctx.singleMethodArg().stream()
                     .map(singleMethodArgContext -> visitor.visit(singleMethodArgContext, context))
                     .collect(Collectors.toList());
+            putArgumentsIntoMethodContext(arguments);
+            return arguments;
+        }
+
+        private void putArgumentsIntoMethodContext(List<VariableDef> args) {
+            args.forEach(variableDef -> context.addVariable(new MethodVar(variableDef)));
         }
 
         @Override
         public Method visitConstructorDec(JavaParser.ConstructorDecContext ctx) {
             MethodHeader constructorHeader = visit(ctx.constructorHeader());
-            context.save(constructorHeader);
-            return new Method(context, constructorHeader, ctx.methodBody());
+            return context.save(constructorHeader, ctx.methodBody());
         }
 
         MethodHeader visit(JavaParser.ConstructorHeaderContext ctx) {

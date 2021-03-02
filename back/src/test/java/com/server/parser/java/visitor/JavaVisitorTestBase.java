@@ -4,7 +4,7 @@ import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
 
@@ -21,14 +21,15 @@ public class JavaVisitorTestBase {
     protected ClassContext context = new ClassContext();
 
     protected MethodContext createMethodContext() {
-        return createMethodContext("");
+        return createMethodContext("", "void");
     }
 
-    protected MethodContext createMethodContext(String methodName) {
+    protected MethodContext createMethodContext(String methodName, String resultTypeName) {
         MethodHeader methodHeader = mock(MethodHeader.class);
         when(methodHeader.getName()).thenReturn(methodName);
+        when(methodHeader.getResult()).thenReturn(resultTypeName);
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(methodHeader);
+        methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));
         return methodContext;
     }
 

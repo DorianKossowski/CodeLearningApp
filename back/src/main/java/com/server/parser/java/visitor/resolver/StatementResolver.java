@@ -7,7 +7,7 @@ import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.exception.ResolvingException;
 
-public class StatementResolver {
+public abstract class StatementResolver {
 
     protected static boolean resolveCondition(JavaContext context, JavaParser.ExpressionContext expressionContext) {
         Expression condition = context.getVisitor(Expression.class).visit(expressionContext, context);

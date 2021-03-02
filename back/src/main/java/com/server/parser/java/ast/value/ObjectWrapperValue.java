@@ -7,6 +7,7 @@ import com.server.parser.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingNullPointerException;
 import com.server.parser.util.exception.ResolvingUninitializedException;
+import com.server.parser.util.exception.ResolvingVoidException;
 
 public class ObjectWrapperValue extends ObjectValue implements ConstantProvider {
     protected final Constant<?> constant;
@@ -42,6 +43,9 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
         if (v2 instanceof UninitializedValue) {
             throw new ResolvingUninitializedException(v2.expression.getText());
         }
+        if (v2 instanceof VoidValue) {
+            throw new ResolvingVoidException();
+        }
         throw new UnsupportedOperationException();
     }
 
@@ -49,6 +53,12 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
     public boolean equalsMethod(Value v2) {
         if (v2 instanceof NullValue) {
             throw new ResolvingNullPointerException();
+        }
+        if (v2 instanceof UninitializedValue) {
+            throw new ResolvingUninitializedException(v2.expression.getText());
+        }
+        if (v2 instanceof VoidValue) {
+            throw new ResolvingVoidException();
         }
         if (v2 instanceof ConstantProvider) {
             return constant.c.equals(((ConstantProvider) v2).getConstant().c);
@@ -62,6 +72,12 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
             ConstantProvider constantProvider = (ConstantProvider) v2;
             return constant.and(constantProvider.getConstant());
         }
+        if (v2 instanceof UninitializedValue) {
+            throw new ResolvingUninitializedException(v2.expression.getText());
+        }
+        if (v2 instanceof VoidValue) {
+            throw new ResolvingVoidException();
+        }
         throw new ResolvingException("Nie można wykonać operacji &&");
     }
 
@@ -70,6 +86,12 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
         if (v2 instanceof ConstantProvider) {
             ConstantProvider constantProvider = (ConstantProvider) v2;
             return constant.or(constantProvider.getConstant());
+        }
+        if (v2 instanceof UninitializedValue) {
+            throw new ResolvingUninitializedException(v2.expression.getText());
+        }
+        if (v2 instanceof VoidValue) {
+            throw new ResolvingVoidException();
         }
         throw new ResolvingException("Nie można wykonać operacji ||");
     }

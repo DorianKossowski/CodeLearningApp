@@ -4,7 +4,8 @@ import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.expression.NullExpression;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.task.model.MethodArgs;
 import com.server.parser.java.task.model.MethodModel;
 import org.junit.jupiter.api.Test;
@@ -41,8 +42,8 @@ class MethodVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldHasSameMethodArgs() {
-        List<VariableDef> actualArgs = Arrays.asList(new VariableDef("", "int", "name1", NullExpression.INSTANCE,
-                false), new VariableDef("", "String", "name2", NullExpression.INSTANCE, false));
+        List<VariableDef> actualArgs = Arrays.asList(new MethodVarDef("", "Integer", "name1", NullExpression.INSTANCE,
+                false), new MethodVarDef("", "String", "name2", NullExpression.INSTANCE, false));
         List<MethodArgs> expectedArgs = Arrays.asList(new MethodArgs(null, "name1"), new MethodArgs("String", "name2"));
 
         assertThat(MethodVerifier.hasSameMethodArgs(actualArgs, expectedArgs)).isTrue();

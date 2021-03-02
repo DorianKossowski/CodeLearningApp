@@ -27,3 +27,5 @@ public class MyFirstClass {
     void method(String[] s) {
     }
 }
+
+### OUTPUT ###

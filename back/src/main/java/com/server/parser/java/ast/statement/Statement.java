@@ -1,6 +1,7 @@
 package com.server.parser.java.ast.statement;
 
 import com.server.parser.java.ast.AstElement;
+import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,10 +20,7 @@ public abstract class Statement extends AstElement {
         return text;
     }
 
-    public String getResolved() {
-        throw new UnsupportedOperationException("Resolving not supported for type " + getClass());
-    }
-
+    //TODO move properties stuff to separate class
     public void addProperty(String key, String value) {
         properties.put(key, value);
     }
@@ -32,8 +30,4 @@ public abstract class Statement extends AstElement {
     }
 
     public abstract List<ExpressionStatement> getExpressionStatements();
-
-    public boolean hasBreak() {
-        return false;
-    }
 }

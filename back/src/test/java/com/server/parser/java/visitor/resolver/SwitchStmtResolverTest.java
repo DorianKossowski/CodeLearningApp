@@ -5,14 +5,14 @@ import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.constant.BooleanConstant;
 import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
-import com.server.parser.java.ast.statement.ExpressionStatement;
 import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.ast.statement.SwitchStatement;
+import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.ClassContext;
@@ -33,8 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -151,22 +150,26 @@ class SwitchStmtResolverTest {
 
     @Test
     void shouldResolveStatements() {
-        JavaParser.SwitchStatementContext switchCtx = HELPER.shouldParseToEof("switch(1) { case 1: case 2: fun1(); break; " +
-                "default: funD(); }", JavaParser::switchStatement);
+        String input = "switch(1) { " +
+                "case 1: case 2: System.out.print(\"1\"); break; System.out.print(\"2\");" +
+                "default: System.out.print(\"D\"); " +
+                "}";
+        JavaParser.SwitchStatementContext switchCtx = HELPER.shouldParseToEof(input, JavaParser::switchStatement);
 
         SwitchStatement statement = SwitchStmtResolver.resolve(createRealMethodContext(), switchCtx);
 
-        ExpressionStatement expressionStatement = Iterables.getOnlyElement(statement.getExpressionStatements());
-        assertThat(expressionStatement.getText()).isEqualTo("fun1()");
-        assertThat(expressionStatement.getProperty(StatementProperties.SWITCH_EXPRESSION)).isEqualTo("1");
-        assertThat(expressionStatement.getProperty(StatementProperties.SWITCH_LABELS)).isEqualTo("1,2");
+        List<ExpressionStatement> expressionStatements = statement.getExpressionStatements();
+        assertThat(expressionStatements).extracting(ExpressionStatement::getText,
+                stmt -> stmt.getProperty(StatementProperties.SWITCH_EXPRESSION),
+                stmt -> stmt.getProperty(StatementProperties.SWITCH_LABELS)
+        ).containsExactly(tuple("System.out.print(\"1\")", "1", "1,2"), tuple("break", "1", "1,2"));
     }
 
     private MethodContext createRealMethodContext() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
         MethodHeader methodHeader = new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList());
-        methodContext.save(methodHeader);
+        methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));
         return methodContext;
     }
 
@@ -175,7 +178,7 @@ class SwitchStmtResolverTest {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
-        methodContext.addVariable(new Variable("String", "str", value));
+        methodContext.addVariable(new MethodVar("String", "str", value));
 
         JavaParser.StatementListContext c = HELPER.shouldParseToEof("str=null;", JavaParser::statementList);
 

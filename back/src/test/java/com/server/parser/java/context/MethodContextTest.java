@@ -1,5 +1,7 @@
 package com.server.parser.java.context;
 
+import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.util.exception.ResolvingException;
@@ -38,12 +40,13 @@ class MethodContextTest {
     @Test
     void shouldGetField() {
         ClassContext classContext = new ClassContext();
-        Variable var = mock(Variable.class);
+        FieldVar var = mock(FieldVar.class);
         when(var.getName()).thenReturn("var");
         when(var.isStatic()).thenReturn(false);
         classContext.addField(var);
         MethodContext methodContext = new MethodContext(classContext);
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
 
         assertThat(methodContext.getVariable("var")).isSameAs(var);
     }
@@ -51,12 +54,13 @@ class MethodContextTest {
     @Test
     void shouldThrowWhenGettingNonStaticFieldFromStatic() {
         ClassContext classContext = new ClassContext();
-        Variable var = mock(Variable.class);
+        FieldVar var = mock(FieldVar.class);
         when(var.getName()).thenReturn("var");
         when(var.isStatic()).thenReturn(false);
         classContext.addField(var);
         MethodContext methodContext = new MethodContext(classContext);
-        methodContext.save(new MethodHeader(Collections.singletonList("static"), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.singletonList("static"), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
 
         assertThatThrownBy(() -> methodContext.getVariable("var"))
                 .isExactlyInstanceOf(ResolvingException.class)
@@ -66,7 +70,7 @@ class MethodContextTest {
     @Test
     void shouldGetVar() {
         ClassContext classContext = new ClassContext();
-        Variable varField = mock(Variable.class);
+        FieldVar varField = mock(FieldVar.class);
         when(varField.getName()).thenReturn("var");
         classContext.addField(varField);
 

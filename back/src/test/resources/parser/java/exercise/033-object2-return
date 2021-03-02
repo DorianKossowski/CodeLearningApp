@@ -1,0 +1,41 @@
+### TASK ###
+-> method
+    with modifiers: { "static" }
+    with name: "makeTriple"
+    with result: "int"
+-> statement
+    with text: "System.out.println(makeTriple(i))"
+    with resolved: "System.out.println(0)"
+    in method: "main"
+    with for iteration: "0"
+    log info: "Wywołanie metody println w 0 iteracji"
+-> statement
+    with text: "System.out.println(makeTriple(i))"
+    with resolved: "System.out.println(3)"
+    in method: "main"
+    with for iteration: "1"
+    log info: "Wywołanie metody println w 1 iteracji"
+-> statement
+    with text: "System.out.println(makeTriple(i))"
+    with resolved: "System.out.println(6)"
+    in method: "main"
+    with for iteration: "2"
+    log info: "Wywołanie metody println w 2 iteracji"
+
+### INPUT ###
+public class MyClass {
+
+    public static void main(String[] args){
+        for(int i=0; i<3; i=i+1)
+            System.out.println(makeTriple(i));
+    }
+
+    static int makeTriple(int value) {
+        return 3 * value;
+    }
+}
+
+### OUTPUT ###
+0
+3
+6

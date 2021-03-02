@@ -5,6 +5,7 @@ import HomeIntroduction from './HomeIntroduction';
 import HomeVarsAndTypes from './HomeVarsAndTypes';
 import HomeConditionals from './HomeConditionals';
 import HomeLoops from './HomeLoops';
+import HomeFunctions from './HomeFunctions';
 
 import './home.css';
 import HomeCompAndLogic from './HomeCompAndLogic';
@@ -22,6 +23,7 @@ class Home extends Component {
                 <HomeConditionals />
                 <HomeLoops />
                 <HomeObjectIntroduction />
+                <HomeFunctions />
             </Container>
         );
     }

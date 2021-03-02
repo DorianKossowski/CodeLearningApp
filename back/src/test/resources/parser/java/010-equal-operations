@@ -1,25 +1,25 @@
 ### TASK ###
 -> statement
-    with text: "System.out.print(aPrimitive == aObj)"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(aPrimitive == aObj)"
+    with resolved: "System.out.println(true)"
 -> statement
-    with text: "System.out.print(aObj == bObj)"
-    with resolved: "System.out.print(false)"
+    with text: "System.out.println(aObj == bObj)"
+    with resolved: "System.out.println(false)"
 -> statement
-    with text: "System.out.print(aObj.equals(bObj))"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(aObj.equals(bObj))"
+    with resolved: "System.out.println(true)"
 -> statement
-    with text: "System.out.print(aObj == a2Obj)"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(aObj == a2Obj)"
+    with resolved: "System.out.println(true)"
 -> statement
-    with text: "System.out.print(s1 == s2)"
-    with resolved: "System.out.print(false)"
+    with text: "System.out.println(s1 == s2)"
+    with resolved: "System.out.println(false)"
 -> statement
-    with text: "System.out.print(s1.equals(s2))"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(s1.equals(s2))"
+    with resolved: "System.out.println(true)"
 -> statement
-    with text: "System.out.print(s1 == s3)"
-    with resolved: "System.out.print(true)"
+    with text: "System.out.println(s1 == s3)"
+    with resolved: "System.out.println(true)"
 
 ### INPUT ###
 public class MyClass {
@@ -29,16 +29,25 @@ public class MyClass {
         Integer bObj = 128;
         Integer a2Obj = aObj;
 
-        System.out.print(aPrimitive == aObj);   // true
-        System.out.print(aObj == bObj);         // false
-        System.out.print(aObj.equals(bObj));    // true
-        System.out.print(aObj == a2Obj);        // true
+        System.out.println(aPrimitive == aObj);   // true
+        System.out.println(aObj == bObj);         // false
+        System.out.println(aObj.equals(bObj));    // true
+        System.out.println(aObj == a2Obj);        // true
 
         String s1 = "str";
         String s2 = "str";
         String s3 = s1;
-        System.out.print(s1 == s2);             // false
-        System.out.print(s1.equals(s2));        // true
-        System.out.print(s1 == s3);             // true
+        System.out.println(s1 == s2);             // false
+        System.out.println(s1.equals(s2));        // true
+        System.out.println(s1 == s3);             // true
     }
 }
+
+### OUTPUT ###
+true
+false
+true
+true
+false
+true
+true

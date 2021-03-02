@@ -6,6 +6,7 @@ import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
@@ -45,20 +46,22 @@ class ForStmtResolverTest {
     void shouldBreakIn() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
-        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) { break; fun(); }",
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
+        JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) { break; int sth; }",
                 JavaParser::forStatement);
 
         List<Statement> statements = ForStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
         Statement statement = Iterables.getOnlyElement(statements);
-        assertThat(statement.getExpressionStatements()).isEmpty();
+        assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
     }
 
     @Test
     void shouldThrowWhenInfinityLoop() {
         ClassContext context = new ClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()));
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
         JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(int i=0; i<1001; i=i+1);",
                 JavaParser::forStatement);
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Objects;
 
 public class VerificationResultDto {
+    private String output;
     private String errorMessage;
     private int lineNumber;
     @JsonIgnore
@@ -30,14 +31,20 @@ public class VerificationResultDto {
         return new VerificationResultDto(message, lineNumber);
     }
 
-    public static VerificationResultDto valid() {
-        return new VerificationResultDto();
+    public static VerificationResultDto valid(String output) {
+        VerificationResultDto verificationResultDto = new VerificationResultDto();
+        verificationResultDto.output = output;
+        return verificationResultDto;
     }
 
     public static VerificationResultDto invalid(Exception exception) {
         VerificationResultDto resultDto = new VerificationResultDto(exception.getMessage());
         resultDto.exception = exception;
         return resultDto;
+    }
+
+    public String getOutput() {
+        return output;
     }
 
     public String getErrorMessage() {
@@ -70,11 +77,12 @@ public class VerificationResultDto {
         }
         VerificationResultDto that = (VerificationResultDto) o;
         return lineNumber == that.lineNumber &&
+                Objects.equals(output, that.output) &&
                 Objects.equals(errorMessage, that.errorMessage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(errorMessage, lineNumber);
+        return Objects.hash(output, errorMessage, lineNumber);
     }
 }

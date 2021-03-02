@@ -3,7 +3,7 @@ package com.server.parser.java.task.verifier;
 import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Task;
-import com.server.parser.java.ast.statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.task.model.FieldModel;
 import org.junit.jupiter.api.Test;
 

@@ -23,6 +23,11 @@ public class NullExpression extends Expression {
     }
 
     @Override
+    public String getOutput() {
+        return "null";
+    }
+
+    @Override
     public Value getValue() {
         return NullValue.INSTANCE;
     }

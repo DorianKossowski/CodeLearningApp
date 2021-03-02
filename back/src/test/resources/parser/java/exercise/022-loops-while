@@ -32,3 +32,6 @@ public class MyClass {
         System.out.println(suma);
     }
 }
+
+### OUTPUT ###
+6
