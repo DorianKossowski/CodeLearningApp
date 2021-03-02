@@ -1,4 +1,10 @@
 ### TASK ###
+-> class
+    with field
+        with modifiers: { "private" }
+        with type: "int"
+        with name: "j"
+        with init text: "init()"
 
 ### INPUT ###
 public class MyClass {

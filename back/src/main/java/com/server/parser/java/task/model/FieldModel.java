@@ -8,7 +8,7 @@ public class FieldModel {
     private List<String> modifiers;
     private String type;
     private String name;
-    private String value;
+    private String initText;
     private String logInfo;
 
     private FieldModel() {
@@ -26,8 +26,8 @@ public class FieldModel {
         return Optional.ofNullable(name);
     }
 
-    public Optional<String> getValue() {
-        return Optional.ofNullable(value);
+    public Optional<String> getInitText() {
+        return Optional.ofNullable(initText);
     }
 
     public Optional<String> getLogInfo() {
@@ -60,7 +60,7 @@ public class FieldModel {
         private List<String> modifiers;
         private String type;
         private String name;
-        private String value;
+        private String initText;
         private String logInfo;
 
         public Builder withModifiers(List<String> modifiers) {
@@ -78,8 +78,8 @@ public class FieldModel {
             return this;
         }
 
-        public Builder withValue(String value) {
-            this.value = value;
+        public Builder withInitText(String initText) {
+            this.initText = initText;
             return this;
         }
 
@@ -93,7 +93,7 @@ public class FieldModel {
             model.modifiers = this.modifiers;
             model.type = this.type;
             model.name = this.name;
-            model.value = this.value;
+            model.initText = this.initText;
             model.logInfo = this.logInfo;
             return model;
         }

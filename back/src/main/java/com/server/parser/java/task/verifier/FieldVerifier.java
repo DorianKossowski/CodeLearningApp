@@ -23,7 +23,7 @@ public class FieldVerifier extends CommonVerifier {
         fieldModel.getModifiers().ifPresent(this::verifyFieldModifiers);
         fieldModel.getType().ifPresent(this::verifyFieldType);
         fieldModel.getName().ifPresent(this::verifyFieldName);
-        fieldModel.getValue().ifPresent(this::verifyFieldValue);
+        fieldModel.getInitText().ifPresent(this::verifyFieldValue);
         Verify.verify(!availableFields.isEmpty(), getErrorMessage(fieldModel));
     }
 
@@ -53,7 +53,7 @@ public class FieldVerifier extends CommonVerifier {
 
     private void verifyFieldValue(String value) {
         availableFields = availableFields.stream()
-                .filter(field -> field.getValue().getExpression().getResolvedText().equals(value))
+                .filter(field -> field.getInitFunction().getExpressionText().equals(value))
                 .collect(Collectors.toList());
     }
 }

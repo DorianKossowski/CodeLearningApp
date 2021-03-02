@@ -9,7 +9,7 @@ export const task = `
         with modifiers: { "private" }
         with type: "int"
         with name: "i"
-        with value: "1"
+        with init text: "1"
 `;
 
 export const input = `public class MyFirstClass {

@@ -4,7 +4,7 @@ export const task = `
         with modifiers: { "static" }
         with type: "String"
         with name: "s"
-        with value: "\\"MyStatic\\""
+        with init text: "\\"MyStatic\\""
 -> statement
     with text: "System.out.println(s)"
     with resolved: "System.out.println(\\"MyStatic\\")"

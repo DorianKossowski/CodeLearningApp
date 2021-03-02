@@ -63,8 +63,8 @@ class JavaTaskListenerTest {
                         FieldModel.builder().withType("x").build()),
                 Arguments.of("Field with name", "class with field with name: \"x\"",
                         FieldModel.builder().withName("x").build()),
-                Arguments.of("Field with value", "class with field with value: \"x\"",
-                        FieldModel.builder().withValue("x").build()),
+                Arguments.of("Field with init text", "class with field with init text: \"x\"",
+                        FieldModel.builder().withInitText("x").build()),
                 Arguments.of("Field with log info", "class with field with log info: \"t\"",
                         FieldModel.builder().withLogInfo("t").build())
         );
