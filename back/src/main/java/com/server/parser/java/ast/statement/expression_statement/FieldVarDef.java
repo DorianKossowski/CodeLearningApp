@@ -1,28 +1,25 @@
 package com.server.parser.java.ast.statement.expression_statement;
 
-import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
-import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.FieldVarInitExpressionFunction;
 import com.server.parser.java.ast.value.Value;
-import com.server.parser.util.ValuePreparer;
 
 import java.util.Objects;
 
 public class FieldVarDef extends VariableDef {
-    private final FieldVarInitExpressionSupplier initSupplier;
+    private final FieldVarInitExpressionFunction initFunction;
 
-    public FieldVarDef(String text, String type, String name, FieldVarInitExpressionSupplier initSupplier,
+    public FieldVarDef(String text, String type, String name, FieldVarInitExpressionFunction initFunction,
                        boolean explicitInitialization) {
         super(text, type, name, explicitInitialization);
-        this.initSupplier = Objects.requireNonNull(initSupplier, "initSupplier cannot be null");
+        this.initFunction = Objects.requireNonNull(initFunction, "initFunction cannot be null");
     }
 
     @Override
     public Value getValue() {
-        Expression expression = initSupplier.get();
-        return ValuePreparer.prepare(getType(), expression);
+        throw new UnsupportedOperationException("Can't directly reference to field value in FieldVarDef");
     }
 
-    public FieldVarInitExpressionSupplier getInitSupplier() {
-        return initSupplier;
+    public FieldVarInitExpressionFunction getInitFunction() {
+        return initFunction;
     }
 }

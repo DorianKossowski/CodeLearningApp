@@ -2,6 +2,7 @@ package com.server.parser.java.ast;
 
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.context.JavaContext;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -42,5 +43,5 @@ public abstract class Variable implements Serializable {
 
     public abstract void setValue(Value value);
 
-    public abstract void initialize();
+    public abstract void initialize(JavaContext context);
 }
