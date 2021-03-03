@@ -1,0 +1,29 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    private int i;
+
+	public static void main(String[] args) {
+		MyClass myClass = new MyClass(1);
+		System.out.println(myClass.i);
+		init(myClass);
+		System.out.println(myClass.i);
+	}
+
+	MyClass(int val) {
+	    i = val;
+	}
+
+	static void init(MyClass obj) {
+	    obj.setI(3);
+	}
+
+    void setI(int val) {
+        i = val;
+    }
+}
+
+### OUTPUT ###
+1
+3

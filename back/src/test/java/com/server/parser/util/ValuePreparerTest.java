@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ValuePreparerTest {
+    private static final Instance INSTANCE = new Instance("MyClass", Collections.emptyMap());
 
     static Stream<Arguments> typeWithLiteralProvider() {
         return Stream.of(
@@ -121,13 +122,19 @@ class ValuePreparerTest {
         assertThat(value.getExpression()).isSameAs(expression);
     }
 
-    @Test
-    void shouldPrepareWhenInstance() {
-        Instance instance = new Instance("MyClass", Collections.emptyMap());
+    static Stream<Arguments> shouldPrepareWhenInstance() {
+        return Stream.of(
+                Arguments.of(INSTANCE),
+                Arguments.of(new ObjectRefExpression("", new ObjectValue(INSTANCE)))
+        );
+    }
 
-        Value value = ValuePreparer.prepare("MyClass", instance);
+    @ParameterizedTest
+    @MethodSource
+    void shouldPrepareWhenInstance(Expression expression) {
+        Value value = ValuePreparer.prepare("MyClass", expression);
 
         assertThat(value).isExactlyInstanceOf(ObjectValue.class);
-        assertThat(value.getExpression()).isSameAs(instance);
+        assertThat(value.getExpression()).isSameAs(INSTANCE);
     }
 }

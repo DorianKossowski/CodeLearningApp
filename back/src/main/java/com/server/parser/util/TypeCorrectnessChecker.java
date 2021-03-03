@@ -44,7 +44,7 @@ public class TypeCorrectnessChecker {
             throw new ResolvingException(String.format("Operacje na tablicach (%s) nie są wspierane", type));
         }
         if (valueType == ValueType.GENERIC) {
-            return expression instanceof Instance;
+            return expression.getValue().getExpression() instanceof Instance;
         }
         return typeToConstantChecker.get(valueType).test(expression.getLiteral().getConstant().c);
     }

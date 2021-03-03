@@ -20,6 +20,9 @@ public class ValuePreparer {
                 return new ObjectValue((Instance) expression);
             }
             ValueType valueType = ValueType.findByOriginalType(type);
+            if (valueType == ValueType.GENERIC) {
+                return expression.getValue();
+            }
             return prepareFromLiteral(valueType, expression.getLiteral());
         } catch (IllegalArgumentException e) {
             throw new ResolvingException(String.format("Wyrażenie %s nie jest typu %s", expression.getText(), type));
