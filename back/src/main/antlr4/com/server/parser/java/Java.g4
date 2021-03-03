@@ -151,7 +151,11 @@ breakStatement
     ;
 
 assignment
-    : identifier '=' expression
+    : ( identifier | assignmentAttributeIdentifier ) '=' expression
+    ;
+
+assignmentAttributeIdentifier
+    : objectRefName '.' attribute=identifier
     ;
 
 methodVarDec

@@ -179,7 +179,8 @@ public class JavaParserTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "s = \"str\"",
-            "s = s0"
+            "s = s0",
+            "s1.s2 = s3"
     })
     void shouldParseAssignment(String input) {
         HELPER.shouldParseToEof(input, JavaParser::assignment);
