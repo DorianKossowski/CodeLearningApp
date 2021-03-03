@@ -4,7 +4,6 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.BlockStatement;
 import com.server.parser.java.ast.statement.CallStatement;
@@ -67,22 +66,9 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             return context.getVisitor(VariableDef.class).visit(ctx, context);
         }
 
-        //*** ASSIGNMENT ***//
         @Override
         public Statement visitAssignment(JavaParser.AssignmentContext ctx) {
-            String assignmentId;
-            Expression expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
-            if (ctx.assignmentAttributeIdentifier() == null) {
-                assignmentId = textVisitor.visit(ctx.identifier());
-                context.updateVariable(assignmentId, expression);
-            } else {
-                assignmentId = textVisitor.visit(ctx.assignmentAttributeIdentifier());
-                ObjectRef objectRef = context.getVisitor(ObjectRef.class)
-                        .visit(ctx.assignmentAttributeIdentifier().objectRefName(), context);
-                String attribute = textVisitor.visit(ctx.assignmentAttributeIdentifier().attribute);
-                objectRef.getValue().updateAttribute(attribute, expression);
-            }
-            return new Assignment(JavaGrammarHelper.getOriginalText(ctx), assignmentId, expression);
+            return context.getVisitor(Assignment.class).visit(ctx, context);
         }
 
         //*** IF ***//

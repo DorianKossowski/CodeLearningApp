@@ -9,6 +9,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.expression_statement.Assignment;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.java.visitor.*;
@@ -27,6 +28,7 @@ public class JavaVisitorsRegistry {
                     .put(CallStatement.class, Suppliers.memoize(CallStatementVisitor::new))
                     // TODO create ObjectRefVisitor
                     .put(ObjectRef.class, Suppliers.memoize(ExpressionVisitor::new))
+                    .put(Assignment.class, Suppliers.memoize(AssignmentStatementVisitor::new))
                     .build();
 
     public static <T extends AstElement> JavaVisitor<T> get(Class<T> elementClass) {
