@@ -8,7 +8,7 @@ import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
-import com.server.parser.java.ast.expression.ObjectRef;
+import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
@@ -159,17 +159,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         //*** OBJECT REF ***//
         @Override
         public Expression visitObjectRefName(JavaParser.ObjectRefNameContext ctx) {
-            Value currentValue = resolveFirstSegment(ctx);
-            for (JavaParser.IdentifierContext nextSegmentCtx : ctx.identifier()) {
-                String nextSegmentName = textVisitor.visit(nextSegmentCtx);
-                currentValue = currentValue.getAttribute(nextSegmentName);
-            }
-            return new ObjectRef(textVisitor.visit(ctx), currentValue);
-        }
-
-        private Value resolveFirstSegment(JavaParser.ObjectRefNameContext ctx) {
-            String firstSegmentName = textVisitor.visit(ctx.objectRefNameFirstSegment());
-            return context.getVariable(firstSegmentName).getValue();
+            return context.getVisitor(ObjectRefExpression.class).visit(ctx, context);
         }
 
         //*** NULL ***//

@@ -58,7 +58,7 @@ class ValuePreparerTest {
     void shouldThrowWhenInvalidObjectRef() {
         assertThatThrownBy(() -> {
             Literal l = new Literal(new CharacterConstant('L'));
-            ValuePreparer.prepare("String", new ObjectRef("x", new PrimitiveValue(l)));
+            ValuePreparer.prepare("String", new ObjectRefExpression("x", new PrimitiveValue(l)));
         })
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie x nie jest typu String");
@@ -78,8 +78,8 @@ class ValuePreparerTest {
     @Test
     void shouldPrepareComplexObjectRef() {
         Literal l = new Literal(new CharacterConstant('L'));
-        ObjectRef obj1 = new ObjectRef("obj1", new PrimitiveValue(l));
-        ObjectRef obj2 = new ObjectRef("obj2", obj1.getValue());
+        ObjectRefExpression obj1 = new ObjectRefExpression("obj1", new PrimitiveValue(l));
+        ObjectRefExpression obj2 = new ObjectRefExpression("obj2", obj1.getValue());
 
         PrimitiveValue value = (PrimitiveValue) ValuePreparer.prepare("char", obj2);
 

@@ -4,7 +4,7 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.expression.ObjectRef;
+import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.value.*;
@@ -54,7 +54,7 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
                 return new ConstructorCallReference(ctx.constructorCallName().classSeg.getText());
             }
             if (ctx.objectRefName() != null) {
-                ObjectRef objectRef = context.getVisitor(ObjectRef.class).visit(ctx.objectRefName(), context);
+                ObjectRefExpression objectRef = context.getVisitor(ObjectRefExpression.class).visit(ctx.objectRefName(), context);
                 Value value = objectRef.getValue();
                 validateValueToCallOn(objectRef, value);
                 return new CallReference((ObjectValue) value, ctx.methodName.getText());
@@ -62,7 +62,7 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
             return new CallReference(context.getThisValue(), ctx.methodName.getText());
         }
 
-        private void validateValueToCallOn(ObjectRef objectRef, Value value) {
+        private void validateValueToCallOn(ObjectRefExpression objectRef, Value value) {
             if (value instanceof ObjectValue) {
                 return;
             }

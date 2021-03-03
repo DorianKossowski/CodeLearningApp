@@ -4,7 +4,7 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.expression.ObjectRef;
+import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.ast.statement.expression_statement.Assignment;
 import com.server.parser.java.context.JavaContext;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -40,7 +40,7 @@ public class AssignmentStatementVisitor extends JavaVisitor<Assignment> {
         }
 
         private void updateAttribute(JavaParser.AssignmentContext ctx, Expression expression) {
-            ObjectRef objectRef = context.getVisitor(ObjectRef.class)
+            ObjectRefExpression objectRef = context.getVisitor(ObjectRefExpression.class)
                     .visit(ctx.assignmentAttributeIdentifier().objectRefName(), context);
             String attribute = textVisitor.visit(ctx.assignmentAttributeIdentifier().attribute);
             objectRef.getValue().updateAttribute(attribute, expression);

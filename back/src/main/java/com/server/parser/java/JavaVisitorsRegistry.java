@@ -6,7 +6,7 @@ import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.expression.ObjectRef;
+import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.Assignment;
@@ -26,8 +26,7 @@ public class JavaVisitorsRegistry {
                     .put(ClassAst.class, Suppliers.memoize(ClassVisitor::new))
                     .put(Statement.class, Suppliers.memoize(StatementVisitor::new))
                     .put(CallStatement.class, Suppliers.memoize(CallStatementVisitor::new))
-                    // TODO create ObjectRefVisitor
-                    .put(ObjectRef.class, Suppliers.memoize(ExpressionVisitor::new))
+                    .put(ObjectRefExpression.class, Suppliers.memoize(ObjectRefExpressionVisitor::new))
                     .put(Assignment.class, Suppliers.memoize(AssignmentStatementVisitor::new))
                     .build();
 
