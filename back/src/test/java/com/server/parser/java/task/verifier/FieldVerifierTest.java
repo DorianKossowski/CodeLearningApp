@@ -64,7 +64,7 @@ class FieldVerifierTest extends VerifierTestBase {
     @Test
     void shouldHasSameValue() {
         FieldVarDef variableDef = mock(FieldVarDef.class, RETURNS_DEEP_STUBS);
-        when(variableDef.getValue().getExpression().getResolvedText()).thenReturn("1");
+        when(variableDef.getInitFunction().getExpressionText()).thenReturn("1");
         FieldVerifier fieldVerifier = new FieldVerifier(mockTaskWithField(variableDef));
 
         fieldVerifier.verify(FieldModel.builder().withInitText("1").build());

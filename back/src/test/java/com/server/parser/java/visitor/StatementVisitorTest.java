@@ -2,20 +2,17 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.MethodVar;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.*;
 import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.constant.StringConstant;
+import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.*;
-import com.server.parser.java.ast.statement.expression_statement.Assignment;
-import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
-import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
-import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
+import com.server.parser.java.ast.statement.expression_statement.*;
 import com.server.parser.java.ast.value.PrimitiveComputableValue;
 import com.server.parser.java.ast.value.PrimitiveValue;
+import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.BreakStatementException;
@@ -96,6 +93,25 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         assertThatThrownBy(() -> visitor.visit(c, methodContext))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie 5 nie jest typu String");
+    }
+
+    @Test
+    void shouldVisitAttributeAssignment() {
+        Value initValue = new PrimitiveValue(new Literal(new IntConstant()));
+        FieldVar fieldVar = new FieldVar("int", "b", mock(FieldVarInitExpressionFunction.class), initValue);
+        Instance instance = new Instance("MyType", Collections.singletonMap("b", fieldVar));
+        MethodVarDef varDef = new MethodVarDef("", "MyType", "a", instance, false);
+        methodContext.addVariable(new MethodVar(varDef));
+        String input = "a.b = 1";
+        JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
+
+        Assignment assignment = (Assignment) visitor.visit(c, methodContext);
+
+        assertThat(assignment.getText()).isEqualTo(input);
+        assertThat(assignment.getId()).isEqualTo("a.b");
+        assertThat(assignment.getValue().getText()).isEqualTo("1");
+        Variable updatedVar = methodContext.getVariable("a");
+        assertThat((updatedVar.getValue()).getAttribute("b").getExpression().getResolvedText()).isEqualTo("1");
     }
 
     //*** IF ***//

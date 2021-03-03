@@ -1,0 +1,36 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    private int i;
+    private MyClass inner;
+
+	public static void main(String[] args) {
+		MyClass myClass = new MyClass();
+		System.out.println(myClass.i);
+		myClass.i = 1;
+		System.out.println(myClass.i);
+
+		myClass.inner = new MyClass(2);
+		System.out.println(myClass.inner.i);
+		myClass.inner.setI(3);
+		System.out.println(myClass.inner.i);
+	}
+
+    MyClass() {
+    }
+
+    MyClass(int val) {
+        i = val;
+    }
+
+    void setI(int val) {
+        i = val;
+    }
+}
+
+### OUTPUT ###
+0
+1
+2
+3
