@@ -1,5 +1,6 @@
 package com.server.parser.java.ast.value;
 
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingNullPointerException;
@@ -50,6 +51,11 @@ public class NullValue extends Value {
 
     @Override
     public Value getAttribute(String name) {
+        throw new ResolvingNullPointerException();
+    }
+
+    @Override
+    public void updateAttribute(String name, Expression newExpression) {
         throw new ResolvingNullPointerException();
     }
 

@@ -18,7 +18,12 @@ public class PrimitiveValue extends Value implements ConstantProvider {
 
     @Override
     public Value getAttribute(String name) {
-        throw new ResolvingException("Nie można uzyskiwać wartości z prymitywa");
+        throw new ResolvingException(String.format("Nie można uzyskiwać wartości %s z prymitywa", name));
+    }
+
+    @Override
+    public void updateAttribute(String name, Expression newExpression) {
+        throw new ResolvingException(String.format("Nie można aktualizować wartości %s z prymitywa", name));
     }
 
     @Override

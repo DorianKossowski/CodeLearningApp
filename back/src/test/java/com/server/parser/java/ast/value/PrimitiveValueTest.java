@@ -1,6 +1,7 @@
 package com.server.parser.java.ast.value;
 
 import com.server.parser.java.ast.constant.BooleanConstant;
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.UninitializedExpression;
@@ -57,6 +58,13 @@ class PrimitiveValueTest extends ValueTestBase {
     void shouldThrowWhenGetAttribute() {
         assertThatThrownBy(() -> new PrimitiveValue(mock(Literal.class)).getAttribute("NAME"))
                 .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Nie można uzyskiwać wartości z prymitywa");
+                .hasMessage("Problem podczas rozwiązywania: Nie można uzyskiwać wartości NAME z prymitywa");
+    }
+
+    @Test
+    void shouldThrowWhenUpdateAttribute() {
+        assertThatThrownBy(() -> new PrimitiveValue(mock(Literal.class)).updateAttribute("NAME", mock(Expression.class)))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można aktualizować wartości NAME z prymitywa");
     }
 }

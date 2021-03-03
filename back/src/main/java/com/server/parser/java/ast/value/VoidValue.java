@@ -1,5 +1,6 @@
 package com.server.parser.java.ast.value;
 
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.util.exception.ResolvingVoidException;
 
@@ -32,6 +33,11 @@ public class VoidValue extends Value {
 
     @Override
     public Value getAttribute(String name) {
+        throw new ResolvingVoidException();
+    }
+
+    @Override
+    public void updateAttribute(String name, Expression newExpression) {
         throw new ResolvingVoidException();
     }
 

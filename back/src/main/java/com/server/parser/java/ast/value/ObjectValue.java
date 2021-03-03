@@ -1,8 +1,10 @@
 package com.server.parser.java.ast.value;
 
 import com.server.parser.java.ast.FieldVar;
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingUninitializedException;
 import com.server.parser.util.exception.ResolvingVoidException;
@@ -34,6 +36,16 @@ public class ObjectValue extends Value {
             throw new ResolvingException("Nie można znaleźć pola " + name);
         }
         return fieldVar.getValue();
+    }
+
+    @Override
+    public void updateAttribute(String name, Expression newExpression) {
+        if (!fields.containsKey(name)) {
+            throw new ResolvingException("Nie można znaleźć pola " + name);
+        }
+        FieldVar fieldVar = fields.get(name);
+        Value newValue = ValuePreparer.prepare(fieldVar.getType(), newExpression);
+        fieldVar.setValue(newValue);
     }
 
     @Override
