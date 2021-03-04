@@ -8,6 +8,7 @@ import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
+import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.visitor.StatementListVisitor;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,5 +111,20 @@ class ConstructorCallExecutorTest {
 
         // then
         assertThat(instanceFields).containsExactly(entry("F1", staticField), entry("F2", instanceField));
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNullBodyContext() {
+        // given
+        Method method = mock(Method.class, RETURNS_DEEP_STUBS);
+        when(method.getHeader().getArguments()).thenReturn(Collections.emptyList());
+        when(method.getBodyContext()).thenReturn(null);
+        CallInvocation invocation = mock(CallInvocation.class, RETURNS_DEEP_STUBS);
+
+        // when
+        List<Statement> statements = executor.executeInContext(method, invocation, mock(JavaContext.class));
+
+        // then
+        assertThat(statements).isEmpty();
     }
 }

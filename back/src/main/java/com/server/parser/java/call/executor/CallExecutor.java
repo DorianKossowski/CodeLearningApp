@@ -1,6 +1,7 @@
 package com.server.parser.java.call.executor;
 
 import com.google.common.collect.Streams;
+import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.VoidExpression;
@@ -16,6 +17,7 @@ import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,7 +37,8 @@ public abstract class CallExecutor implements Serializable {
     List<Statement> executeInContext(Method method, CallInvocation invocation, JavaContext executionContext) {
         preExecution();
         assignInvocationParameters(method.getHeader().getArguments(), invocation.getArgs(), executionContext);
-        List<Statement> statements = visitor.visit(method.getBodyContext(), executionContext);
+        JavaParser.MethodBodyContext bodyContext = method.getBodyContext();
+        List<Statement> statements = bodyContext != null ? visitor.visit(bodyContext, executionContext) : Collections.emptyList();
         postExecution();
         return statements;
     }
