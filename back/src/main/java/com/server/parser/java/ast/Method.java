@@ -13,7 +13,7 @@ public class Method extends AstElement {
     public Method(MethodContext methodContext, MethodHeader header, JavaParser.MethodBodyContext bodyContext) {
         this.methodContext = Objects.requireNonNull(methodContext, "methodContext cannot be null");
         this.header = Objects.requireNonNull(header, "header cannot be null");
-        this.bodyContext = Objects.requireNonNull(bodyContext, "bodyContext cannot be null");
+        this.bodyContext = bodyContext;
     }
 
     public MethodContext getMethodContext() {

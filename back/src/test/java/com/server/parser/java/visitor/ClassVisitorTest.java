@@ -2,18 +2,18 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.ClassAst;
-import com.server.parser.java.ast.ClassBody;
-import com.server.parser.java.ast.ClassHeader;
+import com.server.parser.java.ast.*;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ClassVisitorTest extends JavaVisitorTestBase {
     private final ClassVisitor visitor = new ClassVisitor();
-    
+
     private ClassVisitor.ClassVisitorInternal visitorInternal;
 
     @Override
@@ -59,5 +59,22 @@ class ClassVisitorTest extends JavaVisitorTestBase {
                 .containsExactly("m", "m2");
         assertThat(body.getFields()).extracting(VariableDef::getName)
                 .containsExactly("i", "s");
+    }
+
+    @Test
+    void shouldCreateDefaultConstructorForEmptyClassBody() {
+        context.setName("MyClass");
+        String input = "";
+        JavaParser.ClassBodyContext c = HELPER.shouldParseToEof(input, JavaParser::classBody);
+
+        ClassBody body = visitorInternal.visit(c);
+
+        Method constructor = Iterables.getOnlyElement(body.getConstructors());
+        assertThat(constructor.getHeader())
+                .returns(Collections.emptyList(), MethodHeader::getModifiers)
+                .returns("MyClass", MethodHeader::getName)
+                .returns(Collections.emptyList(), MethodHeader::getArguments);
+        assertThat(body.getMethods()).isEmpty();
+        assertThat(body.getFields()).isEmpty();
     }
 }
