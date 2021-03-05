@@ -1,7 +1,7 @@
 package com.server.parser.java.ast.statement.expression_statement;
 
-import com.server.parser.java.ast.FieldVarInitExpressionFunction;
 import com.server.parser.java.value.Value;
+import com.server.parser.java.variable.FieldVarInitExpressionFunction;
 
 import java.util.Objects;
 

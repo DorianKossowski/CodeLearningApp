@@ -1,7 +1,7 @@
 package com.server.parser.util;
 
 import com.rits.cloning.Cloner;
-import com.server.parser.java.ast.FieldVarInitExpressionFunction;
+import com.server.parser.java.variable.FieldVarInitExpressionFunction;
 
 public class ClonerFactory {
     private static final Class<?>[] DONT_CLONE = {FieldVarInitExpressionFunction.class};

@@ -1,13 +1,13 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.FieldVarInitExpressionFunction;
-import com.server.parser.java.ast.MethodVar;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.Value;
+import com.server.parser.java.variable.FieldVar;
+import com.server.parser.java.variable.FieldVarInitExpressionFunction;
+import com.server.parser.java.variable.MethodVar;
+import com.server.parser.java.variable.Variable;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

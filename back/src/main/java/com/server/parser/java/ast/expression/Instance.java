@@ -1,8 +1,8 @@
 package com.server.parser.java.ast.expression;
 
-import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.Value;
+import com.server.parser.java.variable.FieldVar;
 
 import java.util.Map;
 import java.util.Objects;

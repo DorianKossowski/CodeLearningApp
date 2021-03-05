@@ -1,9 +1,9 @@
 package com.server.parser.java;
 
 import com.server.parser.ParserTestHelper;
-import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.variable.FieldVar;
 import com.server.parser.java.visitor.TaskVisitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

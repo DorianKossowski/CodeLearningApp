@@ -2,11 +2,11 @@ package com.server.parser.java.context;
 
 import com.server.parser.java.JavaVisitorsRegistry;
 import com.server.parser.java.ast.AstElement;
-import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.value.ObjectValue;
+import com.server.parser.java.variable.FieldVar;
+import com.server.parser.java.variable.Variable;
 import com.server.parser.java.visitor.JavaVisitor;
 
 import java.util.Map;

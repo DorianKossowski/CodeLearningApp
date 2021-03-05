@@ -1,10 +1,10 @@
 package com.server.parser.java.value;
 
-import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.value.util.ValuePreparer;
+import com.server.parser.java.variable.FieldVar;
 import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingUninitializedException;
 import com.server.parser.util.exception.ResolvingVoidException;

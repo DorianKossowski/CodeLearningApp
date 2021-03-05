@@ -1,7 +1,6 @@
 package com.server.parser.java.call.executor;
 
 import com.rits.cloning.Cloner;
-import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.statement.CallStatement;
@@ -10,6 +9,7 @@ import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.java.variable.FieldVar;
 import com.server.parser.java.visitor.StatementListVisitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

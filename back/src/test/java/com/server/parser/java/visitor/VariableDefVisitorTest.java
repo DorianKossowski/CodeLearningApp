@@ -2,8 +2,6 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
@@ -12,6 +10,8 @@ import com.server.parser.java.value.NullValue;
 import com.server.parser.java.value.PrimitiveValue;
 import com.server.parser.java.value.UninitializedValue;
 import com.server.parser.java.value.Value;
+import com.server.parser.java.variable.FieldVar;
+import com.server.parser.java.variable.Variable;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

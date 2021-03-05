@@ -1,9 +1,9 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.variable.FieldVar;
+import com.server.parser.java.variable.Variable;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 

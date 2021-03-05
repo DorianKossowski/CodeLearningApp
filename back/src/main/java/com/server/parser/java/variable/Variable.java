@@ -1,4 +1,4 @@
-package com.server.parser.java.ast;
+package com.server.parser.java.variable;
 
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;

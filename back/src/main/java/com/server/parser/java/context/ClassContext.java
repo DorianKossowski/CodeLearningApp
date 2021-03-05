@@ -1,8 +1,8 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.value.ObjectValue;
+import com.server.parser.java.variable.FieldVar;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
