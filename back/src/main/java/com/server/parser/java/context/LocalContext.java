@@ -2,7 +2,6 @@ package com.server.parser.java.context;
 
 import com.google.common.collect.ImmutableMap;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.variable.Variable;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -13,7 +12,6 @@ import java.util.stream.Stream;
 
 public class LocalContext extends DelegatingContext {
     private final Map<String, Variable> localNameToVariable = new HashMap<>();
-    private ObjectValue thisValue;
 
     LocalContext(JavaContext context) {
         super(context);
@@ -23,11 +21,6 @@ public class LocalContext extends DelegatingContext {
     Map<String, Variable> getNameToVariable() {
         return ImmutableMap.copyOf(getConcatenatedNameToVariables());
     }
-
-//    @Override
-//    public void setThisValue(ObjectValue thisValue) {
-//        this.thisValue = thisValue;
-//    }
 
     @Override
     public JavaContext createLocalContext() {

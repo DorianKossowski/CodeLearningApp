@@ -71,11 +71,6 @@ public abstract class DelegatingContext implements JavaContext {
     }
 
     @Override
-    public void setThisValue(ObjectValue thisValue) {
-        context.setThisValue(thisValue);
-    }
-
-    @Override
     public String getMethodName() {
         return context.getMethodName();
     }

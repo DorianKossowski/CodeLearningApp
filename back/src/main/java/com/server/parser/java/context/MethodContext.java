@@ -47,7 +47,6 @@ public class MethodContext extends DelegatingContext {
         return thisValue;
     }
 
-    @Override
     public void setThisValue(ObjectValue thisValue) {
         this.thisValue = thisValue;
         this.nameToField.putAll(thisValue.getFields());

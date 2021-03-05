@@ -18,8 +18,8 @@ public class ContextFactory {
         return executionContext;
     }
 
-    public static JavaContext createExecutionContext(ObjectValue thisValue, JavaContext baseContext) {
-        JavaContext executionContext = ClonerFactory.createCloner(EXCLUDED_EXECUTION_CLONING).deepClone(baseContext);
+    public static JavaContext createExecutionContext(ObjectValue thisValue, MethodContext baseMethodContext) {
+        MethodContext executionContext = ClonerFactory.createCloner(EXCLUDED_EXECUTION_CLONING).deepClone(baseMethodContext);
         executionContext.setThisValue(thisValue);
         return executionContext;
     }
