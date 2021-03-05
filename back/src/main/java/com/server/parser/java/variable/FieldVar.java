@@ -11,17 +11,15 @@ import java.util.Objects;
 public class FieldVar extends Variable {
     private final FieldVarInitExpressionFunction initFunction;
     private final Value emptyValue = EmptyExpressionPreparer.prepare(getType()).getValue();
-    private Value value;
 
     // only for test purpose
     public FieldVar(String type, String name, FieldVarInitExpressionFunction initFunction, Value value) {
-        super(type, name);
+        super(type, name, Objects.requireNonNull(value, "value cannot be null"));
         this.initFunction = Objects.requireNonNull(initFunction, "initFunction cannot be null");
-        this.value = Objects.requireNonNull(value, "value cannot be null");
     }
 
     public FieldVar(FieldVarDef fieldVarDef) {
-        super(fieldVarDef);
+        super(fieldVarDef, null);
         this.initFunction = fieldVarDef.getInitFunction();
     }
 
@@ -39,11 +37,6 @@ public class FieldVar extends Variable {
             return emptyValue;
         }
         return value;
-    }
-
-    @Override
-    public void setValue(Value value) {
-        this.value = value;
     }
 
     public boolean isStatic() {
