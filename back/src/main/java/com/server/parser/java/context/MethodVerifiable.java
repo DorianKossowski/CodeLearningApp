@@ -1,5 +1,6 @@
 package com.server.parser.java.context;
 
+//TODO merge with MethodPrintable
 public interface MethodVerifiable {
 
     String getMethodName();

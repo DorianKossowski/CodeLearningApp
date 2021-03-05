@@ -1,11 +1,9 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.Value;
 import com.server.parser.java.variable.FieldVar;
-import com.server.parser.java.variable.FieldVarInitExpressionFunction;
 import com.server.parser.java.variable.MethodVar;
 import com.server.parser.java.variable.Variable;
 import com.server.parser.util.exception.ResolvingException;
@@ -18,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 class LocalContextTest {
     private static final String TYPE = "int";
@@ -31,20 +30,26 @@ class LocalContextTest {
     @Mock
     private Value value;
     @Mock
-    private Expression expression;
-    @Mock
     private ObjectValue objectValue;
+    @Mock
+    private DelegatingContext context;
 
     private LocalContext localContext;
     private MethodVar methodVar;
-    private FieldVar fieldVar;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
         methodVar = new MethodVar(TYPE, NAME, value);
-        fieldVar = new FieldVar(TYPE, NAME, new FieldVarInitExpressionFunction("", $ -> expression), value);
-        localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", "", false, objectValue);
+        setUpLocalContext();
+    }
+
+    private void setUpLocalContext() {
+        when(context.getCallResolver()).thenReturn(callResolver);
+        when(context.getFields()).thenReturn(nameToField);
+        when(context.getNameToVariable()).thenReturn(nameToVariable);
+        when(context.getThisValue()).thenReturn(objectValue);
+        localContext = new LocalContext(context);
     }
 
     @Test
@@ -73,25 +78,9 @@ class LocalContextTest {
     @Test
     void shouldGetVariable() {
         nameToVariable.put(NAME, methodVar);
+        when(context.getVariable(NAME)).thenReturn(methodVar);
 
         assertThat(localContext.getVariable(NAME)).isSameAs(methodVar);
-    }
-
-    @Test
-    void shouldGetField() {
-        nameToField.put(NAME, fieldVar);
-
-        assertThat(localContext.getVariable(NAME)).isSameAs(fieldVar);
-    }
-
-    @Test
-    void shouldThrowWhenGettingNonStaticFieldFromStatic() {
-        nameToField.put(NAME, fieldVar);
-        localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", "", true, objectValue);
-
-        assertThatThrownBy(() -> localContext.getVariable(NAME))
-                .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Nie można użyć name ze statycznego kontekstu");
     }
 
     @Test

@@ -7,7 +7,6 @@ import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ClassContext implements JavaContext {
     private final CallResolver callResolver = new CallResolver();
@@ -51,25 +50,14 @@ public class ClassContext implements JavaContext {
         nameToField.put(varName, fieldVar);
     }
 
-    Map<String, FieldVar> getFields() {
-        return new HashMap<>(nameToField);
+    @Override
+    public Map<String, FieldVar> getFields() {
+        return nameToField;
     }
 
     @Override
     public CallResolver getCallResolver() {
         return callResolver;
-    }
-
-    @Override
-    public Map<String, FieldVar> getStaticFields() {
-        return nameToField.entrySet().stream()
-                .filter(entry -> entry.getValue().isStatic())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    @Override
-    public void setFields(Map<String, FieldVar> nameToField) {
-        this.nameToField.putAll(nameToField);
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.server.parser.java.variable.Variable;
 import com.server.parser.java.visitor.JavaVisitor;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public interface JavaContext extends MethodVerifiable {
 
@@ -39,9 +40,17 @@ public interface JavaContext extends MethodVerifiable {
 
     CallResolver getCallResolver();
 
-    Map<String, FieldVar> getStaticFields();
+    default Map<String, FieldVar> getStaticFields() {
+        return getFields().entrySet().stream()
+                .filter(entry -> entry.getValue().isStatic())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 
-    void setFields(Map<String, FieldVar> nameToField);
+    default void setFields(Map<String, FieldVar> nameToField) {
+        getFields().putAll(nameToField);
+    }
+
+    Map<String, FieldVar> getFields();
 
     String getClassName();
 
