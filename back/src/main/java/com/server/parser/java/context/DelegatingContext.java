@@ -7,6 +7,7 @@ import com.server.parser.java.value.Value;
 import com.server.parser.java.value.util.ValuePreparer;
 import com.server.parser.java.variable.FieldVar;
 import com.server.parser.java.variable.Variable;
+import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Map;
 import java.util.Objects;
@@ -80,7 +81,15 @@ public abstract class DelegatingContext implements JavaContext {
         return context.getMethodResultType();
     }
 
-    Map<String, Variable> getNameToVariable() {
-        return ((DelegatingContext) context).getNameToVariable();
+    Map<String, Variable> getImmutableVariables() {
+        return ((DelegatingContext) context).getImmutableVariables();
+    }
+
+    String getValidatedVariableName(Variable var) {
+        String varName = var.getName();
+        if (getImmutableVariables().containsKey(varName)) {
+            throw new ResolvingException("Obiekt " + varName + " już istnieje");
+        }
+        return varName;
     }
 }

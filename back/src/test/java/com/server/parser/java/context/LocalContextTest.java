@@ -47,7 +47,7 @@ class LocalContextTest {
     private void setUpLocalContext() {
         when(context.getCallResolver()).thenReturn(callResolver);
         when(context.getFields()).thenReturn(nameToField);
-        when(context.getNameToVariable()).thenReturn(nameToVariable);
+        when(context.getImmutableVariables()).thenReturn(nameToVariable);
         when(context.getThisValue()).thenReturn(objectValue);
         localContext = new LocalContext(context);
     }
@@ -56,7 +56,7 @@ class LocalContextTest {
     void shouldAddLocalVariable() {
         localContext.addVariable(methodVar);
 
-        assertThat(localContext.getNameToVariable()).containsExactly(entry(NAME, methodVar));
+        assertThat(localContext.getImmutableVariables()).containsExactly(entry(NAME, methodVar));
     }
 
     @Test
@@ -91,6 +91,6 @@ class LocalContextTest {
 
         LocalContext newLocalContext = (LocalContext) localContext.createLocalContext();
 
-        assertThat(newLocalContext.getNameToVariable()).containsExactly(entry(NAME, methodVar), entry(NAME_2, variable2));
+        assertThat(newLocalContext.getImmutableVariables()).containsExactly(entry(NAME, methodVar), entry(NAME_2, variable2));
     }
 }

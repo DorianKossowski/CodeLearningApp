@@ -137,8 +137,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
                 .isEqualTo("\"str\"");
         assertThat(variableDef.printMethodName()).isEqualTo(METHOD_NAME);
 
-        assertThat(methodContext.getNameToVariable().keySet()).containsExactly("a");
-        Variable variable = methodContext.getNameToVariable().get("a");
+        Variable variable = methodContext.getVariable("a");
         assertThat(Iterables.getOnlyElement(variable.getModifiers())).isEqualTo("final");
         assertThat(variable.getValue().toString()).isEqualTo("\"str\"");
     }

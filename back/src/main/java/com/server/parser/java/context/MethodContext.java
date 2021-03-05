@@ -53,7 +53,7 @@ public class MethodContext extends DelegatingContext {
     }
 
     @Override
-    public Map<String, Variable> getNameToVariable() {
+    Map<String, Variable> getImmutableVariables() {
         return ImmutableMap.copyOf(nameToVariable);
     }
 
@@ -69,11 +69,7 @@ public class MethodContext extends DelegatingContext {
 
     @Override
     public void addVariable(Variable var) {
-        String varName = var.getName();
-        nameToVariable.computeIfPresent(varName, (key, $) -> {
-            throw new ResolvingException("Obiekt " + key + " już istnieje");
-        });
-        nameToVariable.put(varName, var);
+        nameToVariable.put(getValidatedVariableName(var), var);
     }
 
     @Override
