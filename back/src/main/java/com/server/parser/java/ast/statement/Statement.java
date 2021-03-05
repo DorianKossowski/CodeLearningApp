@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public abstract class Statement extends AstElement {
+public abstract class Statement implements AstElement {
     private final String text;
     private final Map<String, String> properties = new HashMap<>();
 

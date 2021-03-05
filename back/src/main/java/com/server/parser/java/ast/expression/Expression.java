@@ -6,7 +6,7 @@ import com.server.parser.java.value.Value;
 
 import java.util.Objects;
 
-public abstract class Expression extends AstElement implements Outputable {
+public abstract class Expression implements AstElement, Outputable {
     private final String text;
 
     public Expression(String text) {

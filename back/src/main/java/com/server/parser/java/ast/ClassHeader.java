@@ -3,7 +3,7 @@ package com.server.parser.java.ast;
 import java.util.List;
 import java.util.Objects;
 
-public class ClassHeader extends AstElement {
+public class ClassHeader implements AstElement {
     private final List<String> modifiers;
     private final String name;
 

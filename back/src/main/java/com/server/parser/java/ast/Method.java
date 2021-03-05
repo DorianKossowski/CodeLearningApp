@@ -5,7 +5,7 @@ import com.server.parser.java.context.MethodContext;
 
 import java.util.Objects;
 
-public class Method extends AstElement {
+public class Method implements AstElement {
     private final MethodContext methodContext;
     private final MethodHeader header;
     private final JavaParser.MethodBodyContext bodyContext;

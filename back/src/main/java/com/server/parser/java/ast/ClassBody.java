@@ -5,7 +5,7 @@ import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import java.util.List;
 import java.util.Objects;
 
-public class ClassBody extends AstElement {
+public class ClassBody implements AstElement {
     private final List<FieldVarDef> fields;
     private final List<Method> constructors;
     private final List<Method> methods;
