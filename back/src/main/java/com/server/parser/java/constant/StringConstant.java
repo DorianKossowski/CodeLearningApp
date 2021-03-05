@@ -1,6 +1,6 @@
 package com.server.parser.java.constant;
 
-import com.server.parser.util.EqualityOperatorService;
+import com.server.parser.java.constant.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Objects;

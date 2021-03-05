@@ -1,7 +1,7 @@
 package com.server.parser.java.constant;
 
-import com.server.parser.util.EqualityOperatorService;
-import com.server.parser.util.NumberOperationService;
+import com.server.parser.java.constant.util.EqualityOperatorService;
+import com.server.parser.java.constant.util.NumberOperationService;
 
 import java.util.Objects;
 

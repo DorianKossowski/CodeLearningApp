@@ -1,4 +1,4 @@
-package com.server.parser.util;
+package com.server.parser.java.constant.util;
 
 import com.server.parser.java.constant.*;
 import com.server.parser.util.exception.ResolvingException;

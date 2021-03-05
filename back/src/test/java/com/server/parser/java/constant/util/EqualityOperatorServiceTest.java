@@ -1,4 +1,4 @@
-package com.server.parser.util;
+package com.server.parser.java.constant.util;
 
 import com.server.parser.java.constant.CharacterConstant;
 import com.server.parser.java.constant.IntConstant;

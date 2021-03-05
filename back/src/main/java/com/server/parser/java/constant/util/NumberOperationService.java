@@ -1,4 +1,4 @@
-package com.server.parser.util;
+package com.server.parser.java.constant.util;
 
 import com.google.common.collect.ImmutableMap;
 import com.server.parser.java.constant.BooleanConstant;

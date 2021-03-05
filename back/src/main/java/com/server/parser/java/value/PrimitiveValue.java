@@ -4,7 +4,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.constant.Constant;
 import com.server.parser.java.constant.ConstantProvider;
-import com.server.parser.util.EqualityOperatorService;
+import com.server.parser.java.constant.util.EqualityOperatorService;
 import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingUninitializedException;
 import com.server.parser.util.exception.ResolvingVoidException;
