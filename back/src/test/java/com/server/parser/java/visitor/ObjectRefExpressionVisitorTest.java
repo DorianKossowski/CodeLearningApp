@@ -7,7 +7,6 @@ import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.constant.StringConstant;
-import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
@@ -35,9 +34,8 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        Expression expression = visitor.visit(c, methodContext);
+        ObjectRefExpression expression = visitor.visit(c, methodContext);
 
-        assertThat(expression).isExactlyInstanceOf(ObjectRefExpression.class);
         assertThat(expression.getText()).isEqualTo("x");
         assertThat(expression.getConstant().c).isEqualTo("value");
     }
@@ -67,9 +65,8 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "a.b";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        Expression expression = visitor.visit(c, methodContext);
+        ObjectRefExpression expression = visitor.visit(c, methodContext);
 
-        assertThat(expression).isExactlyInstanceOf(ObjectRefExpression.class);
         assertThat(expression.getValue()).isSameAs(attributeValue);
     }
 
@@ -77,5 +74,30 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
         FieldVar fieldVar = new FieldVar("int", attributeName, mock(FieldVarInitExpressionFunction.class), attributeValue);
         Instance instance = new Instance("MyClass", Collections.singletonMap(attributeName, fieldVar));
         return new MethodVar("String", objectName, new ObjectValue(instance));
+    }
+
+    @Test
+    void shouldVisitThis() {
+        MethodContext methodContext = createMethodContext();
+        PrimitiveValue attributeValue = new PrimitiveValue(new Literal(new IntConstant()));
+        Variable variable = createObjectWithIntAttribute("obj", "a", attributeValue);
+        methodContext.setThisValue((ObjectValue) variable.getValue());
+        String input = "this.a";
+        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
+
+        ObjectRefExpression expression = visitor.visit(c, methodContext);
+
+        assertThat(expression.getValue()).isSameAs(attributeValue);
+    }
+
+    @Test
+    void shouldThrowWhenThisInStaticContext() {
+        MethodContext methodContext = createMethodContext();
+        String input = "this.a";
+        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
+
+        assertThatThrownBy(() -> visitor.visit(c, methodContext))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można użyć słowa kluczowego this ze statycznego kontekstu");
     }
 }
