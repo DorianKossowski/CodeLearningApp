@@ -1,4 +1,4 @@
-package com.server.parser.java.ast.statement;
+package com.server.parser.java.ast.statement.property;
 
 public class StatementProperties {
     public static final String IF_CONDITION = "ifCond";

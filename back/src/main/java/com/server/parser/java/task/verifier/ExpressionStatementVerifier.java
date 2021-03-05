@@ -3,9 +3,9 @@ package com.server.parser.java.task.verifier;
 import com.google.common.base.Verify;
 import com.server.parser.java.JavaParserAdapter;
 import com.server.parser.java.ast.Task;
-import com.server.parser.java.ast.statement.StatementProperties;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
 import com.server.parser.java.ast.statement.expression_statement.MethodPrintable;
+import com.server.parser.java.ast.statement.property.StatementProperties;
 import com.server.parser.java.task.model.StatementModel;
 
 import java.util.ArrayList;

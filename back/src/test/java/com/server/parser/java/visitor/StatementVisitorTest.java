@@ -9,6 +9,7 @@ import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
 import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
+import com.server.parser.java.ast.statement.property.StatementProperties;
 import com.server.parser.java.constant.IntConstant;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;

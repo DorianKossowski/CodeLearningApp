@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-// TODO: make more generic Call class
 public class CallStatement extends Statement {
     private final CallInvocation callInvocation;
     private final List<Statement> contentStatements;

@@ -3,7 +3,7 @@ package com.server.parser.java.visitor.resolver;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.DoWhileStatement;
 import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.ast.statement.StatementProperties;
+import com.server.parser.java.ast.statement.property.StatementProperties;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.java.visitor.resolver.util.BreakHandler;
