@@ -217,6 +217,7 @@ objectRefName
 
 objectRefNameFirstSegment
     : identifier
+    | THIS
     ;
 
 literal
@@ -297,6 +298,7 @@ RETURN      : 'return' ;
 RPAREN      : ')' ;
 SEMICOLON   : ';' ;
 SWITCH      : 'switch' ;
+THIS        : 'this' ;
 WHILE       : 'while' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;
