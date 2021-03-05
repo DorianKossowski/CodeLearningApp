@@ -1,9 +1,9 @@
-package com.server.parser.util;
+package com.server.parser.java.value.util;
 
 import org.junit.jupiter.api.Test;
 
-import static com.server.parser.util.ValueType.ARRAY;
-import static com.server.parser.util.ValueType.GENERIC;
+import static com.server.parser.java.value.util.ValueType.ARRAY;
+import static com.server.parser.java.value.util.ValueType.GENERIC;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ValueTypeTest {

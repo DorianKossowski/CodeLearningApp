@@ -7,7 +7,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.Value;
-import com.server.parser.util.ValuePreparer;
+import com.server.parser.java.value.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;

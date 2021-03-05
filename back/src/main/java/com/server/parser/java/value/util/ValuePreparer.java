@@ -1,8 +1,9 @@
-package com.server.parser.util;
+package com.server.parser.java.value.util;
 
 import com.google.common.base.Preconditions;
 import com.server.parser.java.ast.expression.*;
 import com.server.parser.java.value.*;
+import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.ResolvingException;
 
 public class ValuePreparer {

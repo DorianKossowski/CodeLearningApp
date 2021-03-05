@@ -3,7 +3,7 @@ package com.server.parser.java.ast.expression;
 import com.server.parser.java.constant.Constant;
 import com.server.parser.java.constant.DoubleConstant;
 import com.server.parser.java.value.Value;
-import com.server.parser.util.ValuePreparer;
+import com.server.parser.java.value.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Objects;

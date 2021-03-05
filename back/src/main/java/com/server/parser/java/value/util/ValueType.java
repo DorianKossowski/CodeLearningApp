@@ -1,4 +1,4 @@
-package com.server.parser.util;
+package com.server.parser.java.value.util;
 
 import java.util.Arrays;
 
