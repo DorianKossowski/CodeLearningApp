@@ -19,6 +19,13 @@ public abstract class DelegatingContext extends JavaContext {
         setParameters(context.getParameters());
     }
 
+    public abstract JavaContext createLocalContext();
+
+    @Override
+    public ObjectValue getThisValue() {
+        return context.getThisValue();
+    }
+
     @Override
     public Variable getVariable(String name) {
         return context.getVariable(name);
@@ -37,18 +44,8 @@ public abstract class DelegatingContext extends JavaContext {
     }
 
     @Override
-    public JavaContext createLocalContext() {
-        return context.createLocalContext();
-    }
-
-    @Override
     public Map<String, FieldVar> getFields() {
         return context.getFields();
-    }
-
-    @Override
-    public ObjectValue getThisValue() {
-        return context.getThisValue();
     }
 
     Map<String, Variable> getImmutableVariables() {

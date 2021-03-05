@@ -18,6 +18,9 @@ public abstract class JavaContext {
         return JavaVisitorsRegistry.get(elementClass);
     }
 
+    public abstract ObjectValue getThisValue();
+
+    // VARIABLES //
     public Variable getVariable(String name) {
         throw new UnsupportedOperationException();
     }
@@ -30,10 +33,7 @@ public abstract class JavaContext {
         throw new UnsupportedOperationException();
     }
 
-    public JavaContext createLocalContext() {
-        throw new UnsupportedOperationException();
-    }
-
+    // FIELDS //
     public Map<String, FieldVar> getStaticFields() {
         return getFields().entrySet().stream()
                 .filter(entry -> entry.getValue().isStatic())
@@ -46,8 +46,7 @@ public abstract class JavaContext {
 
     public abstract Map<String, FieldVar> getFields();
 
-    public abstract ObjectValue getThisValue();
-
+    // PARAMETERS //
     public void setParameters(ContextParameters parameters) {
         this.parameters = parameters;
     }

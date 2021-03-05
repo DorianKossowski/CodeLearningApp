@@ -103,7 +103,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitBreak() {
         JavaParser.BreakStatementContext c = HELPER.shouldParseToEof("break", JavaParser::breakStatement);
 
-        assertThatThrownBy(() -> visitor.visit(c, context))
+        assertThatThrownBy(() -> visitor.visit(c, methodContext))
                 .isExactlyInstanceOf(BreakStatementException.class)
                 .hasMessage("Problem podczas rozwiązywania: 'break' poza instrukcją switch oraz pętlą");
     }
@@ -113,7 +113,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitEmpty() {
         JavaParser.EmptyStatementContext c = HELPER.shouldParseToEof(";", JavaParser::emptyStatement);
 
-        assertThat(visitor.visit(c, context)).isSameAs(EmptyStatement.INSTANCE);
+        assertThat(visitor.visit(c, methodContext)).isSameAs(EmptyStatement.INSTANCE);
     }
 
     //*** FOR ***//

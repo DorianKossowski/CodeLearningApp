@@ -10,13 +10,18 @@ import java.util.Map;
 public class ClassContext extends JavaContext {
     private final Map<String, FieldVar> nameToField = new HashMap<>();
 
+    public MethodContext createEmptyMethodContext() {
+        return new MethodContext(this);
+    }
+
     @Override
     public ObjectValue getThisValue() {
         return null;
     }
 
-    public MethodContext createEmptyMethodContext() {
-        return new MethodContext(this);
+    @Override
+    public Map<String, FieldVar> getFields() {
+        return nameToField;
     }
 
     public void addField(FieldVar fieldVar) {
@@ -25,10 +30,5 @@ public class ClassContext extends JavaContext {
             throw new ResolvingException("Pole " + key + " już istnieje");
         });
         nameToField.put(varName, fieldVar);
-    }
-
-    @Override
-    public Map<String, FieldVar> getFields() {
-        return nameToField;
     }
 }

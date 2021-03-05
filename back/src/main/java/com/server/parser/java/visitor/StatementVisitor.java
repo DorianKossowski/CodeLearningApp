@@ -14,6 +14,7 @@ import com.server.parser.java.ast.statement.expression_statement.BreakExprStatem
 import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ContextParameters;
+import com.server.parser.java.context.DelegatingContext;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.*;
 import com.server.parser.util.TypeCorrectnessChecker;
@@ -32,10 +33,10 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     }
 
     public static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
-        private final JavaContext context;
+        private final DelegatingContext context;
 
         private StatementVisitorInternal(JavaContext context) {
-            this.context = Objects.requireNonNull(context, "context cannot be null");
+            this.context = (DelegatingContext) Objects.requireNonNull(context, "context cannot be null");
         }
 
         @Override
