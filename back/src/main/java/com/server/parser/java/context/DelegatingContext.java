@@ -51,16 +51,6 @@ public abstract class DelegatingContext extends JavaContext {
         return context.getThisValue();
     }
 
-    @Override
-    public String getMethodName() {
-        return context.getMethodName();
-    }
-
-    @Override
-    public String getMethodResultType() {
-        return context.getMethodResultType();
-    }
-
     Map<String, Variable> getImmutableVariables() {
         return ((DelegatingContext) context).getImmutableVariables();
     }

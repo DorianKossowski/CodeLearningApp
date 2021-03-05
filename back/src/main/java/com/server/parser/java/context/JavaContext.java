@@ -11,7 +11,7 @@ import com.server.parser.java.visitor.JavaVisitor;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class JavaContext implements MethodVerifiable {
+public abstract class JavaContext {
     private ContextParameters parameters;
 
     public <T extends AstElement> JavaVisitor<T> getVisitor(Class<T> elementClass) {

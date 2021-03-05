@@ -10,6 +10,7 @@ import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.call.reference.ConstructorCallReference;
 import com.server.parser.java.call.reference.PrintCallReference;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.*;
 import com.server.parser.util.exception.ResolvingException;
@@ -41,9 +42,10 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
         public CallStatement visitCall(JavaParser.CallContext ctx) {
             CallReference callReference = visitCallReference(ctx.callName());
             List<Expression> arguments = ctx.callArguments() == null ? Collections.emptyList() : visitArguments(ctx.callArguments());
-            CallInvocation invocation = new CallInvocation(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(),
+            ContextParameters parameters = context.getParameters();
+            CallInvocation invocation = new CallInvocation(JavaGrammarHelper.getOriginalText(ctx), parameters.getMethodName(),
                     callReference, arguments);
-            return context.getParameters().getCallResolver().resolve(context.getParameters().isStaticContext(), invocation);
+            return parameters.getCallResolver().resolve(parameters.isStaticContext(), invocation);
         }
 
         CallReference visitCallReference(JavaParser.CallNameContext ctx) {

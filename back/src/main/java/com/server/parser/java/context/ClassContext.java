@@ -31,9 +31,4 @@ public class ClassContext extends JavaContext {
     public Map<String, FieldVar> getFields() {
         return nameToField;
     }
-
-    @Override
-    public String getMethodName() {
-        return "";
-    }
 }

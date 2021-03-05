@@ -44,7 +44,7 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
                     .map(RuleContext::getText)
                     .collect(Collectors.toList());
             variableDef.setModifiers(modifiers);
-            variableDef.setContextMethodName(context.getMethodName());
+            variableDef.setContextMethodName(context.getParameters().getMethodName());
             context.addVariable(new MethodVar(variableDef));
             return variableDef;
         }

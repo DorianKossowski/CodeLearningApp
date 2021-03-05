@@ -11,10 +11,8 @@ import com.server.parser.util.exception.ResolvingException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class MethodContext extends DelegatingContext {
-    private MethodHeader methodHeader;
     private final Map<String, FieldVar> nameToField;
     private final Map<String, Variable> nameToVariable = new HashMap<>();
     private ObjectValue thisValue;
@@ -26,8 +24,7 @@ public class MethodContext extends DelegatingContext {
 
     public Method save(MethodHeader methodHeader, JavaParser.MethodBodyContext methodBody) {
         setParameters(ContextParameters.createMethodContextParameters(getParameters(), methodHeader.getName(),
-                methodHeader.isStatic()));
-        this.methodHeader = Objects.requireNonNull(methodHeader, "methodHeader cannot be null");
+                methodHeader.getResult(), methodHeader.isStatic()));
         Method method = new Method(this, methodHeader, methodBody);
         getParameters().getCallResolver().getCallableKeeper().keepCallable(method);
         return method;
@@ -51,16 +48,6 @@ public class MethodContext extends DelegatingContext {
     @Override
     Map<String, Variable> getImmutableVariables() {
         return ImmutableMap.copyOf(nameToVariable);
-    }
-
-    @Override
-    public String getMethodName() {
-        return methodHeader.getName();
-    }
-
-    @Override
-    public String getMethodResultType() {
-        return methodHeader.getResult();
     }
 
     @Override

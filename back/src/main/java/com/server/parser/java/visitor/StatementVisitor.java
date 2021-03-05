@@ -13,6 +13,7 @@ import com.server.parser.java.ast.statement.expression_statement.Assignment;
 import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.*;
 import com.server.parser.util.TypeCorrectnessChecker;
@@ -140,10 +141,11 @@ public class StatementVisitor extends JavaVisitor<Statement> {
             if (ctx.expression() != null) {
                 expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
             }
-            if (TypeCorrectnessChecker.isCorrect(context.getMethodResultType(), expression)) {
+            ContextParameters parameters = context.getParameters();
+            if (TypeCorrectnessChecker.isCorrect(parameters.getMethodResultType(), expression)) {
                 return new ReturnExprStatement(JavaGrammarHelper.getOriginalText(ctx), expression);
             }
-            throw new InvalidReturnedExpressionException(expression.getResolvedText(), context.getMethodResultType());
+            throw new InvalidReturnedExpressionException(expression.getResolvedText(), parameters.getMethodResultType());
         }
     }
 }
