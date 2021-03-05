@@ -1,4 +1,4 @@
-package com.server.app.util;
+package com.server.app.util.output;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.ast.expression.Expression;

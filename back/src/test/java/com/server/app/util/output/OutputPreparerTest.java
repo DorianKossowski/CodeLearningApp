@@ -1,4 +1,4 @@
-package com.server.app.util;
+package com.server.app.util.output;
 
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Task;

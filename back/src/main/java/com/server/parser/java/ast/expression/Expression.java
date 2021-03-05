@@ -1,11 +1,12 @@
 package com.server.parser.java.ast.expression;
 
+import com.server.app.util.output.Outputable;
 import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.value.Value;
 
 import java.util.Objects;
 
-public abstract class Expression extends AstElement {
+public abstract class Expression extends AstElement implements Outputable {
     private final String text;
 
     public Expression(String text) {
@@ -19,8 +20,6 @@ public abstract class Expression extends AstElement {
     public abstract Literal getLiteral();
 
     public abstract String getResolvedText();
-
-    public abstract String getOutput();
 
     public abstract Value getValue();
 }

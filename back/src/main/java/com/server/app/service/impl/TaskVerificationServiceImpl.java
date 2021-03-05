@@ -3,7 +3,7 @@ package com.server.app.service.impl;
 import com.google.common.base.Preconditions;
 import com.server.app.model.dto.VerificationResultDto;
 import com.server.app.service.TaskVerificationService;
-import com.server.app.util.OutputPreparer;
+import com.server.app.util.output.OutputPreparer;
 import com.server.parser.java.JavaParserAdapter;
 import com.server.parser.java.ast.Task;
 import com.server.parser.java.task.JavaTaskParserAdapter;
