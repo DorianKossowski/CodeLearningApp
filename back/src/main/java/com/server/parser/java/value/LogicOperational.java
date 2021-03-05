@@ -1,4 +1,4 @@
-package com.server.parser.java.ast.value;
+package com.server.parser.java.value;
 
 public interface LogicOperational {
     boolean and(Value v2);

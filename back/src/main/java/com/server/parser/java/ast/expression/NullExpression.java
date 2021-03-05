@@ -1,7 +1,7 @@
 package com.server.parser.java.ast.expression;
 
-import com.server.parser.java.ast.value.NullValue;
-import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.value.NullValue;
+import com.server.parser.java.value.Value;
 
 public class NullExpression extends Expression {
     public static final NullExpression INSTANCE = new NullExpression();

@@ -3,8 +3,8 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
-import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.value.Value;
 import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.ParserRuleContext;
 

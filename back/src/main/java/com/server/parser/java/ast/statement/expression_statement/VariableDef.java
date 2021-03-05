@@ -1,6 +1,6 @@
 package com.server.parser.java.ast.statement.expression_statement;
 
-import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.value.Value;
 
 import java.util.ArrayList;
 import java.util.List;

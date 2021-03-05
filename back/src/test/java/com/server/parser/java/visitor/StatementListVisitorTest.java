@@ -4,8 +4,8 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.expression.UninitializedExpression;
 import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.ast.value.UninitializedValue;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.java.value.UninitializedValue;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 

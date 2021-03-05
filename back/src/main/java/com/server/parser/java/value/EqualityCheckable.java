@@ -1,4 +1,4 @@
-package com.server.parser.java.ast.value;
+package com.server.parser.java.value;
 
 public interface EqualityCheckable {
     boolean equalsOperator(Value v2);

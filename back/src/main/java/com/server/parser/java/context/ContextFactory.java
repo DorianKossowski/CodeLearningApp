@@ -1,7 +1,7 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.call.CallResolver;
+import com.server.parser.java.value.ObjectValue;
 import com.server.parser.util.ClonerFactory;
 
 public class ContextFactory {

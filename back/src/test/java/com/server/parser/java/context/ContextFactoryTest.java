@@ -2,8 +2,8 @@ package com.server.parser.java.context;
 
 import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.expression.Instance;
-import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.call.CallResolver;
+import com.server.parser.java.value.ObjectValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

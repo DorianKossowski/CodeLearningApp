@@ -3,7 +3,7 @@ package com.server.parser.java.context;
 import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.FieldVarInitExpressionFunction;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.value.Value;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

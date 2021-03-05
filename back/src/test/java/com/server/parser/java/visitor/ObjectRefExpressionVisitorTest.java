@@ -8,13 +8,13 @@ import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
-import com.server.parser.java.ast.value.ObjectValue;
-import com.server.parser.java.ast.value.ObjectWrapperValue;
-import com.server.parser.java.ast.value.PrimitiveValue;
-import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.constant.IntConstant;
 import com.server.parser.java.constant.StringConstant;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.java.value.ObjectValue;
+import com.server.parser.java.value.ObjectWrapperValue;
+import com.server.parser.java.value.PrimitiveValue;
+import com.server.parser.java.value.Value;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 

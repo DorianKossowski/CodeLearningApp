@@ -2,7 +2,7 @@ package com.server.parser.util;
 
 import com.google.common.base.Preconditions;
 import com.server.parser.java.ast.expression.*;
-import com.server.parser.java.ast.value.*;
+import com.server.parser.java.value.*;
 import com.server.parser.util.exception.ResolvingException;
 
 public class ValuePreparer {

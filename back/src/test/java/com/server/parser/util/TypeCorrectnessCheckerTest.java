@@ -3,7 +3,7 @@ package com.server.parser.util;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
-import com.server.parser.java.ast.value.ObjectValue;
+import com.server.parser.java.value.ObjectValue;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

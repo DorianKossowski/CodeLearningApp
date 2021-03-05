@@ -1,4 +1,4 @@
-package com.server.parser.java.ast.value;
+package com.server.parser.java.value;
 
 import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.expression.Expression;

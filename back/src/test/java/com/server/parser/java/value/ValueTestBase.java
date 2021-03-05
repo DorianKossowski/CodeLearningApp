@@ -1,4 +1,4 @@
-package com.server.parser.java.ast.value;
+package com.server.parser.java.value;
 
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.params.ParameterizedTest;

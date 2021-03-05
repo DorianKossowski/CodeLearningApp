@@ -8,9 +8,9 @@ import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
-import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.ClonerFactory;
 

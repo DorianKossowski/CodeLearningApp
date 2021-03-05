@@ -1,5 +1,6 @@
-package com.server.parser.java.ast.value;
+package com.server.parser.java.value;
 
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.constant.Constant;
 import com.server.parser.java.constant.ConstantProvider;
@@ -8,12 +9,22 @@ import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingUninitializedException;
 import com.server.parser.util.exception.ResolvingVoidException;
 
-public class ObjectWrapperValue extends ObjectValue implements ConstantProvider {
+public class PrimitiveValue extends Value implements ConstantProvider {
     protected final Constant<?> constant;
 
-    public ObjectWrapperValue(Literal literal) {
+    public PrimitiveValue(Literal literal) {
         super(literal);
         this.constant = literal.getConstant();
+    }
+
+    @Override
+    public Value getAttribute(String name) {
+        throw new ResolvingException(String.format("Nie można uzyskiwać wartości %s z prymitywa", name));
+    }
+
+    @Override
+    public void updateAttribute(String name, Expression newExpression) {
+        throw new ResolvingException(String.format("Nie można aktualizować wartości %s z prymitywa", name));
     }
 
     @Override
@@ -23,21 +34,14 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
 
     @Override
     public String toString() {
-        return expression.getResolvedText();
+        return constant.toString();
     }
 
     @Override
     public boolean equalsOperator(Value v2) {
-        if (v2 instanceof PrimitiveValue) {
-            PrimitiveValue primitiveValue = (PrimitiveValue) v2;
-            return constant.equalsC(primitiveValue.getConstant(), EqualityOperatorService.EqualityType.PRIMITIVE);
-        }
-        if (v2 instanceof ObjectWrapperValue) {
-            ObjectWrapperValue wrapperValue = (ObjectWrapperValue) v2;
-            return constant.equalsC(wrapperValue.getConstant(), EqualityOperatorService.EqualityType.OBJECT);
-        }
-        if (v2 instanceof NullValue) {
-            return false;
+        if (v2 instanceof ConstantProvider) {
+            ConstantProvider constantProvider = (ConstantProvider) v2;
+            return constant.equalsC(constantProvider.getConstant(), EqualityOperatorService.EqualityType.PRIMITIVE);
         }
         if (v2 instanceof UninitializedValue) {
             throw new ResolvingUninitializedException(v2.expression.getText());
@@ -45,27 +49,12 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
         if (v2 instanceof VoidValue) {
             throw new ResolvingVoidException();
         }
-        if (v2 instanceof ObjectValue) {
-            throw new ResolvingException("Nie można porównać z " + v2.getExpression().getResolvedText());
-        }
-        throw new UnsupportedOperationException();
+        throw new ResolvingException("Nie można porównać z " + v2.getExpression().getResolvedText());
     }
 
     @Override
     public boolean equalsMethod(Value v2) {
-        if (v2 instanceof NullValue) {
-            return false;
-        }
-        if (v2 instanceof UninitializedValue) {
-            throw new ResolvingUninitializedException(v2.expression.getText());
-        }
-        if (v2 instanceof VoidValue) {
-            throw new ResolvingVoidException();
-        }
-        if (v2 instanceof ConstantProvider) {
-            return constant.c.equals(((ConstantProvider) v2).getConstant().c);
-        }
-        return false;
+        throw new ResolvingException("Nie można wywołać metody equals na prymitywie");
     }
 
     @Override
