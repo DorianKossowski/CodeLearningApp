@@ -6,6 +6,7 @@ import com.server.parser.java.ast.*;
 import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ClassContext;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -34,7 +35,7 @@ public class ClassVisitor extends JavaVisitor<ClassAst> {
         @Override
         public ClassAst visitClassDec(JavaParser.ClassDecContext ctx) {
             ClassHeader header = visit(ctx.classHeader());
-            context.setName(header.getName());
+            context.setParameters(ContextParameters.createClassContextParameters(header.getName()));
             ClassBody body = visit(ctx.classBody());
             return new ClassAst(header, body);
         }
@@ -67,8 +68,8 @@ public class ClassVisitor extends JavaVisitor<ClassAst> {
         }
 
         private Method createDefaultConstructor(MethodContext methodContext) {
-            ConstructorHeader header = new ConstructorHeader(Collections.emptyList(), methodContext.getClassName(),
-                    Collections.emptyList());
+            ConstructorHeader header = new ConstructorHeader(Collections.emptyList(),
+                    methodContext.getParameters().getClassName(), Collections.emptyList());
             return methodContext.save(header, null);
         }
     }

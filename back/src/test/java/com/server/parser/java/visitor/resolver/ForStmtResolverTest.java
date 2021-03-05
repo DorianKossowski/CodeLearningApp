@@ -8,6 +8,7 @@ import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.context.ClassContext;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -44,8 +45,7 @@ class ForStmtResolverTest {
 
     @Test
     void shouldBreakIn() {
-        ClassContext context = new ClassContext();
-        context.setName("");
+        ClassContext context = createClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
         methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
                 mock(JavaParser.MethodBodyContext.class));
@@ -57,9 +57,15 @@ class ForStmtResolverTest {
         assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
     }
 
+    private ClassContext createClassContext() {
+        ClassContext context = new ClassContext();
+        context.setParameters(ContextParameters.createClassContextParameters(""));
+        return context;
+    }
+
     @Test
     void shouldThrowWhenInfinityLoop() {
-        ClassContext context = new ClassContext();
+        ClassContext context = createClassContext();
         MethodContext methodContext = context.createEmptyMethodContext();
         methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
                 mock(JavaParser.MethodBodyContext.class));

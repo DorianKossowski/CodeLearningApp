@@ -12,6 +12,7 @@ import com.server.parser.java.ast.statement.expression_statement.ReturnExprState
 import com.server.parser.java.ast.statement.property.StatementProperties;
 import com.server.parser.java.constant.IntConstant;
 import com.server.parser.java.context.ClassContext;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.value.PrimitiveComputableValue;
 import com.server.parser.java.variable.MethodVar;
@@ -78,7 +79,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     private MethodContext createRealMethodContext() {
         ClassContext context = new ClassContext();
-        context.setName("");
+        context.setParameters(ContextParameters.createClassContextParameters(""));
         MethodContext methodContext = context.createEmptyMethodContext();
         MethodHeader methodHeader = new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList());
         methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));

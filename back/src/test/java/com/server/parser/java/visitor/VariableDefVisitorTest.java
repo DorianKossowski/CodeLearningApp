@@ -13,6 +13,7 @@ import com.server.parser.java.value.Value;
 import com.server.parser.java.variable.FieldVar;
 import com.server.parser.java.variable.Variable;
 import com.server.parser.util.exception.ResolvingException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -27,9 +28,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class VariableDefVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
-    private final MethodContext methodContext = createMethodContext(METHOD_NAME, "void");
+    private MethodContext methodContext;
 
     private final VariableDefVisitor visitor = new VariableDefVisitor();
+
+    @Override
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        methodContext = createMethodContext(METHOD_NAME, "void");
+    }
 
     static Stream<Arguments> decWithLiteralsProvider() {
         return Stream.of(
@@ -160,7 +168,6 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldCreateClassTypeVar() {
-        context.setName("MyClass");
         String input = "MyClass m";
         JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 

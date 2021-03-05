@@ -6,6 +6,7 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ClassContext;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.MethodContext;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -19,12 +20,12 @@ import static org.mockito.Mockito.when;
 public class JavaVisitorTestBase {
     static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
 
-    protected ClassContext context = new ClassContext();
+    protected ClassContext context;
 
     @BeforeEach
     void setUp() {
         context = new ClassContext();
-        context.setName("");
+        context.setParameters(ContextParameters.createClassContextParameters("MyClass"));
     }
 
     protected MethodContext createMethodContext() {

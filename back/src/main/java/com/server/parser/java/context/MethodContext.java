@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-// TODO refactor contexts (maybe inheritance)
 public class MethodContext extends DelegatingContext {
     private MethodHeader methodHeader;
     private final Map<String, FieldVar> nameToField;
@@ -23,9 +22,12 @@ public class MethodContext extends DelegatingContext {
     MethodContext(ClassContext classContext) {
         super(classContext);
         this.nameToField = new HashMap<>(classContext.getFields());
+        setParameters(classContext.getParameters());
     }
 
     public Method save(MethodHeader methodHeader, JavaParser.MethodBodyContext methodBody) {
+        setParameters(ContextParameters.createMethodContextParameters(getParameters(), methodHeader.getName(),
+                methodHeader.isStatic()));
         this.methodHeader = Objects.requireNonNull(methodHeader, "methodHeader cannot be null");
         Method method = new Method(this, methodHeader, methodBody);
         getCallResolver().getCallableKeeper().keepCallable(method);

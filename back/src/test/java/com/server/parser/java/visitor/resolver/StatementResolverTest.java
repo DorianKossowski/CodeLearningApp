@@ -8,6 +8,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.constant.StringConstant;
 import com.server.parser.java.context.ClassContext;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.value.ObjectWrapperValue;
@@ -64,8 +65,11 @@ class StatementResolverTest {
     @Test
     void shouldThrowWhenSingleVariableDefAsContent() {
         ClassContext context = new ClassContext();
+        context.setParameters(ContextParameters.createClassContextParameters(""));
         MethodContext methodContext = context.createEmptyMethodContext();
-        methodContext.save(mock(MethodHeader.class, RETURNS_DEEP_STUBS), mock(JavaParser.MethodBodyContext.class));
+        MethodHeader methodHeader = mock(MethodHeader.class, RETURNS_DEEP_STUBS);
+        when(methodHeader.getName()).thenReturn("");
+        methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));
         JavaParser.StatementContext c = HELPER.shouldParseToEof("String str = \"true\";", JavaParser::statement);
 
         assertThatThrownBy(() -> ForStmtResolver.validateLoopContent(methodContext, c))

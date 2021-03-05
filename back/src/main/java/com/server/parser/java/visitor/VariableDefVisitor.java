@@ -74,7 +74,7 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
         }
 
         private void validateType(String type) {
-            if (type.equals(context.getClassName())) {
+            if (type.equals(context.getParameters().getClassName())) {
                 return;
             }
             if (ValueType.findByOriginalType(type) == ValueType.GENERIC) {

@@ -47,7 +47,6 @@ class ClassVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitClassBody() {
-        context.setName("MyClass");
         String input = "int i; void m(){} MyClass(){} void m2(){} private String s;";
         JavaParser.ClassBodyContext c = HELPER.shouldParseToEof(input, JavaParser::classBody);
 
@@ -63,7 +62,6 @@ class ClassVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldCreateDefaultConstructorForEmptyClassBody() {
-        context.setName("MyClass");
         String input = "";
         JavaParser.ClassBodyContext c = HELPER.shouldParseToEof(input, JavaParser::classBody);
 

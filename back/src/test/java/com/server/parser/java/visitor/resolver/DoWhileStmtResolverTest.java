@@ -9,6 +9,7 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.context.ClassContext;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class DoWhileStmtResolverTest {
 
     private MethodContext createMethodContext() {
         ClassContext context = new ClassContext();
-        context.setName("");
+        context.setParameters(ContextParameters.createClassContextParameters(""));
         MethodContext methodContext = context.createEmptyMethodContext();
         methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
                 mock(JavaParser.MethodBodyContext.class));

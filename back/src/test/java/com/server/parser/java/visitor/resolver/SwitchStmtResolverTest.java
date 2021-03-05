@@ -13,6 +13,7 @@ import com.server.parser.java.ast.statement.property.StatementProperties;
 import com.server.parser.java.constant.BooleanConstant;
 import com.server.parser.java.constant.StringConstant;
 import com.server.parser.java.context.ClassContext;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.value.ObjectWrapperValue;
@@ -167,6 +168,7 @@ class SwitchStmtResolverTest {
 
     private MethodContext createRealMethodContext() {
         ClassContext context = new ClassContext();
+        context.setParameters(ContextParameters.createClassContextParameters(""));
         MethodContext methodContext = context.createEmptyMethodContext();
         MethodHeader methodHeader = new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList());
         methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));

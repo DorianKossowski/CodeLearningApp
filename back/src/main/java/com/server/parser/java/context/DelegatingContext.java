@@ -12,7 +12,7 @@ import com.server.parser.util.exception.ResolvingException;
 import java.util.Map;
 import java.util.Objects;
 
-public abstract class DelegatingContext implements JavaContext {
+public abstract class DelegatingContext extends JavaContext {
     private final JavaContext context;
 
     public DelegatingContext(JavaContext context) {
@@ -49,11 +49,6 @@ public abstract class DelegatingContext implements JavaContext {
     @Override
     public Map<String, FieldVar> getFields() {
         return context.getFields();
-    }
-
-    @Override
-    public String getClassName() {
-        return context.getClassName();
     }
 
     @Override

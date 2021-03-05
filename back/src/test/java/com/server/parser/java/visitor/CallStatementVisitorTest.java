@@ -40,6 +40,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
     @Override
     @BeforeEach
     void setUp() {
+        super.setUp();
         methodContext = createMethodContext(METHOD_NAME, "void");
     }
 

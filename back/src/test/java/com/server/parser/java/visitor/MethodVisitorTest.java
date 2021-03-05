@@ -8,6 +8,7 @@ import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,8 +18,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MethodVisitorTest extends JavaVisitorTestBase {
     private final MethodVisitor visitor = new MethodVisitor();
-    private final MethodVisitor.MethodVisitorInternal visitorInternal =
-            new MethodVisitor.MethodVisitorInternal(createMethodContext());
+    private MethodVisitor.MethodVisitorInternal visitorInternal;
+
+    @Override
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        visitorInternal = new MethodVisitor.MethodVisitorInternal(createMethodContext());
+    }
 
     @Test
     void shouldVisitMethodArgs() {
@@ -58,7 +65,6 @@ class MethodVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitMethodDec() {
-        context.setName("MyClass");
         String input = "void m(String[] a) { println(\"HELLO\"); }";
         JavaParser.MethodDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodDec);
         MethodContext methodContext = createMethodContext();
@@ -77,7 +83,6 @@ class MethodVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldVisitConstructorDec() {
-        context.setName("MyClass");
         String input = "MyClass(String[] a) { println(\"HELLO\"); }";
         JavaParser.ConstructorDecContext c = HELPER.shouldParseToEof(input, JavaParser::constructorDec);
 
@@ -95,7 +100,6 @@ class MethodVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldThrowWhenWrongConstructorName() {
-        context.setName("MyClass");
         String input = "X() {}";
         JavaParser.ConstructorDecContext c = HELPER.shouldParseToEof(input, JavaParser::constructorDec);
 

@@ -21,7 +21,7 @@ public class Method implements AstElement {
     }
 
     public String getClassName() {
-        return methodContext.getClassName();
+        return methodContext.getParameters().getClassName();
     }
 
     public MethodHeader getHeader() {

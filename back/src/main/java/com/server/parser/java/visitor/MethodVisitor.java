@@ -6,6 +6,7 @@ import com.server.parser.java.ast.ConstructorHeader;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.variable.MethodVar;
@@ -74,9 +75,10 @@ public class MethodVisitor extends JavaVisitor<Method> {
                 modifiers.add(ctx.constructorModifier().getText());
             }
             String identifier = ctx.identifier().getText();
-            if (!identifier.equals(context.getClassName())) {
+            ContextParameters parameters = context.getParameters();
+            if (!identifier.equals(parameters.getClassName())) {
                 throw new ResolvingException(
-                        String.format("Konstruktor %s różny od nazwy klasy %s", identifier, context.getClassName()));
+                        String.format("Konstruktor %s różny od nazwy klasy %s", identifier, parameters.getClassName()));
             }
             List<VariableDef> args = visit(ctx.methodArgs());
             return new ConstructorHeader(modifiers, identifier, args);

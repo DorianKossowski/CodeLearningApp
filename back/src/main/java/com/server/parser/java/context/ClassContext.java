@@ -8,19 +8,9 @@ import com.server.parser.util.exception.ResolvingException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClassContext implements JavaContext {
+public class ClassContext extends JavaContext {
     private final CallResolver callResolver = new CallResolver();
     private final Map<String, FieldVar> nameToField = new HashMap<>();
-    private String name;
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getClassName() {
-        return name;
-    }
 
     @Override
     public boolean isStaticContext() {
