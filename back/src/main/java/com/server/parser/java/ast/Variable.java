@@ -4,12 +4,11 @@ import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class Variable implements Serializable {
+public abstract class Variable {
     private final List<String> modifiers;
     private final String type;
     private final String name;

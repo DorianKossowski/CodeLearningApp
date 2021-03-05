@@ -2,10 +2,9 @@ package com.server.parser.java.ast.value;
 
 import com.server.parser.java.ast.expression.Expression;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Value implements EqualityCheckable, LogicOperational, Serializable {
+public abstract class Value implements EqualityCheckable, LogicOperational {
     //TODO creation expression <- Literal, Constructor?
     protected final Expression expression;
 

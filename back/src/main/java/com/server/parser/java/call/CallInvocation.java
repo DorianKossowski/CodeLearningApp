@@ -2,11 +2,10 @@ package com.server.parser.java.call;
 
 import com.server.parser.java.ast.expression.Expression;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class CallInvocation implements Serializable {
+public class CallInvocation {
     private final String text;
     private final String contextMethodName;
     private final String name;

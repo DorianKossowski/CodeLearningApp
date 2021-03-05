@@ -11,12 +11,11 @@ import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.call.reference.ConstructorCallReference;
 import com.server.parser.java.call.reference.PrintCallReference;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CallResolver implements Serializable {
+public class CallResolver {
     private final CallableKeeper callableKeeper;
     private final ConstructorCallExecutor constructorCallExecutor;
     private final MethodCallExecutor methodCallExecutor;

@@ -16,14 +16,13 @@ import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import com.server.parser.util.exception.ResolvingException;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public abstract class CallExecutor implements Serializable {
+public abstract class CallExecutor {
     static final int MAX_EXECUTION_LEVEL = 10;
     private int executionLevel = 0;
     private final StatementListVisitor visitor;
