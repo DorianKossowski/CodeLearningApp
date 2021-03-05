@@ -13,7 +13,7 @@ public class ObjectWrapperValue extends ObjectValue implements ConstantProvider 
 
     public ObjectWrapperValue(Literal literal) {
         super(literal);
-        this.constant = expression.getConstant();
+        this.constant = literal.getConstant();
     }
 
     @Override

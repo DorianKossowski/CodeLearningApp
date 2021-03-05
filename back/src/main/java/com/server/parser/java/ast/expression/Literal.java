@@ -45,7 +45,6 @@ public class Literal extends Expression {
         return constant.getRawValue();
     }
 
-    @Override
     public Constant<?> getConstant() {
         return constant;
     }

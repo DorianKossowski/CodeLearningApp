@@ -37,7 +37,7 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
         ObjectRefExpression expression = visitor.visit(c, methodContext);
 
         assertThat(expression.getText()).isEqualTo("x");
-        assertThat(expression.getConstant().c).isEqualTo("value");
+        assertThat(expression.getLiteral().getConstant().c).isEqualTo("value");
     }
 
     private Variable createStringVariable(String name) {

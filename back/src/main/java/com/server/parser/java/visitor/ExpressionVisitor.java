@@ -94,7 +94,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         }
 
         private Literal createNegatedExpression(Expression expression) {
-            Constant<?> constant = expression.getConstant();
+            Constant<?> constant = expression.getLiteral().getConstant();
             if (constant instanceof IntConstant) {
                 return new Literal(new IntConstant((Integer) constant.c * -1));
             }

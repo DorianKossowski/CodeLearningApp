@@ -89,7 +89,7 @@ public class ValuePreparer {
             return new PrimitiveComputableValue(value.getExpression().getLiteral());
         }
         if (value instanceof ObjectWrapperValue) {
-            return new PrimitiveValue(value.getExpression());
+            return new PrimitiveValue((Literal) value.getExpression());
         }
         throw new UnsupportedOperationException();
     }

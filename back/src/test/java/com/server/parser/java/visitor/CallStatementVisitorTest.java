@@ -7,7 +7,6 @@ import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.StringConstant;
-import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.UninitializedExpression;
@@ -101,7 +100,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
 
     static Stream<Arguments> valueToCallOnProvider() {
         return Stream.of(
-                Arguments.of(new PrimitiveValue(mock(Expression.class)), "Nie można wywołać metody na prymitywie"),
+                Arguments.of(new PrimitiveValue(mock(Literal.class)), "Nie można wywołać metody na prymitywie"),
                 Arguments.of(NullValue.INSTANCE, "NullPointerException"),
                 Arguments.of(VoidValue.INSTANCE, "Niedozowolone wyrażenie typu void"),
                 Arguments.of(new UninitializedValue(mock(UninitializedExpression.class)), "Niezainicjalizowana zmienna null")

@@ -1,6 +1,5 @@
 package com.server.parser.java.ast.expression;
 
-import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.value.Value;
 
 import java.util.Objects;
@@ -33,10 +32,5 @@ public class ObjectRefExpression extends Expression {
     @Override
     public String getOutput() {
         return expression.getOutput();
-    }
-
-    @Override
-    public Constant<?> getConstant() {
-        return expression.getConstant();
     }
 }

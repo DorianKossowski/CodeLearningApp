@@ -23,7 +23,7 @@ class EmptyExpressionPreparerTest {
         Expression expression = EmptyExpressionPreparer.prepare("float");
 
         assertThat(expression).isExactlyInstanceOf(Literal.class);
-        assertThat(expression.getConstant().c).isEqualTo(0.0);
+        assertThat(expression.getLiteral().getConstant().c).isEqualTo(0.0);
     }
 
     @Test

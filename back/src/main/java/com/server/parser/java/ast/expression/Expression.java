@@ -1,7 +1,6 @@
 package com.server.parser.java.ast.expression;
 
 import com.server.parser.java.ast.AstElement;
-import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.value.Value;
 
 import java.util.Objects;
@@ -24,7 +23,4 @@ public abstract class Expression extends AstElement {
     public abstract String getOutput();
 
     public abstract Value getValue();
-
-    //TODO make Literal class method
-    public abstract Constant<?> getConstant();
 }
