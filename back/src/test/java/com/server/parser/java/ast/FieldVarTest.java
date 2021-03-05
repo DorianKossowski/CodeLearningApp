@@ -1,9 +1,9 @@
 package com.server.parser.java.ast;
 
-import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.ast.value.NullValue;
+import com.server.parser.java.constant.StringConstant;
 import com.server.parser.java.context.JavaContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

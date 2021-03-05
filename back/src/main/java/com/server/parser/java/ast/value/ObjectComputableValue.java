@@ -1,8 +1,8 @@
 package com.server.parser.java.ast.value;
 
 import com.server.parser.java.ast.Computable;
-import com.server.parser.java.ast.constant.Constant;
 import com.server.parser.java.ast.expression.Literal;
+import com.server.parser.java.constant.Constant;
 
 public class ObjectComputableValue extends ObjectWrapperValue implements Computable {
 

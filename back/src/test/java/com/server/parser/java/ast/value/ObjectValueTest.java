@@ -2,12 +2,12 @@ package com.server.parser.java.ast.value;
 
 import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.FieldVarInitExpressionFunction;
-import com.server.parser.java.ast.constant.BooleanConstant;
-import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.UninitializedExpression;
+import com.server.parser.java.constant.BooleanConstant;
+import com.server.parser.java.constant.StringConstant;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;

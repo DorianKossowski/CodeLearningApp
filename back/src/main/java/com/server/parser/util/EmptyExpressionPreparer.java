@@ -1,13 +1,13 @@
 package com.server.parser.util;
 
-import com.server.parser.java.ast.constant.BooleanConstant;
-import com.server.parser.java.ast.constant.CharacterConstant;
-import com.server.parser.java.ast.constant.DoubleConstant;
-import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.UninitializedExpression;
+import com.server.parser.java.constant.BooleanConstant;
+import com.server.parser.java.constant.CharacterConstant;
+import com.server.parser.java.constant.DoubleConstant;
+import com.server.parser.java.constant.IntConstant;
 
 public class EmptyExpressionPreparer {
 

@@ -1,9 +1,9 @@
 package com.server.parser.util;
 
-import com.server.parser.java.ast.constant.BooleanConstant;
-import com.server.parser.java.ast.constant.Constant;
-import com.server.parser.java.ast.constant.DoubleConstant;
-import com.server.parser.java.ast.constant.IntConstant;
+import com.server.parser.java.constant.BooleanConstant;
+import com.server.parser.java.constant.Constant;
+import com.server.parser.java.constant.DoubleConstant;
+import com.server.parser.java.constant.IntConstant;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

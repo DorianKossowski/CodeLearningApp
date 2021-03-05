@@ -1,10 +1,10 @@
 package com.server.parser.util;
 
 import com.google.common.collect.ImmutableMap;
-import com.server.parser.java.ast.constant.BooleanConstant;
-import com.server.parser.java.ast.constant.Constant;
-import com.server.parser.java.ast.constant.DoubleConstant;
-import com.server.parser.java.ast.constant.IntConstant;
+import com.server.parser.java.constant.BooleanConstant;
+import com.server.parser.java.constant.Constant;
+import com.server.parser.java.constant.DoubleConstant;
+import com.server.parser.java.constant.IntConstant;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Map;

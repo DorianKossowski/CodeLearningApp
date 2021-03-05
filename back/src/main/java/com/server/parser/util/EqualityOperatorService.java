@@ -1,6 +1,6 @@
 package com.server.parser.util;
 
-import com.server.parser.java.ast.constant.*;
+import com.server.parser.java.constant.*;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.function.BiFunction;
@@ -80,7 +80,7 @@ public class EqualityOperatorService {
                 return intValue == (Double) c2;
             }
             throw new ResolvingException("Nie można porównać typu całkowitego z " + c2.getClass().getSimpleName());
-            
+
         }
         if (constant2 instanceof IntConstant) {
             return OBJECT_EQUAL.apply(constant1.c, c2);

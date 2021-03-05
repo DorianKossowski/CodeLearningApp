@@ -1,4 +1,4 @@
-package com.server.parser.java.ast.constant;
+package com.server.parser.java.constant;
 
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;

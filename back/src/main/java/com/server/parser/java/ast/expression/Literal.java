@@ -1,8 +1,8 @@
 package com.server.parser.java.ast.expression;
 
-import com.server.parser.java.ast.constant.Constant;
-import com.server.parser.java.ast.constant.DoubleConstant;
 import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.constant.Constant;
+import com.server.parser.java.constant.DoubleConstant;
 import com.server.parser.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 

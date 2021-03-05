@@ -1,7 +1,7 @@
 package com.server.parser.util;
 
-import com.server.parser.java.ast.constant.CharacterConstant;
-import com.server.parser.java.ast.constant.IntConstant;
+import com.server.parser.java.constant.CharacterConstant;
+import com.server.parser.java.constant.IntConstant;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
