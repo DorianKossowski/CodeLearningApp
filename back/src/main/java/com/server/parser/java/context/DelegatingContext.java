@@ -20,11 +20,6 @@ public abstract class DelegatingContext implements JavaContext {
     }
 
     @Override
-    public void addField(FieldVar fieldVar) {
-        context.addField(fieldVar);
-    }
-
-    @Override
     public Variable getVariable(String name) {
         return context.getVariable(name);
     }

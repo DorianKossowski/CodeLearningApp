@@ -18,10 +18,6 @@ public interface JavaContext extends MethodVerifiable {
         return JavaVisitorsRegistry.get(elementClass);
     }
 
-    default void addField(FieldVar fieldVar) {
-        throw new UnsupportedOperationException();
-    }
-
     default Variable getVariable(String name) {
         throw new UnsupportedOperationException();
     }

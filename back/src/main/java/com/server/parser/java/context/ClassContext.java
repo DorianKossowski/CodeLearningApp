@@ -36,7 +36,6 @@ public class ClassContext implements JavaContext {
         return new MethodContext(this);
     }
 
-    @Override
     public void addField(FieldVar fieldVar) {
         String varName = fieldVar.getName();
         nameToField.computeIfPresent(varName, (key, $) -> {

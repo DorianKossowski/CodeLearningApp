@@ -8,6 +8,7 @@ import com.server.parser.java.ast.statement.expression_statement.ArgumentVarDef;
 import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.util.ValueType;
 import com.server.parser.java.variable.FieldVar;
@@ -55,7 +56,7 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
                     .map(RuleContext::getText)
                     .collect(Collectors.toList());
             variableDef.setModifiers(modifiers);
-            context.addField(new FieldVar(variableDef));
+            ((ClassContext) context).addField(new FieldVar(variableDef));
             return variableDef;
         }
 
