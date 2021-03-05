@@ -4,6 +4,7 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.statement.expression_statement.ArgumentVarDef;
 import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
@@ -62,9 +63,7 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
         public VariableDef visitSingleMethodArg(JavaParser.SingleMethodArgContext ctx) {
             String type = visitValidType(ctx.type());
             String id = textVisitor.visit(ctx.identifier());
-            // TODO ArgumentVarDef?
-            return new MethodVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id,
-                    EmptyExpressionPreparer.prepare(type), false);
+            return new ArgumentVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id);
         }
 
         private String visitValidType(JavaParser.TypeContext typeContext) {
