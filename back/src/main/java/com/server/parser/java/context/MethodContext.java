@@ -22,7 +22,6 @@ public class MethodContext extends DelegatingContext {
     MethodContext(ClassContext classContext) {
         super(classContext);
         this.nameToField = new HashMap<>(classContext.getFields());
-        setParameters(classContext.getParameters());
     }
 
     public Method save(MethodHeader methodHeader, JavaParser.MethodBodyContext methodBody) {
@@ -30,18 +29,13 @@ public class MethodContext extends DelegatingContext {
                 methodHeader.isStatic()));
         this.methodHeader = Objects.requireNonNull(methodHeader, "methodHeader cannot be null");
         Method method = new Method(this, methodHeader, methodBody);
-        getCallResolver().getCallableKeeper().keepCallable(method);
+        getParameters().getCallResolver().getCallableKeeper().keepCallable(method);
         return method;
     }
 
     @Override
     public JavaContext createLocalContext() {
         return new LocalContext(this);
-    }
-
-    @Override
-    public boolean isStaticContext() {
-        return methodHeader.isStatic();
     }
 
     @Override
@@ -81,7 +75,7 @@ public class MethodContext extends DelegatingContext {
         }
         if (nameToField.containsKey(var)) {
             FieldVar variable = nameToField.get(var);
-            if (methodHeader.isStatic() && !variable.isStatic()) {
+            if (getParameters().isStaticContext() && !variable.isStatic()) {
                 throw new ResolvingException("Nie można użyć " + var + " ze statycznego kontekstu");
             }
             return variable;

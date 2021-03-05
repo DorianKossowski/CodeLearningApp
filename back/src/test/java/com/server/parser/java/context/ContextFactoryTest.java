@@ -47,11 +47,12 @@ class ContextFactoryTest {
     @Test
     void shouldHaveSameCallResolver() {
         ClassContext classContext = new ClassContext();
-        CallResolver callResolver = classContext.getCallResolver();
+        classContext.setParameters(ContextParameters.createClassContextParameters(""));
+        CallResolver callResolver = classContext.getParameters().getCallResolver();
 
         JavaContext executionContext = ContextFactory.createStaticExecutionContext(classContext);
 
-        assertThat(executionContext.getCallResolver()).isSameAs(callResolver);
+        assertThat(executionContext.getParameters().getCallResolver()).isSameAs(callResolver);
     }
 
     @Test

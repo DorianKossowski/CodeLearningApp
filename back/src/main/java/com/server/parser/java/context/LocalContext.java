@@ -13,7 +13,6 @@ public class LocalContext extends DelegatingContext {
 
     LocalContext(JavaContext context) {
         super(context);
-        setParameters(context.getParameters());
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.constant.StringConstant;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.value.*;
 import com.server.parser.java.variable.MethodVar;
@@ -61,7 +62,8 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldVisitMethodCallWithoutArgs() {
         MethodHeader header = new MethodHeader(Collections.emptyList(), "void", "someMethod", Collections.emptyList());
-        context.getCallResolver().getCallableKeeper().keepCallable(new Method(methodContext, header, HELPER.shouldParseToEof("", JavaParser::methodBody)));
+        ContextParameters parameters = context.getParameters();
+        parameters.getCallResolver().getCallableKeeper().keepCallable(new Method(methodContext, header, HELPER.shouldParseToEof("", JavaParser::methodBody)));
         String input = "someMethod()";
         JavaParser.CallContext c = HELPER.shouldParseToEof(input, JavaParser::call);
         methodContext.setThisValue(mock(ObjectValue.class));
@@ -80,7 +82,8 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
         VariableDef arg1 = new MethodVarDef("", "String", "a1", NullExpression.INSTANCE, false);
         VariableDef arg2 = new MethodVarDef("", "String", "a2", NullExpression.INSTANCE, false);
         MethodHeader header = new MethodHeader(Collections.emptyList(), "void", "someMethod", Arrays.asList(arg1, arg2));
-        context.getCallResolver().getCallableKeeper().keepCallable(new Method(methodContext, header, HELPER.shouldParseToEof("", JavaParser::methodBody)));
+        ContextParameters parameters = context.getParameters();
+        parameters.getCallResolver().getCallableKeeper().keepCallable(new Method(methodContext, header, HELPER.shouldParseToEof("", JavaParser::methodBody)));
         methodContext.addVariable(createStringVariable("a1"));
         methodContext.addVariable(createStringVariable("a2"));
         methodContext.addVariable(createStringVariable("var"));

@@ -43,7 +43,7 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
             List<Expression> arguments = ctx.callArguments() == null ? Collections.emptyList() : visitArguments(ctx.callArguments());
             CallInvocation invocation = new CallInvocation(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(),
                     callReference, arguments);
-            return context.getCallResolver().resolve(context.isStaticContext(), invocation);
+            return context.getParameters().getCallResolver().resolve(context.getParameters().isStaticContext(), invocation);
         }
 
         CallReference visitCallReference(JavaParser.CallNameContext ctx) {

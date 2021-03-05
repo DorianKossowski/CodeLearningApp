@@ -1,7 +1,6 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.Value;
 import com.server.parser.java.value.util.ValuePreparer;
@@ -17,6 +16,7 @@ public abstract class DelegatingContext extends JavaContext {
 
     public DelegatingContext(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
+        setParameters(context.getParameters());
     }
 
     @Override
@@ -42,18 +42,8 @@ public abstract class DelegatingContext extends JavaContext {
     }
 
     @Override
-    public CallResolver getCallResolver() {
-        return context.getCallResolver();
-    }
-
-    @Override
     public Map<String, FieldVar> getFields() {
         return context.getFields();
-    }
-
-    @Override
-    public boolean isStaticContext() {
-        return context.isStaticContext();
     }
 
     @Override

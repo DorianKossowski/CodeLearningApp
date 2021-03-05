@@ -3,7 +3,6 @@ package com.server.parser.java.context;
 import com.server.parser.java.JavaVisitorsRegistry;
 import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.variable.FieldVar;
 import com.server.parser.java.variable.Variable;
@@ -35,8 +34,6 @@ public abstract class JavaContext implements MethodVerifiable {
         throw new UnsupportedOperationException();
     }
 
-    public abstract CallResolver getCallResolver();
-
     public Map<String, FieldVar> getStaticFields() {
         return getFields().entrySet().stream()
                 .filter(entry -> entry.getValue().isStatic())
@@ -48,8 +45,6 @@ public abstract class JavaContext implements MethodVerifiable {
     }
 
     public abstract Map<String, FieldVar> getFields();
-
-    public abstract boolean isStaticContext();
 
     public abstract ObjectValue getThisValue();
 

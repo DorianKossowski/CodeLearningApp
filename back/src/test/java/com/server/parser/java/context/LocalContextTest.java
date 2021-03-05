@@ -1,6 +1,5 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.Value;
 import com.server.parser.java.variable.FieldVar;
@@ -26,8 +25,6 @@ class LocalContextTest {
     private final Map<String, Variable> nameToVariable = new HashMap<>();
 
     @Mock
-    private CallResolver callResolver;
-    @Mock
     private Value value;
     @Mock
     private ObjectValue objectValue;
@@ -45,7 +42,6 @@ class LocalContextTest {
     }
 
     private void setUpLocalContext() {
-        when(context.getCallResolver()).thenReturn(callResolver);
         when(context.getFields()).thenReturn(nameToField);
         when(context.getImmutableVariables()).thenReturn(nameToVariable);
         when(context.getThisValue()).thenReturn(objectValue);
