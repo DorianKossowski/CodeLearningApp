@@ -212,7 +212,11 @@ nullExpr
     ;
 
 objectRefName
-    : objectRefNameFirstSegment ( '.' identifier )*
+    : objectRefNameFirstSegment objectRefNameNextSegment*
+    ;
+
+objectRefNameNextSegment
+    : '.' identifier
     ;
 
 objectRefNameFirstSegment

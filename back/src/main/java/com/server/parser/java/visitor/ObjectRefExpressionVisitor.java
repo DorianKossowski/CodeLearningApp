@@ -27,11 +27,18 @@ public class ObjectRefExpressionVisitor extends JavaVisitor<ObjectRefExpression>
         @Override
         public ObjectRefExpression visitObjectRefName(JavaParser.ObjectRefNameContext ctx) {
             Value currentValue = resolveFirstSegment(ctx.objectRefNameFirstSegment());
-            for (JavaParser.IdentifierContext nextSegmentCtx : ctx.identifier()) {
-                String nextSegmentName = textVisitor.visit(nextSegmentCtx);
-                currentValue = currentValue.getAttribute(nextSegmentName);
+            for (JavaParser.ObjectRefNameNextSegmentContext nextSegmentCtx : ctx.objectRefNameNextSegment()) {
+                currentValue = resolveNextSegment(currentValue, nextSegmentCtx);
             }
             return new ObjectRefExpression(textVisitor.visit(ctx), currentValue);
+        }
+
+        private Value resolveNextSegment(Value currentValue, JavaParser.ObjectRefNameNextSegmentContext nextSegmentCtx) {
+            if (nextSegmentCtx.identifier() != null) {
+                String nextSegmentName = textVisitor.visit(nextSegmentCtx.identifier());
+                currentValue = currentValue.getAttribute(nextSegmentName);
+            }
+            return currentValue;
         }
 
         private Value resolveFirstSegment(JavaParser.ObjectRefNameFirstSegmentContext ctx) {
