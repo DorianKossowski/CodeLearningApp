@@ -167,11 +167,16 @@ varModifier
     ;
 
 call
+    : ( objectRefName '.' )? callSegment
+    ;
+
+
+callSegment
     : callName '(' callArguments? ')'
     ;
 
 callName
-    : ( objectRefName '.' )? methodName=identifier
+    : methodName=identifier
     | constructorCallName
     | specialPrintCallName
     ;
@@ -223,10 +228,6 @@ objectRefNameFirstSegment
     : identifier
     | callSegment
     | THIS
-    ;
-
-callSegment
-    : identifier '(' callArguments? ')'
     ;
 
 literal

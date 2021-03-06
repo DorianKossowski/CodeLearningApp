@@ -40,28 +40,29 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
 
         @Override
         public CallStatement visitCall(JavaParser.CallContext ctx) {
-            CallReference callReference = visitCallReference(ctx.callName());
-            List<Expression> arguments = ctx.callArguments() == null ? Collections.emptyList() : visitArguments(ctx.callArguments());
+            Value valueToCallOn = context.getThisValue();
+            if (ctx.objectRefName() != null) {
+                ObjectRefExpression objectRef = context.getVisitor(ObjectRefExpression.class).visit(ctx.objectRefName(), context);
+                valueToCallOn = objectRef.getValue();
+                validateValueToCallOn(objectRef, valueToCallOn);
+            }
+            JavaParser.CallSegmentContext callSegmentCtx = ctx.callSegment();
+            CallReference callReference = visitCallReference((ObjectValue) valueToCallOn, callSegmentCtx.callName());
+            List<Expression> arguments = callSegmentCtx.callArguments() == null ? Collections.emptyList() : visitArguments(callSegmentCtx.callArguments());
             ContextParameters parameters = context.getParameters();
             CallInvocation invocation = new CallInvocation(JavaGrammarHelper.getOriginalText(ctx), parameters.getMethodName(),
                     callReference, arguments);
             return parameters.getCallResolver().resolve(parameters.isStaticContext(), invocation);
         }
 
-        CallReference visitCallReference(JavaParser.CallNameContext ctx) {
+        private CallReference visitCallReference(ObjectValue valueToCallOn, JavaParser.CallNameContext ctx) {
             if (ctx.specialPrintCallName() != null) {
                 return new PrintCallReference(ctx.specialPrintCallName().getText());
             }
             if (ctx.constructorCallName() != null) {
                 return new ConstructorCallReference(ctx.constructorCallName().classSeg.getText());
             }
-            if (ctx.objectRefName() != null) {
-                ObjectRefExpression objectRef = context.getVisitor(ObjectRefExpression.class).visit(ctx.objectRefName(), context);
-                Value value = objectRef.getValue();
-                validateValueToCallOn(objectRef, value);
-                return new CallReference((ObjectValue) value, ctx.methodName.getText());
-            }
-            return new CallReference(context.getThisValue(), ctx.methodName.getText());
+            return new CallReference(valueToCallOn, ctx.methodName.getText());
         }
 
         private void validateValueToCallOn(ObjectRefExpression objectRef, Value value) {
