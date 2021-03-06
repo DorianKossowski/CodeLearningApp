@@ -4,12 +4,11 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
-import com.server.parser.java.constant.IntConstant;
+import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.constant.StringConstant;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.ObjectWrapperValue;
-import com.server.parser.java.value.PrimitiveValue;
 import com.server.parser.java.value.Value;
 import com.server.parser.java.variable.FieldVar;
 import com.server.parser.java.variable.FieldVarInitExpressionFunction;
@@ -22,7 +21,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
     private final ObjectRefExpressionVisitor visitor = new ObjectRefExpressionVisitor();
@@ -60,7 +59,7 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldVisitObjectRefWithAttributeExpression() {
         MethodContext methodContext = createMethodContext();
-        PrimitiveValue attributeValue = new PrimitiveValue(new Literal(new IntConstant()));
+        Value attributeValue = mock(Value.class, RETURNS_DEEP_STUBS);
         methodContext.addVariable(createObjectWithIntAttribute("a", "b", attributeValue));
         String input = "a.b";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
@@ -79,7 +78,7 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldVisitThis() {
         MethodContext methodContext = createMethodContext();
-        PrimitiveValue attributeValue = new PrimitiveValue(new Literal(new IntConstant()));
+        Value attributeValue = mock(Value.class, RETURNS_DEEP_STUBS);
         Variable variable = createObjectWithIntAttribute("obj", "a", attributeValue);
         methodContext.setThisValue((ObjectValue) variable.getValue());
         String input = "this.a";
@@ -99,5 +98,28 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
         assertThatThrownBy(() -> visitor.visit(c, methodContext))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Nie można użyć słowa kluczowego this ze statycznego kontekstu");
+    }
+
+    @Test
+    void shouldVisitReferenceToCallResult() {
+        MethodContext methodContext = mock(MethodContext.class, RETURNS_DEEP_STUBS);
+        when(methodContext.getParameters().getMethodName()).thenReturn("");
+        Value attributeValue = mock(Value.class, RETURNS_DEEP_STUBS);
+        mockContextWithCall(methodContext, attributeValue);
+        String input = "fun().a";
+        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
+
+        ObjectRefExpression expression = visitor.visit(c, methodContext);
+
+        assertThat(expression.getValue()).isSameAs(attributeValue);
+    }
+
+    private void mockContextWithCall(MethodContext methodContext, Value attributeValue) {
+        CallStatement callStatement = mock(CallStatement.class);
+        FieldVar fieldVar = new FieldVar("int", "a", mock(FieldVarInitExpressionFunction.class), attributeValue);
+        Instance instance = new Instance("MyClass", Collections.singletonMap("a", fieldVar));
+        when(callStatement.getResult()).thenReturn(instance);
+
+        when(methodContext.getParameters().getCallResolver().resolve(anyBoolean(), any())).thenReturn(callStatement);
     }
 }

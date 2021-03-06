@@ -221,7 +221,12 @@ objectRefNameNextSegment
 
 objectRefNameFirstSegment
     : identifier
+    | callSegment
     | THIS
+    ;
+
+callSegment
+    : identifier '(' callArguments? ')'
     ;
 
 literal

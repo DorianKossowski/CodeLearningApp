@@ -250,7 +250,7 @@ public class JavaParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "a", "a.b", "a.b.c", "this.a"
+            "a", "a.b", "a.b.c", "this.a", "fun().a"
     })
     void shouldParseObjectRefName(String input) {
         HELPER.shouldParseToEof(input, JavaParser::objectRefName);
