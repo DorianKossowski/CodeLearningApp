@@ -135,7 +135,7 @@ emptyStatement
     ;
 
 expressionStatement
-    : call
+    : callStatement
     | methodVarDec
     | assignment
     | breakStatement
@@ -166,10 +166,9 @@ varModifier
     : 'final'
     ;
 
-call
+callStatement
     : ( objectRefName '.' )? callSegment
     ;
-
 
 callSegment
     : callName '(' callArguments? ')'
@@ -206,7 +205,6 @@ expression
 
 exprAtom
     :  LPAREN expression RPAREN
-    | call
     | objectRefName
     | literal
     | nullExpr
@@ -221,7 +219,9 @@ objectRefName
     ;
 
 objectRefNameNextSegment
-    : '.' identifier
+    : '.'
+    ( identifier
+    | callSegment )
     ;
 
 objectRefNameFirstSegment

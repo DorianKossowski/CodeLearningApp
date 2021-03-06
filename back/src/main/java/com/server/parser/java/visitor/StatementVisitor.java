@@ -58,7 +58,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
         //*** CALL ***//
         @Override
-        public CallStatement visitCall(JavaParser.CallContext ctx) {
+        public CallStatement visitCallStatement(JavaParser.CallStatementContext ctx) {
             return context.getVisitor(CallStatement.class).visit(ctx, context);
         }
 

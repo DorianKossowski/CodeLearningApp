@@ -1,0 +1,37 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    int i;
+
+	public static void main(String[] args) {
+		System.out.println(new MyClass().setI(1).i);
+		System.out.println(creator().i);
+		MyClass m = new MyClass().setI(2);
+		System.out.println(m.i);
+		creator().setI(3).print();
+	}
+
+	static MyClass creator() {
+	    return new MyClass();
+	}
+
+    int getI() {
+        return i;
+    }
+
+	MyClass setI(int i) {
+	    this.i = i;
+	    return this;
+	}
+
+	void print() {
+	    System.out.println(i);
+	}
+}
+
+### OUTPUT ###
+1
+0
+2
+3

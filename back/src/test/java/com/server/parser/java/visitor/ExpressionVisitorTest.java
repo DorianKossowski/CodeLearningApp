@@ -4,6 +4,7 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
+import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.constant.StringConstant;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.value.ObjectWrapperValue;
@@ -89,8 +90,8 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
 
         Expression expression = visitor.visit(c, methodContext);
 
-        assertThat(expression).isExactlyInstanceOf(Literal.class);
-        assertThat(expression.getText()).isEqualTo("true");
+        assertThat(expression).isExactlyInstanceOf(ObjectRefExpression.class);
+        assertThat(expression.getText()).isEqualTo(input);
         assertThat(expression.getLiteral().getConstant().c).isEqualTo(true);
     }
 

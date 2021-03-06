@@ -47,6 +47,10 @@ public class ObjectRefResolver {
             String nextSegmentName = textVisitor.visit(ctx.identifier());
             return currentValue.getAttribute(nextSegmentName);
         }
+        if (ctx.callSegment() != null) {
+            CallStatement callStatement = resolveCall(currentValue, ctx.callSegment());
+            return callStatement.getResult().getValue();
+        }
         throw new UnsupportedOperationException("Unsupported segment context: " +
                 Iterables.getOnlyElement(ctx.children).getClass().getSimpleName());
     }
@@ -78,7 +82,7 @@ public class ObjectRefResolver {
         return parameters.getCallResolver().resolve(parameters.isStaticContext(), invocation);
     }
 
-    private void validateValueToCallOn(Value value) {
+    void validateValueToCallOn(Value value) {
         if (value == null) {
             // static call
             return;

@@ -7,7 +7,6 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
-import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.constant.*;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.Computable;
@@ -115,19 +114,10 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
             if (ctx.objectRefName() != null) {
                 return visit(ctx.objectRefName());
             }
-            if (ctx.call() != null) {
-                return visit(ctx.call());
-            }
             if (ctx.nullExpr() != null) {
                 return visit(ctx.nullExpr());
             }
             throw new UnsupportedOperationException();
-        }
-
-        //*** CALL ***//
-        @Override
-        public Expression visitCall(JavaParser.CallContext ctx) {
-            return context.getVisitor(CallStatement.class).visit(ctx, context).getResult();
         }
 
         //*** LITERAL **//

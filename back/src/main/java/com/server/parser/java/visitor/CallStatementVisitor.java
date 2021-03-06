@@ -26,7 +26,7 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
         }
 
         @Override
-        public CallStatement visitCall(JavaParser.CallContext ctx) {
+        public CallStatement visitCallStatement(JavaParser.CallStatementContext ctx) {
             Value valueToCallOn = context.getThisValue();
             if (ctx.objectRefName() != null) {
                 ObjectRefExpression objectRef = context.getVisitor(ObjectRefExpression.class).visit(ctx.objectRefName(), context);
