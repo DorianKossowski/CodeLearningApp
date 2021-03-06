@@ -90,17 +90,6 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
     }
 
     @Test
-    void shouldThrowWhenThisInStaticContext() {
-        MethodContext methodContext = createMethodContext();
-        String input = "this.a";
-        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
-
-        assertThatThrownBy(() -> visitor.visit(c, methodContext))
-                .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Nie można użyć słowa kluczowego this ze statycznego kontekstu");
-    }
-
-    @Test
     void shouldVisitReferenceToCallResult() {
         MethodContext methodContext = mock(MethodContext.class, RETURNS_DEEP_STUBS);
         when(methodContext.getParameters().getMethodName()).thenReturn("");

@@ -4,7 +4,7 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.resolver.ObjectRefResolver;
+import com.server.parser.java.visitor.resolver.ObjectRefValueResolver;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Objects;
@@ -24,7 +24,7 @@ public class ObjectRefExpressionVisitor extends JavaVisitor<ObjectRefExpression>
 
         @Override
         public ObjectRefExpression visitObjectRefName(JavaParser.ObjectRefNameContext ctx) {
-            ObjectRefResolver resolver = new ObjectRefResolver(context);
+            ObjectRefValueResolver resolver = new ObjectRefValueResolver(context);
             return new ObjectRefExpression(textVisitor.visit(ctx), resolver.resolveValue(ctx));
         }
     }

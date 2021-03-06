@@ -2,11 +2,10 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.Value;
-import com.server.parser.java.visitor.resolver.ObjectRefResolver;
+import com.server.parser.java.visitor.resolver.ObjectRefValueResolver;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Objects;
@@ -28,12 +27,11 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
         @Override
         public CallStatement visitCallStatement(JavaParser.CallStatementContext ctx) {
             Value valueToCallOn = context.getThisValue();
+            ObjectRefValueResolver objectRefValueResolver = new ObjectRefValueResolver(context);
             if (ctx.objectRefName() != null) {
-                ObjectRefExpression objectRef = context.getVisitor(ObjectRefExpression.class).visit(ctx.objectRefName(), context);
-                valueToCallOn = objectRef.getValue();
+                valueToCallOn = objectRefValueResolver.resolveValue(ctx.objectRefName());
             }
-            ObjectRefResolver objectRefResolver = new ObjectRefResolver(context);
-            return objectRefResolver.resolveCall(valueToCallOn, ctx.callSegment());
+            return objectRefValueResolver.resolveCall(valueToCallOn, ctx.callSegment());
         }
     }
 }

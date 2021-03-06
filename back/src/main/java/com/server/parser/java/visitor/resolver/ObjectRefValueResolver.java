@@ -25,12 +25,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ObjectRefResolver {
+public class ObjectRefValueResolver {
     private static final JavaDefaultTextVisitor textVisitor = new JavaDefaultTextVisitor();
 
     private final JavaContext context;
 
-    public ObjectRefResolver(JavaContext context) {
+    public ObjectRefValueResolver(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
     }
 
@@ -105,7 +105,7 @@ public class ObjectRefResolver {
         throw new UnsupportedOperationException();
     }
 
-    private CallReference resolveCallReference(ObjectValue valueToCallOn, JavaParser.CallNameContext ctx) {
+    CallReference resolveCallReference(ObjectValue valueToCallOn, JavaParser.CallNameContext ctx) {
         if (ctx.specialPrintCallName() != null) {
             return new PrintCallReference(ctx.specialPrintCallName().getText());
         }
