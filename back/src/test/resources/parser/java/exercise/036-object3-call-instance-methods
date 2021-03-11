@@ -1,0 +1,54 @@
+### TASK ###
+-> class
+    with field
+        with modifiers:
+        with type: "int"
+        with name: "field"
+    with constructor
+        with name: "MyClass"
+        with args: { "int", - }
+-> method
+    with name: "getDouble"
+    with args:
+-> statement
+    with text: "MyClass myClass1 = new MyClass(0)"
+    in method: "main"
+    log info: "Definicja zmiennej myClass1"
+-> statement
+    with text: "MyClass myClass2 = new MyClass(1)"
+    in method: "main"
+    log info: "Definicja zmiennej myClass2"
+-> statement
+    with text: "System.out.println(myClass1.getDouble())"
+    with resolved: "System.out.println(0)"
+    in method: "main"
+    log info: "Wywołanie println z wywołaniem metody (na obiekcie myClass1) jako parametr"
+-> statement
+    with text: "System.out.println(myClass2.getDouble())"
+    with resolved: "System.out.println(2)"
+    in method: "main"
+    log info: "Wywołanie println z wywołaniem metody (na obiekcie myClass2) jako parametr"
+
+### INPUT ###
+public class MyClass {
+    int field;
+
+    public static void main(String[] args){
+        MyClass myClass1 = new MyClass(0);
+        MyClass myClass2 = new MyClass(1);
+        System.out.println(myClass1.getDouble());
+        System.out.println(myClass2.getDouble());
+    }
+
+    MyClass(int value) {
+        field = value;
+    }
+
+    int getDouble() {
+        return field * 2;
+    }
+}
+
+### OUTPUT ###
+0
+2

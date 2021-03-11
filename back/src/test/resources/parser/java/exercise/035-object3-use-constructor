@@ -1,0 +1,42 @@
+### TASK ###
+-> class
+    with field
+        with modifiers:
+        with type: "int"
+        with name: "field"
+    with constructor
+        with name: "MyClass"
+        with args:
+    with constructor
+        with name: "MyClass"
+        with args: { "int", - }
+-> statement
+    with text: "MyClass myClass1 = new MyClass()"
+    in method: "main"
+    log info: "Definicja zmiennej myClass1"
+-> statement
+    with text: "MyClass myClass2 = new MyClass(1)"
+    in method: "main"
+    log info: "Definicja zmiennej myClass2"
+
+### INPUT ###
+public class MyClass {
+    int field;
+
+    public static void main(String[] args){
+        MyClass myClass1 = new MyClass();
+        MyClass myClass2 = new MyClass(1);
+    }
+
+    MyClass() {
+    }
+
+    MyClass(int value) {
+        System.out.print("Inicjalizacja wartością: ");
+        System.out.println(value);
+        field = value;
+    }
+}
+
+### OUTPUT ###
+Inicjalizacja wartością: 1
