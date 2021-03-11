@@ -23,8 +23,10 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
         Preconditions.checkArgument(input != null, "input cannot be null");
 
         Task resolvedTask;
+        String output;
         try {
             resolvedTask = getResolvedUserInputTask(input);
+            output = getOutput(resolvedTask);
         } catch (PrintableParseException e) {
             logger.error("Invalid input:\n" + e.getMessage());
             return VerificationResultDto.invalidInput(e.getMessage(), e.getLineNumber());
@@ -33,7 +35,6 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
             return VerificationResultDto.invalid(e);
         }
 
-        String output = getOutput(resolvedTask);
         try {
             verify(task, resolvedTask);
             logger.info("Verification completed successfully");

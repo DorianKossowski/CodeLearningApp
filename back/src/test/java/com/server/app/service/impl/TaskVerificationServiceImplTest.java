@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+// TODO test logging
 class TaskVerificationServiceImplTest {
     private static final String TASK = "task";
     private static final String INPUT = "input";
@@ -78,5 +79,15 @@ class TaskVerificationServiceImplTest {
         VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
         assertThat(resultDto).isEqualTo(VerificationResultDto.valid(OUTPUT));
+    }
+
+    @Test
+    void shouldCatchWhenResolvingExceptionDuringOutput() {
+        ResolvingException exception = new ResolvingException("ERROR");
+        doThrow(exception).when(verificationService).getOutput(resolvedTask);
+
+        VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
+
+        assertThat(resultDto).isEqualTo(VerificationResultDto.invalid(new Exception("Problem podczas rozwiązywania: ERROR")));
     }
 }
