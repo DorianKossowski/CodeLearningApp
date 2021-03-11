@@ -1,0 +1,37 @@
+### TASK ###
+-> class
+    with field
+        with modifiers:
+        with type: "int"
+        with name: "field"
+    with field
+        with modifiers:
+        with type: "MyClass"
+        with name: "inner"
+-> statement
+    with text: "MyClass myClass = new MyClass()"
+    in method: "main"
+    log info: "Definicja zmiennej myClass"
+-> statement
+    with text: "System.out.println(myClass.inner.field)"
+    with resolved: "System.out.println(5)"
+    in method: "main"
+    log info: "Wywołanie println z parametrem myClass.inner.field"
+
+### INPUT ###
+public class MyClass {
+    int field;
+    MyClass inner;
+
+    public static void main(String[] args){
+        MyClass myClass = new MyClass();
+
+        myClass.inner = new MyClass();
+        myClass.inner.field = 5;
+
+        System.out.println(myClass.inner.field);
+    }
+}
+
+### OUTPUT ###
+5
