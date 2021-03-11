@@ -1,5 +1,6 @@
 package com.server.parser.java.call.executor;
 
+import com.google.common.collect.ImmutableMap;
 import com.rits.cloning.Cloner;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Instance;
@@ -34,6 +35,8 @@ class ConstructorCallExecutorTest {
     private Cloner cloner;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Method method;
+    @Mock
+    private JavaContext context;
 
     private ConstructorCallExecutor executor;
 
@@ -122,9 +125,27 @@ class ConstructorCallExecutorTest {
         CallInvocation invocation = mock(CallInvocation.class, RETURNS_DEEP_STUBS);
 
         // when
-        List<Statement> statements = executor.executeInContext(method, invocation, mock(JavaContext.class));
+        List<Statement> statements = executor.executeInContext(method, invocation, context);
 
         // then
         assertThat(statements).isEmpty();
+    }
+
+    @Test
+    void shouldInitializeInstanceFields() {
+        FieldVar fieldVar = mock(FieldVar.class);
+        FieldVar staticFieldVar = mock(FieldVar.class);
+        when(staticFieldVar.isStatic()).thenReturn(true);
+        Map<String, FieldVar> fields = ImmutableMap.<String, FieldVar>builder()
+                .put("F1", fieldVar)
+                .put("F2", staticFieldVar)
+                .build();
+
+        executor.initializeInstanceFields(context, fields);
+
+        verify(fieldVar).isStatic();
+        verify(fieldVar).initialize(context);
+        verify(staticFieldVar).isStatic();
+        verifyNoMoreInteractions(staticFieldVar);
     }
 }

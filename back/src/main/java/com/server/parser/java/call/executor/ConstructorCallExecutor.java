@@ -35,9 +35,15 @@ public class ConstructorCallExecutor extends CallExecutor {
     public CallStatement execute(Method method, CallInvocation invocation) {
         Instance instance = prepareNewInstance(method);
         JavaContext executionContext = ContextFactory.createExecutionContext(new ObjectValue(instance), method.getMethodContext());
-        instance.getFields().values().forEach(fieldVar -> fieldVar.initialize(executionContext));
+        initializeInstanceFields(executionContext, instance.getFields());
         List<Statement> statements = executeInContext(method, invocation, executionContext);
         return new CallStatement(invocation, statements, instance);
+    }
+
+    void initializeInstanceFields(JavaContext executionContext, Map<String, FieldVar> fields) {
+        fields.values().stream()
+                .filter(fieldVar -> !fieldVar.isStatic())
+                .forEach(fieldVar -> fieldVar.initialize(executionContext));
     }
 
     Instance prepareNewInstance(Method method) {
