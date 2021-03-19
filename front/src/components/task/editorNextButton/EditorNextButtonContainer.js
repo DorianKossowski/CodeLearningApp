@@ -23,7 +23,7 @@ class EditorNextButtonContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-    isValid: state.task.isValid, // TODO use state from DB?
+    isValid: state.task.isValid,
     hasNext: state.task.hasNext
 });
 
