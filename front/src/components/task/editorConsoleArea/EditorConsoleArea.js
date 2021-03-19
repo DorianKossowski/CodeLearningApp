@@ -21,7 +21,15 @@ class EditorConsoleArea extends Component {
     }
 
     prepareConsoleOutput = output => {
-        return output?.split(/\r?\n/).join('<br>');
+        return output?.replace(/[&<>'"]/g, 
+        tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+          }[tag]))
+        .split(/\r?\n/).join('<br>');
     }
 }
 
