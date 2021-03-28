@@ -11,7 +11,6 @@ import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.variable.FieldVar;
 import com.server.parser.java.variable.FieldVarInitExpressionFunction;
-import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.ClonerFactory;
 
 import java.util.HashMap;
@@ -23,11 +22,10 @@ public class ConstructorCallExecutor extends CallExecutor {
     private final Cloner cloner;
 
     public ConstructorCallExecutor() {
-        this(new StatementListVisitor(), ClonerFactory.createCloner(FieldVarInitExpressionFunction.class));
+        this(ClonerFactory.createCloner(FieldVarInitExpressionFunction.class));
     }
 
-    ConstructorCallExecutor(StatementListVisitor visitor, Cloner cloner) {
-        super(visitor);
+    ConstructorCallExecutor(Cloner cloner) {
         this.cloner = Objects.requireNonNull(cloner, "cloner cannot be null");
     }
 

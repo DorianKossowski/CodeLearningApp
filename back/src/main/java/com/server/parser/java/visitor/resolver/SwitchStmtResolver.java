@@ -10,7 +10,6 @@ import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.PrimitiveValue;
 import com.server.parser.java.value.Value;
-import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.java.visitor.resolver.util.BreakHandler;
 import com.server.parser.java.visitor.resolver.util.ReturnHandler;
 import com.server.parser.util.exception.ResolvingException;
@@ -22,7 +21,6 @@ public class SwitchStmtResolver extends StatementResolver {
     private static final String EXCEPTION_PREFIX = "W instrukcji switch: ";
     private static final String EXCEPTION_SUFFIX = " nie jest jednego z typów: char, byte, short, int, Character, " +
             "Byte, Short, Integer, String";
-    private static final StatementListVisitor statementListVisitor = new StatementListVisitor();
     private static Integer defaultIndex;
 
     public static SwitchStatement resolve(JavaContext context, JavaParser.SwitchStatementContext switchCtx) {
@@ -72,7 +70,7 @@ public class SwitchStmtResolver extends StatementResolver {
         ArrayList<Statement> statements = new ArrayList<>();
         for (int i = startIndex; i < switchElements.size(); ++i) {
             SwitchElement switchElement = switchElements.get(i);
-            List<Statement> visitedStmts = statementListVisitor.visit(switchElement.getStatementListContext(), context);
+            List<Statement> visitedStmts = context.resolveStatements(context, switchElement.getStatementListContext());
             for (Statement visitedStmt : visitedStmts) {
                 addProperty(visitedStmt, StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
                 statements.add(visitedStmt);
@@ -159,7 +157,9 @@ public class SwitchStmtResolver extends StatementResolver {
 
     static void validateStatementLists(JavaContext context, List<JavaParser.StatementListContext> statementListContexts) {
         JavaContext validationContext = ContextFactory.createValidationContext(context);
-        statementListContexts.forEach(statementListContext -> statementListVisitor.visit(statementListContext, validationContext));
+        statementListContexts.forEach(
+                statementListContext -> validationContext.resolveStatements(validationContext, statementListContext)
+        );
     }
 
     static List<Expression> resolveLabelExpressions(JavaContext context,

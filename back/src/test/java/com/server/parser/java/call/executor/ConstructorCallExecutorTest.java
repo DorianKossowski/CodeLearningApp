@@ -11,7 +11,6 @@ import com.server.parser.java.ast.statement.expression_statement.ExpressionState
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.variable.FieldVar;
-import com.server.parser.java.visitor.StatementListVisitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
@@ -30,8 +29,6 @@ import static org.mockito.Mockito.*;
 class ConstructorCallExecutorTest {
     private static final String CLASS_NAME = "CLASS";
     @Mock
-    private StatementListVisitor visitor;
-    @Mock
     private Cloner cloner;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Method method;
@@ -43,7 +40,7 @@ class ConstructorCallExecutorTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        executor = new ConstructorCallExecutor(visitor, cloner);
+        executor = new ConstructorCallExecutor(cloner);
         when(method.getClassName()).thenReturn(CLASS_NAME);
     }
 

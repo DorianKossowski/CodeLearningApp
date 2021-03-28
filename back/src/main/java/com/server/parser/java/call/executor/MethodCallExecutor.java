@@ -12,20 +12,11 @@ import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.Value;
-import com.server.parser.java.visitor.StatementListVisitor;
 
 import java.util.Collections;
 import java.util.List;
 
 public class MethodCallExecutor extends CallExecutor {
-
-    public MethodCallExecutor() {
-        this(new StatementListVisitor());
-    }
-
-    MethodCallExecutor(StatementListVisitor visitor) {
-        super(visitor);
-    }
 
     @Override
     public CallStatement execute(Method method, CallInvocation invocation) {

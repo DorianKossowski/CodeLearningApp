@@ -4,7 +4,7 @@ import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.StatementListVisitor;
+import com.server.parser.java.context.MethodContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,11 +30,12 @@ public class JavaProgramRunner {
     }
 
     static class MainRunner {
-        private final StatementListVisitor statementListVisitor = new StatementListVisitor();
-
         public Optional<List<Statement>> run(List<Method> methods) {
             return getMainMethod(methods)
-                    .map(mainMethod -> statementListVisitor.visit(mainMethod.getBodyContext(), mainMethod.getMethodContext()));
+                    .map(mainMethod -> {
+                        MethodContext context = mainMethod.getMethodContext();
+                        return context.resolveStatements(context, mainMethod.getBodyContext().statementList());
+                    });
         }
 
         Optional<Method> getMainMethod(List<Method> methods) {

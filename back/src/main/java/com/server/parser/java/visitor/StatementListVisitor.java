@@ -11,15 +11,18 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-// TODO refactor using this visitor
 public class StatementListVisitor extends JavaVisitor<List<Statement>> {
-    private JavaContext context;
+    private final JavaContext context;
+
+    public StatementListVisitor(JavaContext context) {
+        this.context = Objects.requireNonNull(context, "context cannot be null");
+    }
 
     @Override
     public List<Statement> visit(ParserRuleContext ctx, JavaContext context) {
-        this.context = context;
-        return visit(ctx);
+        throw new UnsupportedOperationException();
     }
 
     @Override

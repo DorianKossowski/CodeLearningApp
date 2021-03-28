@@ -10,7 +10,6 @@ import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.Value;
-import com.server.parser.java.visitor.StatementListVisitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
@@ -23,8 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class MethodCallExecutorTest {
-    @Mock
-    private StatementListVisitor visitor;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Method method;
 
@@ -33,7 +30,7 @@ class MethodCallExecutorTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        executor = new MethodCallExecutor(visitor);
+        executor = new MethodCallExecutor();
         when(method.getHeader().getResult()).thenReturn("void");
     }
 

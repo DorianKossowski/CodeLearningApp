@@ -38,8 +38,8 @@ public class StatementVisitor extends JavaVisitor<Statement> {
 
     @Override
     public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
-        StatementListVisitor statementListVisitor = new StatementListVisitor();
-        List<Statement> statements = statementListVisitor.visit(ctx.statementList(), context.createLocalContext());
+        JavaContext localContext = context.createLocalContext();
+        List<Statement> statements = localContext.resolveStatements(localContext, ctx.statementList());
         return new BlockStatement(statements);
     }
 

@@ -11,25 +11,18 @@ import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public abstract class CallExecutor {
     static final int MAX_EXECUTION_LEVEL = 10;
     private int executionLevel = 0;
-    private final StatementListVisitor visitor;
-
-    CallExecutor(StatementListVisitor visitor) {
-        this.visitor = Objects.requireNonNull(visitor, "visitor cannot be null");
-    }
 
     public abstract CallStatement execute(Method method, CallInvocation invocation);
 
@@ -37,7 +30,9 @@ public abstract class CallExecutor {
         preExecution();
         assignInvocationParameters(method.getHeader().getArguments(), invocation.getArgs(), executionContext);
         JavaParser.MethodBodyContext bodyContext = method.getBodyContext();
-        List<Statement> statements = bodyContext != null ? visitor.visit(bodyContext, executionContext) : Collections.emptyList();
+        List<Statement> statements = bodyContext != null ?
+                executionContext.resolveStatements(executionContext, bodyContext.statementList()) :
+                Collections.emptyList();
         postExecution();
         return statements;
     }
