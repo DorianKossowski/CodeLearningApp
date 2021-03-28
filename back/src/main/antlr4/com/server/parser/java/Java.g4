@@ -73,10 +73,10 @@ singleMethodArg
     ;
 
 methodBody
-    : statementList
+    : statements
     ;
 
-statementList
+statements
     : statement*
     ;
 
@@ -114,7 +114,7 @@ switchStatement
     ;
 
 switchElement
-    : switchElementLabel+ statementList
+    : switchElementLabel+ statements
     ;
 
 switchElementLabel
@@ -123,7 +123,7 @@ switchElementLabel
     ;
 
 blockStatement
-    : '{' statementList '}'
+    : '{' statements '}'
     ;
 
 ifElseStatement

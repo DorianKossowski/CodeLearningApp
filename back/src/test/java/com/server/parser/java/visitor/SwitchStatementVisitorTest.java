@@ -109,7 +109,7 @@ class SwitchStatementVisitorTest extends JavaVisitorTestBase {
         assertThat(labelExpressions).hasSize(2);
         assertThat(labelExpressions.get(0)).isExactlyInstanceOf(Literal.class);
         assertThat(labelExpressions.get(1)).isNull();
-        assertThat(switchElement.getStatementListContext().getText()).isEqualTo("fun();");
+        assertThat(switchElement.getStatementsContext().getText()).isEqualTo("fun();");
     }
 
     @Test
@@ -141,7 +141,7 @@ class SwitchStatementVisitorTest extends JavaVisitorTestBase {
     void shouldCheckIfLabelIsFulfilled(Value value, boolean expectedFulfilled) {
         List<Expression> labelExpressions = Arrays.asList(new Literal(new StringConstant("str")), null);
         SwitchStatementVisitor.SwitchElement switchElement = new SwitchStatementVisitor.SwitchElement(labelExpressions,
-                mock(JavaParser.StatementListContext.class));
+                mock(JavaParser.StatementsContext.class));
 
         boolean labelFulfilled = visitor.isLabelFulfilled(value, switchElement);
 
@@ -181,7 +181,7 @@ class SwitchStatementVisitorTest extends JavaVisitorTestBase {
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
         methodContext.addVariable(new MethodVar("String", "str", value));
 
-        JavaParser.StatementListContext c = HELPER.shouldParseToEof("str=null;", JavaParser::statementList);
+        JavaParser.StatementsContext c = HELPER.shouldParseToEof("str=null;", JavaParser::statements);
 
         new SwitchStatementVisitor(methodContext).validateStatementLists(Collections.singletonList(c));
 

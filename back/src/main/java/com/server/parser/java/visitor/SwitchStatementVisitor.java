@@ -45,8 +45,8 @@ public class SwitchStatementVisitor extends JavaVisitor<SwitchStatement> {
     }
 
     private void validateSwitch(List<SwitchElement> switchElements) {
-        List<JavaParser.StatementListContext> switchStatementContexts = switchElements.stream()
-                .map(SwitchElement::getStatementListContext)
+        List<JavaParser.StatementsContext> switchStatementContexts = switchElements.stream()
+                .map(SwitchElement::getStatementsContext)
                 .collect(Collectors.toList());
         validateStatementLists(switchStatementContexts);
 
@@ -81,7 +81,7 @@ public class SwitchStatementVisitor extends JavaVisitor<SwitchStatement> {
         ArrayList<Statement> statements = new ArrayList<>();
         for (int i = startIndex; i < switchElements.size(); ++i) {
             SwitchElement switchElement = switchElements.get(i);
-            List<Statement> visitedStmts = context.resolveStatements(switchElement.getStatementListContext()).getStatements();
+            List<Statement> visitedStmts = context.resolveStatements(switchElement.getStatementsContext()).getStatements();
             for (Statement visitedStmt : visitedStmts) {
                 addProperty(visitedStmt, StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
                 statements.add(visitedStmt);
@@ -161,11 +161,11 @@ public class SwitchStatementVisitor extends JavaVisitor<SwitchStatement> {
 
     SwitchElement resolveSwitchElement(JavaParser.SwitchElementContext switchElementContext) {
         List<Expression> labelExpressions = resolveLabelExpressions(switchElementContext.switchElementLabel());
-        JavaParser.StatementListContext statementListContext = switchElementContext.statementList();
+        JavaParser.StatementsContext statementListContext = switchElementContext.statements();
         return new SwitchElement(labelExpressions, statementListContext);
     }
 
-    void validateStatementLists(List<JavaParser.StatementListContext> statementListContexts) {
+    void validateStatementLists(List<JavaParser.StatementsContext> statementListContexts) {
         JavaContext validationContext = ContextFactory.createValidationContext(context);
         statementListContexts.forEach(validationContext::resolveStatements);
     }
@@ -194,19 +194,19 @@ public class SwitchStatementVisitor extends JavaVisitor<SwitchStatement> {
 
     static class SwitchElement {
         private final List<Expression> labelExpressions;
-        private final JavaParser.StatementListContext statementListContext;
+        private final JavaParser.StatementsContext statementsContext;
 
-        SwitchElement(List<Expression> labelExpressions, JavaParser.StatementListContext statementListContext) {
+        SwitchElement(List<Expression> labelExpressions, JavaParser.StatementsContext statementsContext) {
             this.labelExpressions = Objects.requireNonNull(labelExpressions, "labelExpressions cannot be null");
-            this.statementListContext = Objects.requireNonNull(statementListContext, "statementListContext cannot be null");
+            this.statementsContext = Objects.requireNonNull(statementsContext, "statementsContext cannot be null");
         }
 
         public List<Expression> getLabelExpressions() {
             return labelExpressions;
         }
 
-        public JavaParser.StatementListContext getStatementListContext() {
-            return statementListContext;
+        public JavaParser.StatementsContext getStatementsContext() {
+            return statementsContext;
         }
     }
 }

@@ -77,7 +77,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         assertThat(header).extracting(MethodHeader::getResult, MethodHeader::getName)
                 .containsExactly("void", "m");
         assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
-        assertThat(Iterables.getOnlyElement(method.getBodyContext().statementList().statement()).getText())
+        assertThat(Iterables.getOnlyElement(method.getBodyContext().statements().statement()).getText())
                 .isEqualTo("println(\"HELLO\");");
         assertThat(methodContext.getVariable("a")).isNotNull();
     }
@@ -95,7 +95,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         assertThat(header).extracting(MethodHeader::getResult, MethodHeader::getName)
                 .containsExactly(null, "MyClass");
         assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
-        assertThat(Iterables.getOnlyElement(method.getBodyContext().statementList().statement()).getText())
+        assertThat(Iterables.getOnlyElement(method.getBodyContext().statements().statement()).getText())
                 .isEqualTo("println(\"HELLO\");");
     }
 

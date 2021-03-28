@@ -30,7 +30,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     @Override
     public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
         JavaContext localContext = context.createLocalContext();
-        Statements statements = localContext.resolveStatements(ctx.statementList());
+        Statements statements = localContext.resolveStatements(ctx.statements());
         return new BlockStatement(statements);
     }
 

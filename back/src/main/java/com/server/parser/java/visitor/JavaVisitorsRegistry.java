@@ -31,7 +31,7 @@ public class JavaVisitorsRegistry {
                     .put(WhileStatement.class, WhileStatementVisitor::new)
                     .put(ForStatement.class, ForStatementVisitor::new)
                     .put(SwitchStatement.class, SwitchStatementVisitor::new)
-                    .put(Statements.class, StatementListVisitor::new)
+                    .put(Statements.class, StatementsVisitor::new)
                     .build();
 
     public static <T extends AstElement> JavaVisitor<T> get(Class<T> elementClass, JavaContext context) {

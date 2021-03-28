@@ -15,20 +15,20 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class StatementListVisitorTest extends JavaVisitorTestBase {
-    private StatementListVisitor visitor;
+class StatementsVisitorTest extends JavaVisitorTestBase {
+    private StatementsVisitor visitor;
 
     @Override
     @BeforeEach
     void setUp() {
         super.setUp();
-        visitor = new StatementListVisitor(createMethodContext());
+        visitor = new StatementsVisitor(createMethodContext());
     }
 
     @Test
     void shouldVisitStatementsInCorrectOrder() {
         String input = "String a = \"s\"; System.out.println(\"sss\"); String b = \"s2\";";
-        JavaParser.StatementListContext c = HELPER.shouldParseToEof(input, JavaParser::statementList);
+        JavaParser.StatementsContext c = HELPER.shouldParseToEof(input, JavaParser::statements);
 
         List<Statement> statements = visitor.visit(c).getStatements();
 
@@ -41,7 +41,7 @@ class StatementListVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldValidateRemainingStatements() {
         String input = "return; a = 1;";
-        JavaParser.StatementListContext c = HELPER.shouldParseToEof(input, JavaParser::statementList);
+        JavaParser.StatementsContext c = HELPER.shouldParseToEof(input, JavaParser::statements);
 
         assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(ResolvingException.class)
@@ -53,9 +53,9 @@ class StatementListVisitorTest extends JavaVisitorTestBase {
         String input = "return; a = 1;";
         MethodContext methodContext = createMethodContext();
         methodContext.addVariable(new MethodVar("int", "a", new UninitializedValue(new UninitializedExpression(""))));
-        JavaParser.StatementListContext c = HELPER.shouldParseToEof(input, JavaParser::statementList);
+        JavaParser.StatementsContext c = HELPER.shouldParseToEof(input, JavaParser::statements);
 
-        new StatementListVisitor(methodContext).visit(c);
+        new StatementsVisitor(methodContext).visit(c);
 
         assertThat(methodContext.getVariable("a").getValue()).isExactlyInstanceOf(UninitializedValue.class);
     }
