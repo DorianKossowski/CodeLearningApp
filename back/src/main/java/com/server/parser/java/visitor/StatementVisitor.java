@@ -137,7 +137,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     public Statement visitReturnStatement(JavaParser.ReturnStatementContext ctx) {
         Expression expression = VoidExpression.INSTANCE;
         if (ctx.expression() != null) {
-            expression = context.getVisitor(Expression.class, context).visit(ctx.expression());
+            expression = context.resolveExpression(context, ctx.expression());
         }
         ContextParameters parameters = context.getParameters();
         if (TypeCorrectnessChecker.isCorrect(parameters.getMethodResultType(), expression)) {

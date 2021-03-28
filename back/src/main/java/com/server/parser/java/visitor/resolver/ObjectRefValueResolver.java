@@ -13,7 +13,6 @@ import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.*;
 import com.server.parser.java.visitor.JavaDefaultTextVisitor;
-import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.util.exception.ResolvingException;
 import com.server.parser.util.exception.ResolvingNullPointerException;
 import com.server.parser.util.exception.ResolvingUninitializedException;
@@ -116,9 +115,8 @@ public class ObjectRefValueResolver {
     }
 
     private List<Expression> visitArguments(JavaParser.CallArgumentsContext ctx) {
-        JavaVisitor<Expression> expressionVisitor = context.getVisitor(Expression.class, context);
         return ctx.expression().stream()
-                .map(expressionVisitor::visit)
+                .map(expressionContext -> context.resolveExpression(context, expressionContext))
                 .collect(Collectors.toList());
     }
 }

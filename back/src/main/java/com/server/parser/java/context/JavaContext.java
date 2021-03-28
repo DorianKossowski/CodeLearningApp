@@ -1,22 +1,15 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.variable.FieldVar;
 import com.server.parser.java.variable.Variable;
-import com.server.parser.java.visitor.JavaVisitor;
-import com.server.parser.java.visitor.JavaVisitorsRegistry;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class JavaContext {
+public abstract class JavaContext extends ResolvingContext {
     private ContextParameters parameters;
-
-    public <T extends AstElement> JavaVisitor<T> getVisitor(Class<T> elementClass, JavaContext context) {
-        return JavaVisitorsRegistry.get(elementClass, context);
-    }
 
     public abstract ObjectValue getThisValue();
 
