@@ -3,11 +3,9 @@ package com.server.parser.java.visitor;
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.constant.StringConstant;
 import com.server.parser.java.context.ClassContext;
-import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.value.ObjectWrapperValue;
 import com.server.parser.java.variable.MethodVar;
@@ -16,9 +14,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
 
-class IfElseStatementVisitorTest {
+class IfElseStatementVisitorTest extends JavaVisitorTestBase {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
 
     private IfElseStatementVisitor visitor;
@@ -41,13 +38,7 @@ class IfElseStatementVisitorTest {
 
     @Test
     void shouldThrowWhenSingleVariableDefAsContent() {
-        ClassContext context = new ClassContext();
-        context.setParameters(ContextParameters.createClassContextParameters(""));
-        MethodContext methodContext = context.createEmptyMethodContext();
-        MethodHeader methodHeader = mock(MethodHeader.class, RETURNS_DEEP_STUBS);
-        when(methodHeader.getName()).thenReturn("");
-        methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));
-        visitor = new IfElseStatementVisitor(methodContext);
+        visitor = new IfElseStatementVisitor(createMethodContext());
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) String str = \"true\";",
                 JavaParser::ifElseStatement);
 

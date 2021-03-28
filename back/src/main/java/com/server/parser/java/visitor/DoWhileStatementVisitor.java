@@ -1,4 +1,4 @@
-package com.server.parser.java.visitor.resolver;
+package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.DoWhileStatement;
@@ -10,16 +10,25 @@ import com.server.parser.java.visitor.resolver.util.ReturnHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class DoWhileStmtResolver extends LoopResolver {
+import static com.server.parser.java.visitor.resolver.LoopResolver.*;
 
-    public static DoWhileStatement resolve(JavaContext context, JavaParser.DoWhileStatementContext doWhileCtx) {
-        validateLoopContent(context, doWhileCtx.statement());
-        List<Statement> contentStatements = resolveContent(context, doWhileCtx);
+public class DoWhileStatementVisitor extends JavaVisitor<DoWhileStatement> {
+    private final JavaContext context;
+
+    DoWhileStatementVisitor(JavaContext context) {
+        this.context = Objects.requireNonNull(context, "context cannot be null");
+    }
+
+    @Override
+    public DoWhileStatement visitDoWhileStatement(JavaParser.DoWhileStatementContext ctx) {
+        validateLoopContent(context, ctx.statement());
+        List<Statement> contentStatements = resolveContent(ctx);
         return new DoWhileStatement(contentStatements);
     }
 
-    static List<Statement> resolveContent(JavaContext context, JavaParser.DoWhileStatementContext doWhileCtx) {
+    List<Statement> resolveContent(JavaParser.DoWhileStatementContext doWhileCtx) {
         int iteration = 0;
         List<Statement> contentStatements = new ArrayList<>();
         do {

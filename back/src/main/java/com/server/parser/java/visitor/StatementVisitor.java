@@ -12,7 +12,6 @@ import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.DelegatingContext;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.resolver.DoWhileStmtResolver;
 import com.server.parser.java.visitor.resolver.ForStmtResolver;
 import com.server.parser.java.visitor.resolver.SwitchStmtResolver;
 import com.server.parser.java.visitor.resolver.WhileStmtResolver;
@@ -117,8 +116,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     //*** DO WHILE ***//
     @Override
     public Statement visitDoWhileStatement(JavaParser.DoWhileStatementContext ctx) {
-        JavaContext localContext = context.createLocalContext();
-        return DoWhileStmtResolver.resolve(localContext, ctx);
+        return context.getVisitor(DoWhileStatement.class, context.createLocalContext()).visit(ctx);
     }
 
     //*** EMPTY ***//

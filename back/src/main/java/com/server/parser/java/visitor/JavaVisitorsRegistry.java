@@ -7,6 +7,7 @@ import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.ast.statement.CallStatement;
+import com.server.parser.java.ast.statement.DoWhileStatement;
 import com.server.parser.java.ast.statement.IfElseStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.Assignment;
@@ -28,6 +29,7 @@ public class JavaVisitorsRegistry {
                     .put(CallStatement.class, CallStatementVisitor::new)
                     .put(Assignment.class, AssignmentStatementVisitor::new)
                     .put(IfElseStatement.class, IfElseStatementVisitor::new)
+                    .put(DoWhileStatement.class, DoWhileStatementVisitor::new)
                     .build();
 
     public static <T extends AstElement> JavaVisitor<T> get(Class<T> elementClass, JavaContext context) {
