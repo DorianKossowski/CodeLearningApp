@@ -12,7 +12,6 @@ import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.DelegatingContext;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.resolver.SwitchStmtResolver;
 import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
@@ -71,7 +70,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     //*** SWITCH ***//
     @Override
     public Statement visitSwitchStatement(JavaParser.SwitchStatementContext ctx) {
-        return SwitchStmtResolver.resolve(context.createLocalContext(), ctx);
+        return context.getVisitor(SwitchStatement.class, context.createLocalContext()).visit(ctx);
     }
 
     //*** BREAK ***//

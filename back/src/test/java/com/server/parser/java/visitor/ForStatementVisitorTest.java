@@ -1,8 +1,6 @@
 package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
-import com.server.parser.ParserTestHelper;
-import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
@@ -17,8 +15,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 class ForStatementVisitorTest extends JavaVisitorTestBase {
-    private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
-
     private ForStatementVisitor visitor;
 
     @Override

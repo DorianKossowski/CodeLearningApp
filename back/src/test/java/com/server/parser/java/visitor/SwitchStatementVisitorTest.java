@@ -1,8 +1,6 @@
-package com.server.parser.java.visitor.resolver;
+package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
-import com.server.parser.ParserTestHelper;
-import com.server.parser.java.JavaLexer;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.expression.Expression;
@@ -38,17 +36,19 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SwitchStmtResolverTest {
-    private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
-
+class SwitchStatementVisitorTest extends JavaVisitorTestBase {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private JavaContext javaContext;
     @Mock
     private JavaParser.ExpressionContext expressionContext;
 
+    private SwitchStatementVisitor visitor;
+
+    @Override
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
+        visitor = new SwitchStatementVisitor(javaContext);
     }
 
     @Test
@@ -58,7 +58,7 @@ class SwitchStmtResolverTest {
         when(condition.getValue()).thenReturn(value);
         when(javaContext.resolveExpression(expressionContext)).thenReturn(condition);
 
-        Value resolvedValue = SwitchStmtResolver.resolveExpression(javaContext, expressionContext);
+        Value resolvedValue = visitor.resolveExpression(expressionContext);
 
         assertThat(resolvedValue).isSameAs(value);
     }
@@ -70,7 +70,7 @@ class SwitchStmtResolverTest {
         when(expression.getValue()).thenReturn(value);
         when(javaContext.resolveExpression(expressionContext)).thenReturn(expression);
 
-        assertThatThrownBy(() -> SwitchStmtResolver.resolveExpression(javaContext, expressionContext))
+        assertThatThrownBy(() -> visitor.resolveExpression(expressionContext))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: W instrukcji switch: true nie jest jednego z typów: char," +
                         " byte, short, int, Character, Byte, Short, Integer, String");
@@ -83,7 +83,7 @@ class SwitchStmtResolverTest {
         Expression expression = mock(Expression.class);
         when(javaContext.resolveExpression(c.expression())).thenReturn(expression);
 
-        List<Expression> labelExpressions = SwitchStmtResolver.resolveLabelExpressions(javaContext, Collections.singletonList(c));
+        List<Expression> labelExpressions = visitor.resolveLabelExpressions(Collections.singletonList(c));
 
         assertThat(Iterables.getOnlyElement(labelExpressions)).isSameAs(expression);
     }
@@ -93,7 +93,7 @@ class SwitchStmtResolverTest {
         String input = "default:";
         JavaParser.SwitchElementLabelContext c = HELPER.shouldParseToEof(input, JavaParser::switchElementLabel);
 
-        List<Expression> labelExpressions = SwitchStmtResolver.resolveLabelExpressions(javaContext, Collections.singletonList(c));
+        List<Expression> labelExpressions = visitor.resolveLabelExpressions(Collections.singletonList(c));
 
         assertThat(Iterables.getOnlyElement(labelExpressions)).isNull();
     }
@@ -103,8 +103,7 @@ class SwitchStmtResolverTest {
         String input = "case 1:default: fun(); ";
         JavaParser.SwitchElementContext c = HELPER.shouldParseToEof(input, JavaParser::switchElement);
 
-        SwitchStmtResolver.SwitchElement switchElement =
-                SwitchStmtResolver.resolveSwitchElement(createRealMethodContext(), c);
+        SwitchStatementVisitor.SwitchElement switchElement = new SwitchStatementVisitor(createRealMethodContext()).resolveSwitchElement(c);
 
         List<Expression> labelExpressions = switchElement.getLabelExpressions();
         assertThat(labelExpressions).hasSize(2);
@@ -115,7 +114,7 @@ class SwitchStmtResolverTest {
 
     @Test
     void shouldThrowWhenDuplicatedDefault() {
-        assertThatThrownBy(() -> SwitchStmtResolver.validateLabels(Collections.singletonList(Arrays.asList(null, null))))
+        assertThatThrownBy(() -> visitor.validateLabels(Collections.singletonList(Arrays.asList(null, null))))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Zduplikowana etykieta default w instrukcji switch");
     }
@@ -124,7 +123,7 @@ class SwitchStmtResolverTest {
     void shouldThrowWhenDuplicatedLabels() {
         Expression expression = mock(Expression.class);
         when(expression.getResolvedText()).thenReturn("text");
-        assertThatThrownBy(() -> SwitchStmtResolver.validateLabels(Collections.singletonList(Arrays.asList(expression, expression))))
+        assertThatThrownBy(() -> visitor.validateLabels(Collections.singletonList(Arrays.asList(expression, expression))))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Zduplikowana etykieta text w instrukcji switch");
     }
@@ -141,10 +140,10 @@ class SwitchStmtResolverTest {
     @MethodSource("isLabelFulfilledProvider")
     void shouldCheckIfLabelIsFulfilled(Value value, boolean expectedFulfilled) {
         List<Expression> labelExpressions = Arrays.asList(new Literal(new StringConstant("str")), null);
-        SwitchStmtResolver.SwitchElement switchElement = new SwitchStmtResolver.SwitchElement(labelExpressions,
+        SwitchStatementVisitor.SwitchElement switchElement = new SwitchStatementVisitor.SwitchElement(labelExpressions,
                 mock(JavaParser.StatementListContext.class));
 
-        boolean labelFulfilled = SwitchStmtResolver.isLabelFulfilled(value, switchElement);
+        boolean labelFulfilled = visitor.isLabelFulfilled(value, switchElement);
 
         assertThat(labelFulfilled).isEqualTo(expectedFulfilled);
     }
@@ -157,7 +156,7 @@ class SwitchStmtResolverTest {
                 "}";
         JavaParser.SwitchStatementContext switchCtx = HELPER.shouldParseToEof(input, JavaParser::switchStatement);
 
-        SwitchStatement statement = SwitchStmtResolver.resolve(createRealMethodContext(), switchCtx);
+        SwitchStatement statement = new SwitchStatementVisitor(createRealMethodContext()).visit(switchCtx);
 
         List<ExpressionStatement> expressionStatements = statement.getExpressionStatements();
         assertThat(expressionStatements).extracting(ExpressionStatement::getText,
@@ -184,7 +183,7 @@ class SwitchStmtResolverTest {
 
         JavaParser.StatementListContext c = HELPER.shouldParseToEof("str=null;", JavaParser::statementList);
 
-        SwitchStmtResolver.validateStatementLists(methodContext, Collections.singletonList(c));
+        new SwitchStatementVisitor(methodContext).validateStatementLists(Collections.singletonList(c));
 
         assertThat(methodContext.getVariable("str").getValue()).isSameAs(value);
     }
