@@ -14,7 +14,6 @@ import com.server.parser.java.context.DelegatingContext;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.ForStmtResolver;
 import com.server.parser.java.visitor.resolver.SwitchStmtResolver;
-import com.server.parser.java.visitor.resolver.WhileStmtResolver;
 import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
@@ -109,8 +108,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     //*** WHILE ***//
     @Override
     public Statement visitWhileStatement(JavaParser.WhileStatementContext ctx) {
-        JavaContext localContext = context.createLocalContext();
-        return WhileStmtResolver.resolve(localContext, ctx);
+        return context.getVisitor(WhileStatement.class, context.createLocalContext()).visit(ctx);
     }
 
     //*** DO WHILE ***//

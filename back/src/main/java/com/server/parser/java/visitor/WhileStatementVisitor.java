@@ -1,4 +1,4 @@
-package com.server.parser.java.visitor.resolver;
+package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.Statement;
@@ -10,16 +10,25 @@ import com.server.parser.java.visitor.resolver.util.ReturnHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class WhileStmtResolver extends LoopResolver {
+import static com.server.parser.java.visitor.resolver.LoopResolver.*;
 
-    public static WhileStatement resolve(JavaContext context, JavaParser.WhileStatementContext whileCtx) {
-        validateLoopContent(context, whileCtx.statement());
-        List<Statement> contentStatements = resolveContent(context, whileCtx);
+public class WhileStatementVisitor extends JavaVisitor<WhileStatement> {
+    private final JavaContext context;
+
+    WhileStatementVisitor(JavaContext context) {
+        this.context = Objects.requireNonNull(context, "context cannot be null");
+    }
+
+    @Override
+    public WhileStatement visitWhileStatement(JavaParser.WhileStatementContext ctx) {
+        validateLoopContent(context, ctx.statement());
+        List<Statement> contentStatements = resolveContent(ctx);
         return new WhileStatement(contentStatements);
     }
 
-    static List<Statement> resolveContent(JavaContext context, JavaParser.WhileStatementContext whileCtx) {
+    List<Statement> resolveContent(JavaParser.WhileStatementContext whileCtx) {
         int iteration = 0;
         List<Statement> contentStatements = new ArrayList<>();
         while (resolveCondition(context, whileCtx.expression())) {
