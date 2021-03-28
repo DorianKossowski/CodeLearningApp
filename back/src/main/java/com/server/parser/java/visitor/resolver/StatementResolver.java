@@ -9,7 +9,7 @@ import com.server.parser.util.exception.ResolvingException;
 
 public abstract class StatementResolver {
 
-    protected static boolean resolveCondition(JavaContext context, JavaParser.ExpressionContext expressionContext) {
+    public static boolean resolveCondition(JavaContext context, JavaParser.ExpressionContext expressionContext) {
         Expression condition = context.getVisitor(Expression.class).visit(expressionContext, context);
         Value value = condition.getValue();
         if (value instanceof ConstantProvider && ((ConstantProvider) value).getConstant().c instanceof Boolean) {

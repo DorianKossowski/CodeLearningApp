@@ -1,4 +1,4 @@
-package com.server.parser.java.visitor.resolver;
+package com.server.parser.java.visitor;
 
 import com.server.parser.ParserTestHelper;
 import com.server.parser.java.JavaLexer;
@@ -18,8 +18,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
-class IfStmtResolverTest {
+class IfElseStatementVisitorTest {
     private static final ParserTestHelper<JavaParser> HELPER = new ParserTestHelper<>(JavaLexer::new, JavaParser::new);
+
+    private IfElseStatementVisitor visitor;
 
     @Test
     void shouldValidateInSeparateContext() {
@@ -27,11 +29,12 @@ class IfStmtResolverTest {
         MethodContext methodContext = context.createEmptyMethodContext();
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("init")));
         methodContext.addVariable(new MethodVar("String", "str", value));
+        visitor = new IfElseStatementVisitor(methodContext);
 
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) str = \"true\"; else str = \"false\";",
                 JavaParser::ifElseStatement);
 
-        IfStmtResolver.validateBranchesContent(methodContext, c);
+        visitor.validateBranchesContent(c);
 
         assertThat(methodContext.getVariable("str").getValue()).isSameAs(value);
     }
@@ -44,10 +47,11 @@ class IfStmtResolverTest {
         MethodHeader methodHeader = mock(MethodHeader.class, RETURNS_DEEP_STUBS);
         when(methodHeader.getName()).thenReturn("");
         methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));
+        visitor = new IfElseStatementVisitor(methodContext);
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof("if(true) String str = \"true\";",
                 JavaParser::ifElseStatement);
 
-        assertThatThrownBy(() -> IfStmtResolver.validateBranchesContent(methodContext, c))
+        assertThatThrownBy(() -> visitor.validateBranchesContent(c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Deklaracja String str = \"true\" nie jest w tym miejscu dozwolona");
     }

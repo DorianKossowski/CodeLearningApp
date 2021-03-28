@@ -5,10 +5,7 @@ import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.VoidExpression;
-import com.server.parser.java.ast.statement.BlockStatement;
-import com.server.parser.java.ast.statement.CallStatement;
-import com.server.parser.java.ast.statement.EmptyStatement;
-import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.ast.statement.expression_statement.Assignment;
 import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
@@ -16,7 +13,10 @@ import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.DelegatingContext;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.resolver.*;
+import com.server.parser.java.visitor.resolver.DoWhileStmtResolver;
+import com.server.parser.java.visitor.resolver.ForStmtResolver;
+import com.server.parser.java.visitor.resolver.SwitchStmtResolver;
+import com.server.parser.java.visitor.resolver.WhileStmtResolver;
 import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
@@ -76,7 +76,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
         //*** IF ***//
         @Override
         public Statement visitIfElseStatement(JavaParser.IfElseStatementContext ctx) {
-            return IfStmtResolver.resolve(context, this, ctx);
+            return context.getVisitor(IfElseStatement.class, context).visit(ctx);
         }
 
         //*** SWITCH ***//
