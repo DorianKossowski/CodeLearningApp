@@ -41,7 +41,7 @@ class StatementResolverTest {
         Expression condition = mock(Expression.class);
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("str")));
         when(condition.getValue()).thenReturn(value);
-        when(javaContext.getVisitor(Expression.class).visit(expressionContext, javaContext)).thenReturn(condition);
+        when(javaContext.getVisitor(Expression.class, javaContext).visit(expressionContext)).thenReturn(condition);
 
         assertThatThrownBy(() -> ForStmtResolver.resolveCondition(javaContext, expressionContext))
                 .isExactlyInstanceOf(ResolvingException.class)

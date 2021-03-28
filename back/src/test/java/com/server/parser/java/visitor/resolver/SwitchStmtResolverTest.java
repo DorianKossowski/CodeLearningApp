@@ -56,7 +56,7 @@ class SwitchStmtResolverTest {
         Expression condition = mock(Expression.class);
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new StringConstant("str")));
         when(condition.getValue()).thenReturn(value);
-        when(javaContext.getVisitor(Expression.class).visit(expressionContext, javaContext)).thenReturn(condition);
+        when(javaContext.getVisitor(Expression.class, javaContext).visit(expressionContext)).thenReturn(condition);
 
         Value resolvedValue = SwitchStmtResolver.resolveExpression(javaContext, expressionContext);
 
@@ -68,7 +68,7 @@ class SwitchStmtResolverTest {
         Expression expression = mock(Expression.class);
         ObjectWrapperValue value = new ObjectWrapperValue(new Literal(new BooleanConstant(true)));
         when(expression.getValue()).thenReturn(value);
-        when(javaContext.getVisitor(Expression.class).visit(expressionContext, javaContext)).thenReturn(expression);
+        when(javaContext.getVisitor(Expression.class, javaContext).visit(expressionContext)).thenReturn(expression);
 
         assertThatThrownBy(() -> SwitchStmtResolver.resolveExpression(javaContext, expressionContext))
                 .isExactlyInstanceOf(ResolvingException.class)
@@ -81,7 +81,7 @@ class SwitchStmtResolverTest {
         String input = "case \"str\":";
         JavaParser.SwitchElementLabelContext c = HELPER.shouldParseToEof(input, JavaParser::switchElementLabel);
         Expression expression = mock(Expression.class);
-        when(javaContext.getVisitor(Expression.class).visit(c.expression(), javaContext)).thenReturn(expression);
+        when(javaContext.getVisitor(Expression.class, javaContext).visit(c.expression())).thenReturn(expression);
 
         List<Expression> labelExpressions = SwitchStmtResolver.resolveLabelExpressions(javaContext, Collections.singletonList(c));
 

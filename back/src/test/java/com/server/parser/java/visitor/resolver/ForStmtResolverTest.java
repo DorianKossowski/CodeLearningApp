@@ -52,7 +52,8 @@ class ForStmtResolverTest {
         JavaParser.ForStatementContext c = HELPER.shouldParseToEof("for(;;) { break; int sth; }",
                 JavaParser::forStatement);
 
-        List<Statement> statements = ForStmtResolver.resolveContent(methodContext, c, methodContext.getVisitor(Statement.class));
+        List<Statement> statements = ForStmtResolver.resolveContent(methodContext, c,
+                methodContext.getVisitor(Statement.class, methodContext));
         Statement statement = Iterables.getOnlyElement(statements);
         assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
     }

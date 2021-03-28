@@ -15,7 +15,7 @@ import java.util.List;
 public class WhileStmtResolver extends LoopResolver {
 
     public static WhileStatement resolve(JavaContext context, JavaParser.WhileStatementContext whileCtx) {
-        JavaVisitor<Statement> statementJavaVisitor = context.getVisitor(Statement.class);
+        JavaVisitor<Statement> statementJavaVisitor = context.getVisitor(Statement.class, context);
         validateLoopContent(context, whileCtx.statement());
         List<Statement> contentStatements = resolveContent(context, whileCtx, statementJavaVisitor);
         return new WhileStatement(contentStatements);
@@ -27,7 +27,7 @@ public class WhileStmtResolver extends LoopResolver {
         List<Statement> contentStatements = new ArrayList<>();
         while (resolveCondition(context, whileCtx.expression())) {
             validateMaxIteration(iteration);
-            Statement statement = statementJavaVisitor.visit(whileCtx.statement(), context);
+            Statement statement = statementJavaVisitor.visit(whileCtx.statement());
             addIterationProperty(statement, StatementProperties.WHILE_ITERATION, iteration);
             contentStatements.add(statement);
             if (ReturnHandler.shouldReturn(statement) || BreakHandler.shouldBreak(statement)) {

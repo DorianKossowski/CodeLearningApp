@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
-    private final ObjectRefExpressionVisitor visitor = new ObjectRefExpressionVisitor();
+    private ObjectRefExpressionVisitor visitor;
 
     @Test
     void shouldVisitObjectRefExpression() {
@@ -33,7 +33,7 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        ObjectRefExpression expression = visitor.visit(c, methodContext);
+        ObjectRefExpression expression = new ObjectRefExpressionVisitor(methodContext).visit(c);
 
         assertThat(expression.getText()).isEqualTo("x");
         assertThat(expression.getLiteral().getConstant().c).isEqualTo("value");
@@ -51,7 +51,7 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        assertThatThrownBy(() -> visitor.visit(c, methodContext))
+        assertThatThrownBy(() -> new ObjectRefExpressionVisitor(methodContext).visit(c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Obiekt x nie istnieje");
     }
@@ -64,7 +64,7 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "a.b";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        ObjectRefExpression expression = visitor.visit(c, methodContext);
+        ObjectRefExpression expression = new ObjectRefExpressionVisitor(methodContext).visit(c);
 
         assertThat(expression.getValue()).isSameAs(attributeValue);
     }
@@ -84,7 +84,7 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "this.a";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        ObjectRefExpression expression = visitor.visit(c, methodContext);
+        ObjectRefExpression expression = new ObjectRefExpressionVisitor(methodContext).visit(c);
 
         assertThat(expression.getValue()).isSameAs(attributeValue);
     }
@@ -98,7 +98,7 @@ class ObjectRefExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "fun().a";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        ObjectRefExpression expression = visitor.visit(c, methodContext);
+        ObjectRefExpression expression = new ObjectRefExpressionVisitor(methodContext).visit(c);
 
         assertThat(expression.getValue()).isSameAs(attributeValue);
     }

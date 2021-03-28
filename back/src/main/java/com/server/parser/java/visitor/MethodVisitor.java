@@ -1,6 +1,5 @@
 package com.server.parser.java.visitor;
 
-import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.ConstructorHeader;
 import com.server.parser.java.ast.Method;
@@ -20,68 +19,64 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MethodVisitor extends JavaVisitor<Method> {
+    private final MethodContext context;
+
+    public MethodVisitor(JavaContext context) {
+        this.context = (MethodContext) Objects.requireNonNull(context, "context cannot be null");
+    }
 
     @Override
     public Method visit(ParserRuleContext ctx, JavaContext context) {
-        return new MethodVisitorInternal((MethodContext) context).visit(ctx);
+        throw new UnsupportedOperationException();
     }
 
-    // package-private for tests purpose only
-    static class MethodVisitorInternal extends JavaBaseVisitor<Method> {
-        private final MethodContext context;
+    @Override
+    public Method visitMethodDec(JavaParser.MethodDecContext ctx) {
+        MethodHeader methodHeader = visit(ctx.methodHeader());
+        return context.save(methodHeader, ctx.methodBody());
+    }
 
-        MethodVisitorInternal(MethodContext context) {
-            this.context = Objects.requireNonNull(context, "context cannot be null");
-        }
+    MethodHeader visit(JavaParser.MethodHeaderContext ctx) {
+        List<String> modifiers = ctx.methodModifier().stream()
+                .map(RuleContext::getText)
+                .collect(Collectors.toList());
+        String methodResult = ctx.methodResult().getText();
+        String identifier = ctx.identifier().getText();
+        List<VariableDef> args = visit(ctx.methodArgs());
+        return new MethodHeader(modifiers, methodResult, identifier, args);
+    }
 
-        @Override
-        public Method visitMethodDec(JavaParser.MethodDecContext ctx) {
-            MethodHeader methodHeader = visit(ctx.methodHeader());
-            return context.save(methodHeader, ctx.methodBody());
-        }
+    List<VariableDef> visit(JavaParser.MethodArgsContext ctx) {
+        JavaVisitor<VariableDef> visitor = context.getVisitor(VariableDef.class, context);
+        List<VariableDef> arguments = ctx.singleMethodArg().stream()
+                .map(visitor::visit)
+                .collect(Collectors.toList());
+        putArgumentsIntoMethodContext(arguments);
+        return arguments;
+    }
 
-        MethodHeader visit(JavaParser.MethodHeaderContext ctx) {
-            List<String> modifiers = ctx.methodModifier().stream()
-                    .map(RuleContext::getText)
-                    .collect(Collectors.toList());
-            String methodResult = ctx.methodResult().getText();
-            String identifier = ctx.identifier().getText();
-            List<VariableDef> args = visit(ctx.methodArgs());
-            return new MethodHeader(modifiers, methodResult, identifier, args);
-        }
+    private void putArgumentsIntoMethodContext(List<VariableDef> args) {
+        args.forEach(variableDef -> context.addVariable(new MethodVar(variableDef)));
+    }
 
-        List<VariableDef> visit(JavaParser.MethodArgsContext ctx) {
-            JavaVisitor<VariableDef> visitor = context.getVisitor(VariableDef.class);
-            List<VariableDef> arguments = ctx.singleMethodArg().stream()
-                    .map(singleMethodArgContext -> visitor.visit(singleMethodArgContext, context))
-                    .collect(Collectors.toList());
-            putArgumentsIntoMethodContext(arguments);
-            return arguments;
-        }
+    @Override
+    public Method visitConstructorDec(JavaParser.ConstructorDecContext ctx) {
+        MethodHeader constructorHeader = visit(ctx.constructorHeader());
+        return context.save(constructorHeader, ctx.methodBody());
+    }
 
-        private void putArgumentsIntoMethodContext(List<VariableDef> args) {
-            args.forEach(variableDef -> context.addVariable(new MethodVar(variableDef)));
+    MethodHeader visit(JavaParser.ConstructorHeaderContext ctx) {
+        List<String> modifiers = new ArrayList<>();
+        if (ctx.constructorModifier() != null) {
+            modifiers.add(ctx.constructorModifier().getText());
         }
-
-        @Override
-        public Method visitConstructorDec(JavaParser.ConstructorDecContext ctx) {
-            MethodHeader constructorHeader = visit(ctx.constructorHeader());
-            return context.save(constructorHeader, ctx.methodBody());
+        String identifier = ctx.identifier().getText();
+        ContextParameters parameters = context.getParameters();
+        if (!identifier.equals(parameters.getClassName())) {
+            throw new ResolvingException(
+                    String.format("Konstruktor %s różny od nazwy klasy %s", identifier, parameters.getClassName()));
         }
-
-        MethodHeader visit(JavaParser.ConstructorHeaderContext ctx) {
-            List<String> modifiers = new ArrayList<>();
-            if (ctx.constructorModifier() != null) {
-                modifiers.add(ctx.constructorModifier().getText());
-            }
-            String identifier = ctx.identifier().getText();
-            ContextParameters parameters = context.getParameters();
-            if (!identifier.equals(parameters.getClassName())) {
-                throw new ResolvingException(
-                        String.format("Konstruktor %s różny od nazwy klasy %s", identifier, parameters.getClassName()));
-            }
-            List<VariableDef> args = visit(ctx.methodArgs());
-            return new ConstructorHeader(modifiers, identifier, args);
-        }
+        List<VariableDef> args = visit(ctx.methodArgs());
+        return new ConstructorHeader(modifiers, identifier, args);
     }
 }

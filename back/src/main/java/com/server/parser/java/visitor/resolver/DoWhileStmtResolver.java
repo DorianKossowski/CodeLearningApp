@@ -15,7 +15,7 @@ import java.util.List;
 public class DoWhileStmtResolver extends LoopResolver {
 
     public static DoWhileStatement resolve(JavaContext context, JavaParser.DoWhileStatementContext doWhileCtx) {
-        JavaVisitor<Statement> statementJavaVisitor = context.getVisitor(Statement.class);
+        JavaVisitor<Statement> statementJavaVisitor = context.getVisitor(Statement.class, context);
         validateLoopContent(context, doWhileCtx.statement());
         List<Statement> contentStatements = resolveContent(context, doWhileCtx, statementJavaVisitor);
         return new DoWhileStatement(contentStatements);
@@ -27,7 +27,7 @@ public class DoWhileStmtResolver extends LoopResolver {
         List<Statement> contentStatements = new ArrayList<>();
         do {
             validateMaxIteration(iteration);
-            Statement statement = statementJavaVisitor.visit(doWhileCtx.statement(), context);
+            Statement statement = statementJavaVisitor.visit(doWhileCtx.statement());
             addIterationProperty(statement, StatementProperties.DO_WHILE_ITERATION, iteration);
             contentStatements.add(statement);
             if (ReturnHandler.shouldReturn(statement) || BreakHandler.shouldBreak(statement)) {

@@ -17,14 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MethodVisitorTest extends JavaVisitorTestBase {
-    private final MethodVisitor visitor = new MethodVisitor();
-    private MethodVisitor.MethodVisitorInternal visitorInternal;
+    private MethodContext methodContext;
+
+    private MethodVisitor visitor;
 
     @Override
     @BeforeEach
     void setUp() {
         super.setUp();
-        visitorInternal = new MethodVisitor.MethodVisitorInternal(createMethodContext());
+        methodContext = createMethodContext();
+        visitor = new MethodVisitor(methodContext);
     }
 
     @Test
@@ -32,7 +34,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         String input = "(Integer[] a, double b, int c)";
         JavaParser.MethodArgsContext c = HELPER.shouldParseToEof(input, JavaParser::methodArgs);
 
-        List<VariableDef> arguments = visitorInternal.visit(c);
+        List<VariableDef> arguments = visitor.visit(c);
 
         assertThat(arguments).hasSize(3);
         assertVariableDec(arguments.get(0), "Integer[]", "a");
@@ -45,7 +47,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         String input = "()";
         JavaParser.MethodArgsContext c = HELPER.shouldParseToEof(input, JavaParser::methodArgs);
 
-        List<VariableDef> arguments = visitorInternal.visit(c);
+        List<VariableDef> arguments = visitor.visit(c);
 
         assertThat(arguments).isEmpty();
     }
@@ -55,7 +57,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         String input = "public synchronized void m(String[] a)";
         JavaParser.MethodHeaderContext c = HELPER.shouldParseToEof(input, JavaParser::methodHeader);
 
-        MethodHeader header = visitorInternal.visit(c);
+        MethodHeader header = visitor.visit(c);
 
         assertThat(header.getModifiers()).containsExactly("public", "synchronized");
         assertVariableDec(Iterables.getOnlyElement(header.getArguments()), "String[]", "a");
@@ -67,9 +69,8 @@ class MethodVisitorTest extends JavaVisitorTestBase {
     void shouldVisitMethodDec() {
         String input = "void m(String[] a) { println(\"HELLO\"); }";
         JavaParser.MethodDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodDec);
-        MethodContext methodContext = createMethodContext();
 
-        Method method = visitor.visit(c, methodContext);
+        Method method = visitor.visit(c);
 
         assertThat(method.getClassName()).isEqualTo("MyClass");
         MethodHeader header = method.getHeader();
@@ -86,7 +87,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         String input = "MyClass(String[] a) { println(\"HELLO\"); }";
         JavaParser.ConstructorDecContext c = HELPER.shouldParseToEof(input, JavaParser::constructorDec);
 
-        Method method = visitor.visit(c, createMethodContext());
+        Method method = visitor.visit(c);
 
         assertThat(method.getClassName()).isEqualTo("MyClass");
         MethodHeader header = method.getHeader();
@@ -103,7 +104,7 @@ class MethodVisitorTest extends JavaVisitorTestBase {
         String input = "X() {}";
         JavaParser.ConstructorDecContext c = HELPER.shouldParseToEof(input, JavaParser::constructorDec);
 
-        assertThatThrownBy(() -> visitor.visit(c, createMethodContext()))
+        assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Konstruktor X różny od nazwy klasy MyClass");
     }

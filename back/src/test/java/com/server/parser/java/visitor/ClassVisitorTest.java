@@ -12,15 +12,13 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ClassVisitorTest extends JavaVisitorTestBase {
-    private final ClassVisitor visitor = new ClassVisitor();
-
-    private ClassVisitor.ClassVisitorInternal visitorInternal;
+    private ClassVisitor visitor;
 
     @Override
     @BeforeEach
     void setUp() {
         super.setUp();
-        visitorInternal = new ClassVisitor.ClassVisitorInternal(context);
+        visitor = new ClassVisitor(context);
     }
 
     @Test
@@ -28,7 +26,7 @@ class ClassVisitorTest extends JavaVisitorTestBase {
         String input = "public class c { void m() {} }";
         JavaParser.ClassDecContext c = HELPER.shouldParseToEof(input, JavaParser::classDec);
 
-        ClassAst classAst = visitor.visit(c, context);
+        ClassAst classAst = visitor.visit(c);
 
         assertThat(classAst.getHeader().getName()).isEqualTo("c");
         assertThat(Iterables.getOnlyElement(classAst.getBody().getMethods()).getHeader().getName()).isEqualTo("m");
@@ -39,7 +37,7 @@ class ClassVisitorTest extends JavaVisitorTestBase {
         String input = "public class c";
         JavaParser.ClassHeaderContext c = HELPER.shouldParseToEof(input, JavaParser::classHeader);
 
-        ClassHeader header = visitorInternal.visit(c);
+        ClassHeader header = visitor.visit(c);
 
         assertThat(Iterables.getOnlyElement(header.getModifiers())).isEqualTo("public");
         assertThat(header.getName()).isEqualTo("c");
@@ -50,7 +48,7 @@ class ClassVisitorTest extends JavaVisitorTestBase {
         String input = "int i; void m(){} MyClass(){} void m2(){} private String s;";
         JavaParser.ClassBodyContext c = HELPER.shouldParseToEof(input, JavaParser::classBody);
 
-        ClassBody body = visitorInternal.visit(c);
+        ClassBody body = visitor.visit(c);
 
         assertThat(body.getConstructors()).extracting(constructor -> constructor.getHeader().getName())
                 .containsExactly("MyClass");
@@ -65,7 +63,7 @@ class ClassVisitorTest extends JavaVisitorTestBase {
         String input = "";
         JavaParser.ClassBodyContext c = HELPER.shouldParseToEof(input, JavaParser::classBody);
 
-        ClassBody body = visitorInternal.visit(c);
+        ClassBody body = visitor.visit(c);
 
         Method constructor = Iterables.getOnlyElement(body.getConstructors());
         assertThat(constructor.getHeader())

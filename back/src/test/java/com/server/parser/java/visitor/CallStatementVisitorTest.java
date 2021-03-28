@@ -28,15 +28,16 @@ import static org.mockito.Mockito.mock;
 
 class CallStatementVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
-
-    private final CallStatementVisitor visitor = new CallStatementVisitor();
     private MethodContext methodContext;
+
+    private CallStatementVisitor visitor;
 
     @Override
     @BeforeEach
     void setUp() {
         super.setUp();
         methodContext = createMethodContext(METHOD_NAME, "void");
+        visitor = new CallStatementVisitor(methodContext);
     }
 
     @Test
@@ -44,7 +45,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
         String input = "System.out.print(\"Hello World\")";
         JavaParser.CallStatementContext c = HELPER.shouldParseToEof(input, JavaParser::callStatement);
 
-        CallStatement callStatement = visitor.visit(c, methodContext);
+        CallStatement callStatement = visitor.visit(c);
 
         CallInvocation invocation = callStatement.getCallInvocation();
         assertThat(invocation.getText()).isEqualTo(input);
@@ -62,7 +63,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
         JavaParser.CallStatementContext c = HELPER.shouldParseToEof(input, JavaParser::callStatement);
         methodContext.setThisValue(mock(ObjectValue.class));
 
-        CallStatement call = visitor.visit(c, methodContext);
+        CallStatement call = visitor.visit(c);
 
         CallInvocation invocation = call.getCallInvocation();
         assertThat(invocation.getText()).isEqualTo(input);
@@ -85,7 +86,7 @@ class CallStatementVisitorTest extends JavaVisitorTestBase {
         String input = "someMethod(\"literal\", var)";
         JavaParser.CallStatementContext c = HELPER.shouldParseToEof(input, JavaParser::callStatement);
 
-        CallStatement call = visitor.visit(c, methodContext);
+        CallStatement call = visitor.visit(c);
 
         assertThat(call.getCallInvocation().getResolved()).isEqualTo("someMethod(\"literal\", \"value\")");
     }

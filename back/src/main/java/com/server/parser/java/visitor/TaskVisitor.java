@@ -23,7 +23,7 @@ public class TaskVisitor extends JavaBaseVisitor<Task> {
 
     @Override
     public Task visitTask(JavaParser.TaskContext ctx) {
-        ClassAst classAst = context.getVisitor(ClassAst.class).visit(ctx.classDec(), context);
+        ClassAst classAst = context.getVisitor(ClassAst.class, context).visit(ctx.classDec());
 
         List<Statement> calledStatements = programRunner.run(classAst.getBody().getMethods()).orElse(Collections.emptyList());
         return new Task(classAst, calledStatements, context.getParameters().getCallResolver().getResolvedPrintCalls());

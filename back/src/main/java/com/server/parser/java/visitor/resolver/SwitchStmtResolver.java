@@ -166,14 +166,14 @@ public class SwitchStmtResolver extends StatementResolver {
                                                     List<JavaParser.SwitchElementLabelContext> switchElementLabelContexts) {
         return switchElementLabelContexts.stream().map(switchElementLabelContext -> {
             if (switchElementLabelContext.CASE() != null) {
-                return context.getVisitor(Expression.class).visit(switchElementLabelContext.expression(), context);
+                return context.getVisitor(Expression.class, context).visit(switchElementLabelContext.expression());
             }
             return null;
         }).collect(Collectors.toList());
     }
 
     static Value resolveExpression(JavaContext context, JavaParser.ExpressionContext expressionContext) {
-        Expression expression = context.getVisitor(Expression.class).visit(expressionContext, context);
+        Expression expression = context.getVisitor(Expression.class, context).visit(expressionContext);
         Value value = expression.getValue();
         if (!(value instanceof ConstantProvider)) {
             throw new ResolvingException(EXCEPTION_PREFIX + value.getExpression().getText() + EXCEPTION_SUFFIX);

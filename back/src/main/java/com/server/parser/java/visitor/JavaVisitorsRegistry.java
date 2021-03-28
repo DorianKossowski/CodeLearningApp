@@ -1,6 +1,5 @@
 package com.server.parser.java.visitor;
 
-import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMap;
 import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.ast.ClassAst;
@@ -21,14 +20,6 @@ import java.util.function.Supplier;
 public class JavaVisitorsRegistry {
     private static final Map<Class<? extends AstElement>, Supplier<JavaVisitor<?>>> _visitors =
             ImmutableMap.<Class<? extends AstElement>, Supplier<JavaVisitor<?>>>builder()
-                    .put(VariableDef.class, Suppliers.memoize(VariableDefVisitor::new))
-                    .put(Expression.class, Suppliers.memoize(ExpressionVisitor::new))
-                    .put(Method.class, Suppliers.memoize(MethodVisitor::new))
-                    .put(ClassAst.class, Suppliers.memoize(ClassVisitor::new))
-                    .put(Statement.class, Suppliers.memoize(StatementVisitor::new))
-                    .put(CallStatement.class, Suppliers.memoize(CallStatementVisitor::new))
-                    .put(ObjectRefExpression.class, Suppliers.memoize(ObjectRefExpressionVisitor::new))
-                    .put(Assignment.class, Suppliers.memoize(AssignmentStatementVisitor::new))
                     .build();
 
     public static <T extends AstElement> JavaVisitor<T> get(Class<T> elementClass) {
@@ -41,6 +32,14 @@ public class JavaVisitorsRegistry {
 
     private static final Map<Class<? extends AstElement>, Function<JavaContext, JavaVisitor<?>>> visitors =
             ImmutableMap.<Class<? extends AstElement>, Function<JavaContext, JavaVisitor<?>>>builder()
+                    .put(VariableDef.class, VariableDefVisitor::new)
+                    .put(Statement.class, StatementVisitor::new)
+                    .put(ObjectRefExpression.class, ObjectRefExpressionVisitor::new)
+                    .put(Method.class, MethodVisitor::new)
+                    .put(Expression.class, ExpressionVisitor::new)
+                    .put(ClassAst.class, ClassVisitor::new)
+                    .put(CallStatement.class, CallStatementVisitor::new)
+                    .put(Assignment.class, AssignmentStatementVisitor::new)
                     .put(IfElseStatement.class, IfElseStatementVisitor::new)
                     .build();
 

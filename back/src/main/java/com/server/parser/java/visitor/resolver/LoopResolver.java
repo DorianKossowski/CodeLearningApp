@@ -19,8 +19,8 @@ public class LoopResolver extends StatementResolver {
 
     static void validateLoopContent(JavaContext context, JavaParser.StatementContext statementContext) {
         JavaContext validationContext = ContextFactory.createValidationContext(context);
-        JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class);
-        Statement statement = visitor.visit(statementContext, validationContext);
+        JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class, validationContext);
+        Statement statement = visitor.visit(statementContext);
         if (statement instanceof VariableDef) {
             throw new ResolvingException(String.format("Deklaracja %s nie jest w tym miejscu dozwolona", statement.getText()));
         }

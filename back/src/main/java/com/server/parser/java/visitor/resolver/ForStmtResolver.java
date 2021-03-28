@@ -15,9 +15,9 @@ import java.util.List;
 public class ForStmtResolver extends LoopResolver {
 
     public static ForStatement resolve(JavaContext context, JavaParser.ForStatementContext forCtx) {
-        JavaVisitor<Statement> statementJavaVisitor = context.getVisitor(Statement.class);
+        JavaVisitor<Statement> statementJavaVisitor = context.getVisitor(Statement.class, context);
         if (forCtx.initExpr != null) {
-            statementJavaVisitor.visit(forCtx.initExpr, context);
+            statementJavaVisitor.visit(forCtx.initExpr);
         }
         validateLoopContent(context, forCtx.statement());
         List<Statement> contentStatements = resolveContent(context, forCtx, statementJavaVisitor);
@@ -30,14 +30,14 @@ public class ForStmtResolver extends LoopResolver {
         List<Statement> contentStatements = new ArrayList<>();
         while (shouldIterate(context, forCtx)) {
             validateMaxIteration(iteration);
-            Statement statement = statementJavaVisitor.visit(forCtx.statement(), context);
+            Statement statement = statementJavaVisitor.visit(forCtx.statement());
             addIterationProperty(statement, StatementProperties.FOR_ITERATION, iteration);
             contentStatements.add(statement);
             if (ReturnHandler.shouldReturn(statement) || BreakHandler.shouldBreak(statement)) {
                 return contentStatements;
             }
             if (forCtx.updateExpr != null) {
-                statementJavaVisitor.visit(forCtx.updateExpr, context);
+                statementJavaVisitor.visit(forCtx.updateExpr);
             }
             iteration++;
         }

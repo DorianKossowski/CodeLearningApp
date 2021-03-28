@@ -29,23 +29,23 @@ public class IfElseStatementVisitor extends JavaVisitor<IfElseStatement> {
         validateBranchesContent(ctx);
         boolean condValue = StatementResolver.resolveCondition(context, ctx.cond);
         Statement visitedStatement = null;
-        JavaVisitor<Statement> statementVisitor = context.getVisitor(Statement.class);
+        JavaVisitor<Statement> statementVisitor = context.getVisitor(Statement.class, context);
         if (condValue) {
-            visitedStatement = statementVisitor.visit(ctx.statement(0), context);
+            visitedStatement = statementVisitor.visit(ctx.statement(0));
         } else if (ctx.statement(1) != null) {
-            return IfElseStatement.createElse(statementVisitor.visit(ctx.statement(1), context));
+            return IfElseStatement.createElse(statementVisitor.visit(ctx.statement(1)));
         }
         return IfElseStatement.createIf(ctx.cond.getText(), visitedStatement);
     }
 
     void validateBranchesContent(JavaParser.IfElseStatementContext ctx) {
         JavaContext validationContext = ContextFactory.createValidationContext(context);
-        JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class);
+        JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class, validationContext);
 
-        Statement ifContentStmt = visitor.visit(ctx.statement(0), validationContext);
+        Statement ifContentStmt = visitor.visit(ctx.statement(0));
         validateBranchContent(ifContentStmt);
         if (ctx.statement(1) != null) {
-            Statement elseContentStmt = visitor.visit(ctx.statement(1), validationContext);
+            Statement elseContentStmt = visitor.visit(ctx.statement(1));
             validateBranchContent(elseContentStmt);
         }
     }

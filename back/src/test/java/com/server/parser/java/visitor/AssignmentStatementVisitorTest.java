@@ -27,13 +27,14 @@ import static org.mockito.Mockito.mock;
 class AssignmentStatementVisitorTest extends JavaVisitorTestBase {
     private MethodContext methodContext;
 
-    private final AssignmentStatementVisitor visitor = new AssignmentStatementVisitor();
+    private AssignmentStatementVisitor visitor;
 
     @Override
     @BeforeEach
     void setUp() {
         super.setUp();
         methodContext = createMethodContext("METHOD_NAME", "void");
+        visitor = new AssignmentStatementVisitor(methodContext);
     }
 
     @Test
@@ -42,7 +43,7 @@ class AssignmentStatementVisitorTest extends JavaVisitorTestBase {
         String input = "a = \"str\"";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 
-        Assignment assignment = visitor.visit(c, methodContext);
+        Assignment assignment = visitor.visit(c);
 
         assertThat(assignment.getText()).isEqualTo(input);
         assertThat(assignment.getId()).isEqualTo("a");
@@ -61,7 +62,7 @@ class AssignmentStatementVisitorTest extends JavaVisitorTestBase {
         String input = "a = 5";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 
-        assertThatThrownBy(() -> visitor.visit(c, methodContext))
+        assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie 5 nie jest typu String");
     }
@@ -76,7 +77,7 @@ class AssignmentStatementVisitorTest extends JavaVisitorTestBase {
         String input = "a.b = 1";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 
-        Assignment assignment = visitor.visit(c, methodContext);
+        Assignment assignment = visitor.visit(c);
 
         assertThat(assignment.getText()).isEqualTo(input);
         assertThat(assignment.getId()).isEqualTo("a.b");
