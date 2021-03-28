@@ -2,6 +2,7 @@ package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.Statements;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.*;
@@ -17,7 +18,6 @@ import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import java.util.List;
 import java.util.Objects;
 
 public class StatementVisitor extends JavaVisitor<Statement> {
@@ -30,7 +30,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     @Override
     public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
         JavaContext localContext = context.createLocalContext();
-        List<Statement> statements = localContext.resolveStatements(ctx.statementList());
+        Statements statements = localContext.resolveStatements(ctx.statementList());
         return new BlockStatement(statements);
     }
 

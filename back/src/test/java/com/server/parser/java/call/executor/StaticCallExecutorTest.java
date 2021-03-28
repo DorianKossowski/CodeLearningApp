@@ -3,6 +3,7 @@ package com.server.parser.java.call.executor;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.Statements;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.CallStatement;
@@ -45,7 +46,7 @@ class StaticCallExecutorTest {
         Method method = mockMethod(bodyContext);
         ExpressionStatement expressionStatement = mockExpressionStatement();
         doReturn(javaContext).when(spyExecutor).createStaticExecutionContext(method);
-        when(javaContext.resolveStatements(bodyContext)).thenReturn(Collections.singletonList(expressionStatement));
+        when(javaContext.resolveStatements(bodyContext)).thenReturn(new Statements(Collections.singletonList(expressionStatement)));
 
         CallStatement callStatement = spyExecutor.execute(method, invocation);
 

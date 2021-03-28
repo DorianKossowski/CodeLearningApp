@@ -7,6 +7,7 @@ import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.value.UninitializedValue;
 import com.server.parser.java.variable.MethodVar;
 import com.server.parser.util.exception.ResolvingException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,12 +18,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class StatementListVisitorTest extends JavaVisitorTestBase {
     private StatementListVisitor visitor;
 
+    @Override
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        visitor = new StatementListVisitor(createMethodContext());
+    }
+
     @Test
     void shouldVisitStatementsInCorrectOrder() {
         String input = "String a = \"s\"; System.out.println(\"sss\"); String b = \"s2\";";
         JavaParser.StatementListContext c = HELPER.shouldParseToEof(input, JavaParser::statementList);
 
-        List<Statement> statements = new StatementListVisitor(createMethodContext()).visit(c);
+        List<Statement> statements = visitor.visit(c).getStatements();
 
         assertThat(statements).hasSize(3);
         assertThat(statements.get(0).getText()).isEqualTo("String a = \"s\"");
@@ -35,7 +43,7 @@ class StatementListVisitorTest extends JavaVisitorTestBase {
         String input = "return; a = 1;";
         JavaParser.StatementListContext c = HELPER.shouldParseToEof(input, JavaParser::statementList);
 
-        assertThatThrownBy(() -> new StatementListVisitor(createMethodContext()).visit(c))
+        assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Obiekt a nie istnieje");
     }

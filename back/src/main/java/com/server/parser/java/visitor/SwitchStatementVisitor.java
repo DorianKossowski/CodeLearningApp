@@ -81,7 +81,7 @@ public class SwitchStatementVisitor extends JavaVisitor<SwitchStatement> {
         ArrayList<Statement> statements = new ArrayList<>();
         for (int i = startIndex; i < switchElements.size(); ++i) {
             SwitchElement switchElement = switchElements.get(i);
-            List<Statement> visitedStmts = context.resolveStatements(switchElement.getStatementListContext());
+            List<Statement> visitedStmts = context.resolveStatements(switchElement.getStatementListContext()).getStatements();
             for (Statement visitedStmt : visitedStmts) {
                 addProperty(visitedStmt, StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
                 statements.add(visitedStmt);

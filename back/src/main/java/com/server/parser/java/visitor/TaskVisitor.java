@@ -9,7 +9,6 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 
-import java.util.Collections;
 import java.util.List;
 
 public class TaskVisitor extends JavaBaseVisitor<Task> {
@@ -25,7 +24,7 @@ public class TaskVisitor extends JavaBaseVisitor<Task> {
     public Task visitTask(JavaParser.TaskContext ctx) {
         ClassAst classAst = context.getVisitor(ClassAst.class, context).visit(ctx.classDec());
 
-        List<Statement> calledStatements = programRunner.run(classAst.getBody().getMethods()).orElse(Collections.emptyList());
+        List<Statement> calledStatements = programRunner.run(classAst.getBody().getMethods());
         return new Task(classAst, calledStatements, context.getParameters().getCallResolver().getResolvedPrintCalls());
     }
 }

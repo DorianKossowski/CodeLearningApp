@@ -1,5 +1,6 @@
 package com.server.parser.java.visitor.resolver.util;
 
+import com.server.parser.java.ast.Statements;
 import com.server.parser.java.ast.statement.BlockStatement;
 import com.server.parser.java.ast.statement.ForStatement;
 import com.server.parser.java.ast.statement.IfElseStatement;
@@ -22,7 +23,7 @@ class BreakHandlerTest {
     @Test
     void shouldBreakInBlock() {
         IfElseStatement ifElseStatement = IfElseStatement.createIf("", BreakExprStatement.INSTANCE);
-        BlockStatement blockStatement = new BlockStatement(Collections.singletonList(ifElseStatement));
+        BlockStatement blockStatement = new BlockStatement(new Statements(Collections.singletonList(ifElseStatement)));
 
         assertThat(BreakHandler.shouldBreak(blockStatement)).isTrue();
     }

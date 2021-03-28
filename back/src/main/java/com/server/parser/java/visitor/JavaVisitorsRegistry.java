@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.Statements;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.ast.statement.*;
@@ -30,6 +31,7 @@ public class JavaVisitorsRegistry {
                     .put(WhileStatement.class, WhileStatementVisitor::new)
                     .put(ForStatement.class, ForStatementVisitor::new)
                     .put(SwitchStatement.class, SwitchStatementVisitor::new)
+                    .put(Statements.class, StatementListVisitor::new)
                     .build();
 
     public static <T extends AstElement> JavaVisitor<T> get(Class<T> elementClass, JavaContext context) {

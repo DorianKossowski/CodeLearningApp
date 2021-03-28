@@ -1,6 +1,7 @@
 package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.Statements;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
@@ -12,20 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-// TODO use Statements class
-public class StatementListVisitor extends JavaVisitor<List<Statement>> {
+public class StatementListVisitor extends JavaVisitor<Statements> {
     private final JavaContext context;
 
-    public StatementListVisitor(JavaContext context) {
+    StatementListVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
     }
 
     @Override
-    public List<Statement> visitStatementList(JavaParser.StatementListContext ctx) {
+    public Statements visitStatementList(JavaParser.StatementListContext ctx) {
         return visitStartingFromChild(ctx, context, 0);
     }
 
-    private List<Statement> visitStartingFromChild(JavaParser.StatementListContext ctx, JavaContext context, int startingChild) {
+    private Statements visitStartingFromChild(JavaParser.StatementListContext ctx, JavaContext context, int startingChild) {
         List<Statement> statements = new ArrayList<>();
         for (int i = startingChild; i < ctx.getChildCount(); ++i) {
             ParseTree child = ctx.getChild(i);
@@ -33,10 +33,10 @@ public class StatementListVisitor extends JavaVisitor<List<Statement>> {
             statements.add(statement);
             if (ReturnHandler.shouldReturn(statement) || BreakHandler.shouldBreak(statement)) {
                 validateRemainingStatements(ctx, context, i + 1);
-                return statements;
+                return new Statements(statements);
             }
         }
-        return statements;
+        return new Statements(statements);
     }
 
     private void validateRemainingStatements(JavaParser.StatementListContext ctx, JavaContext context, int startingChild) {

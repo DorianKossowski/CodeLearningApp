@@ -1,14 +1,12 @@
 package com.server.parser.java;
 
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.Statements;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class JavaProgramRunner {
     private final JavaContext context;
@@ -23,15 +21,17 @@ public class JavaProgramRunner {
         this.mainRunner = Objects.requireNonNull(mainRunner, "mainRunner cannot be null");
     }
 
-    public Optional<List<Statement>> run(List<Method> methods) {
+    public List<Statement> run(List<Method> methods) {
         context.getStaticFields().values().forEach(fieldVar -> fieldVar.initialize(context));
         return mainRunner.run(methods);
     }
 
     static class MainRunner {
-        public Optional<List<Statement>> run(List<Method> methods) {
+        public List<Statement> run(List<Method> methods) {
             return getMainMethod(methods)
-                    .map(mainMethod -> mainMethod.getMethodContext().resolveStatements(mainMethod.getBodyContext()));
+                    .map(mainMethod -> mainMethod.getMethodContext().resolveStatements(mainMethod.getBodyContext()))
+                    .map(Statements::getStatements)
+                    .orElse(Collections.emptyList());
         }
 
         Optional<Method> getMainMethod(List<Method> methods) {

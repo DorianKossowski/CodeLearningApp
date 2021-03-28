@@ -1,14 +1,12 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.AstElement;
+import com.server.parser.java.ast.Statements;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.java.visitor.JavaVisitorsRegistry;
-import com.server.parser.java.visitor.StatementListVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
-
-import java.util.List;
 
 public abstract class ResolvingContext {
 
@@ -26,8 +24,8 @@ public abstract class ResolvingContext {
         return visitor.visit(statementContext);
     }
 
-    public List<Statement> resolveStatements(ParseTree statementsContext) {
-        StatementListVisitor visitor = new StatementListVisitor((JavaContext) this);
+    public Statements resolveStatements(ParseTree statementsContext) {
+        JavaVisitor<Statements> visitor = getVisitor(Statements.class, (JavaContext) this);
         return visitor.visit(statementsContext);
     }
 }
