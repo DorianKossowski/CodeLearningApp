@@ -7,7 +7,7 @@ import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.exception.ResolvingException;
 
-public class LoopResolver extends StatementResolver {
+public final class LoopResolver {
     static final int MAX_ITER_NUMBER = 1000;
 
     public static void validateMaxIteration(int iterNumber) {

@@ -6,7 +6,7 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.resolver.StatementResolver;
+import com.server.parser.java.visitor.resolver.ConditionResolver;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Objects;
@@ -21,7 +21,7 @@ public class IfElseStatementVisitor extends JavaVisitor<IfElseStatement> {
     @Override
     public IfElseStatement visitIfElseStatement(JavaParser.IfElseStatementContext ctx) {
         validateBranchesContent(ctx);
-        boolean condValue = StatementResolver.resolveCondition(context, ctx.cond);
+        boolean condValue = ConditionResolver.resolveCondition(context, ctx.cond);
         Statement visitedStatement = null;
         if (condValue) {
             visitedStatement = context.resolveStatement(ctx.statement(0));

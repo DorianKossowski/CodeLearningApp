@@ -7,7 +7,7 @@ import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.Value;
 import com.server.parser.util.exception.ResolvingException;
 
-public abstract class StatementResolver {
+public class ConditionResolver {
 
     public static boolean resolveCondition(JavaContext context, JavaParser.ExpressionContext expressionContext) {
         Expression condition = context.resolveExpression(expressionContext);

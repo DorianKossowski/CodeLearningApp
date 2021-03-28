@@ -17,7 +17,7 @@ import com.server.parser.util.exception.ResolvingException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SwitchStmtResolver extends StatementResolver {
+public class SwitchStmtResolver extends ConditionResolver {
     private static final String EXCEPTION_PREFIX = "W instrukcji switch: ";
     private static final String EXCEPTION_SUFFIX = " nie jest jednego z typów: char, byte, short, int, Character, " +
             "Byte, Short, Integer, String";

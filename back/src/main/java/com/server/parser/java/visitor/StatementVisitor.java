@@ -12,7 +12,6 @@ import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.DelegatingContext;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.resolver.ForStmtResolver;
 import com.server.parser.java.visitor.resolver.SwitchStmtResolver;
 import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.BreakStatementException;
@@ -101,8 +100,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     //*** FOR ***//
     @Override
     public Statement visitForStatement(JavaParser.ForStatementContext ctx) {
-        JavaContext localContext = context.createLocalContext();
-        return ForStmtResolver.resolve(localContext, ctx);
+        return context.getVisitor(ForStatement.class, context.createLocalContext()).visit(ctx);
     }
 
     //*** WHILE ***//

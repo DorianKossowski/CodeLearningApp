@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.server.parser.java.visitor.resolver.ConditionResolver.resolveCondition;
 import static com.server.parser.java.visitor.resolver.LoopResolver.*;
 
 public class WhileStatementVisitor extends JavaVisitor<WhileStatement> {

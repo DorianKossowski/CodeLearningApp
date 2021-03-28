@@ -1,4 +1,4 @@
-package com.server.parser.java.visitor.resolver;
+package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.ForStatement;
@@ -10,22 +10,32 @@ import com.server.parser.java.visitor.resolver.util.ReturnHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class ForStmtResolver extends LoopResolver {
+import static com.server.parser.java.visitor.resolver.ConditionResolver.resolveCondition;
+import static com.server.parser.java.visitor.resolver.LoopResolver.*;
 
-    public static ForStatement resolve(JavaContext context, JavaParser.ForStatementContext forCtx) {
-        if (forCtx.initExpr != null) {
-            context.resolveStatement(forCtx.initExpr);
+public class ForStatementVisitor extends JavaVisitor<ForStatement> {
+    private final JavaContext context;
+
+    ForStatementVisitor(JavaContext context) {
+        this.context = Objects.requireNonNull(context, "context cannot be null");
+    }
+
+    @Override
+    public ForStatement visitForStatement(JavaParser.ForStatementContext ctx) {
+        if (ctx.initExpr != null) {
+            context.resolveStatement(ctx.initExpr);
         }
-        validateLoopContent(context, forCtx.statement());
-        List<Statement> contentStatements = resolveContent(context, forCtx);
+        validateLoopContent(context, ctx.statement());
+        List<Statement> contentStatements = resolveContent(ctx);
         return new ForStatement(contentStatements);
     }
 
-    static List<Statement> resolveContent(JavaContext context, JavaParser.ForStatementContext forCtx) {
+    List<Statement> resolveContent(JavaParser.ForStatementContext forCtx) {
         int iteration = 0;
         List<Statement> contentStatements = new ArrayList<>();
-        while (shouldIterate(context, forCtx)) {
+        while (shouldIterate(forCtx)) {
             validateMaxIteration(iteration);
             Statement statement = context.resolveStatement(forCtx.statement());
             addIterationProperty(statement, StatementProperties.FOR_ITERATION, iteration);
@@ -41,7 +51,7 @@ public class ForStmtResolver extends LoopResolver {
         return contentStatements;
     }
 
-    static boolean shouldIterate(JavaContext context, JavaParser.ForStatementContext forCtx) {
+    boolean shouldIterate(JavaParser.ForStatementContext forCtx) {
         if (forCtx.condExpr != null) {
             return resolveCondition(context, forCtx.condExpr);
         }
