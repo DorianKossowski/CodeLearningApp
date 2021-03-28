@@ -5,7 +5,6 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.JavaVisitor;
 import com.server.parser.util.exception.ResolvingException;
 
 public class LoopResolver extends StatementResolver {
@@ -19,8 +18,7 @@ public class LoopResolver extends StatementResolver {
 
     static void validateLoopContent(JavaContext context, JavaParser.StatementContext statementContext) {
         JavaContext validationContext = ContextFactory.createValidationContext(context);
-        JavaVisitor<Statement> visitor = validationContext.getVisitor(Statement.class, validationContext);
-        Statement statement = visitor.visit(statementContext);
+        Statement statement = validationContext.resolveStatement(validationContext, statementContext);
         if (statement instanceof VariableDef) {
             throw new ResolvingException(String.format("Deklaracja %s nie jest w tym miejscu dozwolona", statement.getText()));
         }

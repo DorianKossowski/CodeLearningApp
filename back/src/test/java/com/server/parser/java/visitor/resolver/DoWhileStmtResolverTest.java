@@ -30,8 +30,7 @@ class DoWhileStmtResolverTest {
         JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { System.out.print(\"\"); } while(false);",
                 JavaParser::doWhileStatement);
 
-        List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c,
-                methodContext.getVisitor(Statement.class, methodContext));
+        List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c);
         Statement statement = Iterables.getOnlyElement(statements);
         assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isExactlyInstanceOf(CallInvocation.class);
     }
@@ -51,8 +50,7 @@ class DoWhileStmtResolverTest {
         JavaParser.DoWhileStatementContext c = HELPER.shouldParseToEof("do { break; int sth; } while(true);",
                 JavaParser::doWhileStatement);
 
-        List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c,
-                methodContext.getVisitor(Statement.class, methodContext));
+        List<Statement> statements = DoWhileStmtResolver.resolveContent(methodContext, c);
         Statement statement = Iterables.getOnlyElement(statements);
         assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
     }

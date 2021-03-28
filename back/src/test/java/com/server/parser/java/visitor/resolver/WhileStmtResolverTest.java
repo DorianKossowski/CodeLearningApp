@@ -33,8 +33,7 @@ class WhileStmtResolverTest {
         JavaParser.WhileStatementContext c = HELPER.shouldParseToEof("while(true) { break; int sth; }",
                 JavaParser::whileStatement);
 
-        List<Statement> statements = WhileStmtResolver.resolveContent(methodContext, c,
-                methodContext.getVisitor(Statement.class, methodContext));
+        List<Statement> statements = WhileStmtResolver.resolveContent(methodContext, c);
         Statement statement = Iterables.getOnlyElement(statements);
         assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
     }

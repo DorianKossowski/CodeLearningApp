@@ -25,11 +25,10 @@ public class StatementListVisitor extends JavaVisitor<List<Statement>> {
     }
 
     private List<Statement> visitStartingFromChild(JavaParser.StatementListContext ctx, JavaContext context, int startingChild) {
-        JavaVisitor<Statement> statementVisitor = context.getVisitor(Statement.class, context);
         List<Statement> statements = new ArrayList<>();
         for (int i = startingChild; i < ctx.getChildCount(); ++i) {
             ParseTree child = ctx.getChild(i);
-            Statement statement = statementVisitor.visit(child);
+            Statement statement = context.resolveStatement(context, child);
             statements.add(statement);
             if (ReturnHandler.shouldReturn(statement) || BreakHandler.shouldBreak(statement)) {
                 validateRemainingStatements(ctx, context, i + 1);
