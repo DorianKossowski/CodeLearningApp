@@ -31,7 +31,7 @@ public abstract class CallExecutor {
         assignInvocationParameters(method.getHeader().getArguments(), invocation.getArgs(), executionContext);
         JavaParser.MethodBodyContext bodyContext = method.getBodyContext();
         List<Statement> statements = bodyContext != null ?
-                executionContext.resolveStatements(executionContext, bodyContext.statementList()) :
+                executionContext.resolveStatements(bodyContext.statementList()) :
                 Collections.emptyList();
         postExecution();
         return statements;

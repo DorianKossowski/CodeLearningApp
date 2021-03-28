@@ -24,19 +24,19 @@ public class IfElseStatementVisitor extends JavaVisitor<IfElseStatement> {
         boolean condValue = StatementResolver.resolveCondition(context, ctx.cond);
         Statement visitedStatement = null;
         if (condValue) {
-            visitedStatement = context.resolveStatement(context, ctx.statement(0));
+            visitedStatement = context.resolveStatement(ctx.statement(0));
         } else if (ctx.statement(1) != null) {
-            return IfElseStatement.createElse(context.resolveStatement(context, ctx.statement(1)));
+            return IfElseStatement.createElse(context.resolveStatement(ctx.statement(1)));
         }
         return IfElseStatement.createIf(ctx.cond.getText(), visitedStatement);
     }
 
     void validateBranchesContent(JavaParser.IfElseStatementContext ctx) {
         JavaContext validationContext = ContextFactory.createValidationContext(context);
-        Statement ifContentStmt = validationContext.resolveStatement(validationContext, ctx.statement(0));
+        Statement ifContentStmt = validationContext.resolveStatement(ctx.statement(0));
         validateBranchContent(ifContentStmt);
         if (ctx.statement(1) != null) {
-            Statement elseContentStmt = validationContext.resolveStatement(validationContext, ctx.statement(1));
+            Statement elseContentStmt = validationContext.resolveStatement(ctx.statement(1));
             validateBranchContent(elseContentStmt);
         }
     }

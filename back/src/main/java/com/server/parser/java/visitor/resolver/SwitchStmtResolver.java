@@ -70,7 +70,7 @@ public class SwitchStmtResolver extends StatementResolver {
         ArrayList<Statement> statements = new ArrayList<>();
         for (int i = startIndex; i < switchElements.size(); ++i) {
             SwitchElement switchElement = switchElements.get(i);
-            List<Statement> visitedStmts = context.resolveStatements(context, switchElement.getStatementListContext());
+            List<Statement> visitedStmts = context.resolveStatements(switchElement.getStatementListContext());
             for (Statement visitedStmt : visitedStmts) {
                 addProperty(visitedStmt, StatementProperties.SWITCH_LABELS, getElementJoinedLabels(switchElement));
                 statements.add(visitedStmt);
@@ -158,7 +158,7 @@ public class SwitchStmtResolver extends StatementResolver {
     static void validateStatementLists(JavaContext context, List<JavaParser.StatementListContext> statementListContexts) {
         JavaContext validationContext = ContextFactory.createValidationContext(context);
         statementListContexts.forEach(
-                statementListContext -> validationContext.resolveStatements(validationContext, statementListContext)
+                statementListContext -> validationContext.resolveStatements(statementListContext)
         );
     }
 
@@ -166,14 +166,14 @@ public class SwitchStmtResolver extends StatementResolver {
                                                     List<JavaParser.SwitchElementLabelContext> switchElementLabelContexts) {
         return switchElementLabelContexts.stream().map(switchElementLabelContext -> {
             if (switchElementLabelContext.CASE() != null) {
-                return context.resolveExpression(context, switchElementLabelContext.expression());
+                return context.resolveExpression(switchElementLabelContext.expression());
             }
             return null;
         }).collect(Collectors.toList());
     }
 
     static Value resolveExpression(JavaContext context, JavaParser.ExpressionContext expressionContext) {
-        Expression expression = context.resolveExpression(context, expressionContext);
+        Expression expression = context.resolveExpression(expressionContext);
         Value value = expression.getValue();
         if (!(value instanceof ConstantProvider)) {
             throw new ResolvingException(EXCEPTION_PREFIX + value.getExpression().getText() + EXCEPTION_SUFFIX);

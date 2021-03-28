@@ -87,7 +87,7 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
 
     private MethodVarDef createMethodVarDef(String id, String type, JavaParser.VarDecContext ctx) {
         Expression expression = ctx.expression() != null ?
-                context.resolveExpression(context, ctx.expression()) :
+                context.resolveExpression(ctx.expression()) :
                 EmptyExpressionPreparer.prepareUninitialized(id);
         return new MethodVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id, expression,
                 ctx.expression() != null);
@@ -103,7 +103,7 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
             return new FieldVarInitExpressionFunction("", (context) -> EmptyExpressionPreparer.prepare(type));
         }
         return new FieldVarInitExpressionFunction(ctx.expression().getText(),
-                (context) -> context.resolveExpression(context, ctx.expression())
+                (context) -> context.resolveExpression(ctx.expression())
         );
     }
 }

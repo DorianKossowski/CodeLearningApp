@@ -34,7 +34,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     @Override
     public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
         JavaContext localContext = context.createLocalContext();
-        List<Statement> statements = localContext.resolveStatements(localContext, ctx.statementList());
+        List<Statement> statements = localContext.resolveStatements(ctx.statementList());
         return new BlockStatement(statements);
     }
 
@@ -132,7 +132,7 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     public Statement visitReturnStatement(JavaParser.ReturnStatementContext ctx) {
         Expression expression = VoidExpression.INSTANCE;
         if (ctx.expression() != null) {
-            expression = context.resolveExpression(context, ctx.expression());
+            expression = context.resolveExpression(ctx.expression());
         }
         ContextParameters parameters = context.getParameters();
         if (TypeCorrectnessChecker.isCorrect(parameters.getMethodResultType(), expression)) {

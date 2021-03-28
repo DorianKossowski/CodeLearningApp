@@ -24,7 +24,7 @@ public class DoWhileStmtResolver extends LoopResolver {
         List<Statement> contentStatements = new ArrayList<>();
         do {
             validateMaxIteration(iteration);
-            Statement statement = context.resolveStatement(context, doWhileCtx.statement());
+            Statement statement = context.resolveStatement(doWhileCtx.statement());
             addIterationProperty(statement, StatementProperties.DO_WHILE_ITERATION, iteration);
             contentStatements.add(statement);
             if (ReturnHandler.shouldReturn(statement) || BreakHandler.shouldBreak(statement)) {

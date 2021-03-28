@@ -45,7 +45,7 @@ class StaticCallExecutorTest {
         Method method = mockMethod(bodyContext);
         ExpressionStatement expressionStatement = mockExpressionStatement();
         doReturn(javaContext).when(spyExecutor).createStaticExecutionContext(method);
-        when(javaContext.resolveStatements(javaContext, bodyContext.statementList())).thenReturn(Collections.singletonList(expressionStatement));
+        when(javaContext.resolveStatements(bodyContext.statementList())).thenReturn(Collections.singletonList(expressionStatement));
 
         CallStatement callStatement = spyExecutor.execute(method, invocation);
 

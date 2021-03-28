@@ -16,18 +16,18 @@ public abstract class ResolvingContext {
         return JavaVisitorsRegistry.get(elementClass, context);
     }
 
-    public Expression resolveExpression(JavaContext context, ParseTree expressionContext) {
-        JavaVisitor<Expression> visitor = getVisitor(Expression.class, context);
+    public Expression resolveExpression(ParseTree expressionContext) {
+        JavaVisitor<Expression> visitor = getVisitor(Expression.class, (JavaContext) this);
         return visitor.visit(expressionContext);
     }
 
-    public Statement resolveStatement(JavaContext context, ParseTree statementContext) {
-        JavaVisitor<Statement> visitor = getVisitor(Statement.class, context);
+    public Statement resolveStatement(ParseTree statementContext) {
+        JavaVisitor<Statement> visitor = getVisitor(Statement.class, (JavaContext) this);
         return visitor.visit(statementContext);
     }
 
-    public List<Statement> resolveStatements(JavaContext context, ParseTree statementsContext) {
-        StatementListVisitor visitor = new StatementListVisitor(context);
+    public List<Statement> resolveStatements(ParseTree statementsContext) {
+        StatementListVisitor visitor = new StatementListVisitor((JavaContext) this);
         return visitor.visit(statementsContext);
     }
 }

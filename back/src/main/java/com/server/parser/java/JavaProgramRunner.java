@@ -34,7 +34,7 @@ public class JavaProgramRunner {
             return getMainMethod(methods)
                     .map(mainMethod -> {
                         MethodContext context = mainMethod.getMethodContext();
-                        return context.resolveStatements(context, mainMethod.getBodyContext().statementList());
+                        return context.resolveStatements(mainMethod.getBodyContext().statementList());
                     });
         }
 

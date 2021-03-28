@@ -28,7 +28,7 @@ public class StatementListVisitor extends JavaVisitor<List<Statement>> {
         List<Statement> statements = new ArrayList<>();
         for (int i = startingChild; i < ctx.getChildCount(); ++i) {
             ParseTree child = ctx.getChild(i);
-            Statement statement = context.resolveStatement(context, child);
+            Statement statement = context.resolveStatement(child);
             statements.add(statement);
             if (ReturnHandler.shouldReturn(statement) || BreakHandler.shouldBreak(statement)) {
                 validateRemainingStatements(ctx, context, i + 1);

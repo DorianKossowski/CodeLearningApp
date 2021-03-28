@@ -19,7 +19,7 @@ public class AssignmentStatementVisitor extends JavaVisitor<Assignment> {
     @Override
     public Assignment visitAssignment(JavaParser.AssignmentContext ctx) {
         String assignmentId;
-        Expression expression = context.resolveExpression(context, ctx.expression());
+        Expression expression = context.resolveExpression(ctx.expression());
         if (ctx.assignmentAttributeIdentifier() == null) {
             assignmentId = textVisitor.visit(ctx.identifier());
             context.updateVariable(assignmentId, expression);

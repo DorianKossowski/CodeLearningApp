@@ -24,7 +24,7 @@ public class WhileStmtResolver extends LoopResolver {
         List<Statement> contentStatements = new ArrayList<>();
         while (resolveCondition(context, whileCtx.expression())) {
             validateMaxIteration(iteration);
-            Statement statement = context.resolveStatement(context, whileCtx.statement());
+            Statement statement = context.resolveStatement(whileCtx.statement());
             addIterationProperty(statement, StatementProperties.WHILE_ITERATION, iteration);
             contentStatements.add(statement);
             if (ReturnHandler.shouldReturn(statement) || BreakHandler.shouldBreak(statement)) {
