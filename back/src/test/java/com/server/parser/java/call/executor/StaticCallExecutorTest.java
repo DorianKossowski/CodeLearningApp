@@ -41,11 +41,11 @@ class StaticCallExecutorTest {
     @Test
     void shouldExecuteNoArgStaticCall() {
         StaticCallExecutor spyExecutor = spy(executor);
-        JavaParser.MethodBodyContext bodyContext = mock(JavaParser.MethodBodyContext.class, RETURNS_DEEP_STUBS);
+        JavaParser.MethodBodyContext bodyContext = mock(JavaParser.MethodBodyContext.class);
         Method method = mockMethod(bodyContext);
         ExpressionStatement expressionStatement = mockExpressionStatement();
         doReturn(javaContext).when(spyExecutor).createStaticExecutionContext(method);
-        when(javaContext.resolveStatements(bodyContext.statementList())).thenReturn(Collections.singletonList(expressionStatement));
+        when(javaContext.resolveStatements(bodyContext)).thenReturn(Collections.singletonList(expressionStatement));
 
         CallStatement callStatement = spyExecutor.execute(method, invocation);
 

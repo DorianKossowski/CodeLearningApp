@@ -4,7 +4,6 @@ import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.context.MethodContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,10 +31,7 @@ public class JavaProgramRunner {
     static class MainRunner {
         public Optional<List<Statement>> run(List<Method> methods) {
             return getMainMethod(methods)
-                    .map(mainMethod -> {
-                        MethodContext context = mainMethod.getMethodContext();
-                        return context.resolveStatements(mainMethod.getBodyContext().statementList());
-                    });
+                    .map(mainMethod -> mainMethod.getMethodContext().resolveStatements(mainMethod.getBodyContext()));
         }
 
         Optional<Method> getMainMethod(List<Method> methods) {
