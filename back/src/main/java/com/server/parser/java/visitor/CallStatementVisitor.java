@@ -11,7 +11,7 @@ import java.util.Objects;
 public class CallStatementVisitor extends JavaVisitor<CallStatement> {
     private final JavaContext context;
 
-    public CallStatementVisitor(JavaContext context) {
+    CallStatementVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
     }
 

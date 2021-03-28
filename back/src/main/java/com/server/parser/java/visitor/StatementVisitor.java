@@ -27,7 +27,7 @@ import java.util.Objects;
 public class StatementVisitor extends JavaVisitor<Statement> {
     private final DelegatingContext context;
 
-    public StatementVisitor(JavaContext context) {
+    StatementVisitor(JavaContext context) {
         this.context = (DelegatingContext) Objects.requireNonNull(context, "context cannot be null");
     }
 

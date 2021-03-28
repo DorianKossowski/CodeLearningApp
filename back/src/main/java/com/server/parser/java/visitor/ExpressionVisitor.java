@@ -17,7 +17,7 @@ import java.util.Objects;
 public class ExpressionVisitor extends JavaVisitor<Expression> {
     private final JavaContext context;
 
-    public ExpressionVisitor(JavaContext context) {
+    ExpressionVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
     }
 

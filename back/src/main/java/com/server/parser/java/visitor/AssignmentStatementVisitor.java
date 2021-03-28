@@ -12,7 +12,7 @@ import java.util.Objects;
 public class AssignmentStatementVisitor extends JavaVisitor<Assignment> {
     private final JavaContext context;
 
-    public AssignmentStatementVisitor(JavaContext context) {
+    AssignmentStatementVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
     }
 

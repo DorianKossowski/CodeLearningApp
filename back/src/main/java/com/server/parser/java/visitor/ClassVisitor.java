@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ClassVisitor extends JavaVisitor<ClassAst> {
     private final ClassContext context;
 
-    public ClassVisitor(JavaContext context) {
+    ClassVisitor(JavaContext context) {
         this.context = (ClassContext) Objects.requireNonNull(context, "context cannot be null");
     }
 

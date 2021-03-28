@@ -14,7 +14,7 @@ import java.util.Objects;
 public class IfElseStatementVisitor extends JavaVisitor<IfElseStatement> {
     private final JavaContext context;
 
-    public IfElseStatementVisitor(JavaContext context) {
+    IfElseStatementVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
     }
 

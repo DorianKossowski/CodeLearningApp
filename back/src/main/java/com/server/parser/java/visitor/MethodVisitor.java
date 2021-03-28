@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class MethodVisitor extends JavaVisitor<Method> {
     private final MethodContext context;
 
-    public MethodVisitor(JavaContext context) {
+    MethodVisitor(JavaContext context) {
         this.context = (MethodContext) Objects.requireNonNull(context, "context cannot be null");
     }
 

@@ -18,13 +18,14 @@ import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.RuleContext;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class VariableDefVisitor extends JavaVisitor<VariableDef> {
     private final JavaContext context;
 
-    public VariableDefVisitor(JavaContext context) {
-        this.context = context;
+    VariableDefVisitor(JavaContext context) {
+        this.context = Objects.requireNonNull(context, "context cannot be null");
     }
 
     @Override

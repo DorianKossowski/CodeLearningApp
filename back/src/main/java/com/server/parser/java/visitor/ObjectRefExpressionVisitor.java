@@ -10,7 +10,7 @@ import java.util.Objects;
 public class ObjectRefExpressionVisitor extends JavaVisitor<ObjectRefExpression> {
     private final JavaContext context;
 
-    public ObjectRefExpressionVisitor(JavaContext context) {
+    ObjectRefExpressionVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
     }
 
