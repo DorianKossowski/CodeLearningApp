@@ -6,7 +6,6 @@ import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.util.BreakHandler;
 import com.server.parser.java.visitor.resolver.util.ReturnHandler;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
@@ -18,11 +17,6 @@ public class StatementListVisitor extends JavaVisitor<List<Statement>> {
 
     public StatementListVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
-    }
-
-    @Override
-    public List<Statement> visit(ParserRuleContext ctx, JavaContext context) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

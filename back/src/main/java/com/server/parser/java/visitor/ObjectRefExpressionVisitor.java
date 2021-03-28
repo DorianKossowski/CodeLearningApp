@@ -4,7 +4,6 @@ import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.ObjectRefValueResolver;
-import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Objects;
 
@@ -13,11 +12,6 @@ public class ObjectRefExpressionVisitor extends JavaVisitor<ObjectRefExpression>
 
     public ObjectRefExpressionVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
-    }
-
-    @Override
-    public ObjectRefExpression visit(ParserRuleContext ctx, JavaContext context) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

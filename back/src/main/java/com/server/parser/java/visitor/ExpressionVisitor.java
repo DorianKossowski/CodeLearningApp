@@ -11,7 +11,6 @@ import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.Computable;
 import com.server.parser.java.value.Value;
 import com.server.parser.util.exception.ResolvingException;
-import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Objects;
 
@@ -20,11 +19,6 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
 
     public ExpressionVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
-    }
-
-    @Override
-    public Expression visit(ParserRuleContext ctx, JavaContext context) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

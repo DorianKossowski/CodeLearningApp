@@ -6,7 +6,6 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.ast.statement.expression_statement.Assignment;
 import com.server.parser.java.context.JavaContext;
-import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Objects;
 
@@ -15,11 +14,6 @@ public class AssignmentStatementVisitor extends JavaVisitor<Assignment> {
 
     public AssignmentStatementVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
-    }
-
-    @Override
-    public Assignment visit(ParserRuleContext ctx, JavaContext context) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

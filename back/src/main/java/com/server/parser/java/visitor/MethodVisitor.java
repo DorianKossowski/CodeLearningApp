@@ -10,7 +10,6 @@ import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.java.variable.MethodVar;
 import com.server.parser.util.exception.ResolvingException;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
 import java.util.ArrayList;
@@ -23,11 +22,6 @@ public class MethodVisitor extends JavaVisitor<Method> {
 
     public MethodVisitor(JavaContext context) {
         this.context = (MethodContext) Objects.requireNonNull(context, "context cannot be null");
-    }
-
-    @Override
-    public Method visit(ParserRuleContext ctx, JavaContext context) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

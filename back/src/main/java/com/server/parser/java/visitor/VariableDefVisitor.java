@@ -15,7 +15,6 @@ import com.server.parser.java.variable.FieldVarInitExpressionFunction;
 import com.server.parser.java.variable.MethodVar;
 import com.server.parser.util.EmptyExpressionPreparer;
 import com.server.parser.util.exception.ResolvingException;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
 import java.util.List;
@@ -26,11 +25,6 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
 
     public VariableDefVisitor(JavaContext context) {
         this.context = context;
-    }
-
-    @Override
-    public VariableDef visit(ParserRuleContext ctx, JavaContext context) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -8,7 +8,6 @@ import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
 import java.util.Collections;
@@ -21,11 +20,6 @@ public class ClassVisitor extends JavaVisitor<ClassAst> {
 
     public ClassVisitor(JavaContext context) {
         this.context = (ClassContext) Objects.requireNonNull(context, "context cannot be null");
-    }
-
-    @Override
-    public ClassAst visit(ParserRuleContext ctx, JavaContext context) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

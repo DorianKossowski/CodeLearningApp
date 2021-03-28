@@ -32,11 +32,6 @@ public class StatementVisitor extends JavaVisitor<Statement> {
     }
 
     @Override
-    public Statement visit(ParserRuleContext ctx, JavaContext context) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
         JavaContext localContext = context.createLocalContext();
         List<Statement> statements = localContext.resolveStatements(localContext, ctx.statementList());

@@ -8,7 +8,6 @@ import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.StatementResolver;
 import com.server.parser.util.exception.ResolvingException;
-import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Objects;
 
@@ -17,11 +16,6 @@ public class IfElseStatementVisitor extends JavaVisitor<IfElseStatement> {
 
     public IfElseStatementVisitor(JavaContext context) {
         this.context = Objects.requireNonNull(context, "context cannot be null");
-    }
-
-    @Override
-    public IfElseStatement visit(ParserRuleContext ctx, JavaContext context) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
