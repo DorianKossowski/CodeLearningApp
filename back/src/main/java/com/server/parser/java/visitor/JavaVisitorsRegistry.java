@@ -15,21 +15,8 @@ import com.server.parser.java.context.JavaContext;
 
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class JavaVisitorsRegistry {
-    private static final Map<Class<? extends AstElement>, Supplier<JavaVisitor<?>>> _visitors =
-            ImmutableMap.<Class<? extends AstElement>, Supplier<JavaVisitor<?>>>builder()
-                    .build();
-
-    public static <T extends AstElement> JavaVisitor<T> get(Class<T> elementClass) {
-        JavaVisitor<?> visitor = _visitors.get(elementClass).get();
-        if (visitor == null) {
-            throw new RuntimeException(String.format("Visitor for class %s not exists", elementClass));
-        }
-        return (JavaVisitor<T>) visitor;
-    }
-
     private static final Map<Class<? extends AstElement>, Function<JavaContext, JavaVisitor<?>>> visitors =
             ImmutableMap.<Class<? extends AstElement>, Function<JavaContext, JavaVisitor<?>>>builder()
                     .put(VariableDef.class, VariableDefVisitor::new)

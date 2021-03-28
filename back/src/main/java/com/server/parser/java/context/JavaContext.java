@@ -14,10 +14,6 @@ import java.util.stream.Collectors;
 public abstract class JavaContext {
     private ContextParameters parameters;
 
-    public <T extends AstElement> JavaVisitor<T> getVisitor(Class<T> elementClass) {
-        return JavaVisitorsRegistry.get(elementClass);
-    }
-
     public <T extends AstElement> JavaVisitor<T> getVisitor(Class<T> elementClass, JavaContext context) {
         return JavaVisitorsRegistry.get(elementClass, context);
     }
