@@ -36,6 +36,7 @@ class DoWhileStmtResolverTest {
 
     private MethodContext createMethodContext() {
         ClassContext context = new ClassContext();
+        context.setName("");
         MethodContext methodContext = context.createEmptyMethodContext();
         methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
                 mock(JavaParser.MethodBodyContext.class));

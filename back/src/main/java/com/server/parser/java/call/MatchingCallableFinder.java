@@ -1,12 +1,16 @@
 package com.server.parser.java.call;
 
+import com.server.parser.java.ast.ConstructorHeader;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import com.server.parser.java.call.reference.CallReference;
+import com.server.parser.java.call.reference.ConstructorCallReference;
 import com.server.parser.util.TypeCorrectnessChecker;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class MatchingCallableFinder {
     private final Map<MethodHeader, Method> callableWithContext;
@@ -15,11 +19,19 @@ public class MatchingCallableFinder {
         this.callableWithContext = Objects.requireNonNull(callableWithContext, "callableWithContext cannot be null");
     }
 
-    Optional<Method> find(String invocationName, List<Expression> invocationArgs) {
+    Optional<Method> find(CallReference callReference, List<Expression> invocationArgs) {
+        Predicate<MethodHeader> isProperTypeCallable = getCallableTypePredicate(callReference);
         return callableWithContext.entrySet().stream()
-                .filter(entry -> isMatchingMethod(invocationName, invocationArgs, entry.getKey()))
+                .filter(entry -> isProperTypeCallable.test(entry.getKey()))
+                .filter(entry -> isMatchingMethod(callReference.getCallName(), invocationArgs, entry.getKey()))
                 .map(Map.Entry::getValue)
                 .findFirst();
+    }
+
+    private Predicate<MethodHeader> getCallableTypePredicate(CallReference callReference) {
+        return callReference instanceof ConstructorCallReference ?
+                headerClass -> headerClass instanceof ConstructorHeader :
+                $ -> true;
     }
 
     private boolean isMatchingMethod(String invocationName, List<Expression> invocationArguments, MethodHeader header) {

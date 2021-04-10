@@ -1,6 +1,5 @@
 package com.server.parser.java;
 
-import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
@@ -26,7 +25,7 @@ public class JavaProgramRunner {
     }
 
     public Optional<List<Statement>> run(List<Method> methods) {
-        context.getStaticFields().values().forEach(FieldVar::initialize);
+        context.getStaticFields().values().forEach(fieldVar -> fieldVar.initialize(context));
         return mainRunner.run(methods);
     }
 

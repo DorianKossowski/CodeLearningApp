@@ -3,7 +3,7 @@ package com.server.parser.java.visitor;
 import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.statement.Statement;
-import com.server.parser.java.context.ContextCopyFactory;
+import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.visitor.resolver.util.BreakHandler;
 import com.server.parser.java.visitor.resolver.util.ReturnHandler;
@@ -49,7 +49,7 @@ public class StatementListVisitor extends JavaVisitor<List<Statement>> {
         }
 
         private void validateRemainingStatements(JavaParser.StatementListContext ctx, JavaContext context, int startingChild) {
-            JavaContext validationContext = ContextCopyFactory.createValidationContext(context);
+            JavaContext validationContext = ContextFactory.createValidationContext(context);
             visitStartingFromChild(ctx, validationContext, startingChild);
         }
     }

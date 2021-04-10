@@ -25,6 +25,7 @@ class WhileStmtResolverTest {
     @Test
     void shouldBreakIn() {
         ClassContext context = new ClassContext();
+        context.setName("");
         MethodContext methodContext = context.createEmptyMethodContext();
         methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()),
                 mock(JavaParser.MethodBodyContext.class));

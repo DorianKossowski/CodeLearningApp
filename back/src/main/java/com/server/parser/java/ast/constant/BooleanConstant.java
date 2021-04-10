@@ -8,7 +8,7 @@ import java.util.Objects;
 public class BooleanConstant extends Constant<Boolean> {
 
     public BooleanConstant() {
-        this(false);
+        this(new Boolean(false));
     }
 
     public BooleanConstant(Boolean value) {

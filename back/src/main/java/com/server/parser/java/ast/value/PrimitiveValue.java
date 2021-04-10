@@ -17,6 +17,16 @@ public class PrimitiveValue extends Value implements ConstantProvider {
     }
 
     @Override
+    public Value getAttribute(String name) {
+        throw new ResolvingException(String.format("Nie można uzyskiwać wartości %s z prymitywa", name));
+    }
+
+    @Override
+    public void updateAttribute(String name, Expression newExpression) {
+        throw new ResolvingException(String.format("Nie można aktualizować wartości %s z prymitywa", name));
+    }
+
+    @Override
     public Constant<?> getConstant() {
         return constant;
     }
@@ -38,7 +48,7 @@ public class PrimitiveValue extends Value implements ConstantProvider {
         if (v2 instanceof VoidValue) {
             throw new ResolvingVoidException();
         }
-        throw new ResolvingException("Nie można wykonać porównania operatorem ==");
+        throw new ResolvingException("Nie można porównać z " + v2.getExpression().getResolvedText());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.FieldVar;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.util.exception.ResolvingException;
 
@@ -17,8 +18,24 @@ public class ClassContext implements JavaContext {
         this.name = name;
     }
 
-    public String getName() {
+    @Override
+    public String getClassName() {
         return name;
+    }
+
+    @Override
+    public boolean isStaticContext() {
+        return true;
+    }
+
+    @Override
+    public ObjectValue getThisValue() {
+        return null;
+    }
+
+    @Override
+    public void setThisValue(ObjectValue thisValue) {
+        throw new UnsupportedOperationException();
     }
 
     public MethodContext createEmptyMethodContext() {
@@ -35,7 +52,7 @@ public class ClassContext implements JavaContext {
     }
 
     Map<String, FieldVar> getFields() {
-        return nameToField;
+        return new HashMap<>(nameToField);
     }
 
     @Override
@@ -51,7 +68,7 @@ public class ClassContext implements JavaContext {
     }
 
     @Override
-    public void setStaticFields(Map<String, FieldVar> nameToField) {
+    public void setFields(Map<String, FieldVar> nameToField) {
         this.nameToField.putAll(nameToField);
     }
 

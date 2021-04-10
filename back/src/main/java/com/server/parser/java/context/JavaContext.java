@@ -5,6 +5,7 @@ import com.server.parser.java.ast.AstElement;
 import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.visitor.JavaVisitor;
 
@@ -40,5 +41,13 @@ public interface JavaContext extends MethodVerifiable {
 
     Map<String, FieldVar> getStaticFields();
 
-    void setStaticFields(Map<String, FieldVar> nameToField);
+    void setFields(Map<String, FieldVar> nameToField);
+
+    String getClassName();
+
+    boolean isStaticContext();
+
+    ObjectValue getThisValue();
+
+    void setThisValue(ObjectValue thisValue);
 }

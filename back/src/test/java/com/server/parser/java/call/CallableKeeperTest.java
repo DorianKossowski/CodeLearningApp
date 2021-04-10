@@ -5,6 +5,7 @@ import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,11 +92,11 @@ class CallableKeeperTest {
 
     @Test
     void shouldGetCallable() {
-        String name = "NAME";
         List<Expression> args = Collections.emptyList();
-        when(matchingCallableFinder.find(name, args)).thenReturn(Optional.of(method));
+        CallReference callReference = new CallReference("NAME");
+        when(matchingCallableFinder.find(callReference, args)).thenReturn(Optional.of(method));
 
-        Method callable = keeper.getCallable(new CallInvocation("", "", new CallReference(name), args));
+        Method callable = keeper.getCallable(false, new CallInvocation("", "", callReference, args));
 
         assertThat(callable).isSameAs(method);
     }
@@ -106,8 +107,20 @@ class CallableKeeperTest {
         CallInvocation invocation = mock(CallInvocation.class);
         when(invocation.getText()).thenReturn("TEXT");
 
-        assertThatThrownBy(() -> keeper.getCallable(invocation))
+        assertThatThrownBy(() -> keeper.getCallable(false, invocation))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Brak pasującej metody dla wywołania: TEXT");
+    }
+
+    @Test
+    void shouldThrowWhenCallableFromStaticContext() {
+        when(method.getHeader().isStatic()).thenReturn(false);
+        when(matchingCallableFinder.find(any(), any())).thenReturn(Optional.of(method));
+        CallInvocation invocation = mock(CallInvocation.class, RETURNS_DEEP_STUBS);
+        when(invocation.getCallReference().getValue()).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> keeper.getCallable(true, invocation))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Nie można odwołać się do niestatycznej metody ze statycznego kontekstu");
     }
 }

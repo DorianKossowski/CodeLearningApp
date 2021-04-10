@@ -1,0 +1,31 @@
+### TASK ###
+-> class
+    with field
+        with modifiers: { "private" }
+        with type: "int"
+        with name: "j"
+        with init text: "init()"
+
+### INPUT ###
+public class MyClass {
+    private int i;
+    private int j = init();
+
+	public static void main(String[] args) {
+		MyClass myClass = new MyClass(5);
+		System.out.println(myClass.i);
+		System.out.println(myClass.j);
+	}
+
+	MyClass(int val) {
+	    i = val;
+	}
+
+	int init() {
+	    return 10;
+	}
+}
+
+### OUTPUT ###
+5
+10

@@ -1,25 +1,25 @@
-package com.server.parser.java.call;
+package com.server.parser.java.call.reference;
 
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.value.ObjectValue;
 
 import java.util.Objects;
 import java.util.Optional;
 
 public class CallReference {
-    private final Variable variable;
+    private final ObjectValue value;
     private final String callName;
 
     public CallReference(String callName) {
         this(null, callName);
     }
 
-    public CallReference(Variable variable, String callName) {
-        this.variable = variable;
+    public CallReference(ObjectValue value, String callName) {
+        this.value = value;
         this.callName = Objects.requireNonNull(callName, "callName cannot be null");
     }
 
-    public Optional<Variable> getVariable() {
-        return Optional.ofNullable(variable);
+    public Optional<ObjectValue> getValue() {
+        return Optional.ofNullable(value);
     }
 
     public String getCallName() {

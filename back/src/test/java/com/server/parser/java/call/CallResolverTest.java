@@ -1,10 +1,18 @@
 package com.server.parser.java.call;
 
 import com.google.common.collect.Iterables;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
+import com.server.parser.java.ast.value.ObjectValue;
+import com.server.parser.java.call.executor.ConstructorCallExecutor;
+import com.server.parser.java.call.executor.MethodCallExecutor;
+import com.server.parser.java.call.executor.StaticCallExecutor;
+import com.server.parser.java.call.reference.CallReference;
+import com.server.parser.java.call.reference.ConstructorCallReference;
+import com.server.parser.java.call.reference.PrintCallReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -21,19 +29,23 @@ class CallResolverTest {
     @Mock
     private CallableKeeper callableKeeper;
     @Mock
-    private CallExecutor callExecutor;
+    private ConstructorCallExecutor constructorCallExecutor;
+    @Mock
+    private MethodCallExecutor methodCallExecutor;
+    @Mock
+    private StaticCallExecutor staticCallExecutor;
 
     private CallResolver resolver;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        resolver = new CallResolver(callableKeeper, callExecutor);
+        resolver = new CallResolver(callableKeeper, constructorCallExecutor, methodCallExecutor, staticCallExecutor);
     }
 
     @Test
     void shouldBeSpecificEqualsMethod() {
-        CallReference callReference = new CallReference(mock(Variable.class), "equals");
+        CallReference callReference = new CallReference(mock(ObjectValue.class), "equals");
         List<Expression> args = Collections.singletonList(mock(Expression.class));
 
         boolean result = resolver.isSpecificEqualsMethod(new CallInvocation("", "", callReference, args));
@@ -42,15 +54,31 @@ class CallResolverTest {
     }
 
     @Test
-    void shouldKeepPrintCalls() {
-        CallInvocation invocation = createSimplePrintCall();
-        when(callExecutor.executePrintMethod(invocation)).thenReturn(new PrintCallStatement(invocation));
-        resolver.resolve(invocation);
+    void shouldResolvePrintCall() {
+        CallInvocation invocation = createSimpleCall(new PrintCallReference("System.out.print"));
+        PrintCallStatement printCallStatement = new PrintCallStatement(invocation);
+        when(staticCallExecutor.executePrintMethod(invocation)).thenReturn(printCallStatement);
 
-        assertThat(Iterables.getOnlyElement(resolver.getResolvedPrintCalls()).getCallInvocation()).isSameAs(invocation);
+        CallStatement resolvedStatement = resolver.resolve(false, invocation);
+
+        assertThat(resolvedStatement).isSameAs(printCallStatement);
+        assertThat(Iterables.getOnlyElement(resolver.getResolvedPrintCalls())).isSameAs(printCallStatement);
     }
 
-    private CallInvocation createSimplePrintCall() {
-        return new CallInvocation("", "", new CallReference("System.out.print"), Collections.emptyList());
+    private CallInvocation createSimpleCall(CallReference reference) {
+        return new CallInvocation("", "", reference, Collections.emptyList());
+    }
+
+    @Test
+    void shouldResolveConstructorCall() {
+        CallInvocation invocation = createSimpleCall(new ConstructorCallReference(""));
+        Method method = mock(Method.class);
+        when(callableKeeper.getCallable(false, invocation)).thenReturn(method);
+        CallStatement statement = mock(CallStatement.class);
+        when(constructorCallExecutor.execute(method, invocation)).thenReturn(statement);
+
+        CallStatement resolvedStatement = resolver.resolve(false, invocation);
+
+        assertThat(resolvedStatement).isSameAs(statement);
     }
 }

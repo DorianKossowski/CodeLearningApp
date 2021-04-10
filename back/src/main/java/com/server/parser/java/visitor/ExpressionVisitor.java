@@ -4,12 +4,11 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Computable;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.*;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
-import com.server.parser.java.ast.expression.ObjectRef;
+import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.JavaContext;
@@ -160,9 +159,7 @@ public class ExpressionVisitor extends JavaVisitor<Expression> {
         //*** OBJECT REF ***//
         @Override
         public Expression visitObjectRefName(JavaParser.ObjectRefNameContext ctx) {
-            String text = textVisitor.visit(ctx);
-            Variable variable = context.getVariable(text);
-            return new ObjectRef(text, variable.getValue());
+            return context.getVisitor(ObjectRefExpression.class).visit(ctx, context);
         }
 
         //*** NULL ***//

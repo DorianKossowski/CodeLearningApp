@@ -3,7 +3,7 @@ package com.server.parser.java.task.verifier;
 import com.google.common.base.VerifyException;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Task;
-import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.task.model.FieldModel;
 import org.junit.jupiter.api.Test;
 
@@ -17,14 +17,14 @@ class FieldVerifierTest extends VerifierTestBase {
     @Test
     void shouldVerifyFieldName() {
         String name = "NAME";
-        VariableDef variableDef = mock(VariableDef.class);
+        FieldVarDef variableDef = mock(FieldVarDef.class);
         when(variableDef.getName()).thenReturn(name);
         FieldVerifier fieldVerifier = new FieldVerifier(mockTaskWithField(variableDef));
 
         fieldVerifier.verify(FieldModel.builder().withName(name).build());
     }
 
-    private Task mockTaskWithField(VariableDef field) {
+    private Task mockTaskWithField(FieldVarDef field) {
         Task task = mock(Task.class);
         ClassAst classAst = mock(ClassAst.class, RETURNS_DEEP_STUBS);
         when(classAst.getBody().getFields()).thenReturn(Collections.singletonList(field));
@@ -34,7 +34,7 @@ class FieldVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldThrowDuringVerifyingFieldName() {
-        VariableDef variableDef = mock(VariableDef.class);
+        FieldVarDef variableDef = mock(FieldVarDef.class);
         when(variableDef.getName()).thenReturn("");
         FieldVerifier fieldVerifier = new FieldVerifier(mockTaskWithField(variableDef));
 
@@ -45,7 +45,7 @@ class FieldVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldHasSameModifiers() {
-        VariableDef variableDef = mock(VariableDef.class);
+        FieldVarDef variableDef = mock(FieldVarDef.class);
         when(variableDef.getModifiers()).thenReturn(Collections.singletonList("public"));
         FieldVerifier fieldVerifier = new FieldVerifier(mockTaskWithField(variableDef));
 
@@ -54,7 +54,7 @@ class FieldVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldHasSameType() {
-        VariableDef variableDef = mock(VariableDef.class);
+        FieldVarDef variableDef = mock(FieldVarDef.class);
         when(variableDef.getType()).thenReturn("int");
         FieldVerifier fieldVerifier = new FieldVerifier(mockTaskWithField(variableDef));
 
@@ -63,10 +63,10 @@ class FieldVerifierTest extends VerifierTestBase {
 
     @Test
     void shouldHasSameValue() {
-        VariableDef variableDef = mock(VariableDef.class, RETURNS_DEEP_STUBS);
-        when(variableDef.getValue().getExpression().getResolvedText()).thenReturn("1");
+        FieldVarDef variableDef = mock(FieldVarDef.class, RETURNS_DEEP_STUBS);
+        when(variableDef.getInitFunction().getExpressionText()).thenReturn("1");
         FieldVerifier fieldVerifier = new FieldVerifier(mockTaskWithField(variableDef));
 
-        fieldVerifier.verify(FieldModel.builder().withValue("1").build());
+        fieldVerifier.verify(FieldModel.builder().withInitText("1").build());
     }
 }

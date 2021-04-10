@@ -9,7 +9,7 @@
         with modifiers: { "public", "static" }
         with type: "String"
         with name: "s"
-        with value: "\"str\""
+        with init text: "\"str\""
 
 ### INPUT ###
 public class MyClass {

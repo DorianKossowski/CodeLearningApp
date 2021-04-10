@@ -4,7 +4,7 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
+import com.server.parser.java.ast.FieldVarInitExpressionFunction;
 import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
@@ -12,6 +12,8 @@ import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.EmptyExpressionPreparer;
+import com.server.parser.util.ValueType;
+import com.server.parser.util.exception.ResolvingException;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 
@@ -58,17 +60,32 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
 
         @Override
         public VariableDef visitSingleMethodArg(JavaParser.SingleMethodArgContext ctx) {
-            String type = textVisitor.visit(ctx.type());
+            String type = visitValidType(ctx.type());
             String id = textVisitor.visit(ctx.identifier());
             // TODO ArgumentVarDef?
             return new MethodVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id,
                     EmptyExpressionPreparer.prepare(type), false);
         }
 
+        private String visitValidType(JavaParser.TypeContext typeContext) {
+            String type = textVisitor.visit(typeContext);
+            validateType(type.replace("[]", ""));
+            return type;
+        }
+
+        private void validateType(String type) {
+            if (type.equals(context.getClassName())) {
+                return;
+            }
+            if (ValueType.findByOriginalType(type) == ValueType.GENERIC) {
+                throw new ResolvingException("Użyto nieznanego typu: " + type);
+            }
+        }
+
         @Override
         public VariableDef visitVarDec(JavaParser.VarDecContext ctx) {
+            String type = visitValidType(ctx.type());
             String id = textVisitor.visit(ctx.identifier());
-            String type = textVisitor.visit(ctx.type());
             if (ctx.parent instanceof JavaParser.FieldDecContext) {
                 return createFieldVarDef(id, type, ctx);
             } else if (ctx.parent instanceof JavaParser.MethodVarDecContext) {
@@ -87,10 +104,17 @@ public class VariableDefVisitor extends JavaVisitor<VariableDef> {
         }
 
         private FieldVarDef createFieldVarDef(String id, String type, JavaParser.VarDecContext ctx) {
-            FieldVarInitExpressionSupplier supplier = ctx.expression() != null ?
-                    new FieldVarInitExpressionSupplier(() -> context.getVisitor(Expression.class).visit(ctx.expression(), context)) :
-                    new FieldVarInitExpressionSupplier(() -> EmptyExpressionPreparer.prepare(type));
-            return new FieldVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id, supplier, ctx.expression() != null);
+            FieldVarInitExpressionFunction function = createInitExpressionFunction(type, ctx);
+            return new FieldVarDef(JavaGrammarHelper.getOriginalText(ctx), type, id, function, ctx.expression() != null);
+        }
+
+        private FieldVarInitExpressionFunction createInitExpressionFunction(String type, JavaParser.VarDecContext ctx) {
+            if (ctx.expression() == null) {
+                return new FieldVarInitExpressionFunction("", (context) -> EmptyExpressionPreparer.prepare(type));
+            }
+            return new FieldVarInitExpressionFunction(ctx.expression().getText(),
+                    (context) -> context.getVisitor(Expression.class).visit(ctx.expression(), context)
+            );
         }
     }
 }

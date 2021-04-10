@@ -8,7 +8,7 @@ import java.util.Objects;
 public class CharacterConstant extends Constant<Character> {
 
     public CharacterConstant() {
-        this('\0');
+        this(new Character('\0'));
     }
 
     public CharacterConstant(Character value) {

@@ -4,23 +4,19 @@ import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
 import com.server.parser.java.ast.MethodVar;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.constant.IntConstant;
-import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.*;
-import com.server.parser.java.ast.statement.expression_statement.Assignment;
 import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
 import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
 import com.server.parser.java.ast.value.PrimitiveComputableValue;
-import com.server.parser.java.ast.value.PrimitiveValue;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
-import com.server.parser.util.exception.ResolvingException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -30,9 +26,16 @@ import static org.mockito.Mockito.mock;
 
 class StatementVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
-    private final MethodContext methodContext = createMethodContext(METHOD_NAME, "void");
+    private MethodContext methodContext;
 
     private final StatementVisitor visitor = new StatementVisitor();
+
+    @Override
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        methodContext = createMethodContext(METHOD_NAME, "void");
+    }
 
     @Test
     void shouldVisitBlockStatement() {
@@ -50,43 +53,13 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitBlockStatementWithBreak() {
         String input = "for(int i=0; i<1; i=i+1){  { break; }  boolean b = false; }";
         JavaParser.ForStatementContext c = HELPER.shouldParseToEof(input, JavaParser::forStatement);
-        MethodContext methodContext = new ClassContext().createEmptyMethodContext();
-        methodContext.save(new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList()), mock(JavaParser.MethodBodyContext.class));
+        MethodContext methodContext = createRealMethodContext();
+        methodContext.save(new MethodHeader(Collections.emptyList(), "", "methodName", Collections.emptyList()),
+                mock(JavaParser.MethodBodyContext.class));
 
         ForStatement statement = (ForStatement) visitor.visit(c, methodContext);
 
         assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
-    }
-
-    //*** ASSIGNMENT ***//
-    @Test
-    void shouldVisitAssignment() {
-        methodContext.addVariable(createStringVariable("a"));
-        String input = "a = \"str\"";
-        JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
-
-        Assignment assignment = (Assignment) visitor.visit(c, methodContext);
-
-        assertThat(assignment.getText()).isEqualTo(input);
-        assertThat(assignment.getId()).isEqualTo("a");
-        assertThat(assignment.getValue().getText()).isEqualTo("\"str\"");
-    }
-
-    private Variable createStringVariable(String name) {
-        StringConstant stringConstant = new StringConstant("value");
-        PrimitiveValue value = new PrimitiveValue(new Literal(stringConstant));
-        return new MethodVar("String", name, value);
-    }
-
-    @Test
-    void shouldThrowWhenInvalidAssignment() {
-        methodContext.addVariable(createStringVariable("a"));
-        String input = "a = 5";
-        JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
-
-        assertThatThrownBy(() -> visitor.visit(c, methodContext))
-                .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Wyrażenie 5 nie jest typu String");
     }
 
     //*** IF ***//
@@ -104,6 +77,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     private MethodContext createRealMethodContext() {
         ClassContext context = new ClassContext();
+        context.setName("");
         MethodContext methodContext = context.createEmptyMethodContext();
         MethodHeader methodHeader = new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList());
         methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));

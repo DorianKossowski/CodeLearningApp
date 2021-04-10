@@ -1,0 +1,36 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    private int i;
+    private int j = init();
+
+	public static void main(String[] args) {
+		MyClass myClass1 = new MyClass();
+		MyClass myClass2 = new MyClass(20);
+		myClass1.print();
+        myClass2.print();
+	}
+
+    MyClass() {
+    }
+
+	MyClass(int val) {
+	    i = val;
+	}
+
+	void print() {
+        System.out.print(i);
+        System.out.print(" ");
+        System.out.println(j);
+	}
+
+	int init() {
+	    i = 15;
+	    return 10;
+	}
+}
+
+### OUTPUT ###
+15 10
+20 10

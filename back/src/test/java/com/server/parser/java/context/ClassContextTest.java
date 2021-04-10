@@ -1,7 +1,7 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
+import com.server.parser.java.ast.FieldVarInitExpressionFunction;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.util.exception.ResolvingException;
@@ -27,15 +27,19 @@ class ClassContextTest {
 
     @Test
     void shouldAddFieldVariable() {
-        FieldVar variable = new FieldVar(TYPE, NAME, new FieldVarInitExpressionSupplier(() -> mock(Expression.class)), mock(Value.class));
+        FieldVar variable = new FieldVar(TYPE, NAME, createDummyInitFunction(), mock(Value.class));
         context.addField(variable);
 
         assertThat(context.getFields().get(NAME)).isSameAs(variable);
     }
 
+    private FieldVarInitExpressionFunction createDummyInitFunction() {
+        return new FieldVarInitExpressionFunction("", $ -> mock(Expression.class));
+    }
+
     @Test
     void shouldThrowWhenAddFieldAgain() {
-        FieldVar variable = new FieldVar(TYPE, NAME, new FieldVarInitExpressionSupplier(() -> mock(Expression.class)), mock(Value.class));
+        FieldVar variable = new FieldVar(TYPE, NAME, createDummyInitFunction(), mock(Value.class));
         context.addField(variable);
 
         assertThatThrownBy(() -> context.addField(variable))

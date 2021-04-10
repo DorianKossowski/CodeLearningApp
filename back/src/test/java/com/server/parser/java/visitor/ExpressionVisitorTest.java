@@ -7,7 +7,6 @@ import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
-import com.server.parser.java.ast.expression.ObjectRef;
 import com.server.parser.java.ast.value.ObjectWrapperValue;
 import com.server.parser.java.context.MethodContext;
 import com.server.parser.util.exception.ResolvingException;
@@ -63,40 +62,9 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
     }
 
     @Test
-    void shouldVisitObjectRefExpression() {
-        MethodContext methodContext = createMethodContext();
-        methodContext.addVariable(createVariable("x"));
-        String input = "x";
-        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
-
-        Expression expression = visitor.visit(c, methodContext);
-
-        assertThat(expression).isExactlyInstanceOf(ObjectRef.class);
-        assertThat(expression.getText()).isEqualTo("x");
-        assertThat(expression.getConstant().c).isEqualTo("value");
-    }
-
-    private Variable createVariable(String name) {
-        StringConstant stringConstant = new StringConstant("value");
-        ObjectWrapperValue value = new ObjectWrapperValue(new Literal(stringConstant));
-        return new MethodVar("String", name, value);
-    }
-
-    @Test
-    void shouldThrowWhenWrongObjectRefExpression() {
-        MethodContext methodContext = createMethodContext();
-        String input = "x";
-        JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
-
-        assertThatThrownBy(() -> visitor.visit(c, methodContext))
-                .isExactlyInstanceOf(ResolvingException.class)
-                .hasMessage("Problem podczas rozwiązywania: Obiekt x nie istnieje");
-    }
-
-    @Test
     void shouldThrowWhenInvalidExpressionType() {
         MethodContext methodContext = createMethodContext();
-        methodContext.addVariable(createVariable("x"));
+        methodContext.addVariable(createStringVariable("x"));
         String input = "-x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
@@ -105,11 +73,17 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
                 .hasMessage("Problem podczas rozwiązywania: Operacja niedostępna dla typu String");
     }
 
+    private Variable createStringVariable(String name) {
+        StringConstant stringConstant = new StringConstant("value");
+        ObjectWrapperValue value = new ObjectWrapperValue(new Literal(stringConstant));
+        return new MethodVar("String", name, value);
+    }
+
     @Test
     void shouldVisitEqualsCall() {
         MethodContext methodContext = createMethodContext();
-        methodContext.addVariable(createVariable("x"));
-        methodContext.addVariable(createVariable("x2"));
+        methodContext.addVariable(createStringVariable("x"));
+        methodContext.addVariable(createStringVariable("x2"));
         String input = "x.equals(x2)";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 

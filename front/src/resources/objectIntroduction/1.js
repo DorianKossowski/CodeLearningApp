@@ -4,7 +4,7 @@ export const task = `
         with modifiers: { "static" }
         with type: "String"
         with name: "name"
-        with value: "\\"MyStaticName\\""
+        with init text: "\\"MyStaticName\\""
 -> class
     with field
         with type: "int"

@@ -1,10 +1,11 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.FieldVarInitExpressionSupplier;
+import com.server.parser.java.ast.FieldVarInitExpressionFunction;
 import com.server.parser.java.ast.MethodVar;
 import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.call.CallResolver;
 import com.server.parser.util.exception.ResolvingException;
@@ -31,6 +32,8 @@ class LocalContextTest {
     private Value value;
     @Mock
     private Expression expression;
+    @Mock
+    private ObjectValue objectValue;
 
     private LocalContext localContext;
     private MethodVar methodVar;
@@ -40,8 +43,8 @@ class LocalContextTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         methodVar = new MethodVar(TYPE, NAME, value);
-        fieldVar = new FieldVar(TYPE, NAME, new FieldVarInitExpressionSupplier(() -> expression), value);
-        localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", false);
+        fieldVar = new FieldVar(TYPE, NAME, new FieldVarInitExpressionFunction("", $ -> expression), value);
+        localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", "", false, objectValue);
     }
 
     @Test
@@ -84,7 +87,7 @@ class LocalContextTest {
     @Test
     void shouldThrowWhenGettingNonStaticFieldFromStatic() {
         nameToField.put(NAME, fieldVar);
-        localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", true);
+        localContext = new LocalContext(callResolver, nameToField, nameToVariable, "", "", "", true, objectValue);
 
         assertThatThrownBy(() -> localContext.getVariable(NAME))
                 .isExactlyInstanceOf(ResolvingException.class)

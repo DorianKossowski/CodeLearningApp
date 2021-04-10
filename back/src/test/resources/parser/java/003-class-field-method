@@ -4,7 +4,7 @@
         with modifiers: { "static" }
         with type: "String"
         with name: "s"
-        with value: "\"str\""
+        with init text: "\"str\""
 -> method
     with modifiers: { "public" }
     with result: "int"

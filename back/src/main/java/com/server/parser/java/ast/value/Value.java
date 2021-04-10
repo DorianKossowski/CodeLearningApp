@@ -17,6 +17,10 @@ public abstract class Value implements EqualityCheckable, LogicOperational, Seri
         return expression;
     }
 
+    public abstract Value getAttribute(String name);
+
+    public abstract void updateAttribute(String name, Expression newExpression);
+
     @Override
     public abstract String toString();
 }

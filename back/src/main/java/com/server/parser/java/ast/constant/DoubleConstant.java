@@ -8,7 +8,7 @@ import java.util.Objects;
 public class DoubleConstant extends Constant<Double> {
 
     public DoubleConstant() {
-        this(0.0);
+        this(new Double(0.0));
     }
 
     public DoubleConstant(Double value) {

@@ -1,0 +1,25 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    private int i;
+
+	public static void main(String[] args) {
+		MyClass myClass1 = new MyClass(1);
+		MyClass myClass2 = new MyClass(2);
+		System.out.println(myClass1.getI());
+		System.out.println(myClass2.i);
+	}
+
+	MyClass(int val) {
+	    i = val;
+	}
+
+	int getI() {
+	    return i;
+	}
+}
+
+### OUTPUT ###
+1
+2

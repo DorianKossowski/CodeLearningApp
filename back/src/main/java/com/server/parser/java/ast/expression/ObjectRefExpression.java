@@ -5,11 +5,11 @@ import com.server.parser.java.ast.value.Value;
 
 import java.util.Objects;
 
-public class ObjectRef extends Expression {
+public class ObjectRefExpression extends Expression {
     private final Value value;
     private final Expression expression;
 
-    public ObjectRef(String text, Value value) {
+    public ObjectRefExpression(String text, Value value) {
         super(text);
         this.value = Objects.requireNonNull(value, "value cannot be null");
         this.expression = Objects.requireNonNull(value.getExpression(), "expression cannot be null");

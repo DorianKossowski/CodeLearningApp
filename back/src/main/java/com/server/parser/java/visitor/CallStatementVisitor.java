@@ -4,10 +4,18 @@ import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
+import com.server.parser.java.ast.expression.ObjectRefExpression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
-import com.server.parser.java.call.CallReference;
+import com.server.parser.java.ast.value.*;
+import com.server.parser.java.call.reference.CallReference;
+import com.server.parser.java.call.reference.ConstructorCallReference;
+import com.server.parser.java.call.reference.PrintCallReference;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.util.exception.ResolvingException;
+import com.server.parser.util.exception.ResolvingNullPointerException;
+import com.server.parser.util.exception.ResolvingUninitializedException;
+import com.server.parser.util.exception.ResolvingVoidException;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Collections;
@@ -35,18 +43,42 @@ public class CallStatementVisitor extends JavaVisitor<CallStatement> {
             List<Expression> arguments = ctx.callArguments() == null ? Collections.emptyList() : visitArguments(ctx.callArguments());
             CallInvocation invocation = new CallInvocation(JavaGrammarHelper.getOriginalText(ctx), context.getMethodName(),
                     callReference, arguments);
-            return context.getCallResolver().resolve(invocation);
+            return context.getCallResolver().resolve(context.isStaticContext(), invocation);
         }
 
         CallReference visitCallReference(JavaParser.CallNameContext ctx) {
-            if (ctx.specialCallName() != null) {
-                return new CallReference(ctx.specialCallName().getText());
+            if (ctx.specialPrintCallName() != null) {
+                return new PrintCallReference(ctx.specialPrintCallName().getText());
             }
-            String firstSegment = ctx.firstSeg.getText();
-            if (ctx.secSeg != null) {
-                return new CallReference(context.getVariable(firstSegment), ctx.secSeg.getText());
+            if (ctx.constructorCallName() != null) {
+                return new ConstructorCallReference(ctx.constructorCallName().classSeg.getText());
             }
-            return new CallReference(firstSegment);
+            if (ctx.objectRefName() != null) {
+                ObjectRefExpression objectRef = context.getVisitor(ObjectRefExpression.class).visit(ctx.objectRefName(), context);
+                Value value = objectRef.getValue();
+                validateValueToCallOn(objectRef, value);
+                return new CallReference((ObjectValue) value, ctx.methodName.getText());
+            }
+            return new CallReference(context.getThisValue(), ctx.methodName.getText());
+        }
+
+        private void validateValueToCallOn(ObjectRefExpression objectRef, Value value) {
+            if (value instanceof ObjectValue) {
+                return;
+            }
+            if (value instanceof PrimitiveValue) {
+                throw new ResolvingException("Nie można wywołać metody na prymitywie");
+            }
+            if (value instanceof NullValue) {
+                throw new ResolvingNullPointerException();
+            }
+            if (value instanceof VoidValue) {
+                throw new ResolvingVoidException();
+            }
+            if (value instanceof UninitializedValue) {
+                throw new ResolvingUninitializedException(objectRef.getResolvedText());
+            }
+            throw new UnsupportedOperationException();
         }
 
         private List<Expression> visitArguments(JavaParser.CallArgumentsContext ctx) {

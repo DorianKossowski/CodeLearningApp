@@ -151,7 +151,11 @@ breakStatement
     ;
 
 assignment
-    : identifier '=' expression
+    : ( identifier | assignmentAttributeIdentifier ) '=' expression
+    ;
+
+assignmentAttributeIdentifier
+    : objectRefName '.' attribute=identifier
     ;
 
 methodVarDec
@@ -167,11 +171,16 @@ call
     ;
 
 callName
-    : firstSeg=identifier ( '.' secSeg=identifier )?
-    | specialCallName
+    : ( objectRefName '.' )? methodName=identifier
+    | constructorCallName
+    | specialPrintCallName
     ;
 
-specialCallName
+constructorCallName
+    : NEW classSeg=identifier
+    ;
+
+specialPrintCallName
     : 'System.out.print'
     | 'System.out.println'
     ;
@@ -203,8 +212,11 @@ nullExpr
     ;
 
 objectRefName
+    : objectRefNameFirstSegment ( '.' identifier )*
+    ;
+
+objectRefNameFirstSegment
     : identifier
-    | objectRefName '.' identifier
     ;
 
 literal
@@ -279,6 +291,7 @@ ELSE        : 'else' ;
 FOR         : 'for' ;
 IF          : 'if' ;
 LPAREN      : '(' ;
+NEW         : 'new' ;
 NULL        : 'null' ;
 RETURN      : 'return' ;
 RPAREN      : ')' ;

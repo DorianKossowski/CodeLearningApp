@@ -1,5 +1,6 @@
 package com.server.parser.java.ast.value;
 
+import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.UninitializedExpression;
 import com.server.parser.util.exception.ResolvingUninitializedException;
 
@@ -26,6 +27,16 @@ public class UninitializedValue extends Value {
 
     @Override
     public boolean or(Value v2) {
+        throw new ResolvingUninitializedException(expression.getText());
+    }
+
+    @Override
+    public Value getAttribute(String name) {
+        throw new ResolvingUninitializedException(expression.getText());
+    }
+
+    @Override
+    public void updateAttribute(String name, Expression newExpression) {
         throw new ResolvingUninitializedException(expression.getText());
     }
 

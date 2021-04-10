@@ -226,7 +226,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
     }
 
     @Override
-    public void enterValueRuleSpec(JavaTaskParser.ValueRuleSpecContext ctx) {
-        fieldBuilder.withValue(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+    public void enterInitTextRuleSpec(JavaTaskParser.InitTextRuleSpecContext ctx) {
+        fieldBuilder.withInitText(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
     }
 }
