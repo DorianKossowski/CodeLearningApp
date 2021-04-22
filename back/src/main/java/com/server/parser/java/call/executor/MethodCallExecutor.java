@@ -12,6 +12,7 @@ import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.Value;
+import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,9 +33,9 @@ public class MethodCallExecutor extends CallExecutor {
         return ContextFactory.createExecutionContext(thisValue, method.getMethodContext());
     }
 
-    private ObjectValue getThisValue(CallInvocation invocation) {
+    ObjectValue getThisValue(CallInvocation invocation) {
         return invocation.getCallReference().getValue()
-                .orElseThrow(() -> new IllegalArgumentException("Should provide value"));
+                .orElseThrow(() -> new ResolvingException("Niepoprawna próba wywołania: " + invocation.getText()));
     }
 
     public CallStatement executeSpecialEqualsMethod(CallInvocation invocation) {

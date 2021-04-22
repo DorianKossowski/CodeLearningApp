@@ -10,6 +10,7 @@ import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.value.ObjectValue;
 import com.server.parser.java.value.Value;
+import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
@@ -17,8 +18,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 class MethodCallExecutorTest {
@@ -75,5 +78,16 @@ class MethodCallExecutorTest {
         assertThat(statement.getCallInvocation()).isSameAs(invocation);
         assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(invocation);
         assertThat(statement.getResult()).isSameAs(VoidExpression.INSTANCE);
+    }
+
+    @Test
+    void shouldThrowWhenEmptyReference() {
+        CallInvocation invocation = mock(CallInvocation.class, RETURNS_DEEP_STUBS);
+        when(invocation.getCallReference().getValue()).thenReturn(Optional.empty());
+        when(invocation.getText()).thenReturn("CALL()");
+
+        assertThatThrownBy(() -> executor.getThisValue(invocation))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Niepoprawna próba wywołania: CALL()");
     }
 }
