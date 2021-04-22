@@ -1,13 +1,13 @@
 package com.server.app.model.dto;
 
-public class TestInputDto {
+public class VerificationInputDto {
     private String task;
     private String input;
 
-    public TestInputDto() {
+    public VerificationInputDto() {
     }
 
-    public TestInputDto(String task, String input) {
+    public VerificationInputDto(String task, String input) {
         this.task = task;
         this.input = input;
     }
