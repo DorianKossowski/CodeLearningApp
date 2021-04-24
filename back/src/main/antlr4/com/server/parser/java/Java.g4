@@ -5,7 +5,7 @@ taskEOF
     ;
 
 task
-    : classDec
+    : SEMICOLON* classDec SEMICOLON*
     ;
 
 classDec
@@ -194,14 +194,14 @@ callArguments
     ;
 
 expression
-   : unOp=('+' | '-')? exprAtom
-   | expression op=('*' | '/' | '%') expression
-   | expression op=('+' | '-') expression
-   | expression op=('<' | '<=' | '>' | '>=') expression
-   | expression eq=('==' | '!=') expression
-   | expression andOp='&&' expression
-   | expression orOp='||' expression
-   ;
+    : unOp=('+' | '-')? exprAtom
+    | expression op=('*' | '/' | '%') expression
+    | expression op=('+' | '-') expression
+    | expression op=('<' | '<=' | '>' | '>=') expression
+    | expression eq=('==' | '!=') expression
+    | expression andOp='&&' expression
+    | expression orOp='||' expression
+    ;
 
 exprAtom
     :  LPAREN expression RPAREN

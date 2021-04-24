@@ -119,7 +119,7 @@ public class JavaParserTest {
 
     @Test
     void shouldParseTask() {
-        HELPER.shouldParseToEof("public class c {}", JavaParser::task);
+        HELPER.shouldParseToEof(";; public class c {} ;;", JavaParser::task);
     }
 
     @ParameterizedTest
