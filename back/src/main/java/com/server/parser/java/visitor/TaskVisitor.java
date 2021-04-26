@@ -6,6 +6,7 @@ import com.server.parser.java.JavaProgramRunner;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 
@@ -25,6 +26,7 @@ public class TaskVisitor extends JavaBaseVisitor<Task> {
         ClassAst classAst = context.getVisitor(ClassAst.class, context).visit(ctx.classDec());
 
         List<Statement> calledStatements = programRunner.run(classAst.getBody().getMethods());
-        return new Task(classAst, calledStatements, context.getParameters().getCallResolver().getResolvedPrintCalls());
+        CallResolver callResolver = context.getParameters().getCallResolver();
+        return new Task(classAst, calledStatements, callResolver.getResolvedPrintCalls());
     }
 }
