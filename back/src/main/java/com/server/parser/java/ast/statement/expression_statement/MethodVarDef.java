@@ -1,8 +1,8 @@
 package com.server.parser.java.ast.statement.expression_statement;
 
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.value.Value;
-import com.server.parser.util.ValuePreparer;
+import com.server.parser.java.value.Value;
+import com.server.parser.java.value.util.ValuePreparer;
 
 import java.util.Optional;
 

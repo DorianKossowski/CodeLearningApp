@@ -1,0 +1,45 @@
+### TASK ###
+-> class
+    with field
+        with modifiers:
+        with type: "int"
+        with name: "field"
+-> method
+    with name: "setField"
+    with args: { -, "field" }
+    with result: "void"
+-> statement
+    with text: "MyClass myClass = new MyClass()"
+    in method: "main"
+    log info: "Definicja zmiennej myClass"
+-> statement
+    with text: "System.out.println(myClass.field)"
+    with resolved: "System.out.println(1)"
+    in method: "main"
+    log info: "Wywołanie println z parametrem myClass.field"
+
+### INPUT ###
+public class MyClass {
+    int field;
+
+    public static void main(String[] args){
+        MyClass myClass = new MyClass();
+
+        myClass.printAndReturn().setField(1);
+
+        System.out.println(myClass.field);
+    }
+
+    MyClass printAndReturn() {
+        System.out.println(this.field);
+        return this;
+    }
+
+    void setField(int field) {
+        this.field = field;
+    }
+}
+
+### OUTPUT ###
+0
+1

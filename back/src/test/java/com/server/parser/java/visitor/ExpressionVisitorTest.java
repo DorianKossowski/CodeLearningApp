@@ -1,15 +1,17 @@
 package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.MethodVar;
-import com.server.parser.java.ast.Variable;
-import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
-import com.server.parser.java.ast.value.ObjectWrapperValue;
+import com.server.parser.java.ast.expression.ObjectRefExpression;
+import com.server.parser.java.constant.StringConstant;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.java.value.ObjectWrapperValue;
+import com.server.parser.java.variable.MethodVar;
+import com.server.parser.java.variable.Variable;
 import com.server.parser.util.exception.ResolvingException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -21,7 +23,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ExpressionVisitorTest extends JavaVisitorTestBase {
-    private final ExpressionVisitor visitor = new ExpressionVisitor();
+    private ExpressionVisitor visitor;
+
+    @Override
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        visitor = new ExpressionVisitor(context);
+    }
 
     static Stream<Arguments> literalsProvider() {
         return Stream.of(
@@ -44,7 +53,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
     void shouldVisitLiteral(String input, String expected, Class<?> classLiteral) {
         JavaParser.LiteralContext c = HELPER.shouldParseToEof(input, JavaParser::literal);
 
-        Literal literal = (Literal) visitor.visit(c, context);
+        Literal literal = (Literal) visitor.visit(c);
 
         assertThat(literal.getConstant().c).isExactlyInstanceOf(classLiteral);
         assertThat(literal.getText()).isEqualTo(expected);
@@ -55,7 +64,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "\"base string literal\"";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        Expression expression = visitor.visit(c, context);
+        Expression expression = visitor.visit(c);
 
         assertThat(expression).isExactlyInstanceOf(Literal.class);
         assertThat(expression.getText()).isEqualTo(input);
@@ -65,10 +74,11 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
     void shouldThrowWhenInvalidExpressionType() {
         MethodContext methodContext = createMethodContext();
         methodContext.addVariable(createStringVariable("x"));
+        visitor = new ExpressionVisitor(methodContext);
         String input = "-x";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        assertThatThrownBy(() -> visitor.visit(c, methodContext))
+        assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Operacja niedostępna dla typu String");
     }
@@ -84,14 +94,15 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
         MethodContext methodContext = createMethodContext();
         methodContext.addVariable(createStringVariable("x"));
         methodContext.addVariable(createStringVariable("x2"));
+        visitor = new ExpressionVisitor(methodContext);
         String input = "x.equals(x2)";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        Expression expression = visitor.visit(c, methodContext);
+        Expression expression = visitor.visit(c);
 
-        assertThat(expression).isExactlyInstanceOf(Literal.class);
-        assertThat(expression.getText()).isEqualTo("true");
-        assertThat(expression.getConstant().c).isEqualTo(true);
+        assertThat(expression).isExactlyInstanceOf(ObjectRefExpression.class);
+        assertThat(expression.getText()).isEqualTo(input);
+        assertThat(expression.getLiteral().getConstant().c).isEqualTo(true);
     }
 
     @Test
@@ -99,11 +110,11 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "true && false";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        Expression expression = visitor.visit(c, context);
+        Expression expression = visitor.visit(c);
 
         assertThat(expression).isExactlyInstanceOf(Literal.class);
         assertThat(expression.getText()).isEqualTo("false");
-        assertThat(expression.getConstant().c).isEqualTo(false);
+        assertThat(expression.getLiteral().getConstant().c).isEqualTo(false);
     }
 
     @Test
@@ -111,11 +122,11 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "true || false";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        Expression expression = visitor.visit(c, context);
+        Expression expression = visitor.visit(c);
 
         assertThat(expression).isExactlyInstanceOf(Literal.class);
         assertThat(expression.getText()).isEqualTo("true");
-        assertThat(expression.getConstant().c).isEqualTo(true);
+        assertThat(expression.getLiteral().getConstant().c).isEqualTo(true);
     }
 
     @Test
@@ -123,7 +134,7 @@ class ExpressionVisitorTest extends JavaVisitorTestBase {
         String input = "null";
         JavaParser.ExpressionContext c = HELPER.shouldParseToEof(input, JavaParser::expression);
 
-        Expression expression = visitor.visit(c, context);
+        Expression expression = visitor.visit(c);
 
         assertThat(expression).isExactlyInstanceOf(NullExpression.class);
         assertThat(expression.getText()).isEqualTo("null");

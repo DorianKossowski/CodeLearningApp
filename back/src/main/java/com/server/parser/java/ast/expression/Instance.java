@@ -1,9 +1,8 @@
 package com.server.parser.java.ast.expression;
 
-import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.constant.Constant;
-import com.server.parser.java.ast.value.ObjectValue;
-import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.value.ObjectValue;
+import com.server.parser.java.value.Value;
+import com.server.parser.java.variable.FieldVar;
 
 import java.util.Map;
 import java.util.Objects;
@@ -44,10 +43,5 @@ public class Instance extends Expression {
     @Override
     public Value getValue() {
         return new ObjectValue(this);
-    }
-
-    @Override
-    public Constant<?> getConstant() {
-        throw new UnsupportedOperationException();
     }
 }

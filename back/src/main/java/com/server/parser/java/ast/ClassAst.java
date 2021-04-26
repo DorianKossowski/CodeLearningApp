@@ -2,7 +2,7 @@ package com.server.parser.java.ast;
 
 import java.util.Objects;
 
-public class ClassAst extends AstElement {
+public class ClassAst implements AstElement {
     private final ClassHeader header;
     private final ClassBody body;
 

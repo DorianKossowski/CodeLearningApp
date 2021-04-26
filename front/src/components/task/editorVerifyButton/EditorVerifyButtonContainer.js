@@ -15,7 +15,7 @@ class EditorVerifyButtonContainer extends Component {
         this.props.resetAlert();
         api({
             method: 'POST',
-            url: 'parse',
+            url: 'validate',
             data: { task: this.props.task, input: this.props.input }
         })
         .then(data => {

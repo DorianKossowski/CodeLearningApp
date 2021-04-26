@@ -1,19 +1,19 @@
 package com.server.parser.java.visitor;
 
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.FieldVarInitExpressionFunction;
-import com.server.parser.java.ast.MethodVar;
-import com.server.parser.java.ast.Variable;
-import com.server.parser.java.ast.constant.IntConstant;
-import com.server.parser.java.ast.constant.StringConstant;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.statement.expression_statement.Assignment;
 import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
-import com.server.parser.java.ast.value.PrimitiveValue;
-import com.server.parser.java.ast.value.Value;
+import com.server.parser.java.constant.IntConstant;
+import com.server.parser.java.constant.StringConstant;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.java.value.PrimitiveValue;
+import com.server.parser.java.value.Value;
+import com.server.parser.java.variable.FieldVar;
+import com.server.parser.java.variable.FieldVarInitExpressionFunction;
+import com.server.parser.java.variable.MethodVar;
+import com.server.parser.java.variable.Variable;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,13 +27,14 @@ import static org.mockito.Mockito.mock;
 class AssignmentStatementVisitorTest extends JavaVisitorTestBase {
     private MethodContext methodContext;
 
-    private final AssignmentStatementVisitor visitor = new AssignmentStatementVisitor();
+    private AssignmentStatementVisitor visitor;
 
     @Override
     @BeforeEach
     void setUp() {
         super.setUp();
         methodContext = createMethodContext("METHOD_NAME", "void");
+        visitor = new AssignmentStatementVisitor(methodContext);
     }
 
     @Test
@@ -42,7 +43,7 @@ class AssignmentStatementVisitorTest extends JavaVisitorTestBase {
         String input = "a = \"str\"";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 
-        Assignment assignment = visitor.visit(c, methodContext);
+        Assignment assignment = visitor.visit(c);
 
         assertThat(assignment.getText()).isEqualTo(input);
         assertThat(assignment.getId()).isEqualTo("a");
@@ -61,7 +62,7 @@ class AssignmentStatementVisitorTest extends JavaVisitorTestBase {
         String input = "a = 5";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 
-        assertThatThrownBy(() -> visitor.visit(c, methodContext))
+        assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie 5 nie jest typu String");
     }
@@ -76,7 +77,7 @@ class AssignmentStatementVisitorTest extends JavaVisitorTestBase {
         String input = "a.b = 1";
         JavaParser.AssignmentContext c = HELPER.shouldParseToEof(input, JavaParser::assignment);
 
-        Assignment assignment = visitor.visit(c, methodContext);
+        Assignment assignment = visitor.visit(c);
 
         assertThat(assignment.getText()).isEqualTo(input);
         assertThat(assignment.getId()).isEqualTo("a.b");

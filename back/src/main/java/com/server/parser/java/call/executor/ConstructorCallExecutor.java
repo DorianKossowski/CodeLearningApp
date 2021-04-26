@@ -1,17 +1,16 @@
 package com.server.parser.java.call.executor;
 
 import com.rits.cloning.Cloner;
-import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.FieldVarInitExpressionFunction;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
-import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.StatementListVisitor;
+import com.server.parser.java.value.ObjectValue;
+import com.server.parser.java.variable.FieldVar;
+import com.server.parser.java.variable.FieldVarInitExpressionFunction;
 import com.server.parser.util.ClonerFactory;
 
 import java.util.HashMap;
@@ -23,11 +22,10 @@ public class ConstructorCallExecutor extends CallExecutor {
     private final Cloner cloner;
 
     public ConstructorCallExecutor() {
-        this(new StatementListVisitor(), ClonerFactory.createCloner(FieldVarInitExpressionFunction.class));
+        this(ClonerFactory.createCloner(FieldVarInitExpressionFunction.class));
     }
 
-    ConstructorCallExecutor(StatementListVisitor visitor, Cloner cloner) {
-        super(visitor);
+    ConstructorCallExecutor(Cloner cloner) {
         this.cloner = Objects.requireNonNull(cloner, "cloner cannot be null");
     }
 
@@ -35,9 +33,15 @@ public class ConstructorCallExecutor extends CallExecutor {
     public CallStatement execute(Method method, CallInvocation invocation) {
         Instance instance = prepareNewInstance(method);
         JavaContext executionContext = ContextFactory.createExecutionContext(new ObjectValue(instance), method.getMethodContext());
-        instance.getFields().values().forEach(fieldVar -> fieldVar.initialize(executionContext));
+        initializeInstanceFields(executionContext, instance.getFields());
         List<Statement> statements = executeInContext(method, invocation, executionContext);
         return new CallStatement(invocation, statements, instance);
+    }
+
+    void initializeInstanceFields(JavaContext executionContext, Map<String, FieldVar> fields) {
+        fields.values().stream()
+                .filter(fieldVar -> !fieldVar.isStatic())
+                .forEach(fieldVar -> fieldVar.initialize(executionContext));
     }
 
     Instance prepareNewInstance(Method method) {

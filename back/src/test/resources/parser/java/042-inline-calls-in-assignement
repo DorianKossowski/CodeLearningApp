@@ -1,0 +1,27 @@
+### TASK ###
+
+### INPUT ###
+public class MyClass {
+    int i;
+    MyClass m;
+
+	public static void main(String[] args) {
+		MyClass myClass = new MyClass();
+		myClass.m = new MyClass();
+		myClass.getInner().i = 1;
+		myClass.print();
+		myClass.getInner().print();
+	}
+
+    MyClass getInner() {
+        return m;
+    }
+
+	void print() {
+	    System.out.println(i);
+	}
+}
+
+### OUTPUT ###
+0
+1

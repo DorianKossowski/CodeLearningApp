@@ -1,7 +1,7 @@
 package com.server.parser.java.call.executor;
 
+import com.google.common.collect.ImmutableMap;
 import com.rits.cloning.Cloner;
-import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Instance;
 import com.server.parser.java.ast.statement.CallStatement;
@@ -10,7 +10,7 @@ import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
 import com.server.parser.java.context.JavaContext;
 import com.server.parser.java.context.MethodContext;
-import com.server.parser.java.visitor.StatementListVisitor;
+import com.server.parser.java.variable.FieldVar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
@@ -29,18 +29,18 @@ import static org.mockito.Mockito.*;
 class ConstructorCallExecutorTest {
     private static final String CLASS_NAME = "CLASS";
     @Mock
-    private StatementListVisitor visitor;
-    @Mock
     private Cloner cloner;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Method method;
+    @Mock
+    private JavaContext context;
 
     private ConstructorCallExecutor executor;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        executor = new ConstructorCallExecutor(visitor, cloner);
+        executor = new ConstructorCallExecutor(cloner);
         when(method.getClassName()).thenReturn(CLASS_NAME);
     }
 
@@ -122,9 +122,27 @@ class ConstructorCallExecutorTest {
         CallInvocation invocation = mock(CallInvocation.class, RETURNS_DEEP_STUBS);
 
         // when
-        List<Statement> statements = executor.executeInContext(method, invocation, mock(JavaContext.class));
+        List<Statement> statements = executor.executeInContext(method, invocation, context);
 
         // then
         assertThat(statements).isEmpty();
+    }
+
+    @Test
+    void shouldInitializeInstanceFields() {
+        FieldVar fieldVar = mock(FieldVar.class);
+        FieldVar staticFieldVar = mock(FieldVar.class);
+        when(staticFieldVar.isStatic()).thenReturn(true);
+        Map<String, FieldVar> fields = ImmutableMap.<String, FieldVar>builder()
+                .put("F1", fieldVar)
+                .put("F2", staticFieldVar)
+                .build();
+
+        executor.initializeInstanceFields(context, fields);
+
+        verify(fieldVar).isStatic();
+        verify(fieldVar).initialize(context);
+        verify(staticFieldVar).isStatic();
+        verifyNoMoreInteractions(staticFieldVar);
     }
 }

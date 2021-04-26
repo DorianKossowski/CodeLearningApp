@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MethodHeader extends AstElement {
+public class MethodHeader implements AstElement {
     private final List<String> modifiers;
     private final String result;
     private final String name;

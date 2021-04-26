@@ -1,6 +1,6 @@
 package com.server.parser.java.call.reference;
 
-import com.server.parser.java.ast.value.ObjectValue;
+import com.server.parser.java.value.ObjectValue;
 
 import java.util.Objects;
 import java.util.Optional;

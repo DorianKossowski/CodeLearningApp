@@ -1,149 +1,136 @@
 package com.server.parser.java.visitor;
 
-import com.server.parser.java.JavaBaseVisitor;
 import com.server.parser.java.JavaGrammarHelper;
 import com.server.parser.java.JavaParser;
+import com.server.parser.java.ast.Statements;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.VoidExpression;
-import com.server.parser.java.ast.statement.BlockStatement;
-import com.server.parser.java.ast.statement.CallStatement;
-import com.server.parser.java.ast.statement.EmptyStatement;
-import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.ast.statement.expression_statement.Assignment;
 import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
+import com.server.parser.java.context.ContextParameters;
+import com.server.parser.java.context.DelegatingContext;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.resolver.*;
 import com.server.parser.util.TypeCorrectnessChecker;
 import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import java.util.List;
 import java.util.Objects;
 
 public class StatementVisitor extends JavaVisitor<Statement> {
+    private final DelegatingContext context;
 
-    @Override
-    public Statement visit(ParserRuleContext ctx, JavaContext context) {
-        return new StatementVisitorInternal(context).visit(ctx);
+    StatementVisitor(JavaContext context) {
+        this.context = (DelegatingContext) Objects.requireNonNull(context, "context cannot be null");
     }
 
-    public static class StatementVisitorInternal extends JavaBaseVisitor<Statement> {
-        private final JavaContext context;
+    @Override
+    public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
+        JavaContext localContext = context.createLocalContext();
+        Statements statements = localContext.resolveStatements(ctx.statements());
+        return new BlockStatement(statements);
+    }
 
-        private StatementVisitorInternal(JavaContext context) {
-            this.context = Objects.requireNonNull(context, "context cannot be null");
+    @Override
+    public Statement visitExpressionStatement(JavaParser.ExpressionStatementContext ctx) {
+        return visit(ctx.getChild(0));
+    }
+
+    @Override
+    public Statement visitExpressionStatementSemicolon(JavaParser.ExpressionStatementSemicolonContext ctx) {
+        return visit(ctx.getChild(0));
+    }
+
+    //*** CALL ***//
+    @Override
+    public CallStatement visitCallStatement(JavaParser.CallStatementContext ctx) {
+        return context.getVisitor(CallStatement.class, context).visit(ctx);
+    }
+
+    //*** VARIABLE ***//
+    @Override
+    public Statement visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
+        return context.getVisitor(VariableDef.class, context).visit(ctx);
+    }
+
+    @Override
+    public Statement visitAssignment(JavaParser.AssignmentContext ctx) {
+        return context.getVisitor(Assignment.class, context).visit(ctx);
+    }
+
+    //*** IF ***//
+    @Override
+    public Statement visitIfElseStatement(JavaParser.IfElseStatementContext ctx) {
+        return context.getVisitor(IfElseStatement.class, context).visit(ctx);
+    }
+
+    //*** SWITCH ***//
+    @Override
+    public Statement visitSwitchStatement(JavaParser.SwitchStatementContext ctx) {
+        return context.getVisitor(SwitchStatement.class, context.createLocalContext()).visit(ctx);
+    }
+
+    //*** BREAK ***//
+    @Override
+    public Statement visitBreakStatement(JavaParser.BreakStatementContext ctx) {
+        if (isValidBreak(ctx)) {
+            return BreakExprStatement.INSTANCE;
         }
+        throw new BreakStatementException();
+    }
 
-        @Override
-        public Statement visitBlockStatement(JavaParser.BlockStatementContext ctx) {
-            StatementListVisitor statementListVisitor = new StatementListVisitor();
-            List<Statement> statements = statementListVisitor.visit(ctx.statementList(), context.createLocalContext());
-            return new BlockStatement(statements);
-        }
-
-        @Override
-        public Statement visitExpressionStatement(JavaParser.ExpressionStatementContext ctx) {
-            return visit(ctx.getChild(0));
-        }
-
-        @Override
-        public Statement visitExpressionStatementSemicolon(JavaParser.ExpressionStatementSemicolonContext ctx) {
-            return visit(ctx.getChild(0));
-        }
-
-        //*** CALL ***//
-        @Override
-        public CallStatement visitCall(JavaParser.CallContext ctx) {
-            return context.getVisitor(CallStatement.class).visit(ctx, context);
-        }
-
-        //*** VARIABLE ***//
-        @Override
-        public Statement visitMethodVarDec(JavaParser.MethodVarDecContext ctx) {
-            return context.getVisitor(VariableDef.class).visit(ctx, context);
-        }
-
-        @Override
-        public Statement visitAssignment(JavaParser.AssignmentContext ctx) {
-            return context.getVisitor(Assignment.class).visit(ctx, context);
-        }
-
-        //*** IF ***//
-        @Override
-        public Statement visitIfElseStatement(JavaParser.IfElseStatementContext ctx) {
-            return IfStmtResolver.resolve(context, this, ctx);
-        }
-
-        //*** SWITCH ***//
-        @Override
-        public Statement visitSwitchStatement(JavaParser.SwitchStatementContext ctx) {
-            return SwitchStmtResolver.resolve(context.createLocalContext(), ctx);
-        }
-
-        //*** BREAK ***//
-        @Override
-        public Statement visitBreakStatement(JavaParser.BreakStatementContext ctx) {
-            if (isValidBreak(ctx)) {
-                return BreakExprStatement.INSTANCE;
+    private static boolean isValidBreak(ParserRuleContext ctx) {
+        ParserRuleContext parentContext = ctx.getParent();
+        while (parentContext != null) {
+            if (parentContext instanceof JavaParser.SwitchElementContext
+                    || parentContext instanceof JavaParser.ForStatementContext
+                    || parentContext instanceof JavaParser.WhileStatementContext
+                    || parentContext instanceof JavaParser.DoWhileStatementContext) {
+                return true;
             }
-            throw new BreakStatementException();
+            parentContext = parentContext.getParent();
         }
+        return false;
+    }
 
-        private static boolean isValidBreak(ParserRuleContext ctx) {
-            ParserRuleContext parentContext = ctx.getParent();
-            while (parentContext != null) {
-                if (parentContext instanceof JavaParser.SwitchElementContext
-                        || parentContext instanceof JavaParser.ForStatementContext
-                        || parentContext instanceof JavaParser.WhileStatementContext
-                        || parentContext instanceof JavaParser.DoWhileStatementContext) {
-                    return true;
-                }
-                parentContext = parentContext.getParent();
-            }
-            return false;
-        }
+    //*** FOR ***//
+    @Override
+    public Statement visitForStatement(JavaParser.ForStatementContext ctx) {
+        return context.getVisitor(ForStatement.class, context.createLocalContext()).visit(ctx);
+    }
 
-        //*** FOR ***//
-        @Override
-        public Statement visitForStatement(JavaParser.ForStatementContext ctx) {
-            JavaContext localContext = context.createLocalContext();
-            return ForStmtResolver.resolve(localContext, ctx);
-        }
+    //*** WHILE ***//
+    @Override
+    public Statement visitWhileStatement(JavaParser.WhileStatementContext ctx) {
+        return context.getVisitor(WhileStatement.class, context.createLocalContext()).visit(ctx);
+    }
 
-        //*** WHILE ***//
-        @Override
-        public Statement visitWhileStatement(JavaParser.WhileStatementContext ctx) {
-            JavaContext localContext = context.createLocalContext();
-            return WhileStmtResolver.resolve(localContext, ctx);
-        }
+    //*** DO WHILE ***//
+    @Override
+    public Statement visitDoWhileStatement(JavaParser.DoWhileStatementContext ctx) {
+        return context.getVisitor(DoWhileStatement.class, context.createLocalContext()).visit(ctx);
+    }
 
-        //*** DO WHILE ***//
-        @Override
-        public Statement visitDoWhileStatement(JavaParser.DoWhileStatementContext ctx) {
-            JavaContext localContext = context.createLocalContext();
-            return DoWhileStmtResolver.resolve(localContext, ctx);
-        }
+    //*** EMPTY ***//
+    @Override
+    public Statement visitEmptyStatement(JavaParser.EmptyStatementContext ctx) {
+        return EmptyStatement.INSTANCE;
+    }
 
-        //*** EMPTY ***//
-        @Override
-        public Statement visitEmptyStatement(JavaParser.EmptyStatementContext ctx) {
-            return EmptyStatement.INSTANCE;
+    //*** RETURN ***//
+    @Override
+    public Statement visitReturnStatement(JavaParser.ReturnStatementContext ctx) {
+        Expression expression = VoidExpression.INSTANCE;
+        if (ctx.expression() != null) {
+            expression = context.resolveExpression(ctx.expression());
         }
-
-        //*** RETURN ***//
-        @Override
-        public Statement visitReturnStatement(JavaParser.ReturnStatementContext ctx) {
-            Expression expression = VoidExpression.INSTANCE;
-            if (ctx.expression() != null) {
-                expression = context.getVisitor(Expression.class).visit(ctx.expression(), context);
-            }
-            if (TypeCorrectnessChecker.isCorrect(context.getMethodResultType(), expression)) {
-                return new ReturnExprStatement(JavaGrammarHelper.getOriginalText(ctx), expression);
-            }
-            throw new InvalidReturnedExpressionException(expression.getResolvedText(), context.getMethodResultType());
+        ContextParameters parameters = context.getParameters();
+        if (TypeCorrectnessChecker.isCorrect(parameters.getMethodResultType(), expression)) {
+            return new ReturnExprStatement(JavaGrammarHelper.getOriginalText(ctx), expression);
         }
+        throw new InvalidReturnedExpressionException(expression.getResolvedText(), parameters.getMethodResultType());
     }
 }

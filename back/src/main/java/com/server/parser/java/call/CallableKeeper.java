@@ -7,10 +7,9 @@ import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.util.exception.ResolvingException;
 
-import java.io.Serializable;
 import java.util.*;
 
-public class CallableKeeper implements Serializable {
+public class CallableKeeper {
     private final Map<MethodHeader, Method> callableWithContext = new HashMap<>();
     private final MatchingCallableFinder matchingCallableFinder;
 

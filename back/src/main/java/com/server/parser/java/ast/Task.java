@@ -6,7 +6,7 @@ import com.server.parser.java.ast.statement.Statement;
 import java.util.List;
 import java.util.Objects;
 
-public class Task extends AstElement {
+public class Task implements AstElement {
     private final ClassAst classAst;
     private final List<Statement> calledStatements;
     private final List<PrintCallStatement> printCalls;

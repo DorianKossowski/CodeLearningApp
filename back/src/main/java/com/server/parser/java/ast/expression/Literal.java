@@ -1,9 +1,9 @@
 package com.server.parser.java.ast.expression;
 
-import com.server.parser.java.ast.constant.Constant;
-import com.server.parser.java.ast.constant.DoubleConstant;
-import com.server.parser.java.ast.value.Value;
-import com.server.parser.util.ValuePreparer;
+import com.server.parser.java.constant.Constant;
+import com.server.parser.java.constant.DoubleConstant;
+import com.server.parser.java.value.Value;
+import com.server.parser.java.value.util.ValuePreparer;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.Objects;
@@ -45,7 +45,6 @@ public class Literal extends Expression {
         return constant.getRawValue();
     }
 
-    @Override
     public Constant<?> getConstant() {
         return constant;
     }

@@ -3,17 +3,19 @@ package com.server.parser.java.visitor;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.MethodVar;
-import com.server.parser.java.ast.constant.IntConstant;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.*;
 import com.server.parser.java.ast.statement.expression_statement.BreakExprStatement;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
 import com.server.parser.java.ast.statement.expression_statement.ReturnExprStatement;
-import com.server.parser.java.ast.value.PrimitiveComputableValue;
+import com.server.parser.java.ast.statement.property.StatementProperties;
+import com.server.parser.java.constant.IntConstant;
 import com.server.parser.java.context.ClassContext;
+import com.server.parser.java.context.ContextParameters;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.java.value.PrimitiveComputableValue;
+import com.server.parser.java.variable.MethodVar;
 import com.server.parser.util.exception.BreakStatementException;
 import com.server.parser.util.exception.InvalidReturnedExpressionException;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,13 +30,14 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
     private MethodContext methodContext;
 
-    private final StatementVisitor visitor = new StatementVisitor();
+    private StatementVisitor visitor;
 
     @Override
     @BeforeEach
     void setUp() {
         super.setUp();
         methodContext = createMethodContext(METHOD_NAME, "void");
+        visitor = new StatementVisitor(methodContext);
     }
 
     @Test
@@ -42,7 +45,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         String input = "{ int a = 1; boolean b = false; }";
         JavaParser.BlockStatementContext c = HELPER.shouldParseToEof(input, JavaParser::blockStatement);
 
-        BlockStatement statement = (BlockStatement) visitor.visit(c, methodContext);
+        BlockStatement statement = (BlockStatement) visitor.visit(c);
 
         assertThat(statement.getText()).isEqualTo("{ BLOCK STATEMENT }");
         assertThat(statement.getExpressionStatements()).extracting(Statement::getText)
@@ -56,8 +59,9 @@ class StatementVisitorTest extends JavaVisitorTestBase {
         MethodContext methodContext = createRealMethodContext();
         methodContext.save(new MethodHeader(Collections.emptyList(), "", "methodName", Collections.emptyList()),
                 mock(JavaParser.MethodBodyContext.class));
+        visitor = new StatementVisitor(methodContext);
 
-        ForStatement statement = (ForStatement) visitor.visit(c, methodContext);
+        ForStatement statement = (ForStatement) visitor.visit(c);
 
         assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(BreakExprStatement.INSTANCE);
     }
@@ -67,8 +71,9 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitIf() {
         String input = "if(true) { System.out.print(1); if(true) { System.out.print(2); } }";
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof(input, JavaParser::ifElseStatement);
+        visitor = new StatementVisitor(createRealMethodContext());
 
-        IfElseStatement ifElseStatement = (IfElseStatement) visitor.visit(c, createRealMethodContext());
+        IfElseStatement ifElseStatement = (IfElseStatement) visitor.visit(c);
 
         assertThat(ifElseStatement.getText()).isEqualTo("IF ELSE Statement");
         assertThat(ifElseStatement.getExpressionStatements()).extracting(ExpressionStatement::getText)
@@ -77,7 +82,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
     private MethodContext createRealMethodContext() {
         ClassContext context = new ClassContext();
-        context.setName("");
+        context.setParameters(ContextParameters.createClassContextParameters(""));
         MethodContext methodContext = context.createEmptyMethodContext();
         MethodHeader methodHeader = new MethodHeader(Collections.emptyList(), "", "", Collections.emptyList());
         methodContext.save(methodHeader, mock(JavaParser.MethodBodyContext.class));
@@ -88,8 +93,9 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitElse() {
         String input = "if(false) System.out.print(1); else { System.out.print(2); }";
         JavaParser.IfElseStatementContext c = HELPER.shouldParseToEof(input, JavaParser::ifElseStatement);
+        visitor = new StatementVisitor(createRealMethodContext());
 
-        IfElseStatement ifElseStatement = (IfElseStatement) visitor.visit(c, createRealMethodContext());
+        IfElseStatement ifElseStatement = (IfElseStatement) visitor.visit(c);
 
         assertThat(ifElseStatement.getText()).isEqualTo("IF ELSE Statement");
         assertThat(ifElseStatement.getExpressionStatements()).extracting(ExpressionStatement::getText)
@@ -101,7 +107,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitBreak() {
         JavaParser.BreakStatementContext c = HELPER.shouldParseToEof("break", JavaParser::breakStatement);
 
-        assertThatThrownBy(() -> visitor.visit(c, context))
+        assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(BreakStatementException.class)
                 .hasMessage("Problem podczas rozwiązywania: 'break' poza instrukcją switch oraz pętlą");
     }
@@ -111,7 +117,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitEmpty() {
         JavaParser.EmptyStatementContext c = HELPER.shouldParseToEof(";", JavaParser::emptyStatement);
 
-        assertThat(visitor.visit(c, context)).isSameAs(EmptyStatement.INSTANCE);
+        assertThat(visitor.visit(c)).isSameAs(EmptyStatement.INSTANCE);
     }
 
     //*** FOR ***//
@@ -119,8 +125,9 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitFor() {
         String input = "for(int i=0; i<2; i=i+1) { System.out.print(i+1); }";
         JavaParser.ForStatementContext c = HELPER.shouldParseToEof(input, JavaParser::forStatement);
+        visitor = new StatementVisitor(createRealMethodContext());
 
-        ForStatement forStatement = (ForStatement) visitor.visit(c, createRealMethodContext());
+        ForStatement forStatement = (ForStatement) visitor.visit(c);
 
         assertThat(forStatement.getText()).isEqualTo("FOR Statement");
         assertThat(forStatement.getExpressionStatements()).extracting(ExpressionStatement::getResolved,
@@ -136,7 +143,8 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         MethodContext realMethodContext = createRealMethodContext();
         realMethodContext.addVariable(new MethodVar("int", "i", new PrimitiveComputableValue(new Literal(new IntConstant(0)))));
-        WhileStatement whileStatement = (WhileStatement) visitor.visit(c, realMethodContext);
+        visitor = new StatementVisitor(realMethodContext);
+        WhileStatement whileStatement = (WhileStatement) visitor.visit(c);
 
         assertThat(whileStatement.getText()).isEqualTo("WHILE Statement");
         assertThat(whileStatement.getExpressionStatements()).extracting(ExpressionStatement::getResolved,
@@ -153,7 +161,8 @@ class StatementVisitorTest extends JavaVisitorTestBase {
 
         MethodContext realMethodContext = createRealMethodContext();
         realMethodContext.addVariable(new MethodVar("int", "i", new PrimitiveComputableValue(new Literal(new IntConstant(0)))));
-        DoWhileStatement doWhileStatement = (DoWhileStatement) visitor.visit(c, realMethodContext);
+        visitor = new StatementVisitor(realMethodContext);
+        DoWhileStatement doWhileStatement = (DoWhileStatement) visitor.visit(c);
 
         assertThat(doWhileStatement.getText()).isEqualTo("DO WHILE Statement");
         assertThat(doWhileStatement.getExpressionStatements()).extracting(ExpressionStatement::getResolved,
@@ -167,7 +176,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldVisitVoidReturn() {
         JavaParser.ReturnStatementContext c = HELPER.shouldParseToEof("return", JavaParser::returnStatement);
 
-        ReturnExprStatement statement = (ReturnExprStatement) visitor.visit(c, methodContext);
+        ReturnExprStatement statement = (ReturnExprStatement) visitor.visit(c);
 
         assertThat(statement.getExpression()).isSameAs(VoidExpression.INSTANCE);
         assertThat(statement.getResolved()).isEqualTo("return");
@@ -176,8 +185,9 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     @Test
     void shouldVisitReturn() {
         JavaParser.ReturnStatementContext c = HELPER.shouldParseToEof("return 1+1", JavaParser::returnStatement);
+        visitor = new StatementVisitor(createMethodContext(METHOD_NAME, "int"));
 
-        ReturnExprStatement statement = (ReturnExprStatement) visitor.visit(c, createMethodContext(METHOD_NAME, "int"));
+        ReturnExprStatement statement = (ReturnExprStatement) visitor.visit(c);
 
         assertThat(statement.getExpression()).isExactlyInstanceOf(Literal.class);
         assertThat(statement.getResolved()).isEqualTo("return 2");
@@ -187,7 +197,7 @@ class StatementVisitorTest extends JavaVisitorTestBase {
     void shouldThrowWhenInvalidReturnedExpression() {
         JavaParser.ReturnStatementContext c = HELPER.shouldParseToEof("return 1", JavaParser::returnStatement);
 
-        assertThatThrownBy(() -> visitor.visit(c, methodContext))
+        assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(InvalidReturnedExpressionException.class)
                 .hasMessage("Problem podczas rozwiązywania: Zwracany element 1 nie jest typu void");
     }

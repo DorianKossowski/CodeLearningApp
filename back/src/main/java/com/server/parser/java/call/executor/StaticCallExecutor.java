@@ -8,28 +8,23 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.context.ContextFactory;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.StatementListVisitor;
 import com.server.parser.util.exception.ResolvingException;
 
 import java.util.List;
 
 public class StaticCallExecutor extends CallExecutor {
 
-    public StaticCallExecutor() {
-        this(new StatementListVisitor());
-    }
-
-    StaticCallExecutor(StatementListVisitor visitor) {
-        super(visitor);
-    }
-
     @Override
     public CallStatement execute(Method method, CallInvocation invocation) {
-        JavaContext executionContext = ContextFactory.createStaticExecutionContext(method.getMethodContext());
+        JavaContext executionContext = createStaticExecutionContext(method);
         List<Statement> statements = executeInContext(method, invocation, executionContext);
         Expression returnedExpression = getReturnedExpression(statements);
         validateReturnedExpression(method.getHeader().getResult(), returnedExpression);
         return new CallStatement(invocation, statements, returnedExpression);
+    }
+
+    JavaContext createStaticExecutionContext(Method method) {
+        return ContextFactory.createStaticExecutionContext(method.getMethodContext());
     }
 
     public PrintCallStatement executePrintMethod(CallInvocation invocation) {

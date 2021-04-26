@@ -1,9 +1,9 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.expression.Instance;
-import com.server.parser.java.ast.value.ObjectValue;
 import com.server.parser.java.call.CallResolver;
+import com.server.parser.java.value.ObjectValue;
+import com.server.parser.java.variable.FieldVar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -47,11 +47,12 @@ class ContextFactoryTest {
     @Test
     void shouldHaveSameCallResolver() {
         ClassContext classContext = new ClassContext();
-        CallResolver callResolver = classContext.getCallResolver();
+        classContext.setParameters(ContextParameters.createClassContextParameters(""));
+        CallResolver callResolver = classContext.getParameters().getCallResolver();
 
         JavaContext executionContext = ContextFactory.createStaticExecutionContext(classContext);
 
-        assertThat(executionContext.getCallResolver()).isSameAs(callResolver);
+        assertThat(executionContext.getParameters().getCallResolver()).isSameAs(callResolver);
     }
 
     @Test

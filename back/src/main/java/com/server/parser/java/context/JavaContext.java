@@ -1,53 +1,50 @@
 package com.server.parser.java.context;
 
-import com.server.parser.java.JavaVisitorsRegistry;
-import com.server.parser.java.ast.AstElement;
-import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.ast.value.ObjectValue;
-import com.server.parser.java.call.CallResolver;
-import com.server.parser.java.visitor.JavaVisitor;
+import com.server.parser.java.value.ObjectValue;
+import com.server.parser.java.variable.FieldVar;
+import com.server.parser.java.variable.Variable;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public interface JavaContext extends MethodVerifiable {
+public abstract class JavaContext extends ResolvingContext {
+    private ContextParameters parameters;
 
-    default <T extends AstElement> JavaVisitor<T> getVisitor(Class<T> elementClass) {
-        return JavaVisitorsRegistry.get(elementClass);
-    }
+    public abstract ObjectValue getThisValue();
 
-    default void addField(FieldVar fieldVar) {
+    // VARIABLES //
+    public Variable getVariable(String name) {
         throw new UnsupportedOperationException();
     }
 
-    default Variable getVariable(String name) {
+    public void addVariable(Variable variable) {
         throw new UnsupportedOperationException();
     }
 
-    default void addVariable(Variable variable) {
+    public void updateVariable(String name, Expression expression) {
         throw new UnsupportedOperationException();
     }
 
-    default void updateVariable(String name, Expression expression) {
-        throw new UnsupportedOperationException();
+    // FIELDS //
+    public Map<String, FieldVar> getStaticFields() {
+        return getFields().entrySet().stream()
+                .filter(entry -> entry.getValue().isStatic())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    default JavaContext createLocalContext() {
-        throw new UnsupportedOperationException();
+    public void setFields(Map<String, FieldVar> nameToField) {
+        getFields().putAll(nameToField);
     }
 
-    CallResolver getCallResolver();
+    public abstract Map<String, FieldVar> getFields();
 
-    Map<String, FieldVar> getStaticFields();
+    // PARAMETERS //
+    public void setParameters(ContextParameters parameters) {
+        this.parameters = parameters;
+    }
 
-    void setFields(Map<String, FieldVar> nameToField);
-
-    String getClassName();
-
-    boolean isStaticContext();
-
-    ObjectValue getThisValue();
-
-    void setThisValue(ObjectValue thisValue);
+    public ContextParameters getParameters() {
+        return parameters;
+    }
 }

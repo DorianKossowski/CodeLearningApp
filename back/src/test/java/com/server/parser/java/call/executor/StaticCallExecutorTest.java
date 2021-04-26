@@ -3,6 +3,7 @@ package com.server.parser.java.call.executor;
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.Method;
+import com.server.parser.java.ast.Statements;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.CallStatement;
@@ -10,7 +11,7 @@ import com.server.parser.java.ast.statement.Statement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
 import com.server.parser.java.call.reference.CallReference;
-import com.server.parser.java.visitor.StatementListVisitor;
+import com.server.parser.java.context.JavaContext;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,32 +23,32 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class StaticCallExecutorTest {
     @Mock
-    private StatementListVisitor visitor;
-    @Mock
     private CallInvocation invocation;
+    @Mock
+    private JavaContext javaContext;
 
     private StaticCallExecutor executor;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        executor = new StaticCallExecutor(visitor);
+        executor = new StaticCallExecutor();
     }
 
     @Test
     void shouldExecuteNoArgStaticCall() {
+        StaticCallExecutor spyExecutor = spy(executor);
         JavaParser.MethodBodyContext bodyContext = mock(JavaParser.MethodBodyContext.class);
         Method method = mockMethod(bodyContext);
         ExpressionStatement expressionStatement = mockExpressionStatement();
-        when(visitor.visit(eq(bodyContext), any())).thenReturn(Collections.singletonList(expressionStatement));
+        doReturn(javaContext).when(spyExecutor).createStaticExecutionContext(method);
+        when(javaContext.resolveStatements(bodyContext)).thenReturn(new Statements(Collections.singletonList(expressionStatement)));
 
-        CallStatement callStatement = executor.execute(method, invocation);
+        CallStatement callStatement = spyExecutor.execute(method, invocation);
 
         assertThat(callStatement.getCallInvocation()).isSameAs(invocation);
         assertThat(callStatement.getExpressionStatements()).containsExactly(invocation, expressionStatement);

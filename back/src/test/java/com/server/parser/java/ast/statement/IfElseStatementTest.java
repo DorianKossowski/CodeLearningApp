@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.expression_statement.Assignment;
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
+import com.server.parser.java.ast.statement.property.StatementProperties;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

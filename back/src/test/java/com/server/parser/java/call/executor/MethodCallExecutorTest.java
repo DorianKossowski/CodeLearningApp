@@ -6,11 +6,11 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.VoidExpression;
 import com.server.parser.java.ast.statement.CallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
-import com.server.parser.java.ast.value.ObjectValue;
-import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.context.JavaContext;
-import com.server.parser.java.visitor.StatementListVisitor;
+import com.server.parser.java.value.ObjectValue;
+import com.server.parser.java.value.Value;
+import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
@@ -18,13 +18,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 class MethodCallExecutorTest {
-    @Mock
-    private StatementListVisitor visitor;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Method method;
 
@@ -33,7 +33,7 @@ class MethodCallExecutorTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        executor = new MethodCallExecutor(visitor);
+        executor = new MethodCallExecutor();
         when(method.getHeader().getResult()).thenReturn("void");
     }
 
@@ -78,5 +78,16 @@ class MethodCallExecutorTest {
         assertThat(statement.getCallInvocation()).isSameAs(invocation);
         assertThat(Iterables.getOnlyElement(statement.getExpressionStatements())).isSameAs(invocation);
         assertThat(statement.getResult()).isSameAs(VoidExpression.INSTANCE);
+    }
+
+    @Test
+    void shouldThrowWhenEmptyReference() {
+        CallInvocation invocation = mock(CallInvocation.class, RETURNS_DEEP_STUBS);
+        when(invocation.getCallReference().getValue()).thenReturn(Optional.empty());
+        when(invocation.getText()).thenReturn("CALL()");
+
+        assertThatThrownBy(() -> executor.getThisValue(invocation))
+                .isExactlyInstanceOf(ResolvingException.class)
+                .hasMessage("Problem podczas rozwiązywania: Niepoprawna próba wywołania: CALL()");
     }
 }

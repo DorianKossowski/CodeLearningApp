@@ -1,9 +1,9 @@
 package com.server.parser.java.context;
 
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.FieldVar;
 import com.server.parser.java.ast.MethodHeader;
-import com.server.parser.java.ast.Variable;
+import com.server.parser.java.variable.FieldVar;
+import com.server.parser.java.variable.Variable;
 import com.server.parser.util.exception.ResolvingException;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +39,7 @@ class MethodContextTest {
 
     @Test
     void shouldGetField() {
-        ClassContext classContext = new ClassContext();
+        ClassContext classContext = createClassContext();
         FieldVar var = mock(FieldVar.class);
         when(var.getName()).thenReturn("var");
         when(var.isStatic()).thenReturn(false);
@@ -51,9 +51,15 @@ class MethodContextTest {
         assertThat(methodContext.getVariable("var")).isSameAs(var);
     }
 
+    private ClassContext createClassContext() {
+        ClassContext classContext = new ClassContext();
+        classContext.setParameters(ContextParameters.createClassContextParameters(""));
+        return classContext;
+    }
+
     @Test
     void shouldThrowWhenGettingNonStaticFieldFromStatic() {
-        ClassContext classContext = new ClassContext();
+        ClassContext classContext = createClassContext();
         FieldVar var = mock(FieldVar.class);
         when(var.getName()).thenReturn("var");
         when(var.isStatic()).thenReturn(false);

@@ -4,7 +4,7 @@ import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.expression.Literal;
 import com.server.parser.java.ast.expression.NullExpression;
 import com.server.parser.java.ast.expression.UninitializedExpression;
-import com.server.parser.java.ast.value.UninitializedValue;
+import com.server.parser.java.value.UninitializedValue;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +23,7 @@ class EmptyExpressionPreparerTest {
         Expression expression = EmptyExpressionPreparer.prepare("float");
 
         assertThat(expression).isExactlyInstanceOf(Literal.class);
-        assertThat(expression.getConstant().c).isEqualTo(0.0);
+        assertThat(expression.getLiteral().getConstant().c).isEqualTo(0.0);
     }
 
     @Test

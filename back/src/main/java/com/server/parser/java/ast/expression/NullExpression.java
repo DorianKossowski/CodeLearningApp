@@ -1,9 +1,7 @@
 package com.server.parser.java.ast.expression;
 
-import com.server.parser.java.ast.constant.Constant;
-import com.server.parser.java.ast.value.NullValue;
-import com.server.parser.java.ast.value.Value;
-import com.server.parser.util.exception.ResolvingNullPointerException;
+import com.server.parser.java.value.NullValue;
+import com.server.parser.java.value.Value;
 
 public class NullExpression extends Expression {
     public static final NullExpression INSTANCE = new NullExpression();
@@ -30,10 +28,5 @@ public class NullExpression extends Expression {
     @Override
     public Value getValue() {
         return NullValue.INSTANCE;
-    }
-
-    @Override
-    public Constant<?> getConstant() {
-        throw new ResolvingNullPointerException();
     }
 }

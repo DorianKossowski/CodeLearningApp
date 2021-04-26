@@ -2,17 +2,18 @@ package com.server.parser.java.visitor;
 
 import com.google.common.collect.Iterables;
 import com.server.parser.java.JavaParser;
-import com.server.parser.java.ast.FieldVar;
-import com.server.parser.java.ast.Variable;
 import com.server.parser.java.ast.statement.expression_statement.FieldVarDef;
 import com.server.parser.java.ast.statement.expression_statement.MethodVarDef;
 import com.server.parser.java.ast.statement.expression_statement.VariableDef;
-import com.server.parser.java.ast.value.NullValue;
-import com.server.parser.java.ast.value.PrimitiveValue;
-import com.server.parser.java.ast.value.UninitializedValue;
-import com.server.parser.java.ast.value.Value;
 import com.server.parser.java.context.MethodContext;
+import com.server.parser.java.value.NullValue;
+import com.server.parser.java.value.PrimitiveValue;
+import com.server.parser.java.value.UninitializedValue;
+import com.server.parser.java.value.Value;
+import com.server.parser.java.variable.FieldVar;
+import com.server.parser.java.variable.Variable;
 import com.server.parser.util.exception.ResolvingException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -27,9 +28,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class VariableDefVisitorTest extends JavaVisitorTestBase {
     private final String METHOD_NAME = "methodName";
-    private final MethodContext methodContext = createMethodContext(METHOD_NAME, "void");
+    private MethodContext methodContext;
 
-    private final VariableDefVisitor visitor = new VariableDefVisitor();
+    private VariableDefVisitor visitor;
+
+    @Override
+    @BeforeEach
+    void setUp() {
+        super.setUp();
+        visitor = new VariableDefVisitor(context);
+        methodContext = createMethodContext(METHOD_NAME, "void");
+    }
 
     static Stream<Arguments> decWithLiteralsProvider() {
         return Stream.of(
@@ -56,7 +65,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
     void shouldVisitVarDecWithLiteral(String input, String type, String name, String value) {
         JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
-        VariableDef variableDef = visitor.visit(c, createMethodContext());
+        VariableDef variableDef = new VariableDefVisitor(createMethodContext()).visit(c);
 
         assertThat(variableDef.getType()).isEqualTo(type);
         assertThat(variableDef.getName()).isEqualTo(name);
@@ -68,7 +77,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         String input = "String a";
         JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
-        VariableDef variableDef = visitor.visit(c, context);
+        VariableDef variableDef = visitor.visit(c);
 
         FieldVar fieldVar = new FieldVar((FieldVarDef) variableDef);
         assertThat(fieldVar.getType()).isEqualTo("String");
@@ -81,7 +90,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         String input = "int a";
         JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
-        VariableDef variableDef = visitor.visit(c, context);
+        VariableDef variableDef = visitor.visit(c);
 
         FieldVar fieldVar = new FieldVar((FieldVarDef) variableDef);
         assertThat(fieldVar.getType()).isEqualTo("int");
@@ -95,7 +104,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         String input = "int a";
         JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
-        VariableDef variableDef = visitor.visit(c, createMethodContext());
+        VariableDef variableDef = new VariableDefVisitor(createMethodContext()).visit(c);
 
         assertThat(variableDef.getType()).isEqualTo("int");
         assertThat(variableDef.getName()).isEqualTo("a");
@@ -107,7 +116,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         String input = "String a = 's'";
         JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
-        assertThatThrownBy(() -> visitor.visit(c, context))
+        assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Wyrażenie 's' nie jest typu String");
     }
@@ -117,7 +126,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         String input = "Integer[] a";
         JavaParser.SingleMethodArgContext c = HELPER.shouldParseToEof(input, JavaParser::singleMethodArg);
 
-        VariableDef variableDef = visitor.visit(c, context);
+        VariableDef variableDef = visitor.visit(c);
 
         assertThat(variableDef.getText()).isEqualTo(input);
         assertVariableDec(variableDef, "Integer[]", "a");
@@ -128,7 +137,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         String input = "final String a = \"str\"";
         JavaParser.MethodVarDecContext c = HELPER.shouldParseToEof(input, JavaParser::methodVarDec);
 
-        MethodVarDef variableDef = (MethodVarDef) visitor.visit(c, methodContext);
+        MethodVarDef variableDef = (MethodVarDef) new VariableDefVisitor(methodContext).visit(c);
 
         assertThat(variableDef.getText()).isEqualTo("String a = \"str\"");
         assertThat(variableDef.getResolved()).isEqualTo(input);
@@ -137,8 +146,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
                 .isEqualTo("\"str\"");
         assertThat(variableDef.printMethodName()).isEqualTo(METHOD_NAME);
 
-        assertThat(methodContext.getNameToVariable().keySet()).containsExactly("a");
-        Variable variable = methodContext.getNameToVariable().get("a");
+        Variable variable = methodContext.getVariable("a");
         assertThat(Iterables.getOnlyElement(variable.getModifiers())).isEqualTo("final");
         assertThat(variable.getValue().toString()).isEqualTo("\"str\"");
     }
@@ -148,7 +156,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         String input = "private static String a = \"str\"";
         JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
-        VariableDef variableDef = visitor.visit(c, context);
+        VariableDef variableDef = visitor.visit(c);
 
         assertThat(variableDef.getText()).isEqualTo("String a = \"str\"");
         assertThat(variableDef.getResolved()).isEqualTo(input);
@@ -161,11 +169,10 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
 
     @Test
     void shouldCreateClassTypeVar() {
-        context.setName("MyClass");
         String input = "MyClass m";
         JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
-        VariableDef variableDef = visitor.visit(c, context);
+        VariableDef variableDef = visitor.visit(c);
 
         assertThat(variableDef.getText()).isEqualTo(input);
         assertThat(variableDef.getResolved()).isEqualTo(input);
@@ -180,7 +187,7 @@ class VariableDefVisitorTest extends JavaVisitorTestBase {
         String input = "string s";
         JavaParser.FieldDecContext c = HELPER.shouldParseToEof(input, JavaParser::fieldDec);
 
-        assertThatThrownBy(() -> visitor.visit(c, context))
+        assertThatThrownBy(() -> visitor.visit(c))
                 .isExactlyInstanceOf(ResolvingException.class)
                 .hasMessage("Problem podczas rozwiązywania: Użyto nieznanego typu: string");
     }

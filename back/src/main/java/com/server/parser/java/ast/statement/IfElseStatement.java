@@ -1,6 +1,7 @@
 package com.server.parser.java.ast.statement;
 
 import com.server.parser.java.ast.statement.expression_statement.ExpressionStatement;
+import com.server.parser.java.ast.statement.property.StatementProperties;
 
 import java.util.ArrayList;
 import java.util.List;

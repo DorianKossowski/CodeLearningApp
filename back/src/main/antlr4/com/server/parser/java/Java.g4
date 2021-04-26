@@ -5,7 +5,7 @@ taskEOF
     ;
 
 task
-    : classDec
+    : SEMICOLON* classDec SEMICOLON*
     ;
 
 classDec
@@ -73,10 +73,10 @@ singleMethodArg
     ;
 
 methodBody
-    : statementList
+    : statements
     ;
 
-statementList
+statements
     : statement*
     ;
 
@@ -114,7 +114,7 @@ switchStatement
     ;
 
 switchElement
-    : switchElementLabel+ statementList
+    : switchElementLabel+ statements
     ;
 
 switchElementLabel
@@ -123,7 +123,7 @@ switchElementLabel
     ;
 
 blockStatement
-    : '{' statementList '}'
+    : '{' statements '}'
     ;
 
 ifElseStatement
@@ -135,7 +135,7 @@ emptyStatement
     ;
 
 expressionStatement
-    : call
+    : callStatement
     | methodVarDec
     | assignment
     | breakStatement
@@ -166,12 +166,16 @@ varModifier
     : 'final'
     ;
 
-call
+callStatement
+    : ( objectRefName '.' )? callSegment
+    ;
+
+callSegment
     : callName '(' callArguments? ')'
     ;
 
 callName
-    : ( objectRefName '.' )? methodName=identifier
+    : methodName=identifier
     | constructorCallName
     | specialPrintCallName
     ;
@@ -190,18 +194,17 @@ callArguments
     ;
 
 expression
-   : unOp=('+' | '-')? exprAtom
-   | expression op=('*' | '/' | '%') expression
-   | expression op=('+' | '-') expression
-   | expression op=('<' | '<=' | '>' | '>=') expression
-   | expression eq=('==' | '!=') expression
-   | expression andOp='&&' expression
-   | expression orOp='||' expression
-   ;
+    : unOp=('+' | '-')? exprAtom
+    | expression op=('*' | '/' | '%') expression
+    | expression op=('+' | '-') expression
+    | expression op=('<' | '<=' | '>' | '>=') expression
+    | expression eq=('==' | '!=') expression
+    | expression andOp='&&' expression
+    | expression orOp='||' expression
+    ;
 
 exprAtom
     :  LPAREN expression RPAREN
-    | call
     | objectRefName
     | literal
     | nullExpr
@@ -212,11 +215,19 @@ nullExpr
     ;
 
 objectRefName
-    : objectRefNameFirstSegment ( '.' identifier )*
+    : objectRefNameFirstSegment objectRefNameNextSegment*
+    ;
+
+objectRefNameNextSegment
+    : '.'
+    ( identifier
+    | callSegment )
     ;
 
 objectRefNameFirstSegment
     : identifier
+    | callSegment
+    | THIS
     ;
 
 literal
@@ -297,6 +308,7 @@ RETURN      : 'return' ;
 RPAREN      : ')' ;
 SEMICOLON   : ';' ;
 SWITCH      : 'switch' ;
+THIS        : 'this' ;
 WHILE       : 'while' ;
 
 STRING_LITERAL : '"' ( '\\"' | . )*? '"' ;

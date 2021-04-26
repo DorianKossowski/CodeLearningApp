@@ -6,10 +6,10 @@ import com.server.parser.java.JavaProgramRunner;
 import com.server.parser.java.ast.ClassAst;
 import com.server.parser.java.ast.Task;
 import com.server.parser.java.ast.statement.Statement;
+import com.server.parser.java.call.CallResolver;
 import com.server.parser.java.context.ClassContext;
 import com.server.parser.java.context.JavaContext;
 
-import java.util.Collections;
 import java.util.List;
 
 public class TaskVisitor extends JavaBaseVisitor<Task> {
@@ -23,9 +23,10 @@ public class TaskVisitor extends JavaBaseVisitor<Task> {
 
     @Override
     public Task visitTask(JavaParser.TaskContext ctx) {
-        ClassAst classAst = context.getVisitor(ClassAst.class).visit(ctx.classDec(), context);
+        ClassAst classAst = context.getVisitor(ClassAst.class, context).visit(ctx.classDec());
 
-        List<Statement> calledStatements = programRunner.run(classAst.getBody().getMethods()).orElse(Collections.emptyList());
-        return new Task(classAst, calledStatements, context.getCallResolver().getResolvedPrintCalls());
+        List<Statement> calledStatements = programRunner.run(classAst.getBody().getMethods());
+        CallResolver callResolver = context.getParameters().getCallResolver();
+        return new Task(classAst, calledStatements, callResolver.getResolvedPrintCalls());
     }
 }

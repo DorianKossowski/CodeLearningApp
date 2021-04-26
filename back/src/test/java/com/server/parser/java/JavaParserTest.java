@@ -119,13 +119,7 @@ public class JavaParserTest {
 
     @Test
     void shouldParseTask() {
-        HELPER.shouldParseToEof("public class c {}", JavaParser::task);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"fun()", "a.fun()", "a.b.fun()"})
-    void shouldParseMethodCall(String input) {
-        HELPER.shouldParseToEof(input, JavaParser::call);
+        HELPER.shouldParseToEof(";; public class c {} ;;", JavaParser::task);
     }
 
     @ParameterizedTest
@@ -136,7 +130,7 @@ public class JavaParserTest {
 
     @Test
     void shouldParsePrintMethodCall() {
-        HELPER.shouldParseToEof("System.out.print(\"Hello World\")", JavaParser::call);
+        HELPER.shouldParseToEof("System.out.print(\"Hello World\")", JavaParser::callStatement);
     }
 
     @Test
@@ -245,12 +239,12 @@ public class JavaParserTest {
 
     @Test
     void shouldParseConstructorCall() {
-        HELPER.shouldParseToEof("new MyClass(10)", JavaParser::call);
+        HELPER.shouldParseToEof("new MyClass(10)", JavaParser::callStatement);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "a", "a.b", "a.b.c"
+            "a", "a.b", "a.b.c", "this.a", "fun().a", "a.fun()", "fun().fun().a", "fun()"
     })
     void shouldParseObjectRefName(String input) {
         HELPER.shouldParseToEof(input, JavaParser::objectRefName);
