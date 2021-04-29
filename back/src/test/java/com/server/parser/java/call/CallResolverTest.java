@@ -4,10 +4,10 @@ import com.google.common.collect.Iterables;
 import com.server.parser.java.ast.Method;
 import com.server.parser.java.ast.expression.Expression;
 import com.server.parser.java.ast.statement.CallStatement;
-import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.call.executor.ConstructorCallExecutor;
 import com.server.parser.java.call.executor.MethodCallExecutor;
+import com.server.parser.java.call.executor.PrintCallExecutor;
 import com.server.parser.java.call.executor.StaticCallExecutor;
 import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.call.reference.ConstructorCallReference;
@@ -34,13 +34,15 @@ class CallResolverTest {
     private MethodCallExecutor methodCallExecutor;
     @Mock
     private StaticCallExecutor staticCallExecutor;
+    @Mock
+    private PrintCallExecutor printCallExecutor;
 
     private CallResolver resolver;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        resolver = new CallResolver(callableKeeper, constructorCallExecutor, methodCallExecutor, staticCallExecutor);
+        resolver = new CallResolver(callableKeeper, constructorCallExecutor, methodCallExecutor, staticCallExecutor, printCallExecutor);
     }
 
     @Test
@@ -55,14 +57,14 @@ class CallResolverTest {
 
     @Test
     void shouldResolvePrintCall() {
-        CallInvocation invocation = createSimpleCall(new PrintCallReference("System.out.print"));
-        PrintCallStatement printCallStatement = new PrintCallStatement(invocation);
-        when(staticCallExecutor.executePrintMethod(invocation)).thenReturn(printCallStatement);
+        CallInvocation invocation = new CallInvocation("", "", new PrintCallReference("System.out.print"),
+                Collections.singletonList(mock(Expression.class)));
+        resolver = new CallResolver(callableKeeper, constructorCallExecutor, methodCallExecutor, staticCallExecutor,
+                new PrintCallExecutor());
 
         CallStatement resolvedStatement = resolver.resolve(false, invocation);
 
-        assertThat(resolvedStatement).isSameAs(printCallStatement);
-        assertThat(Iterables.getOnlyElement(resolver.getResolvedPrintCalls())).isSameAs(printCallStatement);
+        assertThat(Iterables.getOnlyElement(resolver.getResolvedPrintCalls())).isSameAs(resolvedStatement);
     }
 
     private CallInvocation createSimpleCall(CallReference reference) {

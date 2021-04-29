@@ -6,12 +6,12 @@ import com.server.parser.java.ast.statement.PrintCallStatement;
 import com.server.parser.java.ast.statement.expression_statement.CallInvocation;
 import com.server.parser.java.call.executor.ConstructorCallExecutor;
 import com.server.parser.java.call.executor.MethodCallExecutor;
+import com.server.parser.java.call.executor.PrintCallExecutor;
 import com.server.parser.java.call.executor.StaticCallExecutor;
 import com.server.parser.java.call.reference.CallReference;
 import com.server.parser.java.call.reference.ConstructorCallReference;
 import com.server.parser.java.call.reference.PrintCallReference;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,18 +20,21 @@ public class CallResolver {
     private final ConstructorCallExecutor constructorCallExecutor;
     private final MethodCallExecutor methodCallExecutor;
     private final StaticCallExecutor staticCallExecutor;
-    private final List<PrintCallStatement> resolvedPrintCalls = new ArrayList<>();
+    private final PrintCallExecutor printCallExecutor;
 
     public CallResolver() {
-        this(new CallableKeeper(), new ConstructorCallExecutor(), new MethodCallExecutor(), new StaticCallExecutor());
+        this(new CallableKeeper(), new ConstructorCallExecutor(), new MethodCallExecutor(), new StaticCallExecutor(),
+                new PrintCallExecutor());
     }
 
     public CallResolver(CallableKeeper callableKeeper, ConstructorCallExecutor constructorCallExecutor,
-                        MethodCallExecutor methodCallExecutor, StaticCallExecutor staticCallExecutor) {
+                        MethodCallExecutor methodCallExecutor, StaticCallExecutor staticCallExecutor,
+                        PrintCallExecutor printCallExecutor) {
         this.callableKeeper = Objects.requireNonNull(callableKeeper, "callableKeeper cannot be null");
         this.constructorCallExecutor = Objects.requireNonNull(constructorCallExecutor, "constructorCallExecutor cannot be null");
         this.methodCallExecutor = Objects.requireNonNull(methodCallExecutor, "callExecutor cannot be null");
         this.staticCallExecutor = Objects.requireNonNull(staticCallExecutor, "staticCallExecutor cannot be null");
+        this.printCallExecutor = Objects.requireNonNull(printCallExecutor, "printCallExecutor cannot be null");
     }
 
     public CallableKeeper getCallableKeeper() {
@@ -40,9 +43,7 @@ public class CallResolver {
 
     public CallStatement resolve(boolean isStaticContext, CallInvocation invocation) {
         if (invocation.getCallReference() instanceof PrintCallReference) {
-            PrintCallStatement callStatement = staticCallExecutor.executePrintMethod(invocation);
-            resolvedPrintCalls.add(callStatement);
-            return callStatement;
+            return printCallExecutor.executePrintMethod(invocation);
         }
         if (isSpecificEqualsMethod(invocation)) {
             return methodCallExecutor.executeSpecialEqualsMethod(invocation);
@@ -65,6 +66,6 @@ public class CallResolver {
     }
 
     public List<PrintCallStatement> getResolvedPrintCalls() {
-        return resolvedPrintCalls;
+        return printCallExecutor.getResolvedPrintCalls();
     }
 }
