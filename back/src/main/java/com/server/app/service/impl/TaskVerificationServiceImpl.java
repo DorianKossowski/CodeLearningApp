@@ -56,7 +56,7 @@ public class TaskVerificationServiceImpl implements TaskVerificationService {
         return JavaParserAdapter.getResolvedTask(input);
     }
 
-    void verify(String input, Task resolvedTask) {
-        JavaTaskParserAdapter.verifyTask(input, resolvedTask);
+    void verify(String task, Task resolvedTask) {
+        JavaTaskParserAdapter.verifyTask(task, resolvedTask);
     }
 }
