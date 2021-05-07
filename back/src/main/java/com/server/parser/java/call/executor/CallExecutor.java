@@ -38,10 +38,9 @@ public abstract class CallExecutor {
     }
 
     void preExecution() {
-        if (executionLevel > MAX_EXECUTION_LEVEL) {
+        if (executionLevel++ > MAX_EXECUTION_LEVEL) {
             throw new ResolvingException("Przekroczono ilość dopuszczalnych zagnieżdżonych wywołań równą: " + MAX_EXECUTION_LEVEL);
         }
-        ++executionLevel;
     }
 
     private void postExecution() {
