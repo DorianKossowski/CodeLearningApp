@@ -2,8 +2,8 @@ package com.server.parser.java.visitor.resolver;
 
 import com.server.parser.java.JavaParser;
 import com.server.parser.java.ast.expression.Expression;
-import com.server.parser.java.constant.ConstantProvider;
 import com.server.parser.java.context.JavaContext;
+import com.server.parser.java.value.ConstantProvider;
 import com.server.parser.java.value.Value;
 import com.server.parser.util.exception.ResolvingException;
 
