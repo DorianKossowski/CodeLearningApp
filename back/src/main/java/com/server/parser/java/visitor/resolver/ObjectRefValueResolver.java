@@ -116,7 +116,7 @@ public class ObjectRefValueResolver {
 
     private List<Expression> visitArguments(JavaParser.CallArgumentsContext ctx) {
         return ctx.expression().stream()
-                .map(expressionContext -> context.resolveExpression(expressionContext))
+                .map(context::resolveExpression)
                 .collect(Collectors.toList());
     }
 }
