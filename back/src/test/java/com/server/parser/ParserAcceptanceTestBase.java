@@ -2,7 +2,6 @@ package com.server.parser;
 
 import com.server.app.model.dto.VerificationResultDto;
 import com.server.app.service.TaskVerificationService;
-import com.server.app.service.impl.TaskVerificationServiceImpl;
 import com.server.parser.util.AcceptanceTestCaseFetcher;
 import com.server.parser.util.AcceptanceTestCaseModel;
 import org.antlr.v4.runtime.*;
@@ -17,7 +16,7 @@ import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class ParserAcceptanceTestBase<P extends Parser> {
-    private static final TaskVerificationService VERIFICATION_SERVICE = new TaskVerificationServiceImpl();
+    private static final TaskVerificationService VERIFICATION_SERVICE = new TaskVerificationService();
     private final ParserTestHelper<P> helper;
     private final Map<String, String> testCases;
 

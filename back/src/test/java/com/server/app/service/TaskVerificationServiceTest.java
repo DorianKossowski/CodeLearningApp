@@ -1,4 +1,4 @@
-package com.server.app.service.impl;
+package com.server.app.service;
 
 import com.server.app.model.dto.VerificationResultDto;
 import com.server.parser.java.ast.Task;
@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-class TaskVerificationServiceImplTest {
+class TaskVerificationServiceTest {
     private static final String TASK = "task";
     private static final String INPUT = "input";
     private static final String OUTPUT = "output";
@@ -21,7 +21,7 @@ class TaskVerificationServiceImplTest {
     @Mock
     private Task resolvedTask;
 
-    private final TaskVerificationServiceImpl verificationService = spy(new TaskVerificationServiceImpl());
+    private final TaskVerificationService verificationService = spy(new TaskVerificationService());
 
     @BeforeEach
     void setUp() {
@@ -37,7 +37,7 @@ class TaskVerificationServiceImplTest {
         when(exception.getLineNumber()).thenReturn(1);
         doThrow(exception).when(verificationService).getResolvedUserInputTask(INPUT);
 
-        try (LogTester logTester = new LogTester(TaskVerificationServiceImpl.class)) {
+        try (LogTester logTester = new LogTester(TaskVerificationService.class)) {
             VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
             assertThat(resultDto).isEqualTo(VerificationResultDto.invalidInput("msg", 1));
@@ -50,7 +50,7 @@ class TaskVerificationServiceImplTest {
         ResolvingException exception = new ResolvingException("ERROR");
         doThrow(exception).when(verificationService).getResolvedUserInputTask(INPUT);
 
-        try (LogTester logTester = new LogTester(TaskVerificationServiceImpl.class)) {
+        try (LogTester logTester = new LogTester(TaskVerificationService.class)) {
             VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
             assertThat(resultDto).isEqualTo(VerificationResultDto.invalid(new Exception("Problem podczas rozwiązywania: ERROR")));
@@ -64,7 +64,7 @@ class TaskVerificationServiceImplTest {
         doReturn("ERROR").when(exception).getMessage();
         doThrow(exception).when(verificationService).verify(TASK, resolvedTask);
 
-        try (LogTester logTester = new LogTester(TaskVerificationServiceImpl.class)) {
+        try (LogTester logTester = new LogTester(TaskVerificationService.class)) {
             VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
             assertThat(resultDto).isEqualTo(VerificationResultDto.invalidTask(OUTPUT));
@@ -77,7 +77,7 @@ class TaskVerificationServiceImplTest {
         RuntimeException exception = new RuntimeException("msg");
         doThrow(exception).when(verificationService).verify(TASK, resolvedTask);
 
-        try (LogTester logTester = new LogTester(TaskVerificationServiceImpl.class)) {
+        try (LogTester logTester = new LogTester(TaskVerificationService.class)) {
             VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
             assertThat(resultDto).isEqualTo(VerificationResultDto.invalid(exception, OUTPUT));
@@ -89,7 +89,7 @@ class TaskVerificationServiceImplTest {
     void shouldValidWhenVerified() {
         doNothing().when(verificationService).verify(TASK, resolvedTask);
 
-        try (LogTester logTester = new LogTester(TaskVerificationServiceImpl.class)) {
+        try (LogTester logTester = new LogTester(TaskVerificationService.class)) {
             VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
             assertThat(resultDto).isEqualTo(VerificationResultDto.valid(OUTPUT));
@@ -102,7 +102,7 @@ class TaskVerificationServiceImplTest {
         ResolvingException exception = new ResolvingException("ERROR");
         doThrow(exception).when(verificationService).getOutput(resolvedTask);
 
-        try (LogTester logTester = new LogTester(TaskVerificationServiceImpl.class)) {
+        try (LogTester logTester = new LogTester(TaskVerificationService.class)) {
             VerificationResultDto resultDto = verificationService.verify(TASK, INPUT);
 
             assertThat(resultDto).isEqualTo(VerificationResultDto.invalid(new Exception("Problem podczas rozwiązywania: ERROR")));
