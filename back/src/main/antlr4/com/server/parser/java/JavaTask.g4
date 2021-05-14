@@ -123,7 +123,7 @@ textRuleSpec
     ;
 
 statementMethodRuleSpec
-    : 'in' 'method' ':' valueOrEmpty
+    : 'in' 'method' ':' STRING_LITERAL
     ;
 
 methodRule
@@ -147,7 +147,7 @@ methodArgsRuleSpec
     ;
 
 methodNameRuleSpec
-    : 'name' ':' valueOrEmpty
+    : 'name' ':' STRING_LITERAL
     ;
 
 argsElements

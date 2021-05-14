@@ -4,6 +4,7 @@ import com.server.parser.java.JavaTaskBaseListener;
 import com.server.parser.java.JavaTaskParser;
 import com.server.parser.java.task.model.*;
 import com.server.parser.java.task.verifier.TaskVerifier;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,11 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterMethodNameRuleSpec(JavaTaskParser.MethodNameRuleSpecContext ctx) {
-        JavaTaskGrammarHelper.extractValue(ctx.valueOrEmpty()).ifPresent(value -> methodBuilder.withName(value));
+        methodBuilder.withName(convertToString(ctx.STRING_LITERAL()));
+    }
+
+    private String convertToString(TerminalNode terminalNode) {
+        return JavaTaskGrammarHelper.getFromStringLiteral(terminalNode.getText());
     }
 
     @Override
@@ -62,7 +67,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
         List<String> modifiers = new ArrayList<>();
         if (ctx.STRING_LITERAL() != null) {
             modifiers = ctx.STRING_LITERAL().stream()
-                    .map(node -> JavaTaskGrammarHelper.getFromStringLiteral(node.getText()))
+                    .map(this::convertToString)
                     .collect(Collectors.toList());
         }
         if (ctx.getParent() instanceof JavaTaskParser.MethodRuleSpecContext) {
@@ -76,7 +81,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterMethodResultRuleSpec(JavaTaskParser.MethodResultRuleSpecContext ctx) {
-        methodBuilder.withResult(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        methodBuilder.withResult(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
@@ -91,26 +96,26 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterStatementMethodRuleSpec(JavaTaskParser.StatementMethodRuleSpecContext ctx) {
-        JavaTaskGrammarHelper.extractValue(ctx.valueOrEmpty()).ifPresent(value -> statementBuilder.withMethod(value));
+        statementBuilder.withMethod(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
     public void enterTextRuleSpec(JavaTaskParser.TextRuleSpecContext ctx) {
         if (ctx.parent instanceof JavaTaskParser.StatementRuleSpecContext) {
-            statementBuilder.withText(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+            statementBuilder.withText(convertToString(ctx.STRING_LITERAL()));
         } else if (ctx.parent instanceof JavaTaskParser.VariableRuleSpecContext) {
-            variableBuilder.withText(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+            variableBuilder.withText(convertToString(ctx.STRING_LITERAL()));
         }
     }
 
     @Override
     public void enterStatementResolvedRuleSpec(JavaTaskParser.StatementResolvedRuleSpecContext ctx) {
-        statementBuilder.withResolved(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        statementBuilder.withResolved(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
     public void enterLogInfo(JavaTaskParser.LogInfoContext ctx) {
-        String log = JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
+        String log = convertToString(ctx.STRING_LITERAL());
         if (ctx.parent instanceof JavaTaskParser.StatementRuleSpecContext) {
             statementBuilder.withLogInfo(log);
         } else if (ctx.parent instanceof JavaTaskParser.VariableRuleSpecContext) {
@@ -134,7 +139,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterIfSpec(JavaTaskParser.IfSpecContext ctx) {
-        statementBuilder.withIf(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        statementBuilder.withIf(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
@@ -144,34 +149,34 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterElseIfSpec(JavaTaskParser.ElseIfSpecContext ctx) {
-        statementBuilder.withElseIf(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        statementBuilder.withElseIf(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
     public void enterSwitchExpr(JavaTaskParser.SwitchExprContext ctx) {
-        statementBuilder.withSwitchExpr(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        statementBuilder.withSwitchExpr(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
     public void enterSwitchLabel(JavaTaskParser.SwitchLabelContext ctx) {
-        statementBuilder.withSwitchLabel(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        statementBuilder.withSwitchLabel(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
     public void enterForIteration(JavaTaskParser.ForIterationContext ctx) {
-        String stringLiteral = JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
+        String stringLiteral = convertToString(ctx.STRING_LITERAL());
         statementBuilder.withForIteration(Integer.parseInt(stringLiteral));
     }
 
     @Override
     public void enterWhileIteration(JavaTaskParser.WhileIterationContext ctx) {
-        String stringLiteral = JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
+        String stringLiteral = convertToString(ctx.STRING_LITERAL());
         statementBuilder.withWhileIteration(Integer.parseInt(stringLiteral));
     }
 
     @Override
     public void enterDoWhileIteration(JavaTaskParser.DoWhileIterationContext ctx) {
-        String stringLiteral = JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText());
+        String stringLiteral = convertToString(ctx.STRING_LITERAL());
         statementBuilder.withDoWhileIteration(Integer.parseInt(stringLiteral));
     }
 
@@ -187,7 +192,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterClassNameSpec(JavaTaskParser.ClassNameSpecContext ctx) {
-        classBuilder.withName(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        classBuilder.withName(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
@@ -202,7 +207,7 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterConstructorNameRuleSpec(JavaTaskParser.ConstructorNameRuleSpecContext ctx) {
-        constructorBuilder.withName(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        constructorBuilder.withName(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
@@ -217,16 +222,16 @@ public class JavaTaskListener extends JavaTaskBaseListener {
 
     @Override
     public void enterTypeRuleSpec(JavaTaskParser.TypeRuleSpecContext ctx) {
-        fieldBuilder.withType(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        fieldBuilder.withType(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
     public void enterFieldNameRuleSpec(JavaTaskParser.FieldNameRuleSpecContext ctx) {
-        fieldBuilder.withName(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        fieldBuilder.withName(convertToString(ctx.STRING_LITERAL()));
     }
 
     @Override
     public void enterInitTextRuleSpec(JavaTaskParser.InitTextRuleSpecContext ctx) {
-        fieldBuilder.withInitText(JavaTaskGrammarHelper.getFromStringLiteral(ctx.STRING_LITERAL().getText()));
+        fieldBuilder.withInitText(convertToString(ctx.STRING_LITERAL()));
     }
 }
